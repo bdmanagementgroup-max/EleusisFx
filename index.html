@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eleusis FX — Elite Prop Firm Evaluation Service</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --green: #00F5A0;
+      --green-dim: #00C880;
+      --green-dark: #00A066;
+      --cyan: #00E5FF;
+      --cyan-dim: #00B8CC;
+      --black: #050505;
+      --dark: #0A0A0A;
+      --dark2: #0D0D0D;
+      --dark3: #111111;
+      --card: #0F0F0F;
+      --card2: #131313;
+      --border: #1E1E1E;
+      --border2: #252525;
+      --text: #DEDEDE;
+      --muted: #666666;
+      --white: #FFFFFF;
+      --glow: rgba(0,245,160,0.15);
+      --glow-cyan: rgba(0,229,255,0.12);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── SCANLINE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.03) 2px,
+        rgba(0,0,0,0.03) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── UTILS ── */
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+    .green { color: var(--green); }
+    .cyan { color: var(--cyan); }
+    .section { padding: 100px 0; }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-label::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 2px;
+      background: var(--green);
+    }
+
+    .section-title {
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--white);
+      margin-bottom: 20px;
+      letter-spacing: -0.5px;
+    }
+
+    .section-sub {
+      font-size: 17px;
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.7;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 18px 0;
+      background: rgba(5,5,5,0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .logo span {
+      color: var(--green);
+      text-shadow: 0 0 20px rgba(0,245,160,0.5);
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+      align-items: center;
+    }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--green); }
+    .nav-cta {
+      background: transparent !important;
+      color: var(--green) !important;
+      border: 1px solid var(--green) !important;
+      padding: 8px 20px;
+      border-radius: 2px;
+      font-weight: 600 !important;
+      transition: all 0.2s !important;
+    }
+    .nav-cta:hover {
+      background: var(--green) !important;
+      color: var(--black) !important;
+      box-shadow: 0 0 20px rgba(0,245,160,0.3) !important;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 70% 50%, rgba(0,245,160,0.05) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(0,229,255,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse 30% 30% at 90% 10%, rgba(0,245,160,0.03) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    /* Grid lines bg */
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,245,160,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,245,160,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,245,160,0.06);
+      border: 1px solid rgba(0,245,160,0.2);
+      border-radius: 2px;
+      padding: 6px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--green);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 8px var(--green); }
+      50% { opacity: 0.5; transform: scale(1.3); box-shadow: 0 0 16px var(--green); }
+    }
+
+    .hero-title {
+      font-size: clamp(42px, 5.5vw, 72px);
+      font-weight: 700;
+      line-height: 1.0;
+      color: var(--white);
+      margin-bottom: 24px;
+      letter-spacing: -1px;
+    }
+    .hero-title .highlight {
+      color: var(--green);
+      text-shadow: 0 0 30px rgba(0,245,160,0.4);
+    }
+    .hero-title .highlight-cyan {
+      color: var(--cyan);
+      text-shadow: 0 0 30px rgba(0,229,255,0.4);
+    }
+
+    .hero-sub {
+      font-size: 17px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 40px;
+      max-width: 480px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--green);
+      color: var(--black);
+      font-weight: 700;
+      font-size: 14px;
+      padding: 15px 30px;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .btn-primary:hover {
+      background: #00ffaa;
+      transform: translateY(-1px);
+      box-shadow: 0 0 30px rgba(0,245,160,0.4);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 14px;
+      padding: 15px 26px;
+      border-radius: 2px;
+      text-decoration: none;
+      border: 1px solid var(--border2);
+      transition: all 0.2s;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .btn-secondary:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    .hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; }
+
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      margin-top: 52px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+    .hero-stat-value {
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--green);
+      display: block;
+      text-shadow: 0 0 20px rgba(0,245,160,0.3);
+      letter-spacing: -0.5px;
+    }
+    .hero-stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* Hero card — terminal style */
+    .hero-card {
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--green), var(--cyan), transparent);
+    }
+    .card-header {
+      background: var(--card2);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-red { background: #FF5F57; }
+    .dot-yellow { background: #FFBD2E; }
+    .dot-green { background: #28C840; }
+    .card-title-bar {
+      margin-left: 8px;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .card-body { padding: 20px; }
+    .account-pass {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .account-pass:last-child { border-bottom: none; }
+    .pass-icon {
+      width: 32px; height: 32px;
+      border-radius: 2px;
+      background: rgba(0,245,160,0.08);
+      border: 1px solid rgba(0,245,160,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+    .pass-firm { font-weight: 600; font-size: 13px; color: var(--white); }
+    .pass-size { font-size: 11px; color: var(--muted); }
+    .pass-badge {
+      margin-left: auto;
+      background: rgba(0,245,160,0.1);
+      color: var(--green);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 2px;
+      letter-spacing: 1px;
+      border: 1px solid rgba(0,245,160,0.2);
+      text-shadow: 0 0 8px rgba(0,245,160,0.4);
+    }
+
+    /* ── TICKER / TRUST BAR ── */
+    .trust-bar {
+      background: var(--dark2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+      overflow: hidden;
+      position: relative;
+    }
+    .trust-bar::before, .trust-bar::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 80px;
+      z-index: 2;
+    }
+    .trust-bar::before { left: 0; background: linear-gradient(90deg, var(--dark2), transparent); }
+    .trust-bar::after { right: 0; background: linear-gradient(-90deg, var(--dark2), transparent); }
+    .trust-inner {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .trust-item .icon { color: var(--green); font-size: 14px; }
+
+    /* ── HOW IT WORKS ── */
+    #how { background: var(--dark2); }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      margin-top: 60px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .step {
+      background: var(--card);
+      padding: 36px 24px;
+      position: relative;
+      transition: background 0.2s;
+    }
+    .step:hover { background: var(--card2); }
+    .step:hover .step-num { color: rgba(0,245,160,0.2); }
+    .step-num {
+      font-size: 52px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.04);
+      line-height: 1;
+      margin-bottom: 20px;
+      letter-spacing: -2px;
+      transition: color 0.2s;
+    }
+    .step-icon {
+      font-size: 24px;
+      margin-bottom: 14px;
+      display: block;
+    }
+    .step h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+    .step p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .step-line {
+      width: 24px;
+      height: 2px;
+      background: var(--green);
+      margin-bottom: 20px;
+    }
+
+    /* ── PRICING ── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      margin-top: 60px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .pricing-card {
+      background: var(--card);
+      padding: 36px 28px;
+      position: relative;
+      transition: background 0.2s;
+    }
+    .pricing-card:hover { background: #0E0E0E; }
+    .pricing-card.featured {
+      background: #080E0A;
+    }
+    .pricing-card.featured::before {
+      content: 'MOST POPULAR';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      background: var(--green);
+      color: var(--black);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      padding: 5px;
+      text-align: center;
+    }
+    .featured-inner { padding-top: 16px; }
+    .price-tier {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .price-tier::before {
+      content: '';
+      width: 16px;
+      height: 1px;
+      background: var(--green);
+    }
+    .price-amount {
+      font-size: 52px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 4px;
+      letter-spacing: -2px;
+    }
+    .price-desc {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 28px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .price-features {
+      list-style: none;
+      margin-bottom: 32px;
+    }
+    .price-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text);
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .price-features li:last-child { border-bottom: none; }
+    .price-features li::before {
+      content: '›';
+      color: var(--green);
+      font-weight: 700;
+      flex-shrink: 0;
+      font-size: 16px;
+      line-height: 1.2;
+    }
+    .btn-full { width: 100%; justify-content: center; }
+
+    /* ── FIRMS ── */
+    #firms { background: var(--dark2); }
+    .firms-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1px;
+      margin-top: 52px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .firm-card {
+      background: var(--card);
+      padding: 24px 16px;
+      text-align: center;
+      transition: all 0.2s;
+      cursor: default;
+    }
+    .firm-card:hover {
+      background: #0A120D;
+    }
+    .firm-name {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    .firm-tag {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .firm-icon {
+      font-size: 22px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    /* ── WHY US ── */
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      margin-top: 60px;
+    }
+    .why-features {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .why-feature {
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+      padding: 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      transition: border-color 0.2s;
+    }
+    .why-feature:hover { border-color: rgba(0,245,160,0.2); }
+    .why-feature-icon {
+      width: 40px; height: 40px;
+      border-radius: 2px;
+      background: rgba(0,245,160,0.07);
+      border: 1px solid rgba(0,245,160,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .why-feature h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 5px;
+      letter-spacing: 0.3px;
+    }
+    .why-feature p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* Terminal-style metrics panel */
+    .terminal {
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .terminal-header {
+      background: var(--card2);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .terminal-body { padding: 20px; font-family: 'Courier New', monospace; }
+    .t-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .t-line:last-child { border-bottom: none; }
+    .t-key { color: var(--muted); }
+    .t-val { color: var(--green); font-weight: 600; text-shadow: 0 0 8px rgba(0,245,160,0.3); }
+    .t-val.cyan { color: var(--cyan); text-shadow: 0 0 8px rgba(0,229,255,0.3); }
+    .t-val.white { color: var(--white); }
+    .t-prompt { color: var(--green); margin-right: 6px; }
+
+    /* ── TESTIMONIALS ── */
+    #testimonials { background: var(--dark2); }
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      margin-top: 52px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .testi-card {
+      background: var(--card);
+      padding: 28px;
+      transition: background 0.2s;
+    }
+    .testi-card:hover { background: #0A120D; }
+    .stars {
+      display: flex;
+      gap: 2px;
+      margin-bottom: 16px;
+    }
+    .star { color: var(--green); font-size: 13px; text-shadow: 0 0 6px rgba(0,245,160,0.4); }
+    .testi-quote {
+      font-size: 28px;
+      color: var(--green);
+      line-height: 1;
+      margin-bottom: 12px;
+      opacity: 0.5;
+    }
+    .testi-text {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+    .testi-author { display: flex; align-items: center; gap: 10px; }
+    .testi-avatar {
+      width: 36px; height: 36px;
+      border-radius: 2px;
+      background: rgba(0,245,160,0.08);
+      border: 1px solid rgba(0,245,160,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 12px;
+      color: var(--green);
+      font-family: 'Courier New', monospace;
+    }
+    .testi-name { font-weight: 600; font-size: 13px; color: var(--white); }
+    .testi-firm { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* ── FAQ ── */
+    .faq-list {
+      max-width: 760px;
+      margin: 52px auto 0;
+    }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-q {
+      width: 100%;
+      background: none;
+      border: none;
+      text-align: left;
+      padding: 22px 0;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--white);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      transition: color 0.2s;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .faq-q:hover { color: var(--green); }
+    .faq-q .arrow {
+      color: var(--green);
+      font-size: 18px;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+      font-family: monospace;
+    }
+    .faq-a {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+      padding-bottom: 22px;
+      display: none;
+    }
+    .faq-item.open .faq-a { display: block; }
+    .faq-item.open .faq-q { color: var(--green); }
+    .faq-item.open .arrow { transform: rotate(45deg); }
+
+    /* ── CTA ── */
+    #cta {
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    #cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 50%, rgba(0,245,160,0.04) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(0,229,255,0.03) 0%, transparent 60%);
+      background-image:
+        linear-gradient(rgba(0,245,160,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,245,160,0.02) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+    #cta .section-title { margin: 0 auto 20px; max-width: 640px; }
+    #cta .section-sub { margin: 0 auto 44px; text-align: center; }
+    .cta-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .wa-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #25D366;
+      color: var(--black);
+      font-weight: 700;
+      font-size: 14px;
+      padding: 15px 30px;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: all 0.2s;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .wa-btn:hover {
+      background: #20bd5a;
+      transform: translateY(-1px);
+      box-shadow: 0 0 30px rgba(37,211,102,0.3);
+    }
+    .ig-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 14px;
+      padding: 15px 26px;
+      border-radius: 2px;
+      text-decoration: none;
+      border: 1px solid var(--border2);
+      transition: all 0.2s;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .ig-btn:hover {
+      border-color: #E1306C;
+      color: #E1306C;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black);
+      border-top: 1px solid var(--border);
+      padding: 48px 0 32px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 40px;
+    }
+    .footer-brand p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-top: 12px;
+      max-width: 300px;
+    }
+    .footer-col h4 {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 16px;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 10px; }
+    .footer-col ul li a {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-col ul li a:hover { color: var(--green); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .footer-bottom p { font-size: 12px; color: var(--muted); line-height: 1.7; }
+    .footer-legal {
+      font-size: 11px;
+      color: rgba(102,102,102,0.6);
+      max-width: 600px;
+      line-height: 1.6;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-card { display: none; }
+      .steps { grid-template-columns: repeat(2, 1fr); }
+      .pricing-grid { grid-template-columns: 1fr; border-radius: 4px; max-width: 400px; margin: 60px auto 0; }
+      .firms-grid { grid-template-columns: repeat(3, 1fr); }
+      .why-grid { grid-template-columns: 1fr; }
+      .testi-grid { grid-template-columns: 1fr; max-width: 480px; margin: 52px auto 0; }
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      .nav-links { display: none; }
+    }
+    @media (max-width: 600px) {
+      .section { padding: 64px 0; }
+      .steps { grid-template-columns: 1fr; }
+      .firms-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero-stats { gap: 24px; flex-wrap: wrap; }
+      .trust-inner { gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="container nav-inner">
+    <a href="#" class="logo">ELEUSIS <span>FX</span></a>
+    <ul class="nav-links">
+      <li><a href="#how">Process</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#firms">Firms</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#cta" class="nav-cta">Get Started</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-badge">UK's Premier Prop Evaluation Service</div>
+        <h1 class="hero-title">
+          We Pass Your<br/>
+          Prop Firm<br/>
+          <span class="highlight">Evaluation.</span>
+        </h1>
+        <p class="hero-sub">
+          Skip the stress. Our team of professional traders handles every stage of your evaluation — Phase 1 and 2 — while you sit back and wait for your funded account credentials.
+        </p>
+        <div class="hero-ctas">
+          <a href="https://wa.me/447493593099?text=Hi%2C%20I%27d%20like%20to%20get%20started%20with%20Eleusis%20FX" class="btn-primary" target="_blank">
+            💬 WhatsApp Us
+          </a>
+          <a href="#how" class="btn-secondary">See How It Works →</a>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <span class="hero-stat-value">100%</span>
+            <span class="hero-stat-label">Pass Rate</span>
+          </div>
+          <div>
+            <span class="hero-stat-value">10+</span>
+            <span class="hero-stat-label">Firms Supported</span>
+          </div>
+          <div>
+            <span class="hero-stat-value">FCA</span>
+            <span class="hero-stat-label">Regulated Partner</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="hero-card">
+          <div class="card-header">
+            <div class="dot dot-red"></div>
+            <div class="dot dot-yellow"></div>
+            <div class="dot dot-green"></div>
+            <span class="card-title-bar">eleusis_fx — recent_passes.log</span>
+          </div>
+          <div class="card-body">
+            <div class="account-pass">
+              <div class="pass-icon">📈</div>
+              <div>
+                <div class="pass-firm">FTMO</div>
+                <div class="pass-size">$100,000 Account</div>
+              </div>
+              <span class="pass-badge">✓ PASSED</span>
+            </div>
+            <div class="account-pass">
+              <div class="pass-icon">💹</div>
+              <div>
+                <div class="pass-firm">The Funded Trader</div>
+                <div class="pass-size">$200,000 Account</div>
+              </div>
+              <span class="pass-badge">✓ PASSED</span>
+            </div>
+            <div class="account-pass">
+              <div class="pass-icon">📊</div>
+              <div>
+                <div class="pass-firm">FundedNext</div>
+                <div class="pass-size">$50,000 Account</div>
+              </div>
+              <span class="pass-badge">✓ PASSED</span>
+            </div>
+            <div class="account-pass">
+              <div class="pass-icon">🏆</div>
+              <div>
+                <div class="pass-firm">The5ers</div>
+                <div class="pass-size">$100,000 Account</div>
+              </div>
+              <span class="pass-badge">✓ PASSED</span>
+            </div>
+            <div class="account-pass">
+              <div class="pass-icon">💰</div>
+              <div>
+                <div class="pass-firm">Apex Trader Funding</div>
+                <div class="pass-size">$150,000 Account</div>
+              </div>
+              <span class="pass-badge">✓ PASSED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TRUST BAR ── -->
+<div class="trust-bar">
+  <div class="container">
+    <div class="trust-inner">
+      <div class="trust-item"><span class="icon">🔒</span> Legally Contracted</div>
+      <div class="trust-item"><span class="icon">🏛️</span> FCA Regulated Partner</div>
+      <div class="trust-item"><span class="icon">⚡</span> Phase 1 & 2 Handled</div>
+      <div class="trust-item"><span class="icon">🌍</span> All Major Prop Firms</div>
+      <div class="trust-item"><span class="icon">💼</span> Live Account Management Available</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── HOW IT WORKS ── -->
+<section id="how" class="section">
+  <div class="container">
+    <div class="section-label">The Process</div>
+    <h2 class="section-title">Four Steps to Your<br/><span class="green">Funded Account</span></h2>
+    <p class="section-sub">Simple, transparent, completely hands-off. Here's exactly how it works from start to finish.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-line"></div>
+        <span class="step-icon">🎯</span>
+        <h3>Purchase Your Prop Account</h3>
+        <p>Choose your preferred prop firm and account size. Purchase the evaluation challenge directly through them. We'll recommend the best firms if you're unsure.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-line"></div>
+        <span class="step-icon">📋</span>
+        <h3>Sign Your Contract</h3>
+        <p>We take your basic details and draw up a legally binding digital contract. Once signed, send us your MT4/MT5 credentials and payment — then relax.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-line"></div>
+        <span class="step-icon">📈</span>
+        <h3>We Trade Your Evaluation</h3>
+        <p>Our professional traders handle both phases. We trade within the firm's rules, hit the targets, and notify you the moment it's complete.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-line"></div>
+        <span class="step-icon">💰</span>
+        <h3>Collect Your Funded Account</h3>
+        <p>Your live funded credentials arrive from the prop firm. Trade it yourself, or let us manage it on a profit split — completely hands-free.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRICING ── -->
+<section id="pricing" class="section" style="background: var(--dark2);">
+  <div class="container">
+    <div class="section-label">Pricing</div>
+    <h2 class="section-title">Transparent, Fixed Pricing.<br/><span class="green">No Hidden Fees.</span></h2>
+    <p class="section-sub">One-time fee covers your full evaluation — both phases. No monthly subscriptions, no surprises.</p>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="price-tier">Starter</div>
+        <div class="price-amount">£550</div>
+        <div class="price-desc">$25k – $50k Accounts</div>
+        <ul class="price-features">
+          <li>Phase 1 &amp; Phase 2 passed</li>
+          <li>All major prop firms</li>
+          <li>MT4 / MT5 platforms</li>
+          <li>Digital contract included</li>
+          <li>WhatsApp support</li>
+          <li>7–14 day completion</li>
+        </ul>
+        <a href="https://wa.me/447493593099?text=Hi%2C%20I%27m%20interested%20in%20the%20Starter%20package" class="btn-primary btn-full" target="_blank">Get Started</a>
+      </div>
+      <div class="pricing-card featured">
+        <div class="featured-inner">
+          <div class="price-tier">Professional</div>
+          <div class="price-amount">£850</div>
+          <div class="price-desc">$100k Accounts</div>
+          <ul class="price-features">
+            <li>Phase 1 &amp; Phase 2 passed</li>
+            <li>All major prop firms</li>
+            <li>MT4 / MT5 platforms</li>
+            <li>Digital contract included</li>
+            <li>Priority WhatsApp support</li>
+            <li>5–10 day completion</li>
+            <li>Optional live account management</li>
+          </ul>
+          <a href="https://wa.me/447493593099?text=Hi%2C%20I%27m%20interested%20in%20the%20Professional%20package" class="btn-primary btn-full" target="_blank">Get Started</a>
+        </div>
+      </div>
+      <div class="pricing-card">
+        <div class="price-tier">Elite</div>
+        <div class="price-amount">£1,150</div>
+        <div class="price-desc">$200k+ Accounts</div>
+        <ul class="price-features">
+          <li>Phase 1 &amp; Phase 2 passed</li>
+          <li>All major prop firms</li>
+          <li>MT4 / MT5 platforms</li>
+          <li>Digital contract included</li>
+          <li>Dedicated account manager</li>
+          <li>Priority completion</li>
+          <li>Live account management included</li>
+          <li>Monthly profit split arrangement</li>
+        </ul>
+        <a href="https://wa.me/447493593099?text=Hi%2C%20I%27m%20interested%20in%20the%20Elite%20package" class="btn-primary btn-full" target="_blank">Get Started</a>
+      </div>
+    </div>
+    <p style="text-align:center; margin-top: 24px; font-size: 13px; color: var(--muted);">Not sure which tier? <a href="https://wa.me/447493593099" target="_blank" style="color: var(--green); text-decoration: none;">Message us</a> — we'll advise based on your account size and firm.</p>
+  </div>
+</section>
+
+<!-- ── FIRMS ── -->
+<section id="firms" class="section">
+  <div class="container">
+    <div class="section-label">Supported Firms</div>
+    <h2 class="section-title">All Top 10 Prop Firms<br/><span class="cyan">Fully Supported</span></h2>
+    <p class="section-sub">We've passed evaluations across every major prop trading firm. Whatever you're on, we've got you covered.</p>
+    <div class="firms-grid">
+      <div class="firm-card">
+        <span class="firm-icon">🏆</span>
+        <div class="firm-name">FTMO</div>
+        <div class="firm-tag">Industry Leader</div>
+      </div>
+      <div class="firm-card">
+        <span class="firm-icon">💹</span>
+        <div class="firm-name">FundedNext</div>
+        <div class="firm-tag">Up to 90% Split</div>
+      </div>
+      <div class="firm-card">
+        <span class="firm-icon">📈</span>
+        <div class="firm-name">The Funded Trader</div>
+        <div class="firm-tag">Up to $600k</div>
+      </div>
+      <div class="firm-card">
+        <span class="firm-icon">⚡</span>
+        <div class="firm-name">The5ers</div>
+        <div class="firm-tag">Instant Scaling</div>
+      </div>
+      <div class="firm-card">
+        <span class="firm-icon">🎯</span>
+        <div class="firm-name">Apex Trader Funding</div>
+        <div class="firm-tag">Futures Focused</div>
+      </div>
+      <div class="firm-card">
+        <span class="firm-icon">💰</span>
+        <div class="firm-name">MyFundedFX</div>
+        <div class="firm-tag">Flexible Rules</div>
+      </div>
+      <div class="firm-card">
+        <span class="firm-icon">🌐</span>
+        <div class="firm-name">True Forex Funds</div>
+        <div class="firm-tag">Fast Payouts</div>
+      </div>
+      <div class="firm-card">
+        <span class="firm-icon">📊</span>
+        <div class="firm-name">E8 Funding</div>
+        <div class="firm-tag">8% Profit Target</div>
+      </div>
+      <div class="firm-card">
+        <span class="firm-icon">🚀</span>
+        <div class="firm-name">Lux Trading Firm</div>
+        <div class="firm-tag">Up to $10M</div>
+      </div>
+      <div class="firm-card">
+        <span class="firm-icon">✨</span>
+        <div class="firm-name">Other Firms</div>
+        <div class="firm-tag">Ask us</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHY US ── -->
+<section id="why" class="section" style="background: var(--dark2);">
+  <div class="container">
+    <div class="section-label">Why Eleusis FX</div>
+    <h2 class="section-title">Professional. Secure.<br/><span class="green">Built on Trust.</span></h2>
+    <div class="why-grid">
+      <div class="why-features">
+        <div class="why-feature">
+          <div class="why-feature-icon">📜</div>
+          <div>
+            <h4>Legally Binding Contracts</h4>
+            <p>Every client gets a digital contract before we touch their account. No handshake deals — your arrangement is legally documented and protected.</p>
+          </div>
+        </div>
+        <div class="why-feature">
+          <div class="why-feature-icon">🏛️</div>
+          <div>
+            <h4>FCA Regulated Partner</h4>
+            <p>Eleusis Capital Limited operates as a Strategy Provider to Pelican Trading — FCA-authorised (ref 534484). Rare in this industry.</p>
+          </div>
+        </div>
+        <div class="why-feature">
+          <div class="why-feature-icon">👨‍💼</div>
+          <div>
+            <h4>Real Professional Traders</h4>
+            <p>No bots, no EAs, no HFT tricks. Our traders manually handle every evaluation, within the rules — protecting your account.</p>
+          </div>
+        </div>
+        <div class="why-feature">
+          <div class="why-feature-icon">💬</div>
+          <div>
+            <h4>Direct Communication</h4>
+            <p>You deal directly with us — not a ticket system. WhatsApp and Instagram DMs, answered by the actual team.</p>
+          </div>
+        </div>
+      </div>
+      <div class="terminal">
+        <div class="terminal-header">
+          <div class="dot dot-red"></div>
+          <div class="dot dot-yellow"></div>
+          <div class="dot dot-green"></div>
+          <span class="card-title-bar">service_metrics.sh</span>
+        </div>
+        <div class="terminal-body">
+          <div class="t-line">
+            <span class="t-key"><span class="t-prompt">$</span> pass_rate</span>
+            <span class="t-val">100%</span>
+          </div>
+          <div class="t-line">
+            <span class="t-key"><span class="t-prompt">$</span> firms_supported</span>
+            <span class="t-val">10+</span>
+          </div>
+          <div class="t-line">
+            <span class="t-key"><span class="t-prompt">$</span> avg_completion</span>
+            <span class="t-val white">7–14 days</span>
+          </div>
+          <div class="t-line">
+            <span class="t-key"><span class="t-prompt">$</span> account_sizes</span>
+            <span class="t-val white">$25k–$400k</span>
+          </div>
+          <div class="t-line">
+            <span class="t-key"><span class="t-prompt">$</span> regulatory_status</span>
+            <span class="t-val cyan">FCA_PARTNER</span>
+          </div>
+          <div class="t-line">
+            <span class="t-key"><span class="t-prompt">$</span> contract_provided</span>
+            <span class="t-val">ALWAYS ✓</span>
+          </div>
+          <div class="t-line">
+            <span class="t-key"><span class="t-prompt">$</span> live_management</span>
+            <span class="t-val white">OPTIONAL</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TESTIMONIALS ── -->
+<section id="testimonials" class="section">
+  <div class="container">
+    <div class="section-label">Client Results</div>
+    <h2 class="section-title">Traders Who Let Us<br/><span class="green">Do The Hard Part</span></h2>
+    <p class="section-sub">Real clients, real results. Here's what people say after we've delivered their funded accounts.</p>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <div class="testi-quote">"</div>
+        <p class="testi-text">Failed my FTMO challenge twice on my own. Handed it to Eleusis and they passed Phase 1 and 2 in under 10 days. Now I'm live with a $100k account. Absolutely worth every penny.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">JM</div>
+          <div>
+            <div class="testi-name">James M.</div>
+            <div class="testi-firm">FTMO — $100k</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <div class="testi-quote">"</div>
+        <p class="testi-text">Was sceptical at first, but the contract made me feel safe. Passed my FundedNext evaluation in 9 days. Kept them on for live management and we're splitting profits monthly.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">SK</div>
+          <div>
+            <div class="testi-name">Sophie K.</div>
+            <div class="testi-firm">FundedNext — $50k</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <div class="testi-quote">"</div>
+        <p class="testi-text">Fast, professional, zero drama. The team communicated throughout. Got my The5ers $100k account passed and live within two weeks. Would absolutely recommend.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">DT</div>
+          <div>
+            <div class="testi-name">Daniel T.</div>
+            <div class="testi-firm">The5ers — $100k</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ── -->
+<section id="faq" class="section" style="background: var(--dark2);">
+  <div class="container" style="text-align: center;">
+    <div class="section-label" style="justify-content: center;">FAQ</div>
+    <h2 class="section-title">Questions We Get <span class="green">All The Time</span></h2>
+    <p class="section-sub" style="margin: 0 auto;">Everything you need to know before getting started.</p>
+    <div class="faq-list" style="text-align: left;">
+      <div class="faq-item open">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Is using a passing service against prop firm rules?
+          <span class="arrow">+</span>
+        </button>
+        <div class="faq-a">
+          Most prop firms prohibit third-party trading on their platform — this is something to be aware of. We trade carefully, professionally, and within all stated evaluation parameters. We never use aggressive HFT bots or patterns that raise flags. We're transparent about how we operate and encourage all clients to make an informed decision.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          How does the contract protect me?
+          <span class="arrow">+</span>
+        </button>
+        <div class="faq-a">
+          Before we start any work, you receive a legally binding digital contract outlining the scope, timeline, and terms. Eleusis Capital Limited operates as a Strategy Provider to Pelican Trading, which is FCA-authorised (ref 534484), adding a further layer of legitimacy.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What happens if the evaluation fails?
+          <span class="arrow">+</span>
+        </button>
+        <div class="faq-a">
+          We have a strong track record and take every evaluation seriously. In the unlikely event of an issue, we discuss options directly with you — this is exactly why the contract and upfront communication matter. Speak to us before purchasing to understand our process fully.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Do I need to do anything during the evaluation?
+          <span class="arrow">+</span>
+        </button>
+        <div class="faq-a">
+          Nothing at all. Once you've signed the contract, sent us your MT4/MT5 credentials, and made payment — just wait. We'll keep you updated and notify you the moment it's complete.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Can you manage my live funded account after passing?
+          <span class="arrow">+</span>
+        </button>
+        <div class="faq-a">
+          Yes. You can trade yourself and we log out completely — or we offer ongoing live account management on a monthly profit split basis. Message us to discuss the details.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          How long does it take?
+          <span class="arrow">+</span>
+        </button>
+        <div class="faq-a">
+          Most evaluations complete within 7–14 days, depending on the firm's rules and account size. Some firms have minimum trading day requirements which affect timing. We'll give you a realistic estimate upfront.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          How do I get started?
+          <span class="arrow">+</span>
+        </button>
+        <div class="faq-a">
+          Just message us on WhatsApp or Instagram. We'll confirm your firm and account size, send a quote, draw up your contract, and get started. Onboarding takes less than 24 hours once you've purchased your evaluation.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section id="cta" class="section">
+  <div class="container">
+    <div class="section-label" style="justify-content: center;">Get Started Today</div>
+    <h2 class="section-title" style="text-align:center; margin: 0 auto 20px; max-width: 640px;">Ready for Your<br/><span class="green">Funded Account?</span></h2>
+    <p class="section-sub" style="text-align:center; margin: 0 auto 44px;">Message us now. Fast response, onboarding under 24 hours, evaluation passed within two weeks.</p>
+    <div class="cta-buttons">
+      <a href="https://wa.me/447493593099?text=Hi%2C%20I%27d%20like%20to%20get%20started%20with%20Eleusis%20FX" class="wa-btn" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Message on WhatsApp
+      </a>
+      <a href="https://instagram.com/eleusisfx" class="ig-btn" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        Instagram DM
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo">ELEUSIS <span>FX</span></a>
+        <p>Professional prop firm evaluation service. We pass your challenge — you collect your funded account. Based in the UK, serving traders worldwide.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigate</h4>
+        <ul>
+          <li><a href="#how">How It Works</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#firms">Supported Firms</a></li>
+          <li><a href="#why">Why Us</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="https://wa.me/447493593099" target="_blank">WhatsApp</a></li>
+          <li><a href="https://instagram.com/eleusisfx" target="_blank">@eleusisfx</a></li>
+          <li><a href="https://eleusisfx.uk" target="_blank">eleusisfx.uk</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Eleusis Capital Limited. All rights reserved.</p>
+      <p class="footer-legal">
+        Risk Warning: Trading carries a high level of risk to your capital and is not suitable for all investors. Eleusis Capital Limited is a Strategy Provider to Pelican Trading. Pelican Trading is a trading name of London &amp; Eastern LLP, authorised and regulated by the FCA (ref 534484). Registered: 85 Great Portland Street, London, W1W 7LT. Past performance is not indicative of future results.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+</script>
+
+</body>
+</html>
