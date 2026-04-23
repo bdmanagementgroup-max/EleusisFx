@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Eleusis FX — Prop Firm Specialists</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Epilogue:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #020305;
+  --surface:   #08090f;
+  --surface2:  #0d0f1a;
+  --border:    rgba(255,255,255,0.06);
+  --border-hi: rgba(255,255,255,0.12);
+  --white:     #e8eaf0;
+  --muted:     rgba(232,234,240,0.38);
+  --muted2:    rgba(232,234,240,0.18);
+  --accent:    #4f8ef7;
+  --accent2:   #7eb3ff;
+  --accent-glow: rgba(79,142,247,0.15);
+  --green:     #22c55e;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: #020305;
+  background-color: #020305;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+body {
+  background: #020305;
+  background-color: #020305;
+  color: #e8eaf0;
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: none;
+  -webkit-text-size-adjust: 100%;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+}
+
+/* CUSTOM CURSOR */
+.cursor {
+  width: 8px; height: 8px;
+  background: #4f8ef7;
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.15s ease;
+  mix-blend-mode: screen;
+}
+.cursor-ring {
+  width: 32px; height: 32px;
+  border: 1px solid rgba(79,142,247,0.4);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  transition: all 0.25s ease;
+}
+
+/* GRID OVERLAY */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+  background-size: 80px 80px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 56px;
+  height: 72px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: rgba(2,3,5,0.92);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+
+.logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 17px;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: #e8eaf0;
+}
+.logo span { color: #4f8ef7; }
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.nav-link {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(232,234,240,0.38);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-link:hover { color: #e8eaf0; }
+
+.nav-btn {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #020305;
+  background: #e8eaf0;
+  padding: 11px 26px;
+  text-decoration: none;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+  -webkit-appearance: none;
+}
+.nav-btn:hover {
+  background: transparent;
+  color: #e8eaf0;
+  border-color: rgba(255,255,255,0.12);
+}
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 0;
+  align-items: center;
+  padding: 100px 56px 60px;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* ANIMATED BACKGROUND GLOW */
+.hero-glow {
+  position: absolute;
+  width: 900px; height: 900px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(79,142,247,0.06) 0%, transparent 65%);
+  top: -200px; left: -200px;
+  pointer-events: none;
+  animation: glowPulse 8s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.7; }
+}
+
+.hero-left { position: relative; }
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #4f8ef7;
+  border: 1px solid rgba(79,142,247,0.3);
+  padding: 8px 16px;
+  margin-bottom: 48px;
+  opacity: 0;
+  animation: fadeIn 0.6s 0.3s forwards;
+}
+.hero-tag::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #4f8ef7;
+  animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+.hero-h1 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(40px, 10vw, 92px);
+  line-height: 0.95;
+  letter-spacing: -2px;
+  margin-bottom: 36px;
+  opacity: 0;
+  animation: fadeIn 0.8s 0.5s forwards;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.hero-h1 .line2 {
+  display: block;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(232,234,240,0.3);
+}
+
+.hero-h1 .line3 {
+  display: block;
+  background: -webkit-linear-gradient(135deg, #4f8ef7 0%, #7eb3ff 100%);
+  background: linear-gradient(135deg, #4f8ef7 0%, #7eb3ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: #4f8ef7;
+}
+
+.hero-desc {
+  font-size: 16px;
+  line-height: 1.8;
+  color: rgba(232,234,240,0.38);
+  max-width: 480px;
+  margin-bottom: 52px;
+  opacity: 0;
+  animation: fadeIn 0.8s 0.7s forwards;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  opacity: 0;
+  animation: fadeIn 0.8s 0.9s forwards;
+}
+
+.btn-primary {
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #020305;
+  background: #e8eaf0;
+  padding: 16px 36px;
+  text-decoration: none;
+  transition: all 0.25s;
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  -webkit-appearance: none;
+  border: none;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #4f8ef7;
+  transform: translateX(-101%);
+  transition: transform 0.3s ease;
+}
+.btn-primary:hover::after { transform: translateX(0); }
+.btn-primary span { position: relative; z-index: 1; color: #020305; }
+.btn-primary:hover span { color: #e8eaf0; }
+
+.btn-ghost {
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(232,234,240,0.38);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.2s;
+}
+.btn-ghost:hover { color: #e8eaf0; }
+.btn-ghost svg { transition: transform 0.2s; }
+.btn-ghost:hover svg { transform: translateX(4px); }
+
+/* HERO RIGHT — CARD */
+.hero-right {
+  opacity: 0;
+  animation: fadeIn 1s 1s forwards;
+  position: relative;
+}
+
+.hero-card {
+  background: #08090f;
+  background-color: #08090f;
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #4f8ef7, transparent);
+}
+
+.card-label {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(232,234,240,0.38);
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+}
+
+.card-amount {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 64px;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.card-sub {
+  font-size: 12px;
+  color: rgba(232,234,240,0.38);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 36px;
+}
+
+.card-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+  margin-bottom: 28px;
+}
+
+.card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.card-row:last-child { margin-bottom: 0; }
+
+.card-row-label {
+  font-size: 12px;
+  color: rgba(232,234,240,0.38);
+}
+
+.card-row-val {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #e8eaf0;
+}
+
+.card-row-val.green { color: #22c55e; }
+
+.card-badge {
+  margin-top: 32px;
+  background: rgba(34,197,94,0.08);
+  border: 1px solid rgba(34,197,94,0.2);
+  color: #22c55e;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+}
+
+/* TICKER */
+.ticker {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 16px 0;
+  overflow: hidden;
+  background: #08090f;
+  position: relative;
+  z-index: 1;
+}
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: scroll 28s linear infinite;
+}
+
+.ticker-item {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  padding: 0 40px;
+  white-space: nowrap;
+}
+
+.ticker-text {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(232,234,240,0.38);
+}
+
+.ticker-dot {
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: #4f8ef7;
+  flex-shrink: 0;
+}
+
+@keyframes scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* STATS */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  position: relative;
+  z-index: 1;
+}
+
+.stat-cell {
+  padding: 72px 56px;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s;
+}
+.stat-cell:last-child { border-right: none; }
+.stat-cell:hover { background: #08090f; }
+
+.stat-cell::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 1px;
+  background: #4f8ef7;
+  transition: width 0.5s ease;
+}
+.stat-cell:hover::before { width: 100%; }
+
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 56px;
+  line-height: 1;
+  letter-spacing: -2px;
+  margin-bottom: 12px;
+  color: #e8eaf0;
+}
+
+.stat-lbl {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(232,234,240,0.38);
+}
+
+/* SECTIONS */
+.section {
+  padding: 140px 56px;
+  position: relative;
+  z-index: 1;
+}
+
+.section-eyebrow {
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #4f8ef7;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.section-eyebrow::before {
+  content: '';
+  width: 24px; height: 1px;
+  background: #4f8ef7;
+}
+
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(28px, 5vw, 60px);
+  line-height: 1.0;
+  letter-spacing: -1.5px;
+  margin-bottom: 80px;
+  max-width: 560px;
+  word-break: break-word;
+}
+
+/* STEPS */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.step {
+  padding: 52px 44px;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  position: relative;
+  transition: background 0.3s;
+}
+.step:last-child { border-right: none; }
+.step:hover { background: #08090f; }
+
+.step-num {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: #4f8ef7;
+  margin-bottom: 36px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.step-num::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+}
+
+.step-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  margin-bottom: 18px;
+  letter-spacing: -0.5px;
+}
+
+.step-desc {
+  font-size: 14px;
+  line-height: 1.85;
+  color: rgba(232,234,240,0.38);
+}
+
+/* PROOF */
+.proof-section {
+  padding: 140px 56px;
+  background: #08090f;
+  background-color: #08090f;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.proof-section::before {
+  content: '';
+  position: absolute;
+  bottom: -300px; right: -300px;
+  width: 700px; height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(79,142,247,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.proof-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 80px;
+}
+
+.proof-card {
+  background: #020305;
+  background-color: #020305;
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 36px 32px;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.proof-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, rgba(79,142,247,0.03) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.proof-card:hover { border-color: rgba(79,142,247,0.3); transform: translateY(-4px); }
+.proof-card:hover::after { opacity: 1; }
+
+.proof-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #22c55e;
+  margin-bottom: 28px;
+}
+.proof-status::before {
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: #22c55e;
+}
+
+.proof-amount {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 48px;
+  letter-spacing: -2px;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.proof-firm {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(232,234,240,0.18);
+  margin-bottom: 28px;
+}
+
+.proof-detail {
+  font-size: 13px;
+  line-height: 1.8;
+  color: rgba(232,234,240,0.38);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding-top: 24px;
+}
+
+/* PRICING */
+.pricing-section {
+  padding: 140px 56px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 100px;
+  align-items: start;
+  position: relative;
+  z-index: 1;
+}
+
+.pricing-card {
+  background: #08090f;
+  background-color: #08090f;
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 56px 52px;
+  position: relative;
+  overflow: hidden;
+}
+
+.pricing-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #4f8ef7 40%, transparent);
+}
+
+.pricing-card::after {
+  content: '';
+  position: absolute;
+  bottom: -100px; right: -100px;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(79,142,247,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.pricing-tag {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #4f8ef7;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pricing-price {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 80px;
+  letter-spacing: -3px;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.pricing-currency {
+  font-size: 32px;
+  vertical-align: top;
+  padding-top: 14px;
+  margin-right: 2px;
+  font-weight: 600;
+}
+
+.pricing-sub {
+  font-size: 13px;
+  color: rgba(232,234,240,0.38);
+  margin-bottom: 44px;
+  line-height: 1.6;
+}
+
+.pricing-list {
+  list-style: none;
+  margin-bottom: 44px;
+}
+
+.pricing-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  font-size: 14px;
+  color: rgba(232,234,240,0.38);
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  line-height: 1.5;
+}
+
+.pricing-list li .check {
+  width: 18px; height: 18px;
+  border: 1px solid rgba(79,142,247,0.4);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.pricing-list li .check::after {
+  content: '✓';
+  font-size: 10px;
+  color: #4f8ef7;
+}
+
+.pricing-text p {
+  font-size: 15px;
+  line-height: 1.9;
+  color: rgba(232,234,240,0.38);
+  margin-bottom: 24px;
+}
+
+.spots-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(79,142,247,0.07);
+  border: 1px solid rgba(79,142,247,0.2);
+  padding: 14px 20px;
+  margin-bottom: 40px;
+  margin-top: 16px;
+}
+
+.spots-badge span {
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: #7eb3ff;
+}
+
+/* FAQ */
+.faq-section {
+  padding: 140px 56px;
+  background: #08090f;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  position: relative;
+  z-index: 1;
+}
+
+.faq-list {
+  margin-top: 80px;
+  max-width: 900px;
+}
+
+.faq-item {
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 32px 0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.faq-q-text {
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: -0.3px;
+  transition: color 0.2s;
+}
+
+.faq-item:hover .faq-q-text { color: #7eb3ff; }
+
+.faq-icon {
+  width: 28px; height: 28px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 14px;
+  color: rgba(232,234,240,0.38);
+  transition: all 0.2s;
+}
+
+.faq-item.open .faq-icon {
+  background: #4f8ef7;
+  border-color: #4f8ef7;
+  color: #020305;
+  transform: rotate(45deg);
+}
+
+.faq-answer {
+  font-size: 14px;
+  line-height: 1.85;
+  color: rgba(232,234,240,0.38);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s;
+}
+
+.faq-item.open .faq-answer {
+  max-height: 200px;
+  padding-top: 20px;
+}
+
+/* APPLY */
+.apply-section {
+  padding: 160px 56px;
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 100px;
+  align-items: center;
+  overflow: hidden;
+}
+
+.apply-section::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(79,142,247,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.apply-left .section-title { margin-bottom: 24px; }
+
+.apply-left p {
+  font-size: 15px;
+  line-height: 1.9;
+  color: rgba(232,234,240,0.38);
+  margin-bottom: 40px;
+}
+
+.contact-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.contact-icon {
+  width: 40px; height: 40px;
+  border: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.contact-info {
+  font-size: 13px;
+  color: rgba(232,234,240,0.38);
+}
+.contact-info strong {
+  display: block;
+  color: #e8eaf0;
+  font-size: 14px;
+  font-weight: 400;
+  margin-bottom: 2px;
+}
+
+/* FORM */
+.apply-form {
+  background: #08090f;
+  background-color: #08090f;
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 52px 48px;
+  position: relative;
+}
+
+.apply-form::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #4f8ef7 40%, transparent);
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(232,234,240,0.38);
+  margin-bottom: 10px;
+}
+
+.form-input {
+  width: 100%;
+  background: #020305;
+  background-color: #020305;
+  border: 1px solid rgba(255,255,255,0.06);
+  color: #e8eaf0;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  padding: 14px 18px;
+  outline: none;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: 0;
+}
+.form-input:focus { border-color: rgba(79,142,247,0.5); }
+.form-input::placeholder { color: rgba(232,234,240,0.18); }
+.form-input:-webkit-autofill,
+.form-input:-webkit-autofill:hover,
+.form-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #020305 inset !important;
+  -webkit-text-fill-color: #e8eaf0 !important;
+  border-color: rgba(79,142,247,0.5);
+}
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+select.form-input { cursor: pointer; }
+select.form-input option { background: #0d0f1a; }
+
+textarea.form-input { resize: none; }
+
+.form-submit {
+  width: 100%;
+  background: #e8eaf0;
+  color: #020305;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 18px;
+  border: none;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+  -webkit-appearance: none;
+  border-radius: 0;
+}
+
+.form-submit::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #4f8ef7;
+  transform: translateX(-101%);
+  transition: transform 0.3s ease;
+}
+.form-submit:hover::after { transform: translateX(0); }
+.form-submit span { position: relative; z-index: 1; color: #020305; }
+.form-submit:hover span { color: #e8eaf0; }
+
+.form-note {
+  font-size: 11px;
+  color: rgba(232,234,240,0.18);
+  line-height: 1.7;
+  margin-top: 16px;
+  text-align: center;
+}
+
+/* FOOTER */
+footer {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 40px 56px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: rgba(232,234,240,0.38);
+}
+.footer-logo span { color: #4f8ef7; }
+
+.footer-links {
+  display: flex;
+  gap: 28px;
+}
+.footer-links a {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(232,234,240,0.18);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: #e8eaf0; }
+
+.footer-copy {
+  font-size: 11px;
+  color: rgba(232,234,240,0.18);
+}
+
+/* REVEAL ANIMATIONS */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.in { opacity: 1; transform: translateY(0); }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* WHATSAPP FLOAT */
+.wa-float {
+  position: fixed;
+  bottom: 28px; right: 28px;
+  z-index: 400;
+  background: #1a1a2e;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #e8eaf0;
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 14px 22px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.25s;
+  backdrop-filter: blur(10px);
+}
+.wa-float:hover {
+  background: #0d0f1a;
+  border-color: rgba(79,142,247,0.3);
+  box-shadow: 0 8px 32px rgba(79,142,247,0.1);
+}
+.wa-float svg { color: #25D366; }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  nav { padding: 0 20px; }
+  .nav-link { display: none; }
+  .hero { grid-template-columns: 1fr; padding: 90px 20px 60px; }
+  .hero-right { display: none; }
+  .hero-tag { font-size: 9px; letter-spacing: 2px; }
+  .stats-row { grid-template-columns: 1fr; }
+  .stat-cell { border-right: none; padding: 48px 20px; }
+  .section { padding: 80px 20px; }
+  .steps { grid-template-columns: 1fr; }
+  .step { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); padding: 36px 20px; }
+  .step:last-child { border-bottom: none; }
+  .proof-section { padding: 80px 20px; }
+  .proof-grid { grid-template-columns: 1fr; }
+  .pricing-section { grid-template-columns: 1fr; padding: 80px 20px; gap: 48px; }
+  .pricing-card { padding: 36px 24px; }
+  .pricing-price { font-size: 60px; }
+  .faq-section { padding: 80px 20px; }
+  .faq-list { max-width: 100%; }
+  .apply-section { grid-template-columns: 1fr; padding: 80px 20px; gap: 48px; }
+  .apply-form { padding: 32px 20px; }
+  footer { padding: 28px 20px; flex-direction: column; text-align: center; }
+  .footer-links { justify-content: center; flex-wrap: wrap; gap: 16px; }
+  .wa-float { bottom: 16px; right: 16px; font-size: 10px; padding: 11px 16px; }
+  .form-row { grid-template-columns: 1fr; }
+  body { cursor: auto; }
+  .cursor, .cursor-ring { display: none; }
+  /* Prevent any element from causing horizontal scroll */
+  * { max-width: 100%; }
+  img, video, iframe { max-width: 100%; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">ELEUSIS<span>.</span>FX</div>
+  <div class="nav-right">
+    <a href="#process" class="nav-link">Process</a>
+    <a href="#results" class="nav-link">Results</a>
+    <a href="#pricing" class="nav-link">Pricing</a>
+    <a href="#apply" class="nav-btn">Apply Now</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+
+  <div class="hero-left">
+    <div class="hero-tag">Prop Firm Specialists — UK Based</div>
+    <h1 class="hero-h1">
+      We Pass<br>
+      <span class="line2">Your FTMO</span>
+      <span class="line3">Challenge.</span>
+    </h1>
+    <p class="hero-desc">
+      Skip the failed attempts. Our expert traders handle your entire prop firm evaluation — you receive a funded $100,000 account. Proven. Professional. Guaranteed.
+    </p>
+    <div class="hero-actions">
+      <a href="#apply" class="btn-primary"><span>Get Funded Now</span></a>
+      <a href="#process" class="btn-ghost">
+        See how it works
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-card">
+      <div class="card-label">Latest Pass</div>
+      <div class="card-amount">$100,000</div>
+      <div class="card-sub">Funded Account — FTMO</div>
+      <div class="card-divider"></div>
+      <div class="card-row">
+        <span class="card-row-label">Phase 1</span>
+        <span class="card-row-val green">✓ Passed</span>
+      </div>
+      <div class="card-row">
+        <span class="card-row-label">Phase 2</span>
+        <span class="card-row-val green">✓ Passed</span>
+      </div>
+      <div class="card-row">
+        <span class="card-row-label">Drawdown Violations</span>
+        <span class="card-row-val green">None</span>
+      </div>
+      <div class="card-row">
+        <span class="card-row-label">Duration</span>
+        <span class="card-row-val">24 Days</span>
+      </div>
+      <div class="card-row">
+        <span class="card-row-label">Investment</span>
+        <span class="card-row-val">£1,150</span>
+      </div>
+      <div class="card-badge">Account Active & Funded</div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <div class="ticker-item"><span class="ticker-text">FTMO Certified</span><span class="ticker-dot"></span></div>
+    <div class="ticker-item"><span class="ticker-text">$100K Funded Accounts</span><span class="ticker-dot"></span></div>
+    <div class="ticker-item"><span class="ticker-text">100% Pass Rate</span><span class="ticker-dot"></span></div>
+    <div class="ticker-item"><span class="ticker-text">UK Based Traders</span><span class="ticker-dot"></span></div>
+    <div class="ticker-item"><span class="ticker-text">True Forex Funds</span><span class="ticker-dot"></span></div>
+    <div class="ticker-item"><span class="ticker-text">Zero Drawdown Violations</span><span class="ticker-dot"></span></div>
+    <div class="ticker-item"><span class="ticker-text">Verified Results</span><span class="ticker-dot"></span></div>
+    <div class="ticker-item"><span class="ticker-text">FTMO Certified</span><span class="ticker-dot"></span></div>
+    <div class="ticker-item"><span class="ticker-text">$100K Funded Accounts</span><span class="ticker-dot"></span></div>
+    <div class="ticker-item"><span class="ticker-text">100% Pass Rate</span><span class="ticker-dot"></span></div>
+    <div class="ticker-item"><span class="ticker-text">UK Based Traders</span><span class="ticker-dot"></span></div>
+    <div class="ticker-item"><span class="ticker-text">True Forex Funds</span><span class="ticker-dot"></span></div>
+    <div class="ticker-item"><span class="ticker-text">Zero Drawdown Violations</span><span class="ticker-dot"></span></div>
+    <div class="ticker-item"><span class="ticker-text">Verified Results</span><span class="ticker-dot"></span></div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-row reveal">
+  <div class="stat-cell">
+    <div class="stat-num">100%</div>
+    <div class="stat-lbl">Challenge Pass Rate</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num">$100K</div>
+    <div class="stat-lbl">Funded Account Value</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num">&lt;30</div>
+    <div class="stat-lbl">Days Average to Funded</div>
+  </div>
+</div>
+
+<!-- PROCESS -->
+<section class="section reveal" id="process">
+  <div class="section-eyebrow">The Process</div>
+  <h2 class="section-title">Three Steps to a Funded Account</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01 &nbsp; Apply</div>
+      <h3 class="step-title">You Submit Your Enquiry</h3>
+      <p class="step-desc">Fill out our short application form. We review your situation, confirm a spot is available, and get everything set up. Fast, simple, no fluff.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02 &nbsp; Trade</div>
+      <h3 class="step-title">Our Traders Take Over</h3>
+      <p class="step-desc">Our experienced team executes your challenge with surgical precision — hitting profit targets while respecting every rule FTMO or your chosen firm requires.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03 &nbsp; Funded</div>
+      <h3 class="step-title">Your Account is Live</h3>
+      <p class="step-desc">Challenge passed. $100,000 funded account is yours. You're now a verified funded trader — receiving real payouts from your chosen prop firm.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<section class="proof-section reveal" id="results">
+  <div class="section-eyebrow">Verified Results</div>
+  <h2 class="section-title">Real Passes.<br>Real Accounts.</h2>
+  <div class="proof-grid">
+    <div class="proof-card">
+      <div class="proof-status">Challenge Passed</div>
+      <div class="proof-amount">$100K</div>
+      <div class="proof-firm">FTMO</div>
+      <div class="proof-detail">Phase 1 & 2 completed. No drawdown violations. Client onboarded to funded account within 28 days of initial payment.</div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-status">Challenge Passed</div>
+      <div class="proof-amount">$100K</div>
+      <div class="proof-firm">True Forex Funds</div>
+      <div class="proof-detail">Clean pass with zero rule breaches. Client received their first payout within the opening cycle of trading.</div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-status">Challenge Passed</div>
+      <div class="proof-amount">$100K</div>
+      <div class="proof-firm">FTMO</div>
+      <div class="proof-detail">Client had previously failed 3 times independently. Passed first attempt with Eleusis FX. Now fully funded and trading.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section reveal" id="pricing">
+  <div class="pricing-text">
+    <div class="section-eyebrow">Pricing</div>
+    <h2 class="section-title">One Investment.<br>One Funded Account.</h2>
+    <p>No hidden fees, no monthly retainers, no complications. You pay once, we pass your challenge, you receive your $100,000 funded trading account.</p>
+    <p>We limit spots each month to ensure every client receives our full attention and every challenge is passed.</p>
+
+    <div class="spots-badge">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>Limited spots available this month</span>
+    </div>
+
+    <a href="#apply" class="btn-primary"><span>Reserve Your Spot</span></a>
+  </div>
+
+  <div class="pricing-card">
+    <div class="pricing-tag">
+      <span>●</span> Complete Challenge Package
+    </div>
+    <div class="pricing-price">
+      <span class="pricing-currency">£</span>1,150
+    </div>
+    <p class="pricing-sub">Full prop firm evaluation service — you receive a $100,000 funded account on completion.</p>
+    <ul class="pricing-list">
+      <li><span class="check"></span>Full Phase 1 & Phase 2 trading</li>
+      <li><span class="check"></span>$100,000 funded account on pass</li>
+      <li><span class="check"></span>Strict compliance — zero violations</li>
+      <li><span class="check"></span>UK-based, verified traders</li>
+      <li><span class="check"></span>Direct communication throughout</li>
+      <li><span class="check"></span>FTMO, True Forex Funds & more</li>
+    </ul>
+    <a href="#apply" class="btn-primary" style="display:block; text-align:center;"><span>Apply for a Spot →</span></a>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section reveal" id="faq">
+  <div class="section-eyebrow">FAQ</div>
+  <h2 class="section-title">Common Questions</h2>
+
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-question">
+        <span class="faq-q-text">Is this against FTMO's terms of service?</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">We advise all clients to review their chosen prop firm's terms independently. We provide a professional trading service. All clients are responsible for understanding the terms of their accounts.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question">
+        <span class="faq-q-text">Which prop firms do you work with?</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">We primarily work with FTMO and comparable firms including True Forex Funds. Reach out with your specific firm and we'll confirm whether we can accommodate it.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question">
+        <span class="faq-q-text">How long does the process take?</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">Most challenges are completed in under 30 days. FTMO allows up to 60 days — we work efficiently to get you funded as quickly as possible while maintaining full compliance.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question">
+        <span class="faq-q-text">When and how do I pay?</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">Payment is confirmed before we begin trading. Full payment details and methods are shared after your application is reviewed and approved.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question">
+        <span class="faq-q-text">What happens once I'm funded?</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">Once the evaluation is passed, the funded account is entirely yours. You trade it yourself and receive 100% of payouts from the prop firm under their standard payout terms.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question">
+        <span class="faq-q-text">How do I get started?</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">Fill out the application form below or DM us on Instagram @eleusisfx. We respond to all genuine enquiries within 24 hours and confirm availability shortly after.</div>
+    </div>
+  </div>
+</section>
+
+<!-- APPLY -->
+<section class="apply-section" id="apply">
+  <div class="apply-left reveal">
+    <div class="section-eyebrow">Apply</div>
+    <h2 class="section-title">Let's Get You Funded.</h2>
+    <p>Spots are limited each month. Complete the form and we'll be in touch within 24 hours to confirm availability and next steps.</p>
+
+    <div class="contact-row">
+      <div class="contact-icon">📸</div>
+      <div class="contact-info">
+        <strong>@eleusisfx</strong>
+        Instagram DMs welcome
+      </div>
+    </div>
+    <div class="contact-row">
+      <div class="contact-icon">💬</div>
+      <div class="contact-info">
+        <strong>WhatsApp</strong>
+        Message us directly for fast response
+      </div>
+    </div>
+  </div>
+
+  <div class="apply-form reveal">
+    <form onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">First Name</label>
+          <input type="text" class="form-input" placeholder="John" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name</label>
+          <input type="text" class="form-input" placeholder="Smith" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" class="form-input" placeholder="john@email.com" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">WhatsApp / Phone</label>
+        <input type="tel" class="form-input" placeholder="+44 7700 000000">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Prop Firm</label>
+        <select class="form-input" required>
+          <option value="" disabled selected>Select your firm</option>
+          <option>FTMO</option>
+          <option>True Forex Funds</option>
+          <option>My Forex Funds</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Additional Info (Optional)</label>
+        <textarea class="form-input" rows="3" placeholder="Anything else we should know..."></textarea>
+      </div>
+      <button type="submit" class="form-submit"><span>Submit Application →</span></button>
+      <p class="form-note">We review all applications within 24 hours. Submitting does not guarantee a spot.</p>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">ELEUSIS<span>.</span>FX</div>
+  <div class="footer-links">
+    <a href="https://instagram.com/eleusisfx" target="_blank">Instagram</a>
+    <a href="#process">Process</a>
+    <a href="#results">Results</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#apply">Apply</a>
+  </div>
+  <p class="footer-copy">© 2025 Eleusis FX. All rights reserved.</p>
+</footer>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/44XXXXXXXXXX?text=Hi%2C%20I%27m%20interested%20in%20the%20FTMO%20challenge%20service" class="wa-float" target="_blank">
+  <svg width="16" height="16" fill="#25D366" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  Chat on WhatsApp
+</a>
+
+<script>
+// CUSTOM CURSOR
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx - 4 + 'px';
+  cursor.style.top = my - 4 + 'px';
+});
+
+function animateRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx - 16 + 'px';
+  ring.style.top = ry - 16 + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.querySelectorAll('a, button, .faq-item').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'scale(2)';
+    ring.style.transform = 'scale(1.5)';
+    ring.style.borderColor = 'rgba(79,142,247,0.7)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'scale(1)';
+    ring.style.transform = 'scale(1)';
+    ring.style.borderColor = 'rgba(79,142,247,0.4)';
+  });
+});
+
+// SCROLL REVEAL
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.08 });
+reveals.forEach(el => io.observe(el));
+
+// FAQ ACCORDION
+document.querySelectorAll('.faq-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
+});
+
+// FORM SUBMIT
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('.form-submit');
+  btn.innerHTML = '<span>✓ Application Received — We\'ll be in touch within 24hrs</span>';
+  btn.style.background = 'transparent';
+  btn.style.border = '1px solid rgba(79,142,247,0.4)';
+  btn.querySelector('span').style.color = '#7eb3ff';
+  btn.disabled = true;
+}
+</script>
+</body>
+</html>
