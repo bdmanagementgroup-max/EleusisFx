@@ -1148,6 +1148,122 @@ footer {
   img, video, iframe { max-width: 100%; }
 }
 
+
+/* ARTICLES */
+.articles-section {
+  padding: 140px 56px;
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.articles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 80px;
+}
+
+.article-card {
+  background: #08090f;
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 36px 32px;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.article-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #4f8ef7, transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.article-card:hover {
+  border-color: rgba(79,142,247,0.3);
+  transform: translateY(-4px);
+}
+
+.article-card:hover::before { opacity: 1; }
+
+.article-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #4f8ef7;
+  margin-bottom: 20px;
+}
+
+.article-tag::before {
+  content: '';
+  width: 16px; height: 1px;
+  background: #4f8ef7;
+}
+
+.article-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.25;
+  letter-spacing: -0.4px;
+  margin-bottom: 16px;
+  color: #e8eaf0;
+  transition: color 0.2s;
+}
+
+.article-card:hover .article-title { color: #7eb3ff; }
+
+.article-excerpt {
+  font-size: 13px;
+  line-height: 1.85;
+  color: rgba(232,234,240,0.38);
+  flex: 1;
+  margin-bottom: 28px;
+}
+
+.article-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.article-date {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(232,234,240,0.18);
+}
+
+.article-arrow {
+  font-size: 12px;
+  color: rgba(232,234,240,0.18);
+  transition: all 0.2s;
+}
+
+.article-card:hover .article-arrow {
+  color: #4f8ef7;
+  transform: translateX(4px);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .articles-section { padding: 80px 20px; }
+  .articles-grid { grid-template-columns: 1fr; }
+}
+
 </style>
 </head>
 <body>
@@ -1162,6 +1278,7 @@ footer {
     <a href="#process" class="nav-link">Process</a>
     <a href="#results" class="nav-link">Results</a>
     <a href="#pricing" class="nav-link">Pricing</a>
+    <a href="#articles" class="nav-link">Articles</a>
     <a href="#apply" class="nav-btn">Apply Now</a>
   </div>
 </nav>
@@ -1341,6 +1458,47 @@ footer {
   </div>
 </section>
 
+
+<!-- ARTICLES -->
+<section class="articles-section reveal" id="articles">
+  <div class="section-eyebrow">Trading Insights</div>
+  <h2 class="section-title">Articles &amp;<br>Resources.</h2>
+
+  <div class="articles-grid">
+
+    <a href="#" class="article-card">
+      <div class="article-tag">Prop Firms</div>
+      <h3 class="article-title">What Is an FTMO Challenge and How Does It Work?</h3>
+      <p class="article-excerpt">A complete breakdown of the FTMO evaluation process — phases, rules, drawdown limits, and what you need to know before starting your challenge.</p>
+      <div class="article-meta">
+        <span class="article-date">June 2025</span>
+        <span class="article-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="#" class="article-card">
+      <div class="article-tag">Strategy</div>
+      <h3 class="article-title">Why Most Traders Fail Their Prop Firm Evaluation</h3>
+      <p class="article-excerpt">The three most common reasons traders get disqualified — and how professional evaluation services eliminate these risks entirely.</p>
+      <div class="article-meta">
+        <span class="article-date">May 2025</span>
+        <span class="article-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="#" class="article-card">
+      <div class="article-tag">Funding</div>
+      <h3 class="article-title">FTMO vs True Forex Funds: Which Prop Firm Is Right for You?</h3>
+      <p class="article-excerpt">A side-by-side comparison of the two most popular prop firms — fees, rules, payout structures, and which suits different trading styles.</p>
+      <div class="article-meta">
+        <span class="article-date">April 2025</span>
+        <span class="article-arrow">→</span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
 <!-- FAQ -->
 <section class="faq-section reveal" id="faq">
   <div class="section-eyebrow">FAQ</div>
@@ -1464,6 +1622,7 @@ footer {
     <a href="#results">Results</a>
     <a href="#pricing">Pricing</a>
     <a href="#apply">Apply</a>
+    <a href="#articles">Articles</a>
   </div>
   <p class="footer-copy">© 2025 Eleusis FX. All rights reserved.</p>
 </footer>
