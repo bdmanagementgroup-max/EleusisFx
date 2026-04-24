@@ -1900,7 +1900,7 @@ document.querySelectorAll('.faq-item').forEach(item => {
 });
 
 // LEAD MAGNET SUBMIT
-const MAKE_WEBHOOK_URL = 'https://hook.eu1.make.com/j0b2o1kiqh9774ghqqr263r08ldpd';
+const MAKE_WEBHOOK_URL = 'https://delicate-leaf-df1a.bdmanagementgroup.workers.dev';
 
 async function handleLeadMag(e) {
   e.preventDefault();
@@ -1910,15 +1910,15 @@ async function handleLeadMag(e) {
   btn.querySelector('.btn-text').textContent = 'Sending...';
 
   try {
-    const formData = new URLSearchParams();
-    formData.append('email', email);
-    formData.append('source', 'Free Guide');
-    formData.append('submitted_at', new Date().toISOString());
-    formData.append('page', 'eleusisfx.uk');
     await fetch(MAKE_WEBHOOK_URL, {
       method: 'POST',
-      mode: 'no-cors',
-      body: formData
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email,
+        source: 'Free Guide',
+        submitted_at: new Date().toISOString(),
+        page: 'eleusisfx.uk'
+      })
     });
   } catch (err) {
     console.error('Webhook error:', err);
