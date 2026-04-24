@@ -1705,7 +1705,7 @@ footer {
       <div class="leadmag-bullet">The Recovery Protocol</div>
     </div>
 
-    <form id="leadmagForm" onsubmit="handleLeadMag(event)">
+    <form id="leadmagForm">
       <div class="leadmag-form">
         <input type="email" class="leadmag-input" placeholder="Enter your email address" required>
         <button type="submit" class="leadmag-btn"><span class="btn-text">Get Free Guide →</span></button>
@@ -1905,32 +1905,30 @@ document.querySelectorAll('.faq-item').forEach(item => {
 // LEAD MAGNET SUBMIT
 const MAKE_WEBHOOK_URL = 'https://delicate-leaf-df1a.bdmanagementgroup.workers.dev';
 
-async function handleLeadMag(e) {
+document.getElementById('leadmagForm').addEventListener('submit', function(e) {
   e.preventDefault();
   const email = e.target.querySelector('.leadmag-input').value;
   const btn = e.target.querySelector('.leadmag-btn');
   btn.disabled = true;
   btn.querySelector('.btn-text').textContent = 'Sending...';
 
-  try {
-    await fetch(MAKE_WEBHOOK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: email,
-        source: 'Free Guide',
-        submitted_at: new Date().toISOString(),
-        page: 'eleusisfx.uk'
-      })
-    });
-  } catch (err) {
-    console.error('Webhook error:', err);
-    // Still show success to user — log error silently
-  }
-
+  // Show success immediately — don't wait on fetch (iOS Safari async fix)
   document.getElementById('leadmagForm').style.display = 'none';
   document.getElementById('leadmagSuccess').style.display = 'block';
-}
+
+  fetch(MAKE_WEBHOOK_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email: email,
+      source: 'Free Guide',
+      submitted_at: new Date().toISOString(),
+      page: 'eleusisfx.uk'
+    })
+  }).catch(function(err) {
+    console.error('Webhook error:', err);
+  });
+});
 
 // FORM SUBMIT
 function handleSubmit(e) {
