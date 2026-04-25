@@ -164,4 +164,15 @@ textarea:-webkit-autofill {
   .wa-float { bottom: 16px; right: 16px; font-size: 10px; padding: 11px 16px; }
   * { max-width: 100%; }
   img, video, iframe { max-width: 100%; }
+
+  /* Global section padding on mobile */
+  section { padding-left: 24px !important; padding-right: 24px !important; }
+
+  /* Collapse all 3-col grids to 1-col */
+  [style*="repeat(3, 1fr)"] { grid-template-columns: 1fr !important; }
+  [style*="repeat(4, 1fr)"] { grid-template-columns: 1fr 1fr !important; }
+
+  /* Collapse 2-col grids to 1-col */
+  [style*="1fr 1fr"] { grid-template-columns: 1fr !important; }
+  [style*="grid-template-columns"][style*="1fr 420px"] { grid-template-columns: 1fr !important; }
 }

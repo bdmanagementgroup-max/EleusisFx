@@ -6,7 +6,6 @@ import StatsRow from "@/components/home/StatsRow";
 import ProcessSteps from "@/components/home/ProcessSteps";
 import ProofSection from "@/components/home/ProofSection";
 import PricingSection from "@/components/home/PricingSection";
-import ArticlesPreview from "@/components/home/ArticlesPreview";
 import LeadMagnet from "@/components/home/LeadMagnet";
 import FaqSection from "@/components/home/FaqSection";
 import ApplyForm from "@/components/home/ApplyForm";
@@ -21,7 +20,6 @@ export default function HomePage() {
       <ProcessSteps />
       <ProofSection />
       <PricingSection />
-      <ArticlesPreview />
       <LeadMagnet />
       <FaqSection />
       <ApplyForm />
