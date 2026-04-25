@@ -170,7 +170,7 @@ export default function Nav() {
         }
         .nav-btn-apply:hover { background: transparent; color: #e8eaf0; border-color: rgba(255,255,255,0.12); }
         .nav-desktop {
-          display: flex; align-items: center; gap: 40;
+          display: flex; align-items: center; gap: 40px;
         }
         @media (max-width: 1024px) {
           nav { padding: 0 20px !important; }
