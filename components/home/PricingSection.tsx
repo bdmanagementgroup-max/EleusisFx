@@ -87,11 +87,11 @@ export default function PricingSection() {
           <span>●</span> Complete Challenge Package
         </div>
 
-        <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 80, letterSpacing: -3, lineHeight: 1, marginBottom: 6 }}>
-          <span style={{ fontSize: 32, verticalAlign: "top", paddingTop: 14, marginRight: 2, fontWeight: 600 }}>£</span>1,150
+        <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: "clamp(36px, 6vw, 60px)", letterSpacing: -2, lineHeight: 1.1, marginBottom: 6, color: "#e8eaf0" }}>
+          Enquire for<br />Pricing
         </div>
         <p style={{ fontSize: 13, color: "rgba(232,234,240,0.38)", marginBottom: 44, lineHeight: 1.6 }}>
-          Full prop firm evaluation service — you receive a $100,000 funded account on completion.
+          Pricing is discussed directly after your application is reviewed. Spots are limited — apply to confirm availability.
         </p>
 
         <ul style={{ listStyle: "none", marginBottom: 44 }}>
