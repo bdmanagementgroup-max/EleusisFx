@@ -19,28 +19,44 @@ export async function POST(req: NextRequest) {
       await notion.pages.create({
         parent: { database_id: notionDb },
         properties: {
+          // "Name" is the default title property in every Notion DB
           "Name": {
             title: [{ text: { content: `${firstName} ${lastName}` } }],
           },
-          "Email": {
-            email: email,
-          },
-          "WhatsApp / Phone": {
-            phone_number: phone || "",
-          },
-          "Prop Firm": {
-            select: { name: propFirm || "Other" },
-          },
-          "Notes": {
-            rich_text: [{ text: { content: notes || "" } }],
-          },
-          "Status": {
-            select: { name: "New" },
-          },
-          "Submitted": {
-            date: { start: new Date().toISOString() },
-          },
+          "Email": { email },
+          "Phone": { phone_number: phone || "" },
+          "Prop Firm": { rich_text: [{ text: { content: propFirm || "" } }] },
+          "Notes": { rich_text: [{ text: { content: notes || "" } }] },
+          "Status": { rich_text: [{ text: { content: "New" } }] },
+          "Source": { rich_text: [{ text: { content: "Website" } }] },
         },
+        // Full detail in page body — survives any property mismatch
+        children: [
+          {
+            object: "block" as const,
+            type: "heading_2" as const,
+            heading_2: {
+              rich_text: [{ type: "text" as const, text: { content: "Application Details" } }],
+            },
+          },
+          ...([
+            ["Name", `${firstName} ${lastName}`],
+            ["Email", email],
+            ["WhatsApp / Phone", phone || "—"],
+            ["Prop Firm", propFirm || "—"],
+            ["Submitted", new Date().toLocaleString("en-GB", { timeZone: "Europe/London" })],
+            ["Notes", notes || "—"],
+          ] as [string, string][]).map(([label, value]) => ({
+            object: "block" as const,
+            type: "paragraph" as const,
+            paragraph: {
+              rich_text: [
+                { type: "text" as const, text: { content: `${label}: ` }, annotations: { bold: true, italic: false, strikethrough: false, underline: false, code: false, color: "default" as const } },
+                { type: "text" as const, text: { content: value } },
+              ],
+            },
+          })),
+        ],
       });
     }
 
@@ -57,7 +73,7 @@ export async function POST(req: NextRequest) {
         whatsapp: phone,
         prop_firm: propFirm,
         notes,
-      }).throwOnError();
+      });
     }
 
     return NextResponse.json({ ok: true });
