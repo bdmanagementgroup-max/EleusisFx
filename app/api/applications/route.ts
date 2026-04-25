@@ -23,13 +23,6 @@ export async function POST(req: NextRequest) {
     const { Client } = await import("@notionhq/client");
     const notion = new Client({ auth: notionKey });
 
-    const notesContent = [
-      `Name: ${firstName} ${lastName}`,
-      propFirm ? `Prop Firm: ${propFirm}` : null,
-      phone ? `Phone/WhatsApp: ${phone}` : null,
-      notes ? `Notes: ${notes}` : null,
-    ].filter(Boolean).join("\n");
-
     try {
       await notion.pages.create({
         parent: { database_id: notionDb },
@@ -37,8 +30,17 @@ export async function POST(req: NextRequest) {
           "Email": {
             title: [{ text: { content: email } }],
           },
+          "Name": {
+            rich_text: [{ text: { content: `${firstName} ${lastName}` } }],
+          },
+          "Prop Firm": {
+            rich_text: [{ text: { content: propFirm || "" } }],
+          },
+          "Phone": {
+            phone_number: phone || null,
+          },
           "Notes": {
-            rich_text: [{ text: { content: notesContent } }],
+            rich_text: [{ text: { content: notes || "" } }],
           },
           "Source": {
             select: { name: "Website" },
