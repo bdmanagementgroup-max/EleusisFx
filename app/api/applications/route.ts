@@ -12,27 +12,35 @@ export async function POST(req: NextRequest) {
     const notionKey = process.env.NOTION_API_KEY;
     const notionDb = process.env.NOTION_LEADS_DATABASE_ID;
 
-    if (notionKey && notionDb) {
-      const { Client } = await import("@notionhq/client");
-      const notion = new Client({ auth: notionKey });
+    console.log("[applications] NOTION_API_KEY present:", !!notionKey);
+    console.log("[applications] NOTION_LEADS_DATABASE_ID:", notionDb);
 
-      const notesContent = [
-        propFirm ? `Prop Firm: ${propFirm}` : null,
-        phone ? `Phone/WhatsApp: ${phone}` : null,
-        notes ? `Notes: ${notes}` : null,
-      ].filter(Boolean).join("\n");
+    if (!notionKey || !notionDb) {
+      console.error("[applications] Missing Notion env vars");
+      return NextResponse.json({ error: "Notion not configured" }, { status: 500 });
+    }
 
+    const { Client } = await import("@notionhq/client");
+    const notion = new Client({ auth: notionKey });
+
+    try {
       await notion.pages.create({
         parent: { database_id: notionDb },
         properties: {
-          "Name": {
-            title: [{ text: { content: `${firstName} ${lastName}` } }],
-          },
           "Email": {
-            rich_text: [{ text: { content: email } }],
+            title: [{ text: { content: email } }],
+          },
+          "Name": {
+            rich_text: [{ text: { content: `${firstName} ${lastName}` } }],
+          },
+          "Prop Firm": {
+            rich_text: [{ text: { content: propFirm || "" } }],
+          },
+          "Phone": {
+            phone_number: phone || null,
           },
           "Notes": {
-            rich_text: [{ text: { content: notesContent } }],
+            rich_text: [{ text: { content: notes || "" } }],
           },
           "Source": {
             select: { name: "Website" },
@@ -45,27 +53,37 @@ export async function POST(req: NextRequest) {
           },
         },
       });
+      console.log("[applications] Notion page created successfully");
+    } catch (notionErr: any) {
+      console.error("[applications] Notion error:", notionErr?.message);
+      console.error("[applications] Notion error body:", JSON.stringify(notionErr?.body));
+      // Don't return error — still try Supabase and return success to user
     }
 
-    // Also write to Supabase if configured
+    // Also write to Supabase
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
     if (supabaseUrl && supabaseKey) {
-      const { createClient } = await import("@supabase/supabase-js");
-      const supabase = createClient(supabaseUrl, supabaseKey);
-      await supabase.from("applications").insert({
-        first_name: firstName,
-        last_name: lastName,
-        email,
-        whatsapp: phone,
-        prop_firm: propFirm,
-        notes,
-      });
+      try {
+        const { createClient } = await import("@supabase/supabase-js");
+        const supabase = createClient(supabaseUrl, supabaseKey);
+        await supabase.from("applications").insert({
+          first_name: firstName,
+          last_name: lastName,
+          email,
+          whatsapp: phone,
+          prop_firm: propFirm,
+          notes,
+        });
+        console.log("[applications] Supabase insert OK");
+      } catch (sbErr: any) {
+        console.error("[applications] Supabase error:", sbErr?.message);
+      }
     }
 
     return NextResponse.json({ ok: true });
-  } catch (err) {
-    console.error("Application submission error:", err);
+  } catch (err: any) {
+    console.error("[applications] Unhandled error:", err?.message);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
