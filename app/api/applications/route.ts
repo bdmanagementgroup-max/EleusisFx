@@ -9,9 +9,44 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
+    const notionKey = process.env.NOTION_API_KEY;
+    const notionDb = process.env.NOTION_LEADS_DATABASE_ID;
+
+    if (notionKey && notionDb) {
+      const { Client } = await import("@notionhq/client");
+      const notion = new Client({ auth: notionKey });
+
+      await notion.pages.create({
+        parent: { database_id: notionDb },
+        properties: {
+          "Name": {
+            title: [{ text: { content: `${firstName} ${lastName}` } }],
+          },
+          "Email": {
+            email: email,
+          },
+          "WhatsApp / Phone": {
+            phone_number: phone || "",
+          },
+          "Prop Firm": {
+            select: { name: propFirm || "Other" },
+          },
+          "Notes": {
+            rich_text: [{ text: { content: notes || "" } }],
+          },
+          "Status": {
+            select: { name: "New" },
+          },
+          "Submitted": {
+            date: { start: new Date().toISOString() },
+          },
+        },
+      });
+    }
+
+    // Also write to Supabase if configured
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
     if (supabaseUrl && supabaseKey) {
       const { createClient } = await import("@supabase/supabase-js");
       const supabase = createClient(supabaseUrl, supabaseKey);
@@ -22,11 +57,12 @@ export async function POST(req: NextRequest) {
         whatsapp: phone,
         prop_firm: propFirm,
         notes,
-      });
+      }).throwOnError();
     }
 
     return NextResponse.json({ ok: true });
-  } catch {
+  } catch (err) {
+    console.error("Application submission error:", err);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
