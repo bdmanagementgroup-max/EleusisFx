@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import LogoutButton from "@/components/dashboard/LogoutButton";
 
 export const metadata: Metadata = {
   title: "Dashboard — Eleusis FX",
@@ -51,6 +52,3 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 function DashboardLogout() {
   return <LogoutButton />;
 }
-
-// Client component for logout
-import LogoutButton from "@/components/dashboard/LogoutButton";
