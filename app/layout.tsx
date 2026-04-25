@@ -3,6 +3,7 @@ import { Syne, Epilogue } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/layout/CustomCursor";
 import WhatsAppFloat from "@/components/layout/WhatsAppFloat";
+import RevealInit from "@/components/layout/RevealInit";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -49,6 +50,7 @@ export default function RootLayout({
     <html lang="en" className={`${syne.variable} ${epilogue.variable}`}>
       <body>
         <CustomCursor />
+        <RevealInit />
         {children}
         <WhatsAppFloat />
       </body>
