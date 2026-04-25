@@ -24,6 +24,7 @@ export async function POST(req: NextRequest) {
     const notion = new Client({ auth: notionKey });
 
     const notesContent = [
+      `Name: ${firstName} ${lastName}`,
       propFirm ? `Prop Firm: ${propFirm}` : null,
       phone ? `Phone/WhatsApp: ${phone}` : null,
       notes ? `Notes: ${notes}` : null,
@@ -33,11 +34,8 @@ export async function POST(req: NextRequest) {
       await notion.pages.create({
         parent: { database_id: notionDb },
         properties: {
-          "Name": {
-            title: [{ text: { content: `${firstName} ${lastName}` } }],
-          },
           "Email": {
-            rich_text: [{ text: { content: email } }],
+            title: [{ text: { content: email } }],
           },
           "Notes": {
             rich_text: [{ text: { content: notesContent } }],
