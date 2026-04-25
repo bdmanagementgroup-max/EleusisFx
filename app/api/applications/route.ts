@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
             rich_text: [{ text: { content: propFirm || "" } }],
           },
           "Phone": {
-            phone_number: phone || null,
+            rich_text: [{ text: { content: phone || "" } }],
           },
           "Notes": {
             rich_text: [{ text: { content: notes || "" } }],
