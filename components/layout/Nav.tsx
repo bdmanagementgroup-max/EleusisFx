@@ -48,6 +48,7 @@ export default function Nav() {
           <a href="/#pricing" className="nav-link-item">Pricing</a>
           <Link href="/articles" className="nav-link-item">Articles</Link>
           <Link href="/resources" className="nav-link-item">Resources</Link>
+          <Link href="/calendar" className="nav-link-item">Calendar</Link>
           <a href="/#free-guide" style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "#4f8ef7", textDecoration: "none" }}>
             Free Guide
           </a>
@@ -93,6 +94,7 @@ export default function Nav() {
             { href: "/#pricing", label: "Pricing" },
             { href: "/articles", label: "Articles" },
             { href: "/resources", label: "Resources" },
+            { href: "/calendar", label: "Calendar" },
             { href: "/#free-guide", label: "Free Guide" },
           ].map(({ href, label }) => (
             <a
