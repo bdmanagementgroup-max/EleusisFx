@@ -87,6 +87,7 @@ export default function Nav() {
             padding: "40px 28px",
             gap: 0,
             borderTop: "1px solid rgba(255,255,255,0.06)",
+            overflowY: "auto",
           }}
         >
           {[
