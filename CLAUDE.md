@@ -10,65 +10,104 @@ npm run build    # Production build
 npm run lint     # ESLint (Next.js + TypeScript rules)
 ```
 
-No test suite is configured.
+No test suite is configured. Requires `.env.local` with Supabase + API keys to run locally (see `.env.local.example`).
 
 ## Architecture
 
-**Eleusis FX** is a Next.js 16 (App Router) + TypeScript prop firm evaluation platform. It serves both a public marketing site and a protected client/admin portal.
+**Eleusis FX** is a Next.js 16 (App Router) + TypeScript prop firm evaluation platform serving a public marketing site, protected client dashboard, and admin portal.
 
 **Stack:** Next.js 16, React 19, Tailwind CSS 4, Supabase (auth + PostgreSQL), Notion API, Twelve Data API (forex), CoinGecko API (crypto), Recharts, SWR, Vercel.
 
-### Route Map
+## Full Site Function Map
 
-| Route | Auth | Description |
-|-------|------|-------------|
-| `/` | Public | Marketing homepage |
-| `/articles`, `/articles/[slug]` | Public | Blog — reads from Supabase `articles` table |
-| `/compare` | Public | Prop firm comparison table |
-| `/calendar` | Public | Economic calendar (Investing.com iframe) |
-| `/links` | Public | Link-in-bio page |
-| `/resources` | Public | Educational guides from Supabase |
-| `/login` | Public | Supabase auth entry point |
-| `/dashboard` | Client | Trading metrics, equity curve, drawdown stats |
-| `/admin/*` | Admin | Manage articles, applications, resources, past clients |
+### Public Pages
 
-### Auth & Role Routing
+| Route | Component(s) | Function |
+|---|---|---|
+| `/` | `Hero`, `Ticker`, `StatsRow`, `ProcessSteps`, `ProofSection`, `ProofFeed`, `PricingSection`, `LeadMagnet`, `FaqSection`, `ApplyForm` | Marketing homepage |
+| `/articles` | `app/articles/page.tsx` | Blog list — Supabase `articles`, fallback to 3 hardcoded |
+| `/articles/[slug]` | `app/articles/[slug]/page.tsx` | Article detail — Supabase first, 3 hardcoded fallbacks |
+| `/compare` | `app/compare/page.tsx` | Static prop firm comparison table |
+| `/resources` | `app/resources/page.tsx` | Resource links — Supabase `resources`, fallback to hardcoded |
+| `/resources/position-size-calculator` | Interactive calculator | Lot size from balance, risk %, stop loss, pip value |
+| `/resources/risk-reward-calculator` | Interactive calculator | R:R ratio calculator |
+| `/resources/drawdown-tracker` | Interactive calculator | Drawdown vs FTMO limits |
+| `/calendar` | `EconomicCalendarWidget` | TradingView economic calendar embed (dark theme) |
+| `/links` | Static | Link-in-bio page |
+| `/login` | Supabase auth | Login entry point |
 
-Supabase auth handles sessions. After login, `app_metadata.role === "admin"` routes to `/admin`; everyone else goes to `/dashboard`. Server-side checks use `getSupabaseServerClient()` from `lib/supabase/server.ts`. Row-level security (RLS) enforces that clients only read their own `client_metrics` and `equity_history` rows. Admin operations bypass RLS via `SUPABASE_SERVICE_ROLE_KEY`.
+### Client Dashboard (protected — any authenticated user)
 
-### Data Flows
+| Route | Function |
+|---|---|
+| `/dashboard` | Trading metrics, equity curve chart (Recharts), drawdown stats — reads `client_metrics` + `equity_history` (RLS) |
+| `/dashboard/markets` | Live market data |
+| `/dashboard/calendar` | TradingView calendar |
 
-- **Lead capture** → `POST /api/leads` → Supabase `leads` table
-- **Application form** → `POST /api/applications` → Notion database (primary) + Supabase `applications` table (dual-write)
-- **Market data** → `/api/market/forex` (Twelve Data) and `/api/market/crypto` (CoinGecko), cached 60 s
-- **Client dashboard** → Supabase `client_metrics` + `equity_history` (RLS per user)
-- **Articles / resources** → Admin writes via API routes → frontend reads from Supabase
+### Admin Portal (protected — `app_metadata.role === "admin"`)
 
-### Supabase Client Wrappers (`lib/supabase/`)
+| Route | Function |
+|---|---|
+| `/admin` | Admin home |
+| `/admin/clients` | View applications + leads from Supabase |
+| `/admin/articles` | List, publish/unpublish articles |
+| `/admin/articles/new` | Create new article — POST to `/api/articles` → Supabase |
+| `/admin/resources` | Full CRUD for resources shown on `/resources` |
+| `/admin/past-clients` | View + edit historical client records |
+
+### Homepage Components Detail
+
+- **PublicMarketTicker** — Fixed top bar, live forex + crypto prices (Twelve Data + CoinGecko, 60s cache)
+- **Hero** — Main headline "We Pass / Your Prop / Challenge."
+- **Ticker** — Scrolling feature highlights strip
+- **StatsRow** — Key statistics
+- **ProcessSteps** — How the service works
+- **ProofSection** — 3-card static proof grid
+- **ProofFeed** — Live scrolling ticker of past client wins from Supabase `past_clients` (gracefully hides if DB unavailable)
+- **PricingSection** — Pricing tiers
+- **LeadMagnet** — Email capture → Supabase `leads`
+- **ApplyForm** — Full application → Notion + Supabase `applications`
+
+## Data Flows
+
+- **Lead capture** → `POST /api/leads` → Supabase `leads`
+- **Application form** → `POST /api/applications` → Notion (primary) + Supabase `applications` (dual-write)
+- **New article** → `POST /api/articles` → Supabase `articles`
+- **Resources CRUD** → `/api/resources` → Supabase `resources`
+- **Past clients** → `/api/past-clients` → Supabase `past_clients`
+- **Market data** → `/api/market/forex` (Twelve Data) + `/api/market/crypto` (CoinGecko), 60s server cache
+
+## Auth & Role Routing
+
+Supabase handles sessions. After login, `app_metadata.role === "admin"` routes to `/admin`; all others go to `/dashboard`. Server-side checks use `getSupabaseServerClient()`. Admin operations use `getSupabaseAdminClient()` (service role key, bypasses RLS). Set role in Supabase dashboard per user.
+
+## Supabase Client Wrappers (`lib/supabase/`)
 
 - `client.ts` — browser-side singleton (client components)
-- `server.ts` — server-side clients; use the service-role variant for admin writes
+- `server.ts` — `getSupabaseServerClient()` for user-session server components; `getSupabaseAdminClient()` for admin/service-role operations
 
-### Key Database Tables
+## Key Database Tables
 
-`leads`, `applications`, `articles`, `resources`, `client_metrics`, `equity_history`, `past_clients`
+| Table | Purpose |
+|---|---|
+| `leads` | Email captures |
+| `applications` | Application form submissions |
+| `articles` | Blog articles (admin-managed) |
+| `resources` | Resource links (admin-managed) |
+| `client_metrics` | Per-user trading stats (RLS) |
+| `equity_history` | Time-series equity for dashboard chart (RLS) |
+| `past_clients` | Historical client records — also powers the ProofFeed ticker |
 
-Migration SQL files in the repo root define the full schemas and RLS policies.
+Migration SQL files in repo root define schemas and RLS policies.
 
-### Component Layout
+## Styling
 
-- `components/home/` — landing page sections (Hero, Pricing, FAQ, ApplyForm, etc.)
-- `components/layout/` — shared nav, footer, market ticker, custom cursor, WhatsApp float
-- `components/dashboard/` — client portal components (equity curve via Recharts)
-- `app/admin/` — admin-only pages (CRUD for articles, resources, past clients)
-
-## Important: DEMO Data vs. Live Data
-
-Several admin and dashboard pages still use **hardcoded DEMO arrays** rather than live Supabase reads. Before editing any page, check whether it pulls real data or renders demo constants. Pages known to have been hardcoded as of the April 2026 audit: admin clients list, admin articles list, client dashboard metrics. Newer pages (articles, resources, past-clients) have been wired to Supabase — verify before assuming.
+- **Tailwind CSS 4** with custom theme vars in `globals.css` (`--color-muted`, `--color-accent`, etc.)
+- **Inline styles** used throughout — most muted text is `rgba(210,220,240,0.88)`, faint text `rgba(210,220,240,0.58)`
+- **Silver glow** on all `p`, `li`, `td`, `th`, `label`, `span` via global `text-shadow` in `globals.css`
+- **Scroll animation** — `@keyframes scroll` in `globals.css` (`translateX(-50%)`), reused by Ticker, PublicMarketTicker, and ProofFeedTicker
 
 ## Environment Variables
-
-Required secrets (see `.env.local.example`):
 
 ```
 NEXT_PUBLIC_SUPABASE_URL
