@@ -40,7 +40,6 @@ body {
   font-family: "Epilogue", sans-serif;
   font-weight: 300;
   overflow-x: hidden;
-  cursor: none;
   -webkit-text-size-adjust: 100%;
   width: 100%;
   max-width: 100%;
@@ -64,25 +63,10 @@ body::after {
 
 /* CUSTOM CURSOR */
 .cursor {
-  width: 8px;
-  height: 8px;
-  background: #4f8ef7;
-  border-radius: 50%;
-  position: fixed;
-  pointer-events: none;
-  z-index: 9999;
-  transition: transform 0.15s ease;
-  mix-blend-mode: screen;
+  display: none;
 }
 .cursor-ring {
-  width: 32px;
-  height: 32px;
-  border: 1px solid rgba(79, 142, 247, 0.4);
-  border-radius: 50%;
-  position: fixed;
-  pointer-events: none;
-  z-index: 9998;
-  transition: all 0.25s ease;
+  display: none;
 }
 
 /* SCROLL REVEAL */
