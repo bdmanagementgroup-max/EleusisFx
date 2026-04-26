@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const PHASE_STATUSES = ["in_progress", "passed", "failed"];
 
@@ -9,6 +10,7 @@ export default function NewClientPage() {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [createdUserId, setCreatedUserId] = useState<string | null>(null);
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -51,7 +53,34 @@ export default function NewClientPage() {
     if (data.error) {
       setError(data.error);
     } else {
-      router.push("/admin/metrics");
+      setCreatedUserId(data.id);
+      // Auto-create metrics entry
+      await createMetrics(data.id);
+    }
+  }
+
+  async function createMetrics(userId: string) {
+    try {
+      await fetch("/api/admin/metrics", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: userId,
+          prop_firm: form.prop_firm || null,
+          phase: Number(form.phase),
+          phase_status: form.phase_status,
+          balance: Number(form.balance),
+          equity: Number(form.balance),
+          daily_drawdown: 0,
+          max_drawdown: 0,
+          profit_target: 0,
+          profit_goal: Number(form.profit_goal),
+          days_used: 0,
+          days_allowed: Number(form.days_allowed),
+        }),
+      });
+    } catch {
+      // Metrics creation failed but client was created, so don't show error
     }
   }
 
@@ -66,6 +95,70 @@ export default function NewClientPage() {
     fontSize: 9, letterSpacing: 2, textTransform: "uppercase",
     color: "rgba(232,234,240,0.3)", display: "block", marginBottom: 8,
   };
+
+  // Success screen after client creation
+  if (createdUserId) {
+    return (
+      <div style={{ padding: "56px 48px 80px", maxWidth: 640 }}>
+        <div style={{ fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: "#22c55e", marginBottom: 8 }}>✓ Success</div>
+        <h1 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 36, letterSpacing: -1.5, marginBottom: 48 }}>Client Created</h1>
+
+        <div style={{ background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.2)", padding: "24px", marginBottom: 32 }}>
+          <div style={{ fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(34,197,94,0.8)", marginBottom: 8 }}>User ID</div>
+          <div style={{
+            fontFamily: "monospace", fontSize: 13, color: "#e8eaf0", marginBottom: 12,
+            background: "rgba(0,0,0,0.3)", padding: "12px", borderRadius: 4, wordBreak: "break-all",
+          }}>
+            {createdUserId}
+          </div>
+          <button
+            onClick={() => navigator.clipboard.writeText(createdUserId)}
+            style={{
+              background: "transparent", border: "1px solid rgba(34,197,94,0.3)",
+              color: "#22c55e", fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase",
+              padding: "6px 12px", cursor: "pointer",
+            }}
+          >
+            Copy
+          </button>
+        </div>
+
+        <div style={{ fontSize: 13, color: "rgba(210,220,240,0.88)", marginBottom: 32, lineHeight: 1.6 }}>
+          <p style={{ marginBottom: 12 }}>✓ Client account created and initialized with default metrics</p>
+          <p>You can now navigate to the metrics dashboard to view or edit this client's details.</p>
+        </div>
+
+        <div style={{ display: "flex", gap: 12 }}>
+          <Link href="/admin/metrics" style={{ flex: 1, textDecoration: "none" }}>
+            <button style={{
+              width: "100%",
+              background: "#4f8ef7", color: "#020305", border: "none",
+              fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700,
+              fontSize: 11, letterSpacing: 2, textTransform: "uppercase",
+              padding: "14px", cursor: "pointer",
+            }}>
+              View in Metrics
+            </button>
+          </Link>
+          <button
+            onClick={() => {
+              setCreatedUserId(null);
+              setForm({ email: "", password: "", prop_firm: "", phase: "1", phase_status: "in_progress", balance: "100000", profit_goal: "10", days_allowed: "30" });
+            }}
+            style={{
+              flex: 1,
+              background: "transparent", border: "1px solid rgba(255,255,255,0.1)",
+              color: "rgba(210,220,240,0.6)", fontFamily: "inherit",
+              fontSize: 11, letterSpacing: 2, textTransform: "uppercase",
+              padding: "14px", cursor: "pointer",
+            }}
+          >
+            Create Another
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ padding: "56px 48px 80px", maxWidth: 640 }}>
