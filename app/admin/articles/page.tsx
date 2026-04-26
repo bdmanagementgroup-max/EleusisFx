@@ -1,12 +1,22 @@
 import Link from "next/link";
+import { getSupabaseAdminClient } from "@/lib/supabase/server";
 
-const DEMO_ARTICLES = [
-  { id: "1", slug: "what-is-an-ftmo-challenge", title: "What Is an FTMO Challenge and How Does It Work?", published: true, date: "June 2025" },
-  { id: "2", slug: "why-traders-fail-prop-firm-evaluation", title: "Why Most Traders Fail Their Prop Firm Evaluation", published: true, date: "May 2025" },
-  { id: "3", slug: "ftmo-vs-true-forex-funds", title: "FTMO vs True Forex Funds: Which Prop Firm Is Right for You?", published: true, date: "April 2025" },
-];
+export const dynamic = "force-dynamic";
 
-export default function AdminArticlesPage() {
+function formatDate(iso: string | null) {
+  if (!iso) return "—";
+  return new Date(iso).toLocaleDateString("en-GB", { month: "long", year: "numeric" });
+}
+
+export default async function AdminArticlesPage() {
+  const supabase = await getSupabaseAdminClient();
+  const { data: articles } = await supabase
+    .from("articles")
+    .select("id, slug, title, published, published_at, created_at")
+    .order("created_at", { ascending: false });
+
+  const rows = articles ?? [];
+
   return (
     <div style={{ padding: "56px 48px 80px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 48 }}>
@@ -24,14 +34,19 @@ export default function AdminArticlesPage() {
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1, background: "linear-gradient(90deg, transparent, #4f8ef7 40%, transparent)" }} />
         </div>
 
-        {/* Table header */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr auto auto auto", padding: "14px 28px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
           {["Title", "Status", "Date", "Actions"].map((h) => (
             <span key={h} style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)" }}>{h}</span>
           ))}
         </div>
 
-        {DEMO_ARTICLES.map(({ id, slug, title, published, date }) => (
+        {rows.length === 0 && (
+          <div style={{ padding: "40px 28px", fontSize: 13, color: "rgba(232,234,240,0.38)" }}>
+            No articles yet. <Link href="/admin/articles/new" style={{ color: "#4f8ef7" }}>Create your first article →</Link>
+          </div>
+        )}
+
+        {rows.map(({ id, slug, title, published, published_at, created_at }) => (
           <div key={id} style={{ display: "grid", gridTemplateColumns: "1fr auto auto auto", padding: "20px 28px", borderBottom: "1px solid rgba(255,255,255,0.04)", alignItems: "center", gap: 24 }}>
             <div>
               <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 600, fontSize: 14, color: "#e8eaf0", marginBottom: 4 }}>{title}</div>
@@ -41,9 +56,8 @@ export default function AdminArticlesPage() {
               <span style={{ width: 4, height: 4, borderRadius: "50%", background: published ? "#22c55e" : "rgba(232,234,240,0.38)", display: "inline-block" }} />
               {published ? "Published" : "Draft"}
             </div>
-            <span style={{ fontSize: 11, color: "rgba(232,234,240,0.38)", whiteSpace: "nowrap" }}>{date}</span>
+            <span style={{ fontSize: 11, color: "rgba(232,234,240,0.38)", whiteSpace: "nowrap" }}>{formatDate(published_at ?? created_at)}</span>
             <div style={{ display: "flex", gap: 16 }}>
-              <Link href={`/admin/articles/${id}`} style={{ fontSize: 11, letterSpacing: 1.5, textTransform: "uppercase", color: "#4f8ef7", textDecoration: "none" }}>Edit</Link>
               <Link href={`/articles/${slug}`} target="_blank" style={{ fontSize: 11, letterSpacing: 1.5, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", textDecoration: "none" }}>View →</Link>
             </div>
           </div>

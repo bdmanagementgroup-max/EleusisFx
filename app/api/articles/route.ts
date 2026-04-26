@@ -1,5 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 
+export async function GET() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!supabaseUrl || !supabaseKey) return NextResponse.json({ articles: [] });
+  const { createClient } = await import("@supabase/supabase-js");
+  const supabase = createClient(supabaseUrl, supabaseKey);
+  const { data } = await supabase
+    .from("articles")
+    .select("id, slug, title, published, published_at, created_at")
+    .order("created_at", { ascending: false });
+  return NextResponse.json({ articles: data ?? [] });
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();

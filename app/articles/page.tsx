@@ -2,13 +2,16 @@ import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { getSupabaseAdminClient } from "@/lib/supabase/server";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Articles — Eleusis FX",
   description: "Trading insights, prop firm guides, and strategy breakdowns from the Eleusis FX team.",
 };
 
-const ARTICLES = [
+const FALLBACK_ARTICLES = [
   {
     slug: "what-is-an-ftmo-challenge",
     tag: "Prop Firms",
@@ -35,7 +38,31 @@ const ARTICLES = [
   },
 ];
 
-export default function ArticlesPage() {
+function formatDate(iso: string | null) {
+  if (!iso) return "";
+  return new Date(iso).toLocaleDateString("en-GB", { month: "long", year: "numeric" });
+}
+
+export default async function ArticlesPage() {
+  const supabase = await getSupabaseAdminClient();
+  const { data } = await supabase
+    .from("articles")
+    .select("slug, category, title, excerpt, published_at, read_time")
+    .eq("published", true)
+    .order("published_at", { ascending: false });
+
+  const dbArticles = data ?? [];
+  const articles = dbArticles.length > 0
+    ? dbArticles.map((a) => ({
+        slug: a.slug,
+        tag: a.category ?? "Trading",
+        title: a.title,
+        excerpt: a.excerpt ?? "",
+        date: formatDate(a.published_at),
+        readTime: a.read_time ? `${a.read_time} min read` : "",
+      }))
+    : FALLBACK_ARTICLES;
+
   return (
     <>
       <Nav />
@@ -55,7 +82,7 @@ export default function ArticlesPage() {
 
         <section style={{ padding: "0 56px 140px", position: "relative", zIndex: 1 }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
-            {ARTICLES.map(({ slug, tag, title, excerpt, date, readTime }) => (
+            {articles.map(({ slug, tag, title, excerpt, date, readTime }) => (
               <Link key={slug} href={`/articles/${slug}`} className="article-card-item">
                 <div style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 9, letterSpacing: "2.5px", textTransform: "uppercase" as const, color: "#4f8ef7", marginBottom: 20 }}>
                   <span style={{ width: 16, height: 1, background: "#4f8ef7", display: "inline-block" }} />
@@ -66,7 +93,7 @@ export default function ArticlesPage() {
                 </h2>
                 <p style={{ fontSize: 13, lineHeight: 1.85, color: "rgba(232,234,240,0.38)", flex: 1, marginBottom: 28 }}>{excerpt}</p>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: 20, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-                  <span style={{ fontSize: 10, letterSpacing: "1.5px", textTransform: "uppercase" as const, color: "rgba(232,234,240,0.18)" }}>{date} · {readTime}</span>
+                  <span style={{ fontSize: 10, letterSpacing: "1.5px", textTransform: "uppercase" as const, color: "rgba(232,234,240,0.18)" }}>{date}{readTime ? ` · ${readTime}` : ""}</span>
                   <span className="article-arrow-item" style={{ fontSize: 12, color: "rgba(232,234,240,0.18)", transition: "all 0.2s" }}>→</span>
                 </div>
               </Link>

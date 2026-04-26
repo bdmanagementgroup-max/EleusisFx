@@ -3,10 +3,11 @@ import Footer from "@/components/layout/Footer";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { getSupabaseAdminClient } from "@/lib/supabase/server";
 
 export const revalidate = 3600;
 
-const ARTICLES: Record<string, { tag: string; title: string; excerpt: string; date: string; readTime: string; content: string }> = {
+const HARDCODED: Record<string, { tag: string; title: string; excerpt: string; date: string; readTime: string; content: string }> = {
   "what-is-an-ftmo-challenge": {
     tag: "Prop Firms",
     title: "What Is an FTMO Challenge and How Does It Work?",
@@ -71,27 +72,69 @@ const ARTICLES: Record<string, { tag: string; title: string; excerpt: string; da
   },
 };
 
+function formatDate(iso: string | null) {
+  if (!iso) return "";
+  return new Date(iso).toLocaleDateString("en-GB", { month: "long", year: "numeric" });
+}
+
 export async function generateStaticParams() {
-  return Object.keys(ARTICLES).map((slug) => ({ slug }));
+  const hardcodedSlugs = Object.keys(HARDCODED).map((slug) => ({ slug }));
+  try {
+    const supabase = await getSupabaseAdminClient();
+    const { data } = await supabase.from("articles").select("slug").eq("published", true);
+    const dbSlugs = (data ?? []).map((r) => ({ slug: r.slug }));
+    const all = [...hardcodedSlugs];
+    for (const s of dbSlugs) {
+      if (!all.find((x) => x.slug === s.slug)) all.push(s);
+    }
+    return all;
+  } catch {
+    return hardcodedSlugs;
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const article = ARTICLES[slug];
+  try {
+    const supabase = await getSupabaseAdminClient();
+    const { data } = await supabase.from("articles").select("title, excerpt").eq("slug", slug).eq("published", true).single();
+    if (data) return { title: `${data.title} — Eleusis FX`, description: data.excerpt ?? "", openGraph: { title: data.title, description: data.excerpt ?? "", type: "article" } };
+  } catch {}
+  const article = HARDCODED[slug];
   if (!article) return {};
-  return {
-    title: `${article.title} — Eleusis FX`,
-    description: article.excerpt,
-    openGraph: { title: article.title, description: article.excerpt, type: "article" },
-  };
+  return { title: `${article.title} — Eleusis FX`, description: article.excerpt, openGraph: { title: article.title, description: article.excerpt, type: "article" } };
 }
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const article = ARTICLES[slug];
-  if (!article) notFound();
 
-  const { tag, title, date, readTime, content } = article;
+  let tag: string, title: string, date: string, readTime: string, content: string;
+
+  try {
+    const supabase = await getSupabaseAdminClient();
+    const { data } = await supabase
+      .from("articles")
+      .select("category, title, excerpt, published_at, read_time, content")
+      .eq("slug", slug)
+      .eq("published", true)
+      .single();
+
+    if (data) {
+      tag = data.category ?? "Trading";
+      title = data.title;
+      date = formatDate(data.published_at);
+      readTime = data.read_time ? `${data.read_time} min read` : "";
+      content = data.content ?? "";
+    } else {
+      const h = HARDCODED[slug];
+      if (!h) notFound();
+      ({ tag, title, date, readTime, content } = h);
+    }
+  } catch {
+    const h = HARDCODED[slug];
+    if (!h) notFound();
+    ({ tag, title, date, readTime, content } = h);
+  }
 
   return (
     <>
@@ -117,13 +160,10 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           <div style={{ display: "flex", gap: 24, marginBottom: 60, paddingBottom: 40, borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
             <span style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)" }}>Eleusis FX</span>
             <span style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.18)" }}>{date}</span>
-            <span style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.18)" }}>{readTime}</span>
+            {readTime && <span style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.18)" }}>{readTime}</span>}
           </div>
 
-          <div
-            className="article-body"
-            dangerouslySetInnerHTML={{ __html: content }}
-          />
+          <div className="article-body" dangerouslySetInnerHTML={{ __html: content }} />
         </article>
       </main>
       <Footer />
