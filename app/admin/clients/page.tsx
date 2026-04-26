@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminClientsPage() {
   const supabase = await getSupabaseAdminClient();
 
-  const [{ data: applications }, { data: leads }] = await Promise.all([
+  const [appsResult, leadsResult] = await Promise.all([
     supabase
       .from("applications")
       .select("id, first_name, last_name, email, prop_firm, created_at, status, notes")
@@ -20,8 +20,11 @@ export default async function AdminClientsPage() {
       .limit(50),
   ]);
 
-  const apps = (applications ?? []).map((a) => ({ ...a, status: a.status ?? "new" }));
-  const emailLeads = leads ?? [];
+  if (appsResult.error) console.error("[admin/clients] applications query error:", appsResult.error.message, appsResult.error.code);
+  if (leadsResult.error) console.error("[admin/clients] leads query error:", leadsResult.error.message, leadsResult.error.code);
+
+  const apps = (appsResult.data ?? []).map((a) => ({ ...a, status: a.status ?? "new" }));
+  const emailLeads = leadsResult.data ?? [];
 
   return (
     <div style={{ padding: "56px 48px 80px" }}>
