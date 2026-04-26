@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import CreateMetricsModal from "./CreateMetricsModal";
 
 type MetricsRow = {
   user_id: string;
@@ -41,6 +42,7 @@ export default function MetricsClient({ rows: initial }: { rows: MetricsRow[] })
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   function openRow(row: MetricsRow) {
     setSelected(row);
@@ -81,14 +83,51 @@ export default function MetricsClient({ rows: initial }: { rows: MetricsRow[] })
 
   if (rows.length === 0) {
     return (
-      <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", padding: "40px 28px", fontSize: 13, color: "rgba(210,220,240,0.88)" }}>
-        No client metrics yet. Create a client account first.
+      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <button
+          onClick={() => setShowCreateModal(true)}
+          style={{
+            alignSelf: "flex-start",
+            background: "#4f8ef7", color: "#020305", border: "none",
+            fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700,
+            fontSize: 11, letterSpacing: 2, textTransform: "uppercase",
+            padding: "12px 20px", cursor: "pointer",
+          }}
+        >
+          + Create Metrics
+        </button>
+        <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", padding: "40px 28px", fontSize: 13, color: "rgba(210,220,240,0.88)" }}>
+          No client metrics yet. Create a client account first or add metrics manually.
+        </div>
+        {showCreateModal && (
+          <CreateMetricsModal
+            onClose={() => setShowCreateModal(false)}
+            onSuccess={() => {
+              setShowCreateModal(false);
+              window.location.reload();
+            }}
+          />
+        )}
       </div>
     );
   }
 
   return (
-    <div style={{ display: "flex", gap: 24, alignItems: "flex-start" }}>
+    <>
+      <div style={{ marginBottom: 16 }}>
+        <button
+          onClick={() => setShowCreateModal(true)}
+          style={{
+            background: "#4f8ef7", color: "#020305", border: "none",
+            fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700,
+            fontSize: 11, letterSpacing: 2, textTransform: "uppercase",
+            padding: "12px 20px", cursor: "pointer",
+          }}
+        >
+          + Create Metrics
+        </button>
+      </div>
+      <div style={{ display: "flex", gap: 24, alignItems: "flex-start" }}>
       {/* List */}
       <div style={{ flex: 1 }}>
         <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", overflow: "hidden" }}>
@@ -234,5 +273,15 @@ export default function MetricsClient({ rows: initial }: { rows: MetricsRow[] })
         </div>
       )}
     </div>
+    {showCreateModal && (
+      <CreateMetricsModal
+        onClose={() => setShowCreateModal(false)}
+        onSuccess={() => {
+          setShowCreateModal(false);
+          window.location.reload();
+        }}
+      />
+    )}
+    </>
   );
 }
