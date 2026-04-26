@@ -1,38 +1,43 @@
 import MarketTickerStrip from "@/components/dashboard/MarketTickerStrip";
+import { getSupabaseServerClient } from "@/lib/supabase/server";
 
-const DEMO_METRICS = {
-  phase: 1,
-  phaseStatus: "in_progress",
-  balance: 100000,
-  equity: 102340,
-  dailyDrawdown: 1.2,
-  maxDrawdown: 2.4,
-  profitTarget: 4.8,
-  profitGoal: 10,
-  daysUsed: 12,
-  daysAllowed: 30,
-};
+export const dynamic = "force-dynamic";
 
-const DEMO_EQUITY = [
-  { day: "Day 1", equity: 100000 },
-  { day: "Day 3", equity: 100480 },
-  { day: "Day 5", equity: 100120 },
-  { day: "Day 7", equity: 101200 },
-  { day: "Day 9", equity: 101800 },
-  { day: "Day 11", equity: 101600 },
-  { day: "Day 12", equity: 102340 },
-];
+export default async function DashboardPage() {
+  const supabase = await getSupabaseServerClient();
+  const { data: { user } } = await supabase.auth.getUser();
 
-export default function DashboardPage() {
-  const m = DEMO_METRICS;
-  const progressPct = (m.profitTarget / m.profitGoal) * 100;
-  const daysPct = (m.daysUsed / m.daysAllowed) * 100;
+  const [{ data: metrics }, { data: history }] = await Promise.all([
+    supabase
+      .from("client_metrics")
+      .select("*")
+      .eq("user_id", user?.id)
+      .single(),
+    supabase
+      .from("equity_history")
+      .select("recorded_at, equity")
+      .eq("user_id", user?.id)
+      .order("recorded_at", { ascending: true })
+      .limit(30),
+  ]);
+
+  if (!metrics) {
+    return <EmptyState />;
+  }
+
+  const m = metrics;
+  const progressPct = (m.profit_target / m.profit_goal) * 100;
+  const daysPct = (m.days_used / m.days_allowed) * 100;
+
+  const equityData: { day: string; equity: number }[] = (history ?? []).map((r, i) => ({
+    day: `Day ${i + 1}`,
+    equity: Number(r.equity),
+  }));
 
   return (
     <div style={{ padding: "40px 40px 80px" }}>
       <MarketTickerStrip />
 
-      {/* Header */}
       <div style={{ marginBottom: 40 }}>
         <div style={{ fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: "#4f8ef7", marginBottom: 8 }}>Client Dashboard</div>
         <h1 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 32, letterSpacing: -1 }}>
@@ -40,21 +45,20 @@ export default function DashboardPage() {
         </h1>
       </div>
 
-      {/* Phase badge */}
       <div style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "rgba(79,142,247,0.07)", border: "1px solid rgba(79,142,247,0.2)", padding: "10px 20px", marginBottom: 32 }}>
-        <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#4f8ef7", animation: "blink 1.5s infinite", display: "inline-block" }} />
+        <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#4f8ef7", display: "inline-block" }} />
         <span style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontSize: 11, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase", color: "#7eb3ff" }}>
-          Phase {m.phase} — In Progress
+          Phase {m.phase} — {m.phase_status === "in_progress" ? "In Progress" : m.phase_status === "passed" ? "Passed" : "Failed"}
+          {m.prop_firm ? ` · ${m.prop_firm}` : ""}
         </span>
       </div>
 
-      {/* Metrics Grid */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 1, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.06)", marginBottom: 32 }}>
         {[
-          { label: "Account Balance", value: `$${m.balance.toLocaleString()}` },
-          { label: "Current Equity", value: `$${m.equity.toLocaleString()}`, green: true },
-          { label: "Daily Drawdown", value: `${m.dailyDrawdown}%`, warn: m.dailyDrawdown > 4 },
-          { label: "Max Drawdown", value: `${m.maxDrawdown}%`, warn: m.maxDrawdown > 8 },
+          { label: "Account Balance", value: `$${Number(m.balance).toLocaleString()}` },
+          { label: "Current Equity",  value: `$${Number(m.equity).toLocaleString()}`, green: true },
+          { label: "Daily Drawdown",  value: `${Number(m.daily_drawdown).toFixed(2)}%`, warn: Number(m.daily_drawdown) > 4 },
+          { label: "Max Drawdown",    value: `${Number(m.max_drawdown).toFixed(2)}%`,  warn: Number(m.max_drawdown) > 8 },
         ].map(({ label, value, green, warn }) => (
           <div key={label} style={{ background: "#08090f", padding: "32px 28px" }}>
             <div style={{ fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", marginBottom: 12 }}>{label}</div>
@@ -65,35 +69,50 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      {/* Progress bars */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 32 }}>
-        {/* Profit Target Progress */}
         <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", padding: "32px 28px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
             <div style={{ fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)" }}>Profit Target Progress</div>
-            <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700, fontSize: 14, color: "#22c55e" }}>{m.profitTarget}% / {m.profitGoal}%</div>
+            <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700, fontSize: 14, color: "#22c55e" }}>{Number(m.profit_target).toFixed(1)}% / {Number(m.profit_goal).toFixed(0)}%</div>
           </div>
           <div style={{ height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 2, overflow: "hidden" }}>
-            <div style={{ height: "100%", width: `${progressPct}%`, background: "linear-gradient(90deg, #4f8ef7, #22c55e)", transition: "width 0.5s ease" }} />
+            <div style={{ height: "100%", width: `${Math.min(progressPct, 100)}%`, background: "linear-gradient(90deg, #4f8ef7, #22c55e)", transition: "width 0.5s ease" }} />
           </div>
-          <div style={{ marginTop: 10, fontSize: 11, color: "rgba(232,234,240,0.38)" }}>{(m.profitGoal - m.profitTarget).toFixed(1)}% remaining to target</div>
+          <div style={{ marginTop: 10, fontSize: 11, color: "rgba(232,234,240,0.38)" }}>{(Number(m.profit_goal) - Number(m.profit_target)).toFixed(1)}% remaining to target</div>
         </div>
 
-        {/* Days Progress */}
         <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", padding: "32px 28px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
             <div style={{ fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)" }}>Days Used</div>
-            <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700, fontSize: 14, color: "#e8eaf0" }}>{m.daysUsed} / {m.daysAllowed}</div>
+            <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700, fontSize: 14, color: "#e8eaf0" }}>{m.days_used} / {m.days_allowed}</div>
           </div>
           <div style={{ height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 2, overflow: "hidden" }}>
-            <div style={{ height: "100%", width: `${daysPct}%`, background: "#4f8ef7", transition: "width 0.5s ease" }} />
+            <div style={{ height: "100%", width: `${Math.min(daysPct, 100)}%`, background: "#4f8ef7", transition: "width 0.5s ease" }} />
           </div>
-          <div style={{ marginTop: 10, fontSize: 11, color: "rgba(232,234,240,0.38)" }}>{m.daysAllowed - m.daysUsed} days remaining</div>
+          <div style={{ marginTop: 10, fontSize: 11, color: "rgba(232,234,240,0.38)" }}>{m.days_allowed - m.days_used} days remaining</div>
         </div>
       </div>
 
-      {/* Equity Chart */}
-      <EquityChart data={DEMO_EQUITY} />
+      {equityData.length > 1 && <EquityChart data={equityData} />}
+    </div>
+  );
+}
+
+function EmptyState() {
+  return (
+    <div style={{ padding: "40px 40px 80px" }}>
+      <MarketTickerStrip />
+      <div style={{ marginTop: 80, maxWidth: 480 }}>
+        <div style={{ fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: "#4f8ef7", marginBottom: 16 }}>Client Dashboard</div>
+        <h1 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 28, letterSpacing: -1, marginBottom: 20 }}>
+          No evaluation data yet
+        </h1>
+        <p style={{ fontSize: 14, lineHeight: 1.8, color: "rgba(232,234,240,0.38)" }}>
+          Your challenge metrics will appear here once your evaluation has been set up. Contact Eleusis FX at{" "}
+          <a href="mailto:eleusiscapital@protonmail.com" style={{ color: "#4f8ef7", textDecoration: "none" }}>eleusiscapital@protonmail.com</a>
+          {" "}if you believe this is an error.
+        </p>
+      </div>
     </div>
   );
 }
