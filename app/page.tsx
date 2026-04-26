@@ -9,11 +9,15 @@ import PricingSection from "@/components/home/PricingSection";
 import LeadMagnet from "@/components/home/LeadMagnet";
 import FaqSection from "@/components/home/FaqSection";
 import ApplyForm from "@/components/home/ApplyForm";
+import PublicMarketTicker from "@/components/layout/PublicMarketTicker";
 
 export default function HomePage() {
   return (
     <>
       <Nav />
+      <PublicMarketTicker />
+      {/* 38px spacer so content clears the fixed market ticker bar */}
+      <div style={{ height: 38 }} />
       <Hero />
       <Ticker />
       <StatsRow />
