@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabaseAdminClient } from "@/lib/supabase/server";
+import { getSupabaseAdminClient, getSupabaseServerClient } from "@/lib/supabase/server";
 
 const ALLOWED_FIELDS = [
   "prop_firm", "phase", "phase_status", "balance", "equity",
@@ -9,6 +9,12 @@ const ALLOWED_FIELDS = [
 
 export async function PATCH(req: NextRequest) {
   try {
+    const authClient = await getSupabaseServerClient();
+    const { data: { user } } = await authClient.auth.getUser();
+    if (!user || user.app_metadata?.role !== "admin") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     const { user_id, ...fields } = await req.json();
     if (!user_id) return NextResponse.json({ error: "user_id required" }, { status: 400 });
 

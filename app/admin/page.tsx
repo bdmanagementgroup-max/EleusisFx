@@ -5,6 +5,7 @@ const TILES = [
   { href: "/admin/clients", label: "Clients", desc: "View applications, manage leads, and create client accounts." },
   { href: "/admin/metrics", label: "Metrics", desc: "Edit live challenge metrics for each client account." },
   { href: "/admin/resources", label: "Resources", desc: "Add prop firm guides, tools, and PDF downloads." },
+  { href: "/admin/past-clients", label: "Past Clients", desc: "View historical client records, challenge results, and contact details." },
 ];
 
 export default function AdminOverview() {

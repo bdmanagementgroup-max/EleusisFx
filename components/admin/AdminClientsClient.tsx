@@ -62,6 +62,7 @@ export default function AdminClientsClient({ applications: initial }: { applicat
   const [deleting, setDeleting] = useState<string | null>(null);
   const [resetLinks, setResetLinks] = useState<Record<string, string>>({});
   const [resetLoading, setResetLoading] = useState<string | null>(null);
+  const [noteErrors, setNoteErrors] = useState<Record<string, string>>({});
 
   function toggleExpand(id: string) {
     setExpanded((prev) => {
@@ -86,11 +87,20 @@ export default function AdminClientsClient({ applications: initial }: { applicat
 
   async function saveNotes(id: string) {
     setSavingNotes(id);
-    await fetch("/api/applications", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, notes: notes[id] }),
-    });
+    setNoteErrors((e) => ({ ...e, [id]: "" }));
+    try {
+      const res = await fetch("/api/applications", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, notes: notes[id] }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setNoteErrors((e) => ({ ...e, [id]: data.error ?? "Failed to save notes" }));
+      }
+    } catch {
+      setNoteErrors((e) => ({ ...e, [id]: "Network error — notes not saved" }));
+    }
     setSavingNotes(null);
   }
 
@@ -204,6 +214,9 @@ export default function AdminClientsClient({ applications: initial }: { applicat
                     <ActionBtn onClick={() => saveNotes(id)} disabled={savingNotes === id} color="#4f8ef7">
                       {savingNotes === id ? "Saving…" : "Save Notes"}
                     </ActionBtn>
+                    {noteErrors[id] && (
+                      <div style={{ fontSize: 10, color: "#ef4444", marginTop: 6 }}>{noteErrors[id]}</div>
+                    )}
                   </div>
 
                   {/* Password reset */}
@@ -226,11 +239,12 @@ export default function AdminClientsClient({ applications: initial }: { applicat
                           style={{
                             background: "rgba(79,142,247,0.06)", border: "1px solid rgba(79,142,247,0.2)",
                             padding: "8px 12px", fontSize: 10, color: "#7eb3ff",
-                            wordBreak: "break-all", cursor: "pointer", lineHeight: 1.6,
+                            overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                            cursor: "pointer", lineHeight: 1.6,
                           }}
-                          title="Click to copy"
+                          title={resetLink}
                         >
-                          {resetLink}
+                          {resetLink.length > 60 ? resetLink.slice(0, 60) + "…" : resetLink}
                         </div>
                         <div style={{ fontSize: 10, color: "rgba(210,220,240,0.3)", marginTop: 6 }}>Click to copy · Link expires after one use</div>
                       </div>

@@ -21,22 +21,19 @@ export async function proxy(req: NextRequest) {
     }
   );
 
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { user } } = await supabase.auth.getUser();
 
-  // Redirect unauthenticated users away from protected routes
-  if (!session && (pathname.startsWith("/dashboard") || pathname.startsWith("/admin"))) {
+  if (!user && (pathname.startsWith("/dashboard") || pathname.startsWith("/admin"))) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  // Redirect authenticated users away from login
-  if (session && pathname === "/login") {
-    const role = session.user?.app_metadata?.role;
+  if (user && pathname === "/login") {
+    const role = user.app_metadata?.role;
     return NextResponse.redirect(new URL(role === "admin" ? "/admin" : "/dashboard", req.url));
   }
 
-  // Admin-only routes
-  if (session && pathname.startsWith("/admin")) {
-    const role = session.user?.app_metadata?.role;
+  if (user && pathname.startsWith("/admin")) {
+    const role = user.app_metadata?.role;
     if (role !== "admin") {
       return NextResponse.redirect(new URL("/dashboard", req.url));
     }

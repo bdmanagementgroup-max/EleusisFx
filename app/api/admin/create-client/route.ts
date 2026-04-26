@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabaseAdminClient } from "@/lib/supabase/server";
+import { getSupabaseAdminClient, getSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function POST(req: NextRequest) {
   try {
+    const authClient = await getSupabaseServerClient();
+    const { data: { user: adminUser } } = await authClient.auth.getUser();
+    if (!adminUser || adminUser.app_metadata?.role !== "admin") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     const {
       email, password,
       prop_firm = "", phase = 1, phase_status = "in_progress",

@@ -26,6 +26,7 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
   const [selected, setSelected] = useState<Client | null>(null);
   const [search, setSearch] = useState("");
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const [editFields, setEditFields] = useState({ email: "", phone: "", notes: "", challenge_result: "" });
 
   const filtered = clients.filter((c) =>
@@ -40,16 +41,24 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
   async function save() {
     if (!selected) return;
     setSaving(true);
-    const res = await fetch("/api/past-clients", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: selected.id, ...editFields }),
-    });
-    const updated = await res.json();
-    setSaving(false);
-    if (!updated.error) {
-      setClients((prev) => prev.map((c) => (c.id === updated.id ? updated : c)));
-      setSelected(updated);
+    setSaveError(null);
+    try {
+      const res = await fetch("/api/past-clients", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: selected.id, ...editFields }),
+      });
+      const updated = await res.json();
+      if (updated.error) {
+        setSaveError(updated.error);
+      } else {
+        setClients((prev) => prev.map((c) => (c.id === updated.id ? updated : c)));
+        setSelected(updated);
+      }
+    } catch {
+      setSaveError("Network error — changes not saved");
+    } finally {
+      setSaving(false);
     }
   }
 
@@ -228,6 +237,9 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
               >
                 {saving ? "Saving…" : "Save Changes"}
               </button>
+              {saveError && (
+                <div style={{ fontSize: 10, color: "#ef4444", marginTop: 6 }}>{saveError}</div>
+              )}
             </div>
 
             <div style={{ marginTop: 20, paddingTop: 16, borderTop: "1px solid rgba(255,255,255,0.06)", fontSize: 10, color: "rgba(232,234,240,0.2)" }}>

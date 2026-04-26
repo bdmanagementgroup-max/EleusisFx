@@ -9,18 +9,23 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const { email } = await req.json();
-    if (!email) return NextResponse.json({ error: "Email required" }, { status: 400 });
+    const { user_id, recorded_at, equity } = await req.json();
+    if (!user_id || !recorded_at || equity === undefined) {
+      return NextResponse.json({ error: "user_id, recorded_at and equity are required" }, { status: 400 });
+    }
+    if (isNaN(Number(equity))) {
+      return NextResponse.json({ error: "equity must be a number" }, { status: 400 });
+    }
 
     const supabase = await getSupabaseAdminClient();
-    const { data, error } = await supabase.auth.admin.generateLink({
-      type: "recovery",
-      email,
-      options: { redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/login` },
-    });
+    const { data, error } = await supabase
+      .from("equity_history")
+      .upsert({ user_id, recorded_at, equity }, { onConflict: "user_id,recorded_at" })
+      .select()
+      .single();
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-    return NextResponse.json({ link: data.properties?.action_link });
+    return NextResponse.json(data);
   } catch {
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }

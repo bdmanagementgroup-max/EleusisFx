@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function GET() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -15,6 +16,12 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
+    const authClient = await getSupabaseServerClient();
+    const { data: { user } } = await authClient.auth.getUser();
+    if (!user || user.app_metadata?.role !== "admin") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     const body = await req.json();
     const { title, slug, excerpt, category, content, published } = body;
 

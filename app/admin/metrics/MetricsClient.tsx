@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 type MetricsRow = {
   user_id: string;
@@ -39,6 +40,7 @@ export default function MetricsClient({ rows: initial }: { rows: MetricsRow[] })
   const [fields, setFields] = useState<Partial<MetricsRow>>({});
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   function openRow(row: MetricsRow) {
     setSelected(row);
@@ -53,19 +55,27 @@ export default function MetricsClient({ rows: initial }: { rows: MetricsRow[] })
   async function save() {
     if (!selected) return;
     setSaving(true);
-    const res = await fetch("/api/admin/metrics", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_id: selected.user_id, ...fields }),
-    });
-    const updated = await res.json();
-    setSaving(false);
-    if (!updated.error) {
-      const merged = { ...updated, email: selected.email };
-      setRows((prev) => prev.map((r) => (r.user_id === selected.user_id ? merged : r)));
-      setSelected(merged);
-      setFields(merged);
-      setSaved(true);
+    setSaveError(null);
+    try {
+      const res = await fetch("/api/admin/metrics", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_id: selected.user_id, ...fields }),
+      });
+      const updated = await res.json();
+      if (updated.error) {
+        setSaveError(updated.error);
+      } else {
+        const merged = { ...updated, email: selected.email };
+        setRows((prev) => prev.map((r) => (r.user_id === selected.user_id ? merged : r)));
+        setSelected(merged);
+        setFields(merged);
+        setSaved(true);
+      }
+    } catch {
+      setSaveError("Network error — changes not saved");
+    } finally {
+      setSaving(false);
     }
   }
 
@@ -87,7 +97,7 @@ export default function MetricsClient({ rows: initial }: { rows: MetricsRow[] })
               key={row.user_id}
               onClick={() => openRow(row)}
               style={{
-                display: "grid", gridTemplateColumns: "1fr auto auto auto",
+                display: "grid", gridTemplateColumns: "1fr auto auto auto auto",
                 padding: "16px 24px", borderBottom: "1px solid rgba(255,255,255,0.04)",
                 alignItems: "center", gap: 16, cursor: "pointer",
                 background: selected?.user_id === row.user_id ? "rgba(79,142,247,0.06)" : "transparent",
@@ -109,6 +119,18 @@ export default function MetricsClient({ rows: initial }: { rows: MetricsRow[] })
                 {row.phase_status.replace("_", " ")}
               </span>
               <span style={{ fontSize: 12, color: "#22c55e" }}>${Number(row.balance).toLocaleString()}</span>
+              <Link
+                href={`/admin/metrics/${row.user_id}`}
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase",
+                  color: "#4f8ef7", textDecoration: "none",
+                  border: "1px solid rgba(79,142,247,0.2)", padding: "4px 10px",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                View →
+              </Link>
             </div>
           ))}
         </div>
@@ -205,6 +227,9 @@ export default function MetricsClient({ rows: initial }: { rows: MetricsRow[] })
             >
               {saving ? "Saving…" : saved ? "Saved ✓" : "Save Changes"}
             </button>
+            {saveError && (
+              <div style={{ fontSize: 10, color: "#ef4444", marginTop: 6 }}>{saveError}</div>
+            )}
           </div>
         </div>
       )}
