@@ -44,7 +44,7 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
   const [search, setSearch] = useState("");
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
-  const [editFields, setEditFields] = useState({ email: "", phone: "", address: "", prop_firm: "", notes: "", challenge_result: "" });
+  const [editFields, setEditFields] = useState({ email: "", phone: "", address: "", account_size_usd: "", fee_paid_gbp: "", prop_firm: "", notes: "", challenge_result: "" });
   const [visibleColumns, setVisibleColumns] = useState<ColumnKey[]>(DEFAULT_COLUMNS);
   const [showColumnSettings, setShowColumnSettings] = useState(false);
 
@@ -118,7 +118,16 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
 
   function openClient(c: Client) {
     setSelected(c);
-    setEditFields({ email: c.email ?? "", phone: c.phone ?? "", address: c.address ?? "", prop_firm: c.prop_firm ?? "", notes: c.notes ?? "", challenge_result: c.challenge_result ?? "" });
+    setEditFields({
+      email: c.email ?? "",
+      phone: c.phone ?? "",
+      address: c.address ?? "",
+      account_size_usd: String(c.account_size_usd ?? ""),
+      fee_paid_gbp: String(c.fee_paid_gbp ?? ""),
+      prop_firm: c.prop_firm ?? "",
+      notes: c.notes ?? "",
+      challenge_result: c.challenge_result ?? ""
+    });
   }
 
   async function save() {
@@ -310,6 +319,29 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
                     <option key={firm} value={firm}>{firm}</option>
                   ))}
                 </select>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                <div>
+                  <label style={labelStyle}>Account Size (USD)</label>
+                  <input
+                    type="number"
+                    value={editFields.account_size_usd}
+                    onChange={(e) => setEditFields((f) => ({ ...f, account_size_usd: e.target.value }))}
+                    placeholder="100000"
+                    style={inputStyle}
+                  />
+                </div>
+                <div>
+                  <label style={labelStyle}>Fee Paid (GBP)</label>
+                  <input
+                    type="number"
+                    value={editFields.fee_paid_gbp}
+                    onChange={(e) => setEditFields((f) => ({ ...f, fee_paid_gbp: e.target.value }))}
+                    placeholder="550"
+                    style={inputStyle}
+                  />
+                </div>
               </div>
 
               <div>

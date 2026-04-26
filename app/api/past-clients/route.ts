@@ -23,7 +23,7 @@ export async function PATCH(req: NextRequest) {
   const { id, ...fields } = await req.json();
   if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
 
-  const allowed = ["email", "phone", "address", "prop_firm", "notes", "challenge_result"];
+  const allowed = ["email", "phone", "address", "account_size_usd", "fee_paid_gbp", "prop_firm", "notes", "challenge_result"];
   const update: Record<string, string> = {};
   for (const k of allowed) {
     if (k in fields) update[k] = fields[k];
