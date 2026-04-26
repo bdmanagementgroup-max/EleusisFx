@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdminClient, getSupabaseServerClient } from "@/lib/supabase/server";
+import { sendWelcomeEmail } from "@/lib/email/sendWelcomeEmail";
 
 const VALID_STATUSES = ["new", "reviewed", "active", "funded", "pending"] as const;
 
@@ -71,52 +72,29 @@ export async function POST(req: NextRequest) {
     const notionKey = process.env.NOTION_API_KEY;
     const notionDb = process.env.NOTION_LEADS_DATABASE_ID;
 
-    console.log("[applications] NOTION_API_KEY present:", !!notionKey);
-    console.log("[applications] NOTION_LEADS_DATABASE_ID:", notionDb);
-
-    if (!notionKey || !notionDb) {
-      console.error("[applications] Missing Notion env vars");
-      return NextResponse.json({ error: "Notion not configured" }, { status: 500 });
-    }
-
-    const { Client } = await import("@notionhq/client");
-    const notion = new Client({ auth: notionKey });
-
-    try {
-      await notion.pages.create({
-        parent: { database_id: notionDb },
-        properties: {
-          "Email": {
-            title: [{ text: { content: email } }],
+    if (notionKey && notionDb) {
+      try {
+        const { Client } = await import("@notionhq/client");
+        const notion = new Client({ auth: notionKey });
+        await notion.pages.create({
+          parent: { database_id: notionDb },
+          properties: {
+            "Email": { title: [{ text: { content: email } }] },
+            "Name": { rich_text: [{ text: { content: `${firstName} ${lastName}` } }] },
+            "Prop Firm": { rich_text: [{ text: { content: propFirm || "" } }] },
+            "Phone": { rich_text: [{ text: { content: phone || "" } }] },
+            "Notes": { rich_text: [{ text: { content: notes || "" } }] },
+            "Source": { select: { name: "Website" } },
+            "Status": { select: { name: "New" } },
+            "Submitted At": { date: { start: new Date().toISOString() } },
           },
-          "Name": {
-            rich_text: [{ text: { content: `${firstName} ${lastName}` } }],
-          },
-          "Prop Firm": {
-            rich_text: [{ text: { content: propFirm || "" } }],
-          },
-          "Phone": {
-            rich_text: [{ text: { content: phone || "" } }],
-          },
-          "Notes": {
-            rich_text: [{ text: { content: notes || "" } }],
-          },
-          "Source": {
-            select: { name: "Website" },
-          },
-          "Status": {
-            select: { name: "New" },
-          },
-          "Submitted At": {
-            date: { start: new Date().toISOString() },
-          },
-        },
-      });
-      console.log("[applications] Notion page created successfully");
-    } catch (notionErr: any) {
-      console.error("[applications] Notion error:", notionErr?.message);
-      console.error("[applications] Notion error body:", JSON.stringify(notionErr?.body));
-      // Don't return error — still try Supabase and return success to user
+        });
+        console.log("[applications] Notion page created successfully");
+      } catch (notionErr: any) {
+        console.error("[applications] Notion error:", notionErr?.message);
+      }
+    } else {
+      console.log("[applications] Notion not configured — skipping");
     }
 
     // Also write to Supabase
@@ -137,6 +115,44 @@ export async function POST(req: NextRequest) {
         console.log("[applications] Supabase insert OK");
       } catch (sbErr: any) {
         console.error("[applications] Supabase error:", sbErr?.message);
+      }
+    }
+
+    // Create Supabase client account + send welcome email
+    if (supabaseUrl && supabaseKey) {
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://eleusisfx.uk";
+      try {
+        const { createClient } = await import("@supabase/supabase-js");
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        const { randomBytes } = await import("crypto");
+        const tempPassword = randomBytes(12).toString("base64url");
+
+        const { data: newUser, error: createErr } = await supabase.auth.admin.createUser({
+          email,
+          password: tempPassword,
+          email_confirm: true,
+        });
+
+        if (!createErr && newUser?.user) {
+          await supabase.from("client_metrics").insert({
+            user_id: newUser.user.id,
+            prop_firm: propFirm ?? "",
+            phase: 1,
+            phase_status: "in_progress",
+            balance: 100000,
+            equity: 100000,
+            profit_goal: 10,
+            days_allowed: 30,
+          });
+          console.log("[applications] Client account created:", newUser.user.id);
+          await sendWelcomeEmail({ to: email, firstName, tempPassword, siteUrl });
+        } else if (createErr) {
+          console.warn("[applications] Account already exists or create failed:", createErr.message);
+          await sendWelcomeEmail({ to: email, firstName, siteUrl });
+        }
+      } catch (accountErr: any) {
+        console.error("[applications] Account/email error:", accountErr?.message);
       }
     }
 
