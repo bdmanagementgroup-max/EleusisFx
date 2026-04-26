@@ -11,7 +11,7 @@ export async function GET() {
 
     const symbols = PAIRS.join(",");
     const res = await fetch(
-      `https://api.twelvedata.com/price?symbol=${encodeURIComponent(symbols)}&apikey=${apiKey}`,
+      `https://api.twelvedata.com/quote?symbol=${encodeURIComponent(symbols)}&apikey=${apiKey}`,
       { next: { revalidate: 60 } }
     );
 
@@ -19,12 +19,11 @@ export async function GET() {
     const raw = await res.json();
 
     const rates = PAIRS.map((symbol) => {
-      const key = symbol.replace("/", "/");
-      const entry = raw[symbol] ?? raw[key];
+      const entry = raw[symbol];
       return {
         symbol,
-        price: entry?.price ?? "0",
-        change: undefined,
+        price: entry?.close ?? entry?.price ?? "0",
+        change: entry?.percent_change != null ? parseFloat(entry.percent_change) : undefined,
       };
     });
 
