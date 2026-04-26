@@ -13,6 +13,12 @@ type Client = {
   challenge: string | null;
   notes: string | null;
   source_file: string;
+  challenge_result: string | null;
+};
+
+const RESULT_STYLES: Record<string, { color: string; bg: string }> = {
+  passed: { color: "#22c55e", bg: "rgba(34,197,94,0.08)" },
+  failed: { color: "#ef4444", bg: "rgba(239,68,68,0.08)" },
 };
 
 export default function PastClientsClient({ clients: initial }: { clients: Client[] }) {
@@ -20,7 +26,7 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
   const [selected, setSelected] = useState<Client | null>(null);
   const [search, setSearch] = useState("");
   const [saving, setSaving] = useState(false);
-  const [editFields, setEditFields] = useState({ email: "", phone: "", notes: "" });
+  const [editFields, setEditFields] = useState({ email: "", phone: "", notes: "", challenge_result: "" });
 
   const filtered = clients.filter((c) =>
     `${c.name} ${c.address ?? ""} ${c.email ?? ""}`.toLowerCase().includes(search.toLowerCase())
@@ -28,7 +34,7 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
 
   function openClient(c: Client) {
     setSelected(c);
-    setEditFields({ email: c.email ?? "", phone: c.phone ?? "", notes: c.notes ?? "" });
+    setEditFields({ email: c.email ?? "", phone: c.phone ?? "", notes: c.notes ?? "", challenge_result: c.challenge_result ?? "" });
   }
 
   async function save() {
@@ -47,9 +53,20 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
     }
   }
 
+  const labelStyle: React.CSSProperties = {
+    fontSize: 9, letterSpacing: 2, textTransform: "uppercase",
+    color: "rgba(232,234,240,0.3)", display: "block", marginBottom: 6,
+  };
+
+  const inputStyle: React.CSSProperties = {
+    width: "100%", boxSizing: "border-box",
+    background: "#020305", border: "1px solid rgba(255,255,255,0.1)",
+    color: "#e8eaf0", fontSize: 13, padding: "10px 12px",
+    outline: "none", fontFamily: "inherit",
+  };
+
   return (
     <>
-      {/* Search */}
       <div style={{ marginBottom: 20 }}>
         <input
           placeholder="Search by name, address or email…"
@@ -64,12 +81,11 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
       </div>
 
       <div style={{ display: "flex", gap: 24, alignItems: "flex-start" }}>
-        {/* Table */}
         <div style={{ flex: 1, overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
             <thead>
               <tr style={{ background: "#08090f", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-                {["Name", "Address", "Account", "Fee Paid", "Email", "Phone"].map((h) => (
+                {["Name", "Address", "Account", "Fee Paid", "Result", "Email", "Phone"].map((h) => (
                   <th key={h} style={{ padding: "10px 14px", textAlign: "left", fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.3)", fontWeight: 600, whiteSpace: "nowrap" }}>
                     {h}
                   </th>
@@ -77,45 +93,59 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
               </tr>
             </thead>
             <tbody>
-              {filtered.map((c) => (
-                <tr
-                  key={c.id}
-                  onClick={() => openClient(c)}
-                  style={{
-                    borderBottom: "1px solid rgba(255,255,255,0.04)",
-                    cursor: "pointer",
-                    background: selected?.id === c.id ? "rgba(79,142,247,0.06)" : "transparent",
-                    transition: "background 0.15s",
-                  }}
-                  onMouseEnter={(e) => { if (selected?.id !== c.id) (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.02)"; }}
-                  onMouseLeave={(e) => { if (selected?.id !== c.id) (e.currentTarget as HTMLElement).style.background = "transparent"; }}
-                >
-                  <td style={{ padding: "12px 14px", color: "#e8eaf0", fontWeight: 600, whiteSpace: "nowrap" }}>{c.name}</td>
-                  <td style={{ padding: "12px 14px", color: "rgba(232,234,240,0.45)", maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                    {c.address ?? <span style={{ color: "rgba(232,234,240,0.2)" }}>—</span>}
-                  </td>
-                  <td style={{ padding: "12px 14px", color: c.account_size_usd ? "#4f8ef7" : "rgba(232,234,240,0.2)", whiteSpace: "nowrap" }}>
-                    {c.account_size_usd ? `$${(c.account_size_usd / 1000).toFixed(0)}K` : "—"}
-                  </td>
-                  <td style={{ padding: "12px 14px", color: c.fee_paid_gbp ? "#22c55e" : "rgba(232,234,240,0.2)", whiteSpace: "nowrap" }}>
-                    {c.fee_paid_gbp ? `£${c.fee_paid_gbp}` : "—"}
-                  </td>
-                  <td style={{ padding: "12px 14px", color: c.email ? "rgba(232,234,240,0.7)" : "rgba(232,234,240,0.15)", whiteSpace: "nowrap" }}>
-                    {c.email ?? <span style={{ fontSize: 10, letterSpacing: 1 }}>ADD</span>}
-                  </td>
-                  <td style={{ padding: "12px 14px", color: c.phone ? "rgba(232,234,240,0.7)" : "rgba(232,234,240,0.15)", whiteSpace: "nowrap" }}>
-                    {c.phone ?? <span style={{ fontSize: 10, letterSpacing: 1 }}>ADD</span>}
-                  </td>
-                </tr>
-              ))}
+              {filtered.map((c) => {
+                const result = c.challenge_result;
+                const rs = result ? RESULT_STYLES[result] : null;
+                return (
+                  <tr
+                    key={c.id}
+                    onClick={() => openClient(c)}
+                    style={{
+                      borderBottom: "1px solid rgba(255,255,255,0.04)",
+                      cursor: "pointer",
+                      background: selected?.id === c.id ? "rgba(79,142,247,0.06)" : "transparent",
+                      transition: "background 0.15s",
+                    }}
+                    onMouseEnter={(e) => { if (selected?.id !== c.id) (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.02)"; }}
+                    onMouseLeave={(e) => { if (selected?.id !== c.id) (e.currentTarget as HTMLElement).style.background = "transparent"; }}
+                  >
+                    <td style={{ padding: "12px 14px", color: "#e8eaf0", fontWeight: 600, whiteSpace: "nowrap" }}>{c.name}</td>
+                    <td style={{ padding: "12px 14px", color: "rgba(232,234,240,0.45)", maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                      {c.address ?? <span style={{ color: "rgba(232,234,240,0.2)" }}>—</span>}
+                    </td>
+                    <td style={{ padding: "12px 14px", color: c.account_size_usd ? "#4f8ef7" : "rgba(232,234,240,0.2)", whiteSpace: "nowrap" }}>
+                      {c.account_size_usd ? `$${(c.account_size_usd / 1000).toFixed(0)}K` : "—"}
+                    </td>
+                    <td style={{ padding: "12px 14px", color: c.fee_paid_gbp ? "#22c55e" : "rgba(232,234,240,0.2)", whiteSpace: "nowrap" }}>
+                      {c.fee_paid_gbp ? `£${c.fee_paid_gbp}` : "—"}
+                    </td>
+                    <td style={{ padding: "12px 14px", whiteSpace: "nowrap" }}>
+                      {rs ? (
+                        <span style={{ fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", padding: "3px 8px", background: rs.bg, color: rs.color }}>
+                          {result}
+                        </span>
+                      ) : (
+                        <span style={{ color: "rgba(232,234,240,0.15)", fontSize: 10 }}>—</span>
+                      )}
+                    </td>
+                    <td style={{ padding: "12px 14px", color: c.email ? "rgba(232,234,240,0.7)" : "rgba(232,234,240,0.15)", whiteSpace: "nowrap" }}>
+                      {c.email ?? <span style={{ fontSize: 10, letterSpacing: 1 }}>ADD</span>}
+                    </td>
+                    <td style={{ padding: "12px 14px", color: c.phone ? "rgba(232,234,240,0.7)" : "rgba(232,234,240,0.15)", whiteSpace: "nowrap" }}>
+                      {c.phone ?? <span style={{ fontSize: 10, letterSpacing: 1 }}>ADD</span>}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
           <div style={{ marginTop: 12, fontSize: 11, color: "rgba(232,234,240,0.2)" }}>
-            {filtered.length} of {clients.length} clients
+            {filtered.length} of {clients.length} clients ·{" "}
+            {clients.filter(c => c.challenge_result === "passed").length} passed ·{" "}
+            {clients.filter(c => c.challenge_result === "failed").length} failed
           </div>
         </div>
 
-        {/* Detail panel */}
         {selected && (
           <div style={{
             width: 320, flexShrink: 0, background: "#08090f",
@@ -146,43 +176,42 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <div>
+                <label style={labelStyle}>Challenge Result</label>
+                <select
+                  value={editFields.challenge_result}
+                  onChange={(e) => setEditFields((f) => ({ ...f, challenge_result: e.target.value }))}
+                  style={inputStyle}
+                >
+                  <option value="">Unknown</option>
+                  <option value="passed">Passed</option>
+                  <option value="failed">Failed</option>
+                </select>
+              </div>
+
               {[
                 { label: "Email", key: "email" as const, placeholder: "client@email.com" },
                 { label: "Phone", key: "phone" as const, placeholder: "+44 7700 000000" },
               ].map(({ label, key, placeholder }) => (
                 <div key={key}>
-                  <label style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.3)", display: "block", marginBottom: 6 }}>
-                    {label}
-                  </label>
+                  <label style={labelStyle}>{label}</label>
                   <input
                     value={editFields[key]}
                     onChange={(e) => setEditFields((f) => ({ ...f, [key]: e.target.value }))}
                     placeholder={placeholder}
-                    style={{
-                      width: "100%", boxSizing: "border-box",
-                      background: "#020305", border: "1px solid rgba(255,255,255,0.1)",
-                      color: "#e8eaf0", fontSize: 13, padding: "10px 12px",
-                      outline: "none", fontFamily: "inherit",
-                    }}
+                    style={inputStyle}
                   />
                 </div>
               ))}
 
               <div>
-                <label style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.3)", display: "block", marginBottom: 6 }}>
-                  Notes
-                </label>
+                <label style={labelStyle}>Notes</label>
                 <textarea
                   value={editFields.notes}
                   onChange={(e) => setEditFields((f) => ({ ...f, notes: e.target.value }))}
                   placeholder="Internal notes…"
                   rows={3}
-                  style={{
-                    width: "100%", boxSizing: "border-box", resize: "vertical",
-                    background: "#020305", border: "1px solid rgba(255,255,255,0.1)",
-                    color: "#e8eaf0", fontSize: 13, padding: "10px 12px",
-                    outline: "none", fontFamily: "inherit",
-                  }}
+                  style={{ ...inputStyle, resize: "vertical" }}
                 />
               </div>
 
