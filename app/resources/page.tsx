@@ -1,5 +1,6 @@
 import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
+import { getSupabaseAdminClient } from "@/lib/supabase/server";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,7 +8,7 @@ export const metadata: Metadata = {
   description: "Prop firm comparison guides, trading tools, calculators, and downloadable guides for funded traders.",
 };
 
-const RESOURCES = {
+const FALLBACK_RESOURCES: Record<string, { title: string; description: string; href: string; download?: boolean }[]> = {
   "Prop Firm Comparison Guides": [
     { title: "FTMO vs True Forex Funds", description: "Side-by-side comparison of rules, profit splits, fees, and payout structures.", href: "/articles/ftmo-vs-true-forex-funds" },
     { title: "What Is an FTMO Challenge?", description: "Complete breakdown of phases, rules, drawdown limits, and evaluation structure.", href: "/articles/what-is-an-ftmo-challenge" },
@@ -23,7 +24,25 @@ const RESOURCES = {
   ],
 };
 
-export default function ResourcesPage() {
+export default async function ResourcesPage() {
+  const supabase = await getSupabaseAdminClient();
+  const { data } = await supabase
+    .from("resources")
+    .select("category, title, url, description")
+    .eq("active", true)
+    .order("created_at", { ascending: true });
+
+  let resources: Record<string, { title: string; description: string; href: string }[]>;
+  if (data && data.length > 0) {
+    resources = {};
+    for (const row of data) {
+      const cat = row.category ?? "General";
+      if (!resources[cat]) resources[cat] = [];
+      resources[cat].push({ title: row.title, description: row.description ?? "", href: row.url });
+    }
+  } else {
+    resources = FALLBACK_RESOURCES;
+  }
   return (
     <>
       <Nav />
@@ -41,7 +60,7 @@ export default function ResourcesPage() {
           </p>
         </section>
 
-        {Object.entries(RESOURCES).map(([category, items]) => (
+        {Object.entries(resources).map(([category, items]) => (
           <section key={category} style={{ padding: "0 56px 80px", position: "relative", zIndex: 1 }}>
             <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 60, marginBottom: 40 }}>
               <div style={{ fontSize: 10, letterSpacing: 4, textTransform: "uppercase", color: "#4f8ef7", marginBottom: 12, display: "flex", alignItems: "center", gap: 14 }}>
@@ -51,8 +70,9 @@ export default function ResourcesPage() {
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
-              {items.map(({ title, description, href, ...rest }) => {
-                const download = "download" in rest ? (rest as any).download : false;
+              {items.map((item) => {
+                const { title, description, href } = item;
+                const download = "download" in item ? (item as any).download : false;
                 return (
                 <a
                   key={title}
