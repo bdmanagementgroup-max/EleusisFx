@@ -27,7 +27,7 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
   const [search, setSearch] = useState("");
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
-  const [editFields, setEditFields] = useState({ email: "", phone: "", address: "", notes: "", challenge: "", challenge_result: "" });
+  const [editFields, setEditFields] = useState({ email: "", phone: "", address: "", notes: "", challenge_result: "" });
 
   const filtered = clients.filter((c) =>
     `${c.name} ${c.address ?? ""} ${c.email ?? ""}`.toLowerCase().includes(search.toLowerCase())
@@ -35,7 +35,7 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
 
   function openClient(c: Client) {
     setSelected(c);
-    setEditFields({ email: c.email ?? "", phone: c.phone ?? "", address: c.address ?? "", notes: c.notes ?? "", challenge: c.challenge ?? "", challenge_result: c.challenge_result ?? "" });
+    setEditFields({ email: c.email ?? "", phone: c.phone ?? "", address: c.address ?? "", notes: c.notes ?? "", challenge_result: c.challenge_result ?? "" });
   }
 
   async function save() {
@@ -94,7 +94,7 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
             <thead>
               <tr style={{ background: "#08090f", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-                {["Name", "Address", "Account", "Fee Paid", "Challenge", "Result", "Email", "Phone"].map((h) => (
+                {["Name", "Address", "Account", "Fee Paid", "Result", "Email", "Phone"].map((h) => (
                   <th key={h} style={{ padding: "10px 14px", textAlign: "left", fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.3)", fontWeight: 600, whiteSpace: "nowrap" }}>
                     {h}
                   </th>
@@ -127,9 +127,6 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
                     </td>
                     <td style={{ padding: "12px 14px", color: c.fee_paid_gbp ? "#22c55e" : "rgba(232,234,240,0.2)", whiteSpace: "nowrap" }}>
                       {c.fee_paid_gbp ? `£${c.fee_paid_gbp}` : "—"}
-                    </td>
-                    <td style={{ padding: "12px 14px", color: c.challenge ? "rgba(232,234,240,0.7)" : "rgba(232,234,240,0.15)", whiteSpace: "nowrap" }}>
-                      {c.challenge ?? "—"}
                     </td>
                     <td style={{ padding: "12px 14px", whiteSpace: "nowrap" }}>
                       {rs ? (
@@ -188,16 +185,6 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              <div>
-                <label style={labelStyle}>Challenge</label>
-                <input
-                  value={editFields.challenge}
-                  onChange={(e) => setEditFields((f) => ({ ...f, challenge: e.target.value }))}
-                  placeholder="e.g. FTMO Challenge, TFF Phase 1"
-                  style={inputStyle}
-                />
-              </div>
-
               <div>
                 <label style={labelStyle}>Challenge Result</label>
                 <select
