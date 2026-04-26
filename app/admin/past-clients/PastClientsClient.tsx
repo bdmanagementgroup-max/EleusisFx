@@ -10,11 +10,13 @@ type Client = {
   address: string | null;
   account_size_usd: number | null;
   fee_paid_gbp: number | null;
-  challenge: string | null;
+  prop_firm: string | null;
   notes: string | null;
   source_file: string;
   challenge_result: string | null;
 };
+
+const PROP_FIRMS = ["FTMO", "FundedTrader", "E8", "The5ers", "True Forex Funds", "Topstep", "Earn2Trade", "City Traders Imperium"];
 
 const RESULT_STYLES: Record<string, { color: string; bg: string }> = {
   passed: { color: "#22c55e", bg: "rgba(34,197,94,0.08)" },
@@ -27,7 +29,7 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
   const [search, setSearch] = useState("");
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
-  const [editFields, setEditFields] = useState({ email: "", phone: "", address: "", notes: "", challenge_result: "" });
+  const [editFields, setEditFields] = useState({ email: "", phone: "", address: "", prop_firm: "", notes: "", challenge_result: "" });
 
   const filtered = clients.filter((c) =>
     `${c.name} ${c.address ?? ""} ${c.email ?? ""}`.toLowerCase().includes(search.toLowerCase())
@@ -35,7 +37,7 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
 
   function openClient(c: Client) {
     setSelected(c);
-    setEditFields({ email: c.email ?? "", phone: c.phone ?? "", address: c.address ?? "", notes: c.notes ?? "", challenge_result: c.challenge_result ?? "" });
+    setEditFields({ email: c.email ?? "", phone: c.phone ?? "", address: c.address ?? "", prop_firm: c.prop_firm ?? "", notes: c.notes ?? "", challenge_result: c.challenge_result ?? "" });
   }
 
   async function save() {
@@ -185,6 +187,20 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <div>
+                <label style={labelStyle}>Prop Firm</label>
+                <select
+                  value={editFields.prop_firm}
+                  onChange={(e) => setEditFields((f) => ({ ...f, prop_firm: e.target.value }))}
+                  style={inputStyle}
+                >
+                  <option value="">Select prop firm</option>
+                  {PROP_FIRMS.map((firm) => (
+                    <option key={firm} value={firm}>{firm}</option>
+                  ))}
+                </select>
+              </div>
+
               <div>
                 <label style={labelStyle}>Challenge Result</label>
                 <select
