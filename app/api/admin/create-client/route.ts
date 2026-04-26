@@ -1,0 +1,46 @@
+import { NextRequest, NextResponse } from "next/server";
+import { getSupabaseAdminClient } from "@/lib/supabase/server";
+
+export async function POST(req: NextRequest) {
+  try {
+    const {
+      email, password,
+      prop_firm = "", phase = 1, phase_status = "in_progress",
+      balance = 100000, profit_goal = 10, days_allowed = 30,
+    } = await req.json();
+
+    if (!email || !password) {
+      return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
+    }
+
+    const supabase = await getSupabaseAdminClient();
+
+    const { data: user, error: userErr } = await supabase.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true,
+    });
+
+    if (userErr) return NextResponse.json({ error: userErr.message }, { status: 500 });
+
+    const { error: metricsErr } = await supabase.from("client_metrics").insert({
+      user_id: user.user.id,
+      prop_firm,
+      phase,
+      phase_status,
+      balance,
+      equity: balance,
+      profit_goal,
+      days_allowed,
+    });
+
+    if (metricsErr) {
+      await supabase.auth.admin.deleteUser(user.user.id);
+      return NextResponse.json({ error: metricsErr.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ id: user.user.id, email });
+  } catch {
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
+  }
+}

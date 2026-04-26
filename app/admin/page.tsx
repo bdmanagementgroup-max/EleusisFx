@@ -2,7 +2,8 @@ import Link from "next/link";
 
 const TILES = [
   { href: "/admin/articles", label: "Articles", desc: "Create, edit, and publish articles to the site." },
-  { href: "/admin/clients", label: "Clients", desc: "View client applications and manage client accounts." },
+  { href: "/admin/clients", label: "Clients", desc: "View applications, manage leads, and create client accounts." },
+  { href: "/admin/metrics", label: "Metrics", desc: "Edit live challenge metrics for each client account." },
   { href: "/admin/resources", label: "Resources", desc: "Add prop firm guides, tools, and PDF downloads." },
 ];
 

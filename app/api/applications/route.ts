@@ -1,4 +1,51 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getSupabaseAdminClient } from "@/lib/supabase/server";
+
+const VALID_STATUSES = ["new", "reviewed", "active", "funded", "pending"] as const;
+
+export async function PATCH(req: NextRequest) {
+  try {
+    const { id, status, notes } = await req.json();
+    if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
+
+    const update: Record<string, unknown> = {};
+    if (status !== undefined) {
+      if (!VALID_STATUSES.includes(status)) {
+        return NextResponse.json({ error: "Invalid status" }, { status: 400 });
+      }
+      update.status = status;
+    }
+    if (notes !== undefined) update.notes = notes;
+    if (Object.keys(update).length === 0) {
+      return NextResponse.json({ error: "Nothing to update" }, { status: 400 });
+    }
+
+    const supabase = await getSupabaseAdminClient();
+    const { data, error } = await supabase
+      .from("applications")
+      .update(update)
+      .eq("id", id)
+      .select("id, status, notes")
+      .single();
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json(data);
+  } catch {
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const { id } = await req.json();
+    if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
+    const supabase = await getSupabaseAdminClient();
+    const { error } = await supabase.from("applications").delete().eq("id", id);
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ ok: true });
+  } catch {
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
+  }
+}
 
 export async function POST(req: NextRequest) {
   try {
