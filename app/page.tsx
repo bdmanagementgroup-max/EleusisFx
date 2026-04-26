@@ -5,6 +5,7 @@ import Ticker from "@/components/home/Ticker";
 import StatsRow from "@/components/home/StatsRow";
 import ProcessSteps from "@/components/home/ProcessSteps";
 import ProofSection from "@/components/home/ProofSection";
+import ProofFeed from "@/components/home/ProofFeed";
 import PricingSection from "@/components/home/PricingSection";
 import LeadMagnet from "@/components/home/LeadMagnet";
 import FaqSection from "@/components/home/FaqSection";
@@ -23,6 +24,7 @@ export default function HomePage() {
       <StatsRow />
       <ProcessSteps />
       <ProofSection />
+      <ProofFeed />
       <PricingSection />
       <LeadMagnet />
       <FaqSection />
