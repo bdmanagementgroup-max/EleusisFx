@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type Client = {
   id: string;
@@ -14,6 +14,21 @@ type Client = {
   notes: string | null;
   source_file: string;
   challenge_result: string | null;
+};
+
+type ColumnKey = "name" | "address" | "account" | "fee_paid" | "prop_firm" | "result" | "email" | "phone";
+
+const DEFAULT_COLUMNS: ColumnKey[] = ["name", "address", "account", "fee_paid", "prop_firm", "result", "email", "phone"];
+
+const COLUMN_LABELS: Record<ColumnKey, string> = {
+  name: "Name",
+  address: "Address",
+  account: "Account",
+  fee_paid: "Fee Paid",
+  prop_firm: "Prop Firm",
+  result: "Result",
+  email: "Email",
+  phone: "Phone",
 };
 
 const PROP_FIRMS = ["FTMO", "FundedTrader", "E8", "The5ers", "True Forex Funds", "Topstep", "Earn2Trade", "City Traders Imperium"];
@@ -30,6 +45,72 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [editFields, setEditFields] = useState({ email: "", phone: "", address: "", prop_firm: "", notes: "", challenge_result: "" });
+  const [visibleColumns, setVisibleColumns] = useState<ColumnKey[]>(DEFAULT_COLUMNS);
+  const [showColumnSettings, setShowColumnSettings] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("past_clients_columns");
+    if (saved) {
+      try {
+        setVisibleColumns(JSON.parse(saved));
+      } catch {
+        setVisibleColumns(DEFAULT_COLUMNS);
+      }
+    }
+  }, []);
+
+  const saveColumnPrefs = (cols: ColumnKey[]) => {
+    setVisibleColumns(cols);
+    localStorage.setItem("past_clients_columns", JSON.stringify(cols));
+  };
+
+  const toggleColumn = (col: ColumnKey) => {
+    const updated = visibleColumns.includes(col)
+      ? visibleColumns.filter((c) => c !== col)
+      : [...visibleColumns, col];
+    saveColumnPrefs(updated);
+  };
+
+  const moveColumn = (col: ColumnKey, direction: "up" | "down") => {
+    const idx = visibleColumns.indexOf(col);
+    if ((direction === "up" && idx === 0) || (direction === "down" && idx === visibleColumns.length - 1)) return;
+    const updated = [...visibleColumns];
+    const swapIdx = direction === "up" ? idx - 1 : idx + 1;
+    [updated[idx], updated[swapIdx]] = [updated[swapIdx], updated[idx]];
+    saveColumnPrefs(updated);
+  };
+
+  const renderCellValue = (c: Client, col: ColumnKey) => {
+    switch (col) {
+      case "name":
+        return <span style={{ color: "#e8eaf0", fontWeight: 600 }}>{c.name}</span>;
+      case "address":
+        return <span style={{ color: "rgba(232,234,240,0.45)", maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis" }}>{c.address ?? "—"}</span>;
+      case "account":
+        return <span style={{ color: c.account_size_usd ? "#4f8ef7" : "rgba(232,234,240,0.2)" }}>{c.account_size_usd ? `$${(c.account_size_usd / 1000).toFixed(0)}K` : "—"}</span>;
+      case "fee_paid":
+        return <span style={{ color: c.fee_paid_gbp ? "#22c55e" : "rgba(232,234,240,0.2)" }}>{c.fee_paid_gbp ? `£${c.fee_paid_gbp}` : "—"}</span>;
+      case "prop_firm":
+        return <span style={{ color: c.prop_firm ? "rgba(232,234,240,0.7)" : "rgba(232,234,240,0.15)" }}>{c.prop_firm ?? "—"}</span>;
+      case "result": {
+        const result = c.challenge_result?.toLowerCase();
+        const rs = result ? RESULT_STYLES[result] : null;
+        return rs ? (
+          <span style={{ fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", padding: "3px 8px", background: rs.bg, color: rs.color }}>
+            {c.challenge_result}
+          </span>
+        ) : (
+          <span style={{ color: "rgba(232,234,240,0.15)", fontSize: 10 }}>—</span>
+        );
+      }
+      case "email":
+        return <span style={{ color: c.email ? "rgba(232,234,240,0.7)" : "rgba(232,234,240,0.15)" }}>{c.email ?? <span style={{ fontSize: 10, letterSpacing: 1 }}>ADD</span>}</span>;
+      case "phone":
+        return <span style={{ color: c.phone ? "rgba(232,234,240,0.7)" : "rgba(232,234,240,0.15)" }}>{c.phone ?? <span style={{ fontSize: 10, letterSpacing: 1 }}>ADD</span>}</span>;
+      default:
+        return "—";
+    }
+  };
 
   const filtered = clients.filter((c) =>
     `${c.name} ${c.address ?? ""} ${c.email ?? ""}`.toLowerCase().includes(search.toLowerCase())
@@ -78,7 +159,7 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
 
   return (
     <>
-      <div style={{ marginBottom: 20 }}>
+      <div style={{ marginBottom: 20, display: "flex", gap: 12, alignItems: "center" }}>
         <input
           placeholder="Search by name, address or email…"
           value={search}
@@ -89,68 +170,95 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
             outline: "none", fontFamily: "inherit",
           }}
         />
+        <button
+          onClick={() => setShowColumnSettings(!showColumnSettings)}
+          style={{
+            background: "rgba(79,142,247,0.1)", border: "1px solid rgba(79,142,247,0.2)",
+            color: "#4f8ef7", fontSize: 11, letterSpacing: 1.5, textTransform: "uppercase",
+            padding: "11px 14px", cursor: "pointer", fontFamily: "inherit",
+          }}
+        >
+          ⚙ Columns
+        </button>
       </div>
+
+      {showColumnSettings && (
+        <div style={{
+          background: "rgba(79,142,247,0.08)", border: "1px solid rgba(79,142,247,0.2)",
+          padding: "16px", marginBottom: 20, borderRadius: 4,
+        }}>
+          <div style={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1, color: "#4f8ef7", marginBottom: 12 }}>Column Settings</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 12 }}>
+            {DEFAULT_COLUMNS.map((col) => (
+              <div key={col} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <input
+                  type="checkbox"
+                  checked={visibleColumns.includes(col)}
+                  onChange={() => toggleColumn(col)}
+                  style={{ cursor: "pointer" }}
+                />
+                <label style={{ fontSize: 12, color: "rgba(210,220,240,0.88)", cursor: "pointer", flex: 1 }}>
+                  {COLUMN_LABELS[col]}
+                </label>
+                <button
+                  onClick={() => moveColumn(col, "up")}
+                  disabled={visibleColumns.indexOf(col) === 0}
+                  style={{
+                    background: "transparent", border: "1px solid rgba(79,142,247,0.2)", color: "#4f8ef7",
+                    fontSize: 10, padding: "4px 6px", cursor: "pointer", opacity: visibleColumns.indexOf(col) === 0 ? 0.3 : 1,
+                  }}
+                >
+                  ↑
+                </button>
+                <button
+                  onClick={() => moveColumn(col, "down")}
+                  disabled={visibleColumns.indexOf(col) === visibleColumns.length - 1}
+                  style={{
+                    background: "transparent", border: "1px solid rgba(79,142,247,0.2)", color: "#4f8ef7",
+                    fontSize: 10, padding: "4px 6px", cursor: "pointer", opacity: visibleColumns.indexOf(col) === visibleColumns.length - 1 ? 0.3 : 1,
+                  }}
+                >
+                  ↓
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div style={{ display: "flex", gap: 24, alignItems: "flex-start" }}>
         <div style={{ flex: 1, overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
             <thead>
               <tr style={{ background: "#08090f", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-                {["Name", "Address", "Account", "Fee Paid", "Prop Firm", "Result", "Email", "Phone"].map((h) => (
-                  <th key={h} style={{ padding: "10px 14px", textAlign: "left", fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.3)", fontWeight: 600, whiteSpace: "nowrap" }}>
-                    {h}
+                {visibleColumns.map((col) => (
+                  <th key={col} style={{ padding: "10px 14px", textAlign: "left", fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.3)", fontWeight: 600, whiteSpace: "nowrap" }}>
+                    {COLUMN_LABELS[col]}
                   </th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {filtered.map((c) => {
-                const result = c.challenge_result?.toLowerCase();
-                const rs = result ? RESULT_STYLES[result] : null;
-                return (
-                  <tr
-                    key={c.id}
-                    onClick={() => openClient(c)}
-                    style={{
-                      borderBottom: "1px solid rgba(255,255,255,0.04)",
-                      cursor: "pointer",
-                      background: selected?.id === c.id ? "rgba(79,142,247,0.06)" : "transparent",
-                      transition: "background 0.15s",
-                    }}
-                    onMouseEnter={(e) => { if (selected?.id !== c.id) (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.02)"; }}
-                    onMouseLeave={(e) => { if (selected?.id !== c.id) (e.currentTarget as HTMLElement).style.background = "transparent"; }}
-                  >
-                    <td style={{ padding: "12px 14px", color: "#e8eaf0", fontWeight: 600, whiteSpace: "nowrap" }}>{c.name}</td>
-                    <td style={{ padding: "12px 14px", color: "rgba(232,234,240,0.45)", maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                      {c.address ?? <span style={{ color: "rgba(232,234,240,0.2)" }}>—</span>}
+              {filtered.map((c) => (
+                <tr
+                  key={c.id}
+                  onClick={() => openClient(c)}
+                  style={{
+                    borderBottom: "1px solid rgba(255,255,255,0.04)",
+                    cursor: "pointer",
+                    background: selected?.id === c.id ? "rgba(79,142,247,0.06)" : "transparent",
+                    transition: "background 0.15s",
+                  }}
+                  onMouseEnter={(e) => { if (selected?.id !== c.id) (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.02)"; }}
+                  onMouseLeave={(e) => { if (selected?.id !== c.id) (e.currentTarget as HTMLElement).style.background = "transparent"; }}
+                >
+                  {visibleColumns.map((col) => (
+                    <td key={col} style={{ padding: "12px 14px", whiteSpace: "nowrap" }}>
+                      {renderCellValue(c, col)}
                     </td>
-                    <td style={{ padding: "12px 14px", color: c.account_size_usd ? "#4f8ef7" : "rgba(232,234,240,0.2)", whiteSpace: "nowrap" }}>
-                      {c.account_size_usd ? `$${(c.account_size_usd / 1000).toFixed(0)}K` : "—"}
-                    </td>
-                    <td style={{ padding: "12px 14px", color: c.fee_paid_gbp ? "#22c55e" : "rgba(232,234,240,0.2)", whiteSpace: "nowrap" }}>
-                      {c.fee_paid_gbp ? `£${c.fee_paid_gbp}` : "—"}
-                    </td>
-                    <td style={{ padding: "12px 14px", color: c.prop_firm ? "rgba(232,234,240,0.7)" : "rgba(232,234,240,0.15)", whiteSpace: "nowrap" }}>
-                      {c.prop_firm ?? "—"}
-                    </td>
-                    <td style={{ padding: "12px 14px", whiteSpace: "nowrap" }}>
-                      {rs ? (
-                        <span style={{ fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", padding: "3px 8px", background: rs.bg, color: rs.color }}>
-                          {result}
-                        </span>
-                      ) : (
-                        <span style={{ color: "rgba(232,234,240,0.15)", fontSize: 10 }}>—</span>
-                      )}
-                    </td>
-                    <td style={{ padding: "12px 14px", color: c.email ? "rgba(232,234,240,0.7)" : "rgba(232,234,240,0.15)", whiteSpace: "nowrap" }}>
-                      {c.email ?? <span style={{ fontSize: 10, letterSpacing: 1 }}>ADD</span>}
-                    </td>
-                    <td style={{ padding: "12px 14px", color: c.phone ? "rgba(232,234,240,0.7)" : "rgba(232,234,240,0.15)", whiteSpace: "nowrap" }}>
-                      {c.phone ?? <span style={{ fontSize: 10, letterSpacing: 1 }}>ADD</span>}
-                    </td>
-                  </tr>
-                );
-              })}
+                  ))}
+                </tr>
+              ))}
             </tbody>
           </table>
           <div style={{ marginTop: 12, fontSize: 11, color: "rgba(232,234,240,0.2)" }}>
