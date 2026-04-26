@@ -59,10 +59,10 @@ export default function DrawdownTracker() {
           <h1 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: "clamp(32px, 5vw, 64px)", lineHeight: 0.95, letterSpacing: -2, marginBottom: 16 }}>
             Drawdown Tracker
           </h1>
-          <p style={{ fontSize: 15, lineHeight: 1.8, color: "rgba(232,234,240,0.38)", marginBottom: 16, maxWidth: 520 }}>
+          <p style={{ fontSize: 15, lineHeight: 1.8, color: "rgba(210,220,240,0.88)", marginBottom: 16, maxWidth: 520 }}>
             Track your daily and maximum drawdown against FTMO limits in real time.
           </p>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", marginBottom: 60, border: "1px solid rgba(255,255,255,0.06)", padding: "8px 14px" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 60, border: "1px solid rgba(255,255,255,0.06)", padding: "8px 14px" }}>
             FTMO limits: 5% daily · 10% max drawdown
           </div>
 
@@ -74,7 +74,7 @@ export default function DrawdownTracker() {
                 { label: "Current Balance ($)", value: currentBalance, set: setCurrentBalance, hint: "Your live equity right now" },
               ].map(({ label, value, set, hint }) => (
                 <div key={label}>
-                  <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", marginBottom: 10 }}>{label}</label>
+                  <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 10 }}>{label}</label>
                   <input
                     type="number"
                     value={value}
@@ -85,7 +85,7 @@ export default function DrawdownTracker() {
                     onFocus={(e) => (e.target.style.borderColor = "rgba(79,142,247,0.5)")}
                     onBlur={(e) => (e.target.style.borderColor = "rgba(255,255,255,0.06)")}
                   />
-                  <div style={{ fontSize: 11, color: "rgba(232,234,240,0.18)", marginTop: 6 }}>{hint}</div>
+                  <div style={{ fontSize: 11, color: "rgba(210,220,240,0.58)", marginTop: 6 }}>{hint}</div>
                 </div>
               ))}
             </div>
@@ -95,7 +95,7 @@ export default function DrawdownTracker() {
               <div style={{ background: "#08090f", border: `1px solid ${dailyBreached ? "rgba(239,68,68,0.4)" : "rgba(255,255,255,0.06)"}`, padding: "32px 28px", position: "relative", overflow: "hidden" }}>
                 <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1, background: `linear-gradient(90deg, transparent, ${getColor(dailySafe, dailyWarn, dailyBreached)}, transparent)` }} />
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
-                  <span style={{ fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)" }}>Daily Drawdown</span>
+                  <span style={{ fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)" }}>Daily Drawdown</span>
                   <span style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: 1, color: getColor(dailySafe, dailyWarn, dailyBreached) }}>
                     {dailyBreached ? "⚠ LIMIT BREACHED" : dailyWarn ? "⚠ WARNING" : "✓ SAFE"}
                   </span>
@@ -103,15 +103,15 @@ export default function DrawdownTracker() {
                 <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 48, letterSpacing: -2, lineHeight: 1, color: getColor(dailySafe, dailyWarn, dailyBreached) }}>
                   {isFinite(dailyDrawdown) ? dailyDrawdown.toFixed(2) : "0.00"}%
                 </div>
-                <div style={{ fontSize: 12, color: "rgba(232,234,240,0.38)", marginTop: 6 }}>
+                <div style={{ fontSize: 12, color: "rgba(210,220,240,0.88)", marginTop: 6 }}>
                   {isFinite(dailyRemaining) && dailyRemaining > 0 ? `${dailyRemaining.toFixed(2)}% remaining before limit` : "Limit reached"}
                 </div>
                 <div style={{ height: 3, background: "rgba(255,255,255,0.06)", borderRadius: 2, overflow: "hidden", marginTop: 16 }}>
                   <div style={{ height: "100%", width: `${Math.min((isFinite(dailyDrawdown) ? dailyDrawdown : 0) / FTMO_LIMITS.daily * 100, 100)}%`, background: getColor(dailySafe, dailyWarn, dailyBreached), transition: "width 0.3s ease" }} />
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6 }}>
-                  <span style={{ fontSize: 10, color: "rgba(232,234,240,0.18)" }}>0%</span>
-                  <span style={{ fontSize: 10, color: "rgba(232,234,240,0.18)" }}>Limit: {FTMO_LIMITS.daily}%</span>
+                  <span style={{ fontSize: 10, color: "rgba(210,220,240,0.58)" }}>0%</span>
+                  <span style={{ fontSize: 10, color: "rgba(210,220,240,0.58)" }}>Limit: {FTMO_LIMITS.daily}%</span>
                 </div>
               </div>
 
@@ -119,7 +119,7 @@ export default function DrawdownTracker() {
               <div style={{ background: "#08090f", border: `1px solid ${maxBreached ? "rgba(239,68,68,0.4)" : "rgba(255,255,255,0.06)"}`, padding: "32px 28px", position: "relative", overflow: "hidden" }}>
                 <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1, background: `linear-gradient(90deg, transparent, ${getColor(maxSafe, maxWarn, maxBreached)}, transparent)` }} />
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
-                  <span style={{ fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)" }}>Max Drawdown</span>
+                  <span style={{ fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)" }}>Max Drawdown</span>
                   <span style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: 1, color: getColor(maxSafe, maxWarn, maxBreached) }}>
                     {maxBreached ? "⚠ LIMIT BREACHED" : maxWarn ? "⚠ WARNING" : "✓ SAFE"}
                   </span>
@@ -127,20 +127,20 @@ export default function DrawdownTracker() {
                 <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 48, letterSpacing: -2, lineHeight: 1, color: getColor(maxSafe, maxWarn, maxBreached) }}>
                   {isFinite(maxDrawdown) ? maxDrawdown.toFixed(2) : "0.00"}%
                 </div>
-                <div style={{ fontSize: 12, color: "rgba(232,234,240,0.38)", marginTop: 6 }}>
+                <div style={{ fontSize: 12, color: "rgba(210,220,240,0.88)", marginTop: 6 }}>
                   {isFinite(maxRemaining) && maxRemaining > 0 ? `${maxRemaining.toFixed(2)}% remaining before limit` : "Limit reached"}
                 </div>
                 <div style={{ height: 3, background: "rgba(255,255,255,0.06)", borderRadius: 2, overflow: "hidden", marginTop: 16 }}>
                   <div style={{ height: "100%", width: `${Math.min((isFinite(maxDrawdown) ? maxDrawdown : 0) / FTMO_LIMITS.max * 100, 100)}%`, background: getColor(maxSafe, maxWarn, maxBreached), transition: "width 0.3s ease" }} />
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6 }}>
-                  <span style={{ fontSize: 10, color: "rgba(232,234,240,0.18)" }}>0%</span>
-                  <span style={{ fontSize: 10, color: "rgba(232,234,240,0.18)" }}>Limit: {FTMO_LIMITS.max}%</span>
+                  <span style={{ fontSize: 10, color: "rgba(210,220,240,0.58)" }}>0%</span>
+                  <span style={{ fontSize: 10, color: "rgba(210,220,240,0.58)" }}>Limit: {FTMO_LIMITS.max}%</span>
                 </div>
               </div>
 
               <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", padding: "20px 28px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: 11, letterSpacing: 1.5, textTransform: "uppercase", color: "rgba(232,234,240,0.38)" }}>P&L</span>
+                <span style={{ fontSize: 11, letterSpacing: 1.5, textTransform: "uppercase", color: "rgba(210,220,240,0.88)" }}>P&L</span>
                 <span style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700, fontSize: 18, color: current >= start ? "#22c55e" : "#ef4444" }}>
                   {isFinite(current - start) ? `${current >= start ? "+" : ""}$${(current - start).toFixed(2)}` : "—"}
                 </span>

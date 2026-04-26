@@ -5,7 +5,7 @@ export default function CalendarPage() {
       <h1 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 32, letterSpacing: -1, marginBottom: 8 }}>
         Economic Calendar
       </h1>
-      <p style={{ fontSize: 13, color: "rgba(232,234,240,0.38)", marginBottom: 48 }}>
+      <p style={{ fontSize: 13, color: "rgba(210,220,240,0.88)", marginBottom: 48 }}>
         High-impact news events that affect forex and crypto markets.
       </p>
 
@@ -28,7 +28,7 @@ export default function CalendarPage() {
         />
       </div>
 
-      <p style={{ marginTop: 16, fontSize: 11, color: "rgba(232,234,240,0.18)", letterSpacing: "0.5px" }}>
+      <p style={{ marginTop: 16, fontSize: 11, color: "rgba(210,220,240,0.58)", letterSpacing: "0.5px" }}>
         Data provided by Investing.com. High-impact events only.
       </p>
     </div>

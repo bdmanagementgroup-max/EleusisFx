@@ -75,7 +75,7 @@ export default async function ArticlesPage() {
           <h1 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: "clamp(36px, 6vw, 72px)", lineHeight: 0.95, letterSpacing: -2, marginBottom: 24 }}>
             Articles &amp; Guides
           </h1>
-          <p style={{ fontSize: 16, lineHeight: 1.8, color: "rgba(232,234,240,0.38)", maxWidth: 560 }}>
+          <p style={{ fontSize: 16, lineHeight: 1.8, color: "rgba(210,220,240,0.88)", maxWidth: 560 }}>
             Prop firm breakdowns, strategy insights, and everything you need to understand funded trading.
           </p>
         </section>
@@ -91,10 +91,10 @@ export default async function ArticlesPage() {
                 <h2 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700, fontSize: 20, lineHeight: 1.25, letterSpacing: -0.4, marginBottom: 16, color: "#e8eaf0", transition: "color 0.2s" }}>
                   {title}
                 </h2>
-                <p style={{ fontSize: 13, lineHeight: 1.85, color: "rgba(232,234,240,0.38)", flex: 1, marginBottom: 28 }}>{excerpt}</p>
+                <p style={{ fontSize: 13, lineHeight: 1.85, color: "rgba(210,220,240,0.88)", flex: 1, marginBottom: 28 }}>{excerpt}</p>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: 20, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-                  <span style={{ fontSize: 10, letterSpacing: "1.5px", textTransform: "uppercase" as const, color: "rgba(232,234,240,0.18)" }}>{date}{readTime ? ` · ${readTime}` : ""}</span>
-                  <span className="article-arrow-item" style={{ fontSize: 12, color: "rgba(232,234,240,0.18)", transition: "all 0.2s" }}>→</span>
+                  <span style={{ fontSize: 10, letterSpacing: "1.5px", textTransform: "uppercase" as const, color: "rgba(210,220,240,0.58)" }}>{date}{readTime ? ` · ${readTime}` : ""}</span>
+                  <span className="article-arrow-item" style={{ fontSize: 12, color: "rgba(210,220,240,0.58)", transition: "all 0.2s" }}>→</span>
                 </div>
               </Link>
             ))}

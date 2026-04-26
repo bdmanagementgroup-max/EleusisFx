@@ -48,7 +48,7 @@ export default function RiskRewardCalculator() {
           <h1 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: "clamp(32px, 5vw, 64px)", lineHeight: 0.95, letterSpacing: -2, marginBottom: 16 }}>
             Risk/Reward Calculator
           </h1>
-          <p style={{ fontSize: 15, lineHeight: 1.8, color: "rgba(232,234,240,0.38)", marginBottom: 60, maxWidth: 520 }}>
+          <p style={{ fontSize: 15, lineHeight: 1.8, color: "rgba(210,220,240,0.88)", marginBottom: 60, maxWidth: 520 }}>
             Calculate your R:R ratio and potential dollar profit vs. loss before entering any trade.
           </p>
 
@@ -62,7 +62,7 @@ export default function RiskRewardCalculator() {
                 { label: "Pip Value ($ per lot)", value: pipVal, set: setPipVal, placeholder: "10" },
               ].map(({ label, value, set, placeholder }) => (
                 <div key={label}>
-                  <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", marginBottom: 10 }}>{label}</label>
+                  <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 10 }}>{label}</label>
                   <input
                     type="number"
                     value={value}
@@ -80,11 +80,11 @@ export default function RiskRewardCalculator() {
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", padding: "40px 36px", position: "relative", overflow: "hidden" }}>
                 <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1, background: "linear-gradient(90deg, transparent, #4f8ef7, transparent)" }} />
-                <div style={{ fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", marginBottom: 20 }}>Risk/Reward Ratio</div>
+                <div style={{ fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 20 }}>Risk/Reward Ratio</div>
                 <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 64, letterSpacing: -2, lineHeight: 1, color: valid && rr >= 2 ? "#22c55e" : valid && rr >= 1 ? "#e8eaf0" : "#ef4444" }}>
                   1:{valid ? rr.toFixed(1) : "—"}
                 </div>
-                <div style={{ fontSize: 13, color: valid && rr >= 2 ? "#22c55e" : "rgba(232,234,240,0.38)", marginTop: 8 }}>
+                <div style={{ fontSize: 13, color: valid && rr >= 2 ? "#22c55e" : "rgba(210,220,240,0.88)", marginTop: 8 }}>
                   {valid && rr >= 2 ? "Good ratio — target met" : valid && rr >= 1 ? "Acceptable" : valid ? "Poor — risk exceeds reward" : "Enter valid prices"}
                 </div>
               </div>
@@ -96,7 +96,7 @@ export default function RiskRewardCalculator() {
                 { label: "Dollar Profit", value: isFinite(dollarReward) ? `$${dollarReward.toFixed(2)}` : "—", color: "#22c55e" },
               ].map(({ label, value, color }) => (
                 <div key={label} style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", padding: "20px 28px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: 11, letterSpacing: 1.5, textTransform: "uppercase", color: "rgba(232,234,240,0.38)" }}>{label}</span>
+                  <span style={{ fontSize: 11, letterSpacing: 1.5, textTransform: "uppercase", color: "rgba(210,220,240,0.88)" }}>{label}</span>
                   <span style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700, fontSize: 18, color }}>{value}</span>
                 </div>
               ))}

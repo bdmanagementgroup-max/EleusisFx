@@ -87,7 +87,7 @@ export default function Hero() {
           style={{
             fontSize: "clamp(14px, 2vw, 16px)",
             lineHeight: 1.8,
-            color: "rgba(232,234,240,0.38)",
+            color: "rgba(210,220,240,0.88)",
             maxWidth: 480,
             marginBottom: 52,
             opacity: 0,
@@ -139,7 +139,7 @@ export default function Hero() {
         >
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1, background: "linear-gradient(90deg, transparent, #4f8ef7, transparent)" }} />
 
-          <div style={{ fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", marginBottom: 28, display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 28, display: "flex", alignItems: "center", gap: 10 }}>
             Prop Specialists
             <span style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)", display: "block" }} />
           </div>
@@ -147,7 +147,7 @@ export default function Hero() {
           <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: "clamp(28px, 4vw, 40px)", lineHeight: 1.1, marginBottom: 6, letterSpacing: -1 }}>
             UK Based.<br />Expert Traders.
           </div>
-          <div style={{ fontSize: 11, color: "rgba(232,234,240,0.38)", letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 32 }}>
+          <div style={{ fontSize: 11, color: "rgba(210,220,240,0.88)", letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 32 }}>
             Prop Firm Evaluation Specialists
           </div>
 
@@ -161,7 +161,7 @@ export default function Hero() {
             { label: "Base", value: "United Kingdom" },
           ].map(({ label, value, green }) => (
             <div key={label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-              <span style={{ fontSize: 12, color: "rgba(232,234,240,0.38)" }}>{label}</span>
+              <span style={{ fontSize: 12, color: "rgba(210,220,240,0.88)" }}>{label}</span>
               <span style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontSize: 13, fontWeight: 600, color: green ? "#22c55e" : "#e8eaf0" }}>{value}</span>
             </div>
           ))}
@@ -215,7 +215,7 @@ export default function Hero() {
         .btn-primary-hero:hover span { color: #e8eaf0; }
         .btn-ghost-hero {
           font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase;
-          color: rgba(232,234,240,0.38); text-decoration: none;
+          color: rgba(210,220,240,0.88); text-decoration: none;
           display: flex; align-items: center; gap: 8px; transition: color 0.2s;
         }
         .btn-ghost-hero:hover { color: #e8eaf0; }

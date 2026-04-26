@@ -55,7 +55,7 @@ export default function ProcessSteps() {
               <span style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)", display: "block" }} />
             </div>
             <h3 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700, fontSize: 22, marginBottom: 18, letterSpacing: -0.5 }}>{title}</h3>
-            <p style={{ fontSize: 14, lineHeight: 1.85, color: "rgba(232,234,240,0.38)" }}>{desc}</p>
+            <p style={{ fontSize: 14, lineHeight: 1.85, color: "rgba(210,220,240,0.88)" }}>{desc}</p>
           </div>
         ))}
       </div>

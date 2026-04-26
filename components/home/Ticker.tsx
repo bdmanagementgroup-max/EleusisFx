@@ -33,7 +33,7 @@ export default function Ticker() {
                 fontWeight: 600,
                 letterSpacing: 3,
                 textTransform: "uppercase",
-                color: "rgba(232,234,240,0.38)",
+                color: "rgba(210,220,240,0.88)",
               }}
             >
               {text}

@@ -27,7 +27,7 @@ export default function MarketsPage() {
     <div style={{ padding: "40px 40px 80px" }}>
       <div style={{ fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: "#4f8ef7", marginBottom: 8 }}>Live Data</div>
       <h1 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 32, letterSpacing: -1, marginBottom: 8 }}>Market Prices</h1>
-      <p style={{ fontSize: 13, color: "rgba(232,234,240,0.38)", marginBottom: 48 }}>Refreshes every 60 seconds.</p>
+      <p style={{ fontSize: 13, color: "rgba(210,220,240,0.88)", marginBottom: 48 }}>Refreshes every 60 seconds.</p>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
         {/* Crypto */}
@@ -39,11 +39,11 @@ export default function MarketsPage() {
           <div style={{ padding: "0 0 8px" }}>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", padding: "12px 24px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
               {["Asset", "Price (USD)", "24h Change"].map((h) => (
-                <span key={h} style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)" }}>{h}</span>
+                <span key={h} style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)" }}>{h}</span>
               ))}
             </div>
             {cLoading ? (
-              <div style={{ padding: "32px 24px", color: "rgba(232,234,240,0.38)", fontSize: 13 }}>Loading…</div>
+              <div style={{ padding: "32px 24px", color: "rgba(210,220,240,0.88)", fontSize: 13 }}>Loading…</div>
             ) : (
               (cryptoData?.prices ?? []).map((p) =>
                 tableRow(p.symbol, `$${p.usd.toLocaleString("en-US", { maximumFractionDigits: 2 })}`, p.usd_24h_change)
@@ -61,11 +61,11 @@ export default function MarketsPage() {
           <div style={{ padding: "0 0 8px" }}>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", padding: "12px 24px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
               {["Pair", "Rate", ""].map((h) => (
-                <span key={h} style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)" }}>{h}</span>
+                <span key={h} style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)" }}>{h}</span>
               ))}
             </div>
             {fLoading ? (
-              <div style={{ padding: "32px 24px", color: "rgba(232,234,240,0.38)", fontSize: 13 }}>Loading…</div>
+              <div style={{ padding: "32px 24px", color: "rgba(210,220,240,0.88)", fontSize: 13 }}>Loading…</div>
             ) : (
               (forexData?.rates ?? []).map((r) =>
                 tableRow(r.symbol, parseFloat(r.price || "0").toFixed(4), r.change)

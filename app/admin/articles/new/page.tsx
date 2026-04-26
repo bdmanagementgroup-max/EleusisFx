@@ -42,7 +42,7 @@ export default function NewArticlePage() {
         {/* Main editor */}
         <div>
           <div style={{ marginBottom: 16 }}>
-            <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", marginBottom: 8 }}>Title</label>
+            <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 8 }}>Title</label>
             <input
               type="text" placeholder="Article title…" value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value, slug: autoSlug(e.target.value) })}
@@ -51,7 +51,7 @@ export default function NewArticlePage() {
           </div>
 
           <div style={{ marginBottom: 16 }}>
-            <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", marginBottom: 8 }}>Excerpt</label>
+            <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 8 }}>Excerpt</label>
             <textarea
               placeholder="Brief summary shown in article listings…" rows={3} value={form.excerpt}
               onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
@@ -60,14 +60,14 @@ export default function NewArticlePage() {
           </div>
 
           <div style={{ marginBottom: 16 }}>
-            <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", marginBottom: 8 }}>Content (HTML)</label>
+            <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 8 }}>Content (HTML)</label>
             <textarea
               placeholder="<h2>Section heading</h2><p>Your content here…</p>"
               rows={24} value={form.content}
               onChange={(e) => setForm({ ...form, content: e.target.value })}
               style={{ ...inputStyle, resize: "vertical", fontFamily: "monospace", fontSize: 13 }}
             />
-            <p style={{ marginTop: 8, fontSize: 11, color: "rgba(232,234,240,0.38)" }}>
+            <p style={{ marginTop: 8, fontSize: 11, color: "rgba(210,220,240,0.88)" }}>
               Write in HTML. Supported tags: h2, h3, p, ul/li, strong, em, table.
             </p>
           </div>
@@ -76,7 +76,7 @@ export default function NewArticlePage() {
         {/* Sidebar */}
         <div>
           <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", padding: "24px 20px", marginBottom: 16 }}>
-            <div style={{ fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", marginBottom: 16 }}>Publish</div>
+            <div style={{ fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 16 }}>Publish</div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               <button onClick={() => handleSave(false)} disabled={saving} className="draft-btn">
@@ -89,14 +89,14 @@ export default function NewArticlePage() {
           </div>
 
           <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", padding: "24px 20px" }}>
-            <div style={{ fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", marginBottom: 16 }}>Settings</div>
+            <div style={{ fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 16 }}>Settings</div>
 
             <div style={{ marginBottom: 14 }}>
-              <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", marginBottom: 8 }}>Slug</label>
+              <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 8 }}>Slug</label>
               <input type="text" value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} style={inputStyle} />
             </div>
             <div>
-              <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", marginBottom: 8 }}>Category</label>
+              <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 8 }}>Category</label>
               <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} style={{ ...inputStyle, cursor: "pointer" }}>
                 {["Prop Firms", "Strategy", "Funding", "News"].map((c) => <option key={c}>{c}</option>)}
               </select>

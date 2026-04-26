@@ -37,7 +37,7 @@ export default function LinksPage() {
                 fontSize: 10,
                 letterSpacing: 3,
                 textTransform: "uppercase",
-                color: "rgba(232,234,240,0.38)",
+                color: "rgba(210,220,240,0.88)",
               }}
             >
               {item}
@@ -62,7 +62,7 @@ export default function LinksPage() {
         <p
           style={{
             fontSize: 13,
-            color: "rgba(232,234,240,0.38)",
+            color: "rgba(210,220,240,0.88)",
             marginBottom: 52,
             letterSpacing: 1,
             textAlign: "center",
@@ -110,7 +110,7 @@ export default function LinksPage() {
           style={{
             marginTop: 48,
             fontSize: 11,
-            color: "rgba(232,234,240,0.18)",
+            color: "rgba(210,220,240,0.58)",
             letterSpacing: 1,
           }}
         >

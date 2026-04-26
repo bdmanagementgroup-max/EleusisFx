@@ -49,7 +49,7 @@ export default async function AdminClientsPage() {
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1, background: "linear-gradient(90deg, transparent, #4f8ef7 40%, transparent)" }} />
 
           {apps.length === 0 ? (
-            <div style={{ padding: "40px 28px", fontSize: 13, color: "rgba(232,234,240,0.38)" }}>
+            <div style={{ padding: "40px 28px", fontSize: 13, color: "rgba(210,220,240,0.88)" }}>
               No applications yet — they'll appear here when someone submits the website form.
             </div>
           ) : (
@@ -59,10 +59,10 @@ export default async function AdminClientsPage() {
                 <div key={id} style={{ display: "grid", gridTemplateColumns: "1fr 1fr auto auto", padding: "18px 28px", borderBottom: "1px solid rgba(255,255,255,0.04)", alignItems: "center", gap: 20 }}>
                   <div>
                     <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 600, fontSize: 14, color: "#e8eaf0" }}>{first_name} {last_name}</div>
-                    <div style={{ fontSize: 11, color: "rgba(232,234,240,0.38)" }}>{email}</div>
+                    <div style={{ fontSize: 11, color: "rgba(210,220,240,0.88)" }}>{email}</div>
                   </div>
-                  <span style={{ fontSize: 12, color: "rgba(232,234,240,0.38)" }}>{prop_firm || "—"}</span>
-                  <span style={{ fontSize: 11, color: "rgba(232,234,240,0.18)", whiteSpace: "nowrap" }}>{formatDate(created_at)}</span>
+                  <span style={{ fontSize: 12, color: "rgba(210,220,240,0.88)" }}>{prop_firm || "—"}</span>
+                  <span style={{ fontSize: 11, color: "rgba(210,220,240,0.58)", whiteSpace: "nowrap" }}>{formatDate(created_at)}</span>
                   <span style={{ fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", padding: "4px 12px", background: s.bg, color: s.color }}>New</span>
                 </div>
               );
@@ -80,15 +80,15 @@ export default async function AdminClientsPage() {
 
         <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", overflow: "hidden" }}>
           {emailLeads.length === 0 ? (
-            <div style={{ padding: "40px 28px", fontSize: 13, color: "rgba(232,234,240,0.38)" }}>
+            <div style={{ padding: "40px 28px", fontSize: 13, color: "rgba(210,220,240,0.88)" }}>
               No email leads yet — they'll appear here when someone downloads the free guide.
             </div>
           ) : (
             emailLeads.map(({ id, email, source, created_at }) => (
               <div key={id} style={{ display: "grid", gridTemplateColumns: "1fr auto auto", padding: "14px 28px", borderBottom: "1px solid rgba(255,255,255,0.04)", alignItems: "center", gap: 20 }}>
                 <span style={{ fontSize: 13, color: "#e8eaf0" }}>{email}</span>
-                <span style={{ fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", color: "rgba(232,234,240,0.38)" }}>{source ?? "free_guide"}</span>
-                <span style={{ fontSize: 11, color: "rgba(232,234,240,0.18)", whiteSpace: "nowrap" }}>{formatDate(created_at)}</span>
+                <span style={{ fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", color: "rgba(210,220,240,0.88)" }}>{source ?? "free_guide"}</span>
+                <span style={{ fontSize: 11, color: "rgba(210,220,240,0.58)", whiteSpace: "nowrap" }}>{formatDate(created_at)}</span>
               </div>
             ))
           )}

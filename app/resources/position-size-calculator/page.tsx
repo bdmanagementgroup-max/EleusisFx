@@ -42,7 +42,7 @@ export default function PositionSizeCalculator() {
           <h1 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: "clamp(32px, 5vw, 64px)", lineHeight: 0.95, letterSpacing: -2, marginBottom: 16 }}>
             Position Size Calculator
           </h1>
-          <p style={{ fontSize: 15, lineHeight: 1.8, color: "rgba(232,234,240,0.38)", marginBottom: 60, maxWidth: 520 }}>
+          <p style={{ fontSize: 15, lineHeight: 1.8, color: "rgba(210,220,240,0.88)", marginBottom: 60, maxWidth: 520 }}>
             Calculate your exact lot size based on account balance, risk percentage, and stop loss distance.
           </p>
 
@@ -56,7 +56,7 @@ export default function PositionSizeCalculator() {
                 { label: "Pip Value ($ per lot)", value: pipValue, set: setPipValue, placeholder: "10" },
               ].map(({ label, value, set, placeholder }) => (
                 <div key={label}>
-                  <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", marginBottom: 10 }}>{label}</label>
+                  <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 10 }}>{label}</label>
                   <input
                     type="number"
                     value={value}
@@ -76,11 +76,11 @@ export default function PositionSizeCalculator() {
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", padding: "40px 36px", position: "relative", overflow: "hidden" }}>
                 <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1, background: "linear-gradient(90deg, transparent, #4f8ef7, transparent)" }} />
-                <div style={{ fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", marginBottom: 20 }}>Position Size</div>
+                <div style={{ fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 20 }}>Position Size</div>
                 <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 64, letterSpacing: -2, lineHeight: 1, color: "#4f8ef7" }}>
                   {validLots.toFixed(2)}
                 </div>
-                <div style={{ fontSize: 13, color: "rgba(232,234,240,0.38)", marginTop: 8 }}>lots</div>
+                <div style={{ fontSize: 13, color: "rgba(210,220,240,0.88)", marginTop: 8 }}>lots</div>
               </div>
 
               {[
@@ -89,12 +89,12 @@ export default function PositionSizeCalculator() {
                 { label: "Micro Lots", value: isFinite(validLots) ? (validLots * 100).toFixed(0) : "0", color: "#e8eaf0" },
               ].map(({ label, value, color }) => (
                 <div key={label} style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", padding: "24px 28px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: 11, letterSpacing: 1.5, textTransform: "uppercase", color: "rgba(232,234,240,0.38)" }}>{label}</span>
+                  <span style={{ fontSize: 11, letterSpacing: 1.5, textTransform: "uppercase", color: "rgba(210,220,240,0.88)" }}>{label}</span>
                   <span style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700, fontSize: 20, color }}>{value}</span>
                 </div>
               ))}
 
-              <p style={{ fontSize: 11, color: "rgba(232,234,240,0.18)", lineHeight: 1.7, marginTop: 8 }}>
+              <p style={{ fontSize: 11, color: "rgba(210,220,240,0.58)", lineHeight: 1.7, marginTop: 8 }}>
                 Pip value varies by currency pair. For EUR/USD standard lots, pip value ≈ $10. Always verify with your broker.
               </p>
             </div>

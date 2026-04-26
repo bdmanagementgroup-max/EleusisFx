@@ -56,7 +56,7 @@ export default function ApplyForm() {
         <h2 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: "clamp(28px, 5vw, 60px)", lineHeight: 1, letterSpacing: -1.5, marginBottom: 24 }}>
           Let&apos;s Get You Funded.
         </h2>
-        <p style={{ fontSize: 15, lineHeight: 1.9, color: "rgba(232,234,240,0.38)", marginBottom: 40 }}>
+        <p style={{ fontSize: 15, lineHeight: 1.9, color: "rgba(210,220,240,0.88)", marginBottom: 40 }}>
           Spots are limited each month. Complete the form and we&apos;ll be in touch within 24 hours to confirm availability and next steps.
         </p>
 
@@ -68,7 +68,7 @@ export default function ApplyForm() {
             <div style={{ width: 40, height: 40, border: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0 }}>{icon}</div>
             <div>
               <strong style={{ display: "block", color: "#e8eaf0", fontSize: 14, fontWeight: 400, marginBottom: 2 }}>{title}</strong>
-              <span style={{ fontSize: 13, color: "rgba(232,234,240,0.38)" }}>{sub}</span>
+              <span style={{ fontSize: 13, color: "rgba(210,220,240,0.88)" }}>{sub}</span>
             </div>
           </div>
         ))}
@@ -91,7 +91,7 @@ export default function ApplyForm() {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
               {[{ name: "firstName", label: "First Name", placeholder: "John" }, { name: "lastName", label: "Last Name", placeholder: "Smith" }].map(({ name, label, placeholder }) => (
                 <div key={name}>
-                  <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", marginBottom: 10 }}>{label}</label>
+                  <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 10 }}>{label}</label>
                   <input type="text" placeholder={placeholder} required value={(form as any)[name]} onChange={(e) => setForm({ ...form, [name]: e.target.value })} style={inputStyle} />
                 </div>
               ))}
@@ -102,13 +102,13 @@ export default function ApplyForm() {
               { name: "phone", label: "WhatsApp / Phone", type: "tel", placeholder: "+44 7700 000000" },
             ].map(({ name, label, type, placeholder }) => (
               <div key={name} style={{ marginBottom: 16 }}>
-                <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", marginBottom: 10 }}>{label}</label>
+                <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 10 }}>{label}</label>
                 <input type={type} placeholder={placeholder} required={type === "email"} value={(form as any)[name]} onChange={(e) => setForm({ ...form, [name]: e.target.value })} style={inputStyle} />
               </div>
             ))}
 
             <div style={{ marginBottom: 16 }}>
-              <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", marginBottom: 10 }}>Prop Firm</label>
+              <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 10 }}>Prop Firm</label>
               <select required value={form.propFirm} onChange={(e) => setForm({ ...form, propFirm: e.target.value })} style={{ ...inputStyle, cursor: "pointer" }}>
                 <option value="" disabled>Select your firm</option>
                 {["FTMO", "True Forex Funds", "My Forex Funds", "Other"].map((f) => (<option key={f}>{f}</option>))}
@@ -116,12 +116,12 @@ export default function ApplyForm() {
             </div>
 
             <div style={{ marginBottom: 16 }}>
-              <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", marginBottom: 10 }}>Additional Info (Optional)</label>
+              <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 10 }}>Additional Info (Optional)</label>
               <textarea rows={3} placeholder="Anything else we should know..." value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} style={{ ...inputStyle, resize: "none" }} />
             </div>
 
             <button type="submit" className="form-submit-btn"><span>Submit Application →</span></button>
-            <p style={{ fontSize: 11, color: "rgba(232,234,240,0.18)", lineHeight: 1.7, marginTop: 16, textAlign: "center" }}>
+            <p style={{ fontSize: 11, color: "rgba(210,220,240,0.58)", lineHeight: 1.7, marginTop: 16, textAlign: "center" }}>
               We review all applications within 24 hours. Submitting does not guarantee a spot.
             </p>
           </form>
@@ -129,7 +129,7 @@ export default function ApplyForm() {
           <div style={{ padding: "40px 0", textAlign: "center" }}>
             <div style={{ fontSize: 32, marginBottom: 16 }}>✓</div>
             <p style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 600, fontSize: 17, color: "#7eb3ff", marginBottom: 8 }}>Application Received</p>
-            <p style={{ fontSize: 14, color: "rgba(232,234,240,0.38)", lineHeight: 1.7 }}>We&apos;ll be in touch within 24 hours.</p>
+            <p style={{ fontSize: 14, color: "rgba(210,220,240,0.88)", lineHeight: 1.7 }}>We&apos;ll be in touch within 24 hours.</p>
           </div>
         )}
       </div>

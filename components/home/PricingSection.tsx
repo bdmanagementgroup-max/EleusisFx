@@ -41,10 +41,10 @@ export default function PricingSection() {
         >
           One Investment.<br />One Funded Account.
         </h2>
-        <p style={{ fontSize: 15, lineHeight: 1.9, color: "rgba(232,234,240,0.38)", marginBottom: 24 }}>
+        <p style={{ fontSize: 15, lineHeight: 1.9, color: "rgba(210,220,240,0.88)", marginBottom: 24 }}>
           No hidden fees, no monthly retainers, no complications. You pay once, we pass your challenge, you receive your $100,000 funded trading account.
         </p>
-        <p style={{ fontSize: 15, lineHeight: 1.9, color: "rgba(232,234,240,0.38)", marginBottom: 24 }}>
+        <p style={{ fontSize: 15, lineHeight: 1.9, color: "rgba(210,220,240,0.88)", marginBottom: 24 }}>
           We limit spots each month to ensure every client receives our full attention and every challenge is passed.
         </p>
 
@@ -90,13 +90,13 @@ export default function PricingSection() {
         <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: "clamp(36px, 6vw, 60px)", letterSpacing: -2, lineHeight: 1.1, marginBottom: 6, color: "#e8eaf0" }}>
           Enquire for<br />Pricing
         </div>
-        <p style={{ fontSize: 13, color: "rgba(232,234,240,0.38)", marginBottom: 44, lineHeight: 1.6 }}>
+        <p style={{ fontSize: 13, color: "rgba(210,220,240,0.88)", marginBottom: 44, lineHeight: 1.6 }}>
           Pricing is discussed directly after your application is reviewed. Spots are limited — apply to confirm availability.
         </p>
 
         <ul style={{ listStyle: "none", marginBottom: 44 }}>
           {FEATURES.map((f) => (
-            <li key={f} style={{ display: "flex", alignItems: "flex-start", gap: 14, fontSize: 14, color: "rgba(232,234,240,0.38)", padding: "14px 0", borderBottom: "1px solid rgba(255,255,255,0.06)", lineHeight: 1.5 }}>
+            <li key={f} style={{ display: "flex", alignItems: "flex-start", gap: 14, fontSize: 14, color: "rgba(210,220,240,0.88)", padding: "14px 0", borderBottom: "1px solid rgba(255,255,255,0.06)", lineHeight: 1.5 }}>
               <span style={{ width: 18, height: 18, border: "1px solid rgba(79,142,247,0.4)", borderRadius: 2, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1, fontSize: 10, color: "#4f8ef7" }}>✓</span>
               {f}
             </li>

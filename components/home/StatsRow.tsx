@@ -30,7 +30,7 @@ export default function StatsRow() {
           >
             {num}
           </div>
-          <div style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)" }}>
+          <div style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)" }}>
             {label}
           </div>
         </div>

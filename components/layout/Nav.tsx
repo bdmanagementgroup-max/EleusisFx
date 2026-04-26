@@ -126,7 +126,7 @@ export default function Nav() {
                 flex: 1, textAlign: "center",
                 fontFamily: "var(--font-syne), Syne, sans-serif",
                 fontWeight: 600, fontSize: 11, letterSpacing: 2,
-                textTransform: "uppercase", color: "rgba(232,234,240,0.38)",
+                textTransform: "uppercase", color: "rgba(210,220,240,0.88)",
                 textDecoration: "none", padding: "14px",
                 border: "1px solid rgba(255,255,255,0.08)",
                 transition: "color 0.2s",
@@ -155,13 +155,13 @@ export default function Nav() {
       <style>{`
         .nav-link-item {
           font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
-          color: rgba(232,234,240,0.38); text-decoration: none; transition: color 0.2s;
+          color: rgba(210,220,240,0.88); text-decoration: none; transition: color 0.2s;
         }
         .nav-link-item:hover { color: #e8eaf0; }
         .nav-btn-item {
           font-family: var(--font-syne), Syne, sans-serif;
           font-size: 11px; font-weight: 600; letter-spacing: 2px;
-          text-transform: uppercase; color: rgba(232,234,240,0.38);
+          text-transform: uppercase; color: rgba(210,220,240,0.88);
           text-decoration: none; transition: color 0.2s;
         }
         .nav-btn-item:hover { color: #e8eaf0; }

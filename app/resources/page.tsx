@@ -55,7 +55,7 @@ export default async function ResourcesPage() {
           <h1 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: "clamp(36px, 6vw, 72px)", lineHeight: 0.95, letterSpacing: -2, marginBottom: 24 }}>
             Tools &amp; Guides
           </h1>
-          <p style={{ fontSize: 16, lineHeight: 1.8, color: "rgba(232,234,240,0.38)", maxWidth: 560 }}>
+          <p style={{ fontSize: 16, lineHeight: 1.8, color: "rgba(210,220,240,0.88)", maxWidth: 560 }}>
             Everything you need to understand prop firm trading — comparison guides, calculators, and free downloads.
           </p>
         </section>
@@ -88,9 +88,9 @@ export default async function ResourcesPage() {
                   <h3 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700, fontSize: 18, lineHeight: 1.3, letterSpacing: -0.3, marginBottom: 12, color: "#e8eaf0", transition: "color 0.2s" }}>
                     {title}
                   </h3>
-                  <p style={{ fontSize: 13, lineHeight: 1.75, color: "rgba(232,234,240,0.38)" }}>{description}</p>
+                  <p style={{ fontSize: 13, lineHeight: 1.75, color: "rgba(210,220,240,0.88)" }}>{description}</p>
                   <div style={{ marginTop: 24, paddingTop: 16, borderTop: "1px solid rgba(255,255,255,0.06)", display: "flex", justifyContent: "flex-end" }}>
-                    <span className="resource-arrow" style={{ fontSize: 12, color: "rgba(232,234,240,0.18)", transition: "all 0.2s" }}>→</span>
+                    <span className="resource-arrow" style={{ fontSize: 12, color: "rgba(210,220,240,0.58)", transition: "all 0.2s" }}>→</span>
                   </div>
                 </a>
                 );

@@ -36,12 +36,12 @@ export default async function AdminArticlesPage() {
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr auto auto auto", padding: "14px 28px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
           {["Title", "Status", "Date", "Actions"].map((h) => (
-            <span key={h} style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)" }}>{h}</span>
+            <span key={h} style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)" }}>{h}</span>
           ))}
         </div>
 
         {rows.length === 0 && (
-          <div style={{ padding: "40px 28px", fontSize: 13, color: "rgba(232,234,240,0.38)" }}>
+          <div style={{ padding: "40px 28px", fontSize: 13, color: "rgba(210,220,240,0.88)" }}>
             No articles yet. <Link href="/admin/articles/new" style={{ color: "#4f8ef7" }}>Create your first article →</Link>
           </div>
         )}
@@ -50,15 +50,15 @@ export default async function AdminArticlesPage() {
           <div key={id} style={{ display: "grid", gridTemplateColumns: "1fr auto auto auto", padding: "20px 28px", borderBottom: "1px solid rgba(255,255,255,0.04)", alignItems: "center", gap: 24 }}>
             <div>
               <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 600, fontSize: 14, color: "#e8eaf0", marginBottom: 4 }}>{title}</div>
-              <div style={{ fontSize: 11, color: "rgba(232,234,240,0.38)" }}>/articles/{slug}</div>
+              <div style={{ fontSize: 11, color: "rgba(210,220,240,0.88)" }}>/articles/{slug}</div>
             </div>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 12px", border: published ? "1px solid rgba(34,197,94,0.3)" : "1px solid rgba(255,255,255,0.12)", background: published ? "rgba(34,197,94,0.05)" : "transparent", fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", color: published ? "#22c55e" : "rgba(232,234,240,0.38)" }}>
-              <span style={{ width: 4, height: 4, borderRadius: "50%", background: published ? "#22c55e" : "rgba(232,234,240,0.38)", display: "inline-block" }} />
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 12px", border: published ? "1px solid rgba(34,197,94,0.3)" : "1px solid rgba(255,255,255,0.12)", background: published ? "rgba(34,197,94,0.05)" : "transparent", fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", color: published ? "#22c55e" : "rgba(210,220,240,0.88)" }}>
+              <span style={{ width: 4, height: 4, borderRadius: "50%", background: published ? "#22c55e" : "rgba(210,220,240,0.88)", display: "inline-block" }} />
               {published ? "Published" : "Draft"}
             </div>
-            <span style={{ fontSize: 11, color: "rgba(232,234,240,0.38)", whiteSpace: "nowrap" }}>{formatDate(published_at ?? created_at)}</span>
+            <span style={{ fontSize: 11, color: "rgba(210,220,240,0.88)", whiteSpace: "nowrap" }}>{formatDate(published_at ?? created_at)}</span>
             <div style={{ display: "flex", gap: 16 }}>
-              <Link href={`/articles/${slug}`} target="_blank" style={{ fontSize: 11, letterSpacing: 1.5, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", textDecoration: "none" }}>View →</Link>
+              <Link href={`/articles/${slug}`} target="_blank" style={{ fontSize: 11, letterSpacing: 1.5, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", textDecoration: "none" }}>View →</Link>
             </div>
           </div>
         ))}

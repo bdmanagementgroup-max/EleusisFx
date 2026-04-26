@@ -88,7 +88,7 @@ export default function FaqSection() {
                   justifyContent: "center",
                   flexShrink: 0,
                   fontSize: 14,
-                  color: open === i ? "#020305" : "rgba(232,234,240,0.38)",
+                  color: open === i ? "#020305" : "rgba(210,220,240,0.88)",
                   background: open === i ? "#4f8ef7" : "transparent",
                   transform: open === i ? "rotate(45deg)" : "none",
                   transition: "all 0.2s",
@@ -101,7 +101,7 @@ export default function FaqSection() {
               style={{
                 fontSize: 14,
                 lineHeight: 1.85,
-                color: "rgba(232,234,240,0.38)",
+                color: "rgba(210,220,240,0.88)",
                 maxHeight: open === i ? 200 : 0,
                 overflow: "hidden",
                 transition: "max-height 0.4s ease, padding 0.3s",

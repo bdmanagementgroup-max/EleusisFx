@@ -33,7 +33,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </Link>
           <nav style={{ display: "flex", gap: 32 }}>
             {NAV_ITEMS.map(({ href, label }) => (
-              <Link key={href} href={href} style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", textDecoration: "none", transition: "color 0.2s" }}>
+              <Link key={href} href={href} style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", textDecoration: "none", transition: "color 0.2s" }}>
                 {label}
               </Link>
             ))}

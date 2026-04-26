@@ -85,13 +85,13 @@ export default function LeadMagnet() {
           </span>
         </h2>
 
-        <p style={{ fontSize: 15, lineHeight: 1.8, color: "rgba(232,234,240,0.38)", marginBottom: 48, maxWidth: 500, marginLeft: "auto", marginRight: "auto" }}>
+        <p style={{ fontSize: 15, lineHeight: 1.8, color: "rgba(210,220,240,0.88)", marginBottom: 48, maxWidth: 500, marginLeft: "auto", marginRight: "auto" }}>
           Here are the 5 mistakes that kill accounts — and exactly how to fix them. Free breakdown, straight to your inbox.
         </p>
 
         <div style={{ display: "flex", justifyContent: "center", gap: 32, marginBottom: 48, flexWrap: "wrap" }}>
           {["The 3-Trade Rule", "The Drawdown Buffer System", "The Recovery Protocol"].map((b) => (
-            <div key={b} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, letterSpacing: "0.5px", color: "rgba(232,234,240,0.38)" }}>
+            <div key={b} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, letterSpacing: "0.5px", color: "rgba(210,220,240,0.88)" }}>
               <span style={{ width: 18, height: 18, border: "1px solid rgba(79,142,247,0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: "#4f8ef7", flexShrink: 0 }}>✓</span>
               {b}
             </div>
@@ -158,7 +158,7 @@ export default function LeadMagnet() {
           </div>
         )}
 
-        <p style={{ fontSize: 11, color: "rgba(232,234,240,0.18)", letterSpacing: "0.5px", marginTop: 12 }}>
+        <p style={{ fontSize: 11, color: "rgba(210,220,240,0.58)", letterSpacing: "0.5px", marginTop: 12 }}>
           No spam. One email. Unsubscribe anytime.
         </p>
       </div>

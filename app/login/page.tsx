@@ -63,11 +63,11 @@ export default function LoginPage() {
 
         <form onSubmit={handleLogin}>
           <div style={{ marginBottom: 16 }}>
-            <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", marginBottom: 10 }}>Email</label>
+            <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 10 }}>Email</label>
             <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@email.com" style={inputStyle} />
           </div>
           <div style={{ marginBottom: 24 }}>
-            <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", marginBottom: 10 }}>Password</label>
+            <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 10 }}>Password</label>
             <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" style={inputStyle} />
           </div>
 
@@ -87,7 +87,7 @@ export default function LoginPage() {
         </form>
       </div>
 
-      <Link href="/" style={{ marginTop: 32, fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", textDecoration: "none" }}>
+      <Link href="/" style={{ marginTop: 32, fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", textDecoration: "none" }}>
         ← Back to site
       </Link>
 

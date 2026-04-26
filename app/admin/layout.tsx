@@ -9,6 +9,7 @@ const NAV = [
   { href: "/admin/articles", label: "Articles" },
   { href: "/admin/clients", label: "Clients" },
   { href: "/admin/resources", label: "Resources" },
+  { href: "/admin/past-clients", label: "Past Clients" },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -31,7 +32,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               ELEUSIS<span style={{ color: "#4f8ef7" }}>.</span>FX
             </div>
           </Link>
-          <div style={{ marginTop: 8, fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)" }}>Admin Panel</div>
+          <div style={{ marginTop: 8, fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)" }}>Admin Panel</div>
         </div>
 
         <nav style={{ flex: 1, padding: "24px 0" }}>
@@ -42,7 +43,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               style={{
                 display: "block", padding: "12px 28px",
                 fontSize: 11, letterSpacing: 2, textTransform: "uppercase",
-                color: "rgba(232,234,240,0.38)", textDecoration: "none",
+                color: "rgba(210,220,240,0.88)", textDecoration: "none",
                 transition: "all 0.2s",
               }}
             >

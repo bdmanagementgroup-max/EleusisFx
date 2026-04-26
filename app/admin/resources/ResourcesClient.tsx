@@ -69,22 +69,22 @@ export default function ResourcesClient({ initial }: { initial: Resource[] }) {
           <h2 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700, fontSize: 18, marginBottom: 24 }}>New Resource</h2>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
             <div>
-              <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", marginBottom: 8 }}>Category</label>
+              <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 8 }}>Category</label>
               <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} style={{ ...inputStyle, cursor: "pointer" }}>
                 {["Prop Firm Tools", "Calculators", "Educational", "Downloads"].map((c) => <option key={c}>{c}</option>)}
               </select>
             </div>
             <div>
-              <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", marginBottom: 8 }}>Title</label>
+              <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 8 }}>Title</label>
               <input type="text" placeholder="Resource title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} style={inputStyle} />
             </div>
           </div>
           <div style={{ marginBottom: 16 }}>
-            <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", marginBottom: 8 }}>URL / Path</label>
+            <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 8 }}>URL / Path</label>
             <input type="text" placeholder="https://… or /articles/slug" value={form.url} onChange={(e) => setForm({ ...form, url: e.target.value })} style={inputStyle} />
           </div>
           <div style={{ marginBottom: 24 }}>
-            <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", marginBottom: 8 }}>Description</label>
+            <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 8 }}>Description</label>
             <textarea rows={2} placeholder="Brief description…" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} style={{ ...inputStyle, resize: "none" }} />
           </div>
           <button onClick={handleSave} disabled={saving} className="new-btn">
@@ -95,7 +95,7 @@ export default function ResourcesClient({ initial }: { initial: Resource[] }) {
 
       <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", overflow: "hidden" }}>
         {resources.length === 0 && (
-          <div style={{ padding: "40px 28px", fontSize: 13, color: "rgba(232,234,240,0.38)" }}>
+          <div style={{ padding: "40px 28px", fontSize: 13, color: "rgba(210,220,240,0.88)" }}>
             No resources yet — add one above.
           </div>
         )}
@@ -104,11 +104,11 @@ export default function ResourcesClient({ initial }: { initial: Resource[] }) {
             <span style={{ fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", padding: "3px 10px", background: "rgba(79,142,247,0.08)", color: "#7eb3ff", whiteSpace: "nowrap" }}>{category}</span>
             <div>
               <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 600, fontSize: 14, color: "#e8eaf0" }}>{title}</div>
-              <div style={{ fontSize: 11, color: "rgba(232,234,240,0.38)" }}>{url}</div>
+              <div style={{ fontSize: 11, color: "rgba(210,220,240,0.88)" }}>{url}</div>
             </div>
-            <span style={{ fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", color: active ? "#22c55e" : "rgba(232,234,240,0.38)" }}>{active ? "Active" : "Hidden"}</span>
+            <span style={{ fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", color: active ? "#22c55e" : "rgba(210,220,240,0.88)" }}>{active ? "Active" : "Hidden"}</span>
             <a href={url} target="_blank" rel="noreferrer" style={{ fontSize: 11, color: "#4f8ef7", background: "transparent", border: "1px solid rgba(79,142,247,0.3)", padding: "5px 12px", textDecoration: "none" }}>View →</a>
-            <button onClick={() => handleToggle(id, active)} style={{ fontSize: 11, color: "rgba(232,234,240,0.38)", background: "transparent", border: "1px solid rgba(255,255,255,0.12)", padding: "5px 12px", cursor: "pointer" }}>
+            <button onClick={() => handleToggle(id, active)} style={{ fontSize: 11, color: "rgba(210,220,240,0.88)", background: "transparent", border: "1px solid rgba(255,255,255,0.12)", padding: "5px 12px", cursor: "pointer" }}>
               {active ? "Hide" : "Show"}
             </button>
           </div>

@@ -162,7 +162,7 @@ export default function ComparePage() {
             <div style={{ display: "grid", gridTemplateColumns: "220px repeat(5, 1fr)", gap: 1, marginBottom: 1 }}>
               <div style={{ background: "#08090f", padding: "24px 20px", border: "1px solid rgba(255,255,255,0.06)" }}>
                 <div style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.25)" }}>Comparing</div>
-                <div style={{ marginTop: 8, fontSize: 11, fontWeight: 600, letterSpacing: 1, textTransform: "uppercase", color: "rgba(232,234,240,0.38)" }}>5 Firms</div>
+                <div style={{ marginTop: 8, fontSize: 11, fontWeight: 600, letterSpacing: 1, textTransform: "uppercase", color: "rgba(210,220,240,0.88)" }}>5 Firms</div>
               </div>
               {FIRMS.map((firm) => (
                 <div

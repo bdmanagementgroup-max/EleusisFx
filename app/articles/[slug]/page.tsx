@@ -143,7 +143,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         <article style={{ maxWidth: 800, margin: "0 auto", padding: "80px 56px 120px" }}>
           <Link
             href="/articles"
-            style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)", textDecoration: "none", marginBottom: 48, transition: "color 0.2s" }}
+            style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", textDecoration: "none", marginBottom: 48, transition: "color 0.2s" }}
           >
             ← Back to Articles
           </Link>
@@ -158,9 +158,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           </h1>
 
           <div style={{ display: "flex", gap: 24, marginBottom: 60, paddingBottom: 40, borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-            <span style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.38)" }}>Eleusis FX</span>
-            <span style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.18)" }}>{date}</span>
-            {readTime && <span style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.18)" }}>{readTime}</span>}
+            <span style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)" }}>Eleusis FX</span>
+            <span style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.58)" }}>{date}</span>
+            {readTime && <span style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.58)" }}>{readTime}</span>}
           </div>
 
           <div className="article-body" dangerouslySetInnerHTML={{ __html: content }} />

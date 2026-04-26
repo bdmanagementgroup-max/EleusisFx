@@ -65,8 +65,8 @@ export default function ProofSection() {
               Challenge Passed
             </div>
             <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 48, letterSpacing: -2, lineHeight: 1, marginBottom: 6 }}>{amount}</div>
-            <div style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.18)", marginBottom: 28 }}>{firm}</div>
-            <div style={{ fontSize: 13, lineHeight: 1.8, color: "rgba(232,234,240,0.38)", borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 24 }}>{detail}</div>
+            <div style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.58)", marginBottom: 28 }}>{firm}</div>
+            <div style={{ fontSize: 13, lineHeight: 1.8, color: "rgba(210,220,240,0.88)", borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 24 }}>{detail}</div>
           </div>
         ))}
       </div>

@@ -7,8 +7,8 @@
   --color-border: rgba(255, 255, 255, 0.06);
   --color-border-hi: rgba(255, 255, 255, 0.12);
   --color-white: #e8eaf0;
-  --color-muted: rgba(232, 234, 240, 0.38);
-  --color-muted2: rgba(232, 234, 240, 0.18);
+  --color-muted: rgba(210, 220, 240, 0.88);
+  --color-muted2: rgba(210, 220, 240, 0.58);
   --color-accent: #4f8ef7;
   --color-accent2: #7eb3ff;
   --color-accent-glow: rgba(79, 142, 247, 0.15);
@@ -156,6 +156,11 @@ textarea:-webkit-autofill {
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #020305; }
 ::-webkit-scrollbar-thumb { background: rgba(79, 142, 247, 0.3); border-radius: 3px; }
+
+/* SILVER GLOW — muted descriptive text */
+p, li, td, th, label, span:not(.cursor):not(.cursor-ring) {
+  text-shadow: 0 0 16px rgba(180, 205, 240, 0.45), 0 0 40px rgba(160, 190, 230, 0.2);
+}
 
 /* RESPONSIVE */
 @media (max-width: 1024px) {

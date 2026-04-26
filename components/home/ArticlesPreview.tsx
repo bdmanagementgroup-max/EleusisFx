@@ -69,10 +69,10 @@ export default function ArticlesPreview() {
             <h3 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700, fontSize: 20, lineHeight: 1.25, letterSpacing: -0.4, marginBottom: 16, color: "#e8eaf0", transition: "color 0.2s" }}>
               {title}
             </h3>
-            <p style={{ fontSize: 13, lineHeight: 1.85, color: "rgba(232,234,240,0.38)", flex: 1, marginBottom: 28 }}>{excerpt}</p>
+            <p style={{ fontSize: 13, lineHeight: 1.85, color: "rgba(210,220,240,0.88)", flex: 1, marginBottom: 28 }}>{excerpt}</p>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: 20, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-              <span style={{ fontSize: 10, letterSpacing: "1.5px", textTransform: "uppercase" as const, color: "rgba(232,234,240,0.18)" }}>{date}</span>
-              <span className="article-arrow-item" style={{ fontSize: 12, color: "rgba(232,234,240,0.18)", transition: "all 0.2s" }}>→</span>
+              <span style={{ fontSize: 10, letterSpacing: "1.5px", textTransform: "uppercase" as const, color: "rgba(210,220,240,0.58)" }}>{date}</span>
+              <span className="article-arrow-item" style={{ fontSize: 12, color: "rgba(210,220,240,0.58)", transition: "all 0.2s" }}>→</span>
             </div>
           </Link>
         ))}

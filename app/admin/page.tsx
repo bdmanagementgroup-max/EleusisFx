@@ -17,7 +17,7 @@ export default function AdminOverview() {
           <Link key={href} href={href} style={{ textDecoration: "none" }}>
             <div className="admin-tile">
               <h2 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700, fontSize: 20, marginBottom: 12, color: "#e8eaf0" }}>{label}</h2>
-              <p style={{ fontSize: 13, lineHeight: 1.7, color: "rgba(232,234,240,0.38)" }}>{desc}</p>
+              <p style={{ fontSize: 13, lineHeight: 1.7, color: "rgba(210,220,240,0.88)" }}>{desc}</p>
               <div style={{ marginTop: 24, fontSize: 12, color: "#4f8ef7" }}>Manage →</div>
             </div>
           </Link>

@@ -24,7 +24,7 @@ export default function CalendarPage() {
           <h1 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: "clamp(32px, 5vw, 60px)", lineHeight: 0.95, letterSpacing: -2, marginBottom: 16 }}>
             Economic Calendar
           </h1>
-          <p style={{ fontSize: 15, lineHeight: 1.8, color: "rgba(232,234,240,0.38)", maxWidth: 520, marginBottom: 0 }}>
+          <p style={{ fontSize: 15, lineHeight: 1.8, color: "rgba(210,220,240,0.88)", maxWidth: 520, marginBottom: 0 }}>
             High-impact news events affecting forex and crypto markets. Plan your trades around the data releases that move price.
           </p>
         </section>
@@ -34,7 +34,7 @@ export default function CalendarPage() {
             <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1, background: "linear-gradient(90deg, transparent, #4f8ef7 40%, transparent)" }} />
             <EconomicCalendarWidget />
           </div>
-          <p style={{ marginTop: 14, fontSize: 11, color: "rgba(232,234,240,0.18)", letterSpacing: "0.5px" }}>
+          <p style={{ marginTop: 14, fontSize: 11, color: "rgba(210,220,240,0.58)", letterSpacing: "0.5px" }}>
             Data provided by TradingView · High-impact events only · Times shown in your local timezone
           </p>
         </section>

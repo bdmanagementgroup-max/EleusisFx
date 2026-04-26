@@ -24,7 +24,7 @@ export default async function PastClientsPage() {
         <h1 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 32, letterSpacing: -1, color: "#e8eaf0", marginBottom: 8 }}>
           FTMO Client Database
         </h1>
-        <p style={{ fontSize: 13, color: "rgba(232,234,240,0.38)" }}>
+        <p style={{ fontSize: 13, color: "rgba(210,220,240,0.88)" }}>
           {clients?.length ?? 0} records · Extracted from client service agreements. Click a row to add email, phone, or notes.
         </p>
       </div>

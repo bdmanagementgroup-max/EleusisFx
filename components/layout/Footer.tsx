@@ -22,7 +22,7 @@ export default function Footer() {
           fontSize: 14,
           letterSpacing: 5,
           textTransform: "uppercase",
-          color: "rgba(232,234,240,0.38)",
+          color: "rgba(210,220,240,0.88)",
         }}
       >
         ELEUSIS<span style={{ color: "#4f8ef7" }}>.</span>FX
@@ -50,14 +50,14 @@ export default function Footer() {
         ))}
       </div>
 
-      <p style={{ fontSize: 11, color: "rgba(232,234,240,0.18)" }}>
+      <p style={{ fontSize: 11, color: "rgba(210,220,240,0.58)" }}>
         © {new Date().getFullYear()} Eleusis FX. All rights reserved.
       </p>
 
       <style>{`
         .footer-link {
           font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
-          color: rgba(232,234,240,0.18); text-decoration: none; transition: color 0.2s;
+          color: rgba(210,220,240,0.58); text-decoration: none; transition: color 0.2s;
         }
         .footer-link:hover { color: #e8eaf0; }
         @media (max-width: 1024px) {
