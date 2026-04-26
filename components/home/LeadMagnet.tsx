@@ -53,7 +53,8 @@ export default function LeadMagnet() {
             lineHeight: 1,
             letterSpacing: -3,
             color: "transparent",
-            WebkitTextStroke: "1px rgba(79,142,247,0.4)",
+            WebkitTextStroke: "1.5px #e74c3c",
+            textShadow: "0 0 40px rgba(231,76,60,0.35)",
             marginBottom: 16,
           }}
         >
