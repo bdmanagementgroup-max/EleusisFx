@@ -103,7 +103,7 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
             </thead>
             <tbody>
               {filtered.map((c) => {
-                const result = c.challenge_result;
+                const result = c.challenge_result?.toLowerCase();
                 const rs = result ? RESULT_STYLES[result] : null;
                 return (
                   <tr
@@ -150,8 +150,8 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
           </table>
           <div style={{ marginTop: 12, fontSize: 11, color: "rgba(232,234,240,0.2)" }}>
             {filtered.length} of {clients.length} clients ·{" "}
-            {clients.filter(c => c.challenge_result === "passed").length} passed ·{" "}
-            {clients.filter(c => c.challenge_result === "failed").length} failed
+            {clients.filter(c => c.challenge_result?.toLowerCase() === "passed").length} passed ·{" "}
+            {clients.filter(c => c.challenge_result?.toLowerCase() === "failed").length} failed
           </div>
         </div>
 
