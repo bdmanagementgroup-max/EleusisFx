@@ -96,7 +96,7 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
             <thead>
               <tr style={{ background: "#08090f", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-                {["Name", "Address", "Account", "Fee Paid", "Result", "Email", "Phone"].map((h) => (
+                {["Name", "Address", "Account", "Fee Paid", "Prop Firm", "Result", "Email", "Phone"].map((h) => (
                   <th key={h} style={{ padding: "10px 14px", textAlign: "left", fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.3)", fontWeight: 600, whiteSpace: "nowrap" }}>
                     {h}
                   </th>
@@ -129,6 +129,9 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
                     </td>
                     <td style={{ padding: "12px 14px", color: c.fee_paid_gbp ? "#22c55e" : "rgba(232,234,240,0.2)", whiteSpace: "nowrap" }}>
                       {c.fee_paid_gbp ? `£${c.fee_paid_gbp}` : "—"}
+                    </td>
+                    <td style={{ padding: "12px 14px", color: c.prop_firm ? "rgba(232,234,240,0.7)" : "rgba(232,234,240,0.15)", whiteSpace: "nowrap" }}>
+                      {c.prop_firm ?? "—"}
                     </td>
                     <td style={{ padding: "12px 14px", whiteSpace: "nowrap" }}>
                       {rs ? (
