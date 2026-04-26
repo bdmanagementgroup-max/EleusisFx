@@ -68,7 +68,7 @@ export default function Hero() {
               WebkitTextStroke: "1px rgba(232,234,240,0.3)",
             }}
           >
-            Your FTMO
+            Your Prop
           </span>
           <span
             style={{
