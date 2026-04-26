@@ -63,6 +63,9 @@ export default function AdminClientsClient({ applications: initial }: { applicat
   const [resetLinks, setResetLinks] = useState<Record<string, string>>({});
   const [resetLoading, setResetLoading] = useState<string | null>(null);
   const [noteErrors, setNoteErrors] = useState<Record<string, string>>({});
+  const [welcomeSending, setWelcomeSending] = useState<string | null>(null);
+  const [welcomeSent, setWelcomeSent] = useState<Set<string>>(new Set());
+  const [welcomeError, setWelcomeError] = useState<Record<string, string>>({});
 
   function toggleExpand(id: string) {
     setExpanded((prev) => {
@@ -116,6 +119,27 @@ export default function AdminClientsClient({ applications: initial }: { applicat
       setApps((prev) => prev.filter((a) => a.id !== id));
     }
     setDeleting(null);
+  }
+
+  async function sendWelcome(id: string, email: string, firstName: string) {
+    setWelcomeSending(id);
+    setWelcomeError((e) => ({ ...e, [id]: "" }));
+    try {
+      const res = await fetch("/api/admin/send-welcome", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, firstName }),
+      });
+      if (res.ok) {
+        setWelcomeSent((prev) => new Set([...prev, id]));
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setWelcomeError((e) => ({ ...e, [id]: data.error ?? "Send failed" }));
+      }
+    } catch {
+      setWelcomeError((e) => ({ ...e, [id]: "Network error" }));
+    }
+    setWelcomeSending(null);
   }
 
   async function generateReset(id: string, email: string) {
@@ -193,7 +217,7 @@ export default function AdminClientsClient({ applications: initial }: { applicat
             {/* Expanded panel */}
             {isExpanded && (
               <div style={{ padding: "16px 24px 24px", borderTop: "1px solid rgba(255,255,255,0.04)", background: "rgba(0,0,0,0.2)" }}>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 24 }}>
                   {/* Notes */}
                   <div>
                     <label style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.3)", display: "block", marginBottom: 8 }}>
@@ -248,6 +272,26 @@ export default function AdminClientsClient({ applications: initial }: { applicat
                         </div>
                         <div style={{ fontSize: 10, color: "rgba(210,220,240,0.3)", marginTop: 6 }}>Click to copy · Link expires after one use</div>
                       </div>
+                    )}
+                  </div>
+
+                  {/* Send welcome email */}
+                  <div>
+                    <label style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.3)", display: "block", marginBottom: 8 }}>
+                      Welcome Email
+                    </label>
+                    <p style={{ fontSize: 12, color: "rgba(210,220,240,0.88)", marginBottom: 12 }}>
+                      Send welcome email + free guide to {email}. Creates a dashboard account if none exists.
+                    </p>
+                    {welcomeSent.has(id) ? (
+                      <div style={{ fontSize: 11, color: "#22c55e", letterSpacing: 1 }}>✓ Sent</div>
+                    ) : (
+                      <ActionBtn onClick={() => sendWelcome(id, email, first_name)} disabled={welcomeSending === id} color="#22c55e">
+                        {welcomeSending === id ? "Sending…" : "Send Welcome"}
+                      </ActionBtn>
+                    )}
+                    {welcomeError[id] && (
+                      <div style={{ fontSize: 10, color: "#ef4444", marginTop: 6 }}>{welcomeError[id]}</div>
                     )}
                   </div>
                 </div>
