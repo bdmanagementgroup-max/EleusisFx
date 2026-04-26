@@ -41,3 +41,14 @@ create policy "Client reads own equity history"
   using (auth.uid() = user_id);
 
 -- Service role (admin) can do everything — no policy needed for service_role bypass
+
+-- Resources (admin-managed links, guides, tools shown on /resources)
+create table if not exists resources (
+  id          uuid primary key default gen_random_uuid(),
+  category    text not null default 'General',
+  title       text not null,
+  url         text not null,
+  description text default '',
+  active      boolean default true,
+  created_at  timestamptz default now()
+);
