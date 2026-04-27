@@ -10,10 +10,9 @@ export const metadata: Metadata = {
 
 export default async function PastClientsPage() {
   const supabase = await getSupabaseAdminClient();
-  const { data: clients, error } = await supabase
-    .from("past_clients")
-    .select("*")
-    .order("name");
+
+  // Use RPC to bypass PostgREST schema cache issues with past_clients table
+  const { data: clients, error } = await supabase.rpc("get_past_clients");
 
   return (
     <div style={{ padding: "40px 48px", background: "#020305", minHeight: "100vh" }}>
@@ -30,15 +29,8 @@ export default async function PastClientsPage() {
       </div>
 
       {error && (
-        <div style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)", padding: "20px 24px", marginBottom: 24, fontSize: 13, color: "#ef4444" }}>
-          <div style={{ marginBottom: 8, fontWeight: 600 }}>Database error: {error.message}</div>
-          <div style={{ fontSize: 12, color: "rgba(239,68,68,0.7)", marginBottom: 12 }}>
-            Run the following SQL in your Supabase SQL editor (looplcpivxolszawqgii.supabase.co):
-          </div>
-          <pre style={{ margin: 0, fontSize: 11, color: "rgba(239,68,68,0.9)", background: "rgba(239,68,68,0.06)", padding: "10px 14px", overflowX: "auto" }}>
-{`-- Paste and run past-clients-migration.sql in full, then:
-NOTIFY pgrst, 'reload schema';`}
-          </pre>
+        <div style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)", padding: "14px 20px", marginBottom: 24, fontSize: 13, color: "#ef4444" }}>
+          Database error: {error.message}
         </div>
       )}
 
