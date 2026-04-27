@@ -29,7 +29,7 @@ export async function sendPdfEmail({ to, firstName, pdfKey, siteUrl }: SendPdfAr
   const pdfUrl = `${siteUrl}/${pdf.file}`;
   const resend = new Resend(apiKey);
 
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from,
     to,
     subject: `${pdf.label} — From Eleusis FX`,
@@ -99,4 +99,5 @@ export async function sendPdfEmail({ to, firstName, pdfKey, siteUrl }: SendPdfAr
 </body>
 </html>`,
   });
+  if (error) throw new Error(error.message);
 }

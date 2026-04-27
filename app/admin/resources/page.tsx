@@ -8,7 +8,7 @@ export default async function AdminResourcesPage() {
   const { data } = await supabase
     .from("resources")
     .select("id, category, title, url, description, active")
-    .order("created_at", { ascending: false });
+    .order("sort_order", { ascending: true });
 
   return <ResourcesClient initial={data ?? []} />;
 }

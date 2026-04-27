@@ -32,7 +32,7 @@ export async function sendWelcomeEmail({ to, firstName, tempPassword, resetLink,
         Click the button below to set your password and access your dashboard.
       </p>`;
 
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from,
     to,
     subject: "Welcome to Eleusis FX — Your Application Is Confirmed",
@@ -135,4 +135,5 @@ export async function sendWelcomeEmail({ to, firstName, tempPassword, resetLink,
 </body>
 </html>`,
   });
+  if (error) throw new Error(error.message);
 }

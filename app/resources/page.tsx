@@ -30,7 +30,7 @@ export default async function ResourcesPage() {
     .from("resources")
     .select("category, title, url, description")
     .eq("active", true)
-    .order("created_at", { ascending: true });
+    .order("sort_order", { ascending: true });
 
   let resources: Record<string, { title: string; description: string; href: string }[]>;
   if (data && data.length > 0) {

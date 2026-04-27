@@ -14,6 +14,16 @@ type Client = {
   notes: string | null;
   source_file: string;
   challenge_result: string | null;
+  phase: number | null;
+  phase_status: string | null;
+  balance: number | null;
+  equity: number | null;
+  daily_drawdown: number | null;
+  max_drawdown: number | null;
+  profit_target: number | null;
+  profit_goal: number | null;
+  days_used: number | null;
+  days_allowed: number | null;
 };
 
 type ColumnKey = "name" | "address" | "account" | "fee_paid" | "prop_firm" | "result" | "email" | "phone";
@@ -44,7 +54,7 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
   const [search, setSearch] = useState("");
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
-  const [editFields, setEditFields] = useState({ email: "", phone: "", address: "", account_size_usd: "", fee_paid_gbp: "", prop_firm: "", notes: "", challenge_result: "" });
+  const [editFields, setEditFields] = useState({ email: "", phone: "", address: "", account_size_usd: "", fee_paid_gbp: "", prop_firm: "", notes: "", challenge_result: "", phase: "1", phase_status: "unknown", balance: "", equity: "", daily_drawdown: "", max_drawdown: "", profit_target: "", profit_goal: "10", days_used: "", days_allowed: "30" });
   const [visibleColumns, setVisibleColumns] = useState<ColumnKey[]>(DEFAULT_COLUMNS);
   const [showColumnSettings, setShowColumnSettings] = useState(false);
 
@@ -126,7 +136,17 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
       fee_paid_gbp: String(c.fee_paid_gbp ?? ""),
       prop_firm: c.prop_firm ?? "",
       notes: c.notes ?? "",
-      challenge_result: c.challenge_result ?? ""
+      challenge_result: c.challenge_result ?? "",
+      phase: String(c.phase ?? 1),
+      phase_status: c.phase_status ?? "unknown",
+      balance: c.balance != null ? String(c.balance) : "",
+      equity: c.equity != null ? String(c.equity) : "",
+      daily_drawdown: c.daily_drawdown != null ? String(c.daily_drawdown) : "",
+      max_drawdown: c.max_drawdown != null ? String(c.max_drawdown) : "",
+      profit_target: c.profit_target != null ? String(c.profit_target) : "",
+      profit_goal: String(c.profit_goal ?? 10),
+      days_used: c.days_used != null ? String(c.days_used) : "",
+      days_allowed: String(c.days_allowed ?? 30),
     });
   }
 
@@ -355,6 +375,71 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
                   <option value="passed">Passed</option>
                   <option value="failed">Failed</option>
                 </select>
+              </div>
+
+              {/* Metrics */}
+              <div style={{ paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+                <div style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "#4f8ef7", marginBottom: 14 }}>Trading Metrics</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                    <div>
+                      <label style={labelStyle}>Phase</label>
+                      <select value={editFields.phase} onChange={(e) => setEditFields((f) => ({ ...f, phase: e.target.value }))} style={inputStyle}>
+                        <option value="1">Phase 1</option>
+                        <option value="2">Phase 2</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label style={labelStyle}>Phase Status</label>
+                      <select value={editFields.phase_status} onChange={(e) => setEditFields((f) => ({ ...f, phase_status: e.target.value }))} style={inputStyle}>
+                        <option value="unknown">Unknown</option>
+                        <option value="in_progress">In Progress</option>
+                        <option value="passed">Passed</option>
+                        <option value="failed">Failed</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                    <div>
+                      <label style={labelStyle}>Balance ($)</label>
+                      <input type="number" value={editFields.balance} onChange={(e) => setEditFields((f) => ({ ...f, balance: e.target.value }))} placeholder="100000" style={inputStyle} />
+                    </div>
+                    <div>
+                      <label style={labelStyle}>Equity ($)</label>
+                      <input type="number" value={editFields.equity} onChange={(e) => setEditFields((f) => ({ ...f, equity: e.target.value }))} placeholder="100000" style={inputStyle} />
+                    </div>
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                    <div>
+                      <label style={labelStyle}>Daily DD (%)</label>
+                      <input type="number" step="0.01" value={editFields.daily_drawdown} onChange={(e) => setEditFields((f) => ({ ...f, daily_drawdown: e.target.value }))} placeholder="0" style={inputStyle} />
+                    </div>
+                    <div>
+                      <label style={labelStyle}>Max DD (%)</label>
+                      <input type="number" step="0.01" value={editFields.max_drawdown} onChange={(e) => setEditFields((f) => ({ ...f, max_drawdown: e.target.value }))} placeholder="0" style={inputStyle} />
+                    </div>
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                    <div>
+                      <label style={labelStyle}>Profit Target (%)</label>
+                      <input type="number" step="0.01" value={editFields.profit_target} onChange={(e) => setEditFields((f) => ({ ...f, profit_target: e.target.value }))} placeholder="0" style={inputStyle} />
+                    </div>
+                    <div>
+                      <label style={labelStyle}>Profit Goal (%)</label>
+                      <input type="number" step="0.01" value={editFields.profit_goal} onChange={(e) => setEditFields((f) => ({ ...f, profit_goal: e.target.value }))} placeholder="10" style={inputStyle} />
+                    </div>
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                    <div>
+                      <label style={labelStyle}>Days Used</label>
+                      <input type="number" value={editFields.days_used} onChange={(e) => setEditFields((f) => ({ ...f, days_used: e.target.value }))} placeholder="0" style={inputStyle} />
+                    </div>
+                    <div>
+                      <label style={labelStyle}>Days Allowed</label>
+                      <input type="number" value={editFields.days_allowed} onChange={(e) => setEditFields((f) => ({ ...f, days_allowed: e.target.value }))} placeholder="30" style={inputStyle} />
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {[

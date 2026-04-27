@@ -14,6 +14,14 @@ No test suite is configured. Requires `.env.local` with Supabase + API keys to r
 
 **Known local build quirk:** `/resources` fails to prerender at build time if `NEXT_PUBLIC_SUPABASE_URL` is not set in `.env.local`. This is not a code bug — it builds and runs correctly in production (Vercel) where env vars are present.
 
+**Known Supabase schema quirk:** The `applications` table was created from an older migration and may be missing columns. If `/admin/clients` shows a DB error or is empty, run this in the Supabase SQL editor:
+```sql
+ALTER TABLE applications ADD COLUMN IF NOT EXISTS created_at timestamptz DEFAULT now();
+ALTER TABLE applications ADD COLUMN IF NOT EXISTS whatsapp text;
+ALTER TABLE applications ADD COLUMN IF NOT EXISTS status text DEFAULT 'new';
+ALTER TABLE applications ADD COLUMN IF NOT EXISTS notes text;
+```
+
 ## Architecture
 
 **Eleusis FX** is a Next.js 16 (App Router) + TypeScript prop firm evaluation platform serving a public marketing site, protected client dashboard, and admin portal.

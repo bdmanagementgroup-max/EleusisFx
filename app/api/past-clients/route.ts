@@ -23,10 +23,17 @@ export async function PATCH(req: NextRequest) {
   const { id, ...fields } = await req.json();
   if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
 
-  const allowed = ["email", "phone", "address", "account_size_usd", "fee_paid_gbp", "prop_firm", "notes", "challenge_result"];
-  const update: Record<string, string> = {};
+  const textFields = new Set(["email", "phone", "address", "prop_firm", "notes", "challenge_result", "phase_status"]);
+  const numericFields = new Set(["account_size_usd", "fee_paid_gbp", "phase", "balance", "equity", "daily_drawdown", "max_drawdown", "profit_target", "profit_goal", "days_used", "days_allowed"]);
+  const allowed = [...textFields, ...numericFields];
+  const update: Record<string, unknown> = {};
   for (const k of allowed) {
-    if (k in fields) update[k] = fields[k];
+    if (!(k in fields)) continue;
+    if (numericFields.has(k)) {
+      update[k] = fields[k] === "" || fields[k] === null ? null : Number(fields[k]);
+    } else {
+      update[k] = fields[k] === "" ? null : fields[k];
+    }
   }
 
   const supabase = await getSupabaseAdminClient();
