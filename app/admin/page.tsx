@@ -9,6 +9,7 @@ const TILES = [
   { href: "/admin/metrics", label: "Metrics", desc: "Edit live challenge metrics for each client account." },
   { href: "/admin/resources", label: "Resources", desc: "Add prop firm guides, tools, and PDF downloads." },
   { href: "/admin/past-clients", label: "Past Clients", desc: "View historical client records, challenge results, and contact details." },
+  { href: "/admin/tools/email", label: "Email Editor", desc: "Compose and send branded emails to clients, past clients, and custom recipients." },
 ];
 
 function StatCard({ label, value, sub, color }: { label: string; value: string; sub?: string; color?: string }) {

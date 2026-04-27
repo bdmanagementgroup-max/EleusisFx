@@ -12,6 +12,8 @@ const NAV = [
   { href: "/admin/metrics", label: "Metrics" },
   { href: "/admin/resources", label: "Resources" },
   { href: "/admin/past-clients", label: "Past Clients" },
+  { divider: true },
+  { href: "/admin/tools/email", label: "Email Editor", section: "Tools" },
 ];
 
 export default function AdminShell({ children }: { children: React.ReactNode }) {
@@ -53,21 +55,33 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
         </div>
 
         <nav style={{ flex: 1, padding: "24px 0" }}>
-          {NAV.map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              onClick={() => setOpen(false)}
-              style={{
-                display: "block", padding: "12px 28px",
-                fontSize: 11, letterSpacing: 2, textTransform: "uppercase",
-                color: "rgba(210,220,240,0.88)", textDecoration: "none",
-                transition: "all 0.2s",
-              }}
-            >
-              {label}
-            </Link>
-          ))}
+          {NAV.map((item, i) => {
+            if ("divider" in item) {
+              return <div key={i} style={{ height: 1, background: "rgba(255,255,255,0.06)", margin: "12px 28px" }} />;
+            }
+            const { href, label, section } = item as { href: string; label: string; section?: string };
+            return (
+              <div key={href}>
+                {section && (
+                  <div style={{ padding: "0 28px 6px", fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.3)" }}>
+                    {section}
+                  </div>
+                )}
+                <Link
+                  href={href}
+                  onClick={() => setOpen(false)}
+                  style={{
+                    display: "block", padding: "12px 28px",
+                    fontSize: 11, letterSpacing: 2, textTransform: "uppercase",
+                    color: "rgba(210,220,240,0.88)", textDecoration: "none",
+                    transition: "all 0.2s",
+                  }}
+                >
+                  {label}
+                </Link>
+              </div>
+            );
+          })}
         </nav>
 
         <div style={{ padding: "24px 28px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
