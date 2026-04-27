@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { PDF_OPTIONS, type PdfKey } from "@/lib/email/sendPdfEmail";
 
 type Application = {
   id: string;
@@ -66,6 +67,12 @@ export default function AdminClientsClient({ applications: initial }: { applicat
   const [welcomeSending, setWelcomeSending] = useState<string | null>(null);
   const [welcomeSent, setWelcomeSent] = useState<Set<string>>(new Set());
   const [welcomeError, setWelcomeError] = useState<Record<string, string>>({});
+  const [selectedPdf, setSelectedPdf] = useState<Record<string, PdfKey>>(
+    Object.fromEntries(initial.map((a) => [a.id, PDF_OPTIONS[0].key]))
+  );
+  const [pdfSending, setPdfSending] = useState<string | null>(null);
+  const [pdfSent, setPdfSent] = useState<Record<string, string>>({});
+  const [pdfError, setPdfError] = useState<Record<string, string>>({});
 
   function toggleExpand(id: string) {
     setExpanded((prev) => {
@@ -140,6 +147,28 @@ export default function AdminClientsClient({ applications: initial }: { applicat
       setWelcomeError((e) => ({ ...e, [id]: "Network error" }));
     }
     setWelcomeSending(null);
+  }
+
+  async function sendPdf(id: string, email: string, firstName: string) {
+    setPdfSending(id);
+    setPdfError((e) => ({ ...e, [id]: "" }));
+    try {
+      const res = await fetch("/api/admin/send-pdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, firstName, pdfKey: selectedPdf[id] }),
+      });
+      if (res.ok) {
+        const label = PDF_OPTIONS.find((p) => p.key === selectedPdf[id])?.label ?? "PDF";
+        setPdfSent((prev) => ({ ...prev, [id]: label }));
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setPdfError((e) => ({ ...e, [id]: data.error ?? "Send failed" }));
+      }
+    } catch {
+      setPdfError((e) => ({ ...e, [id]: "Network error" }));
+    }
+    setPdfSending(null);
   }
 
   async function generateReset(id: string, email: string) {
@@ -217,7 +246,7 @@ export default function AdminClientsClient({ applications: initial }: { applicat
             {/* Expanded panel */}
             {isExpanded && (
               <div style={{ padding: "16px 24px 24px", borderTop: "1px solid rgba(255,255,255,0.04)", background: "rgba(0,0,0,0.2)" }}>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 24 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 24 }}>
                   {/* Notes */}
                   <div>
                     <label style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.3)", display: "block", marginBottom: 8 }}>
@@ -292,6 +321,38 @@ export default function AdminClientsClient({ applications: initial }: { applicat
                     )}
                     {welcomeError[id] && (
                       <div style={{ fontSize: 10, color: "#ef4444", marginTop: 6 }}>{welcomeError[id]}</div>
+                    )}
+                  </div>
+
+                  {/* Send PDF */}
+                  <div>
+                    <label style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.3)", display: "block", marginBottom: 8 }}>
+                      Send PDF
+                    </label>
+                    <select
+                      value={selectedPdf[id]}
+                      onChange={(e) => setSelectedPdf((prev) => ({ ...prev, [id]: e.target.value as PdfKey }))}
+                      style={{
+                        width: "100%", appearance: "none",
+                        background: "#08090f", border: "1px solid rgba(255,255,255,0.1)",
+                        color: "rgba(210,220,240,0.88)", fontSize: 11, padding: "8px 10px",
+                        outline: "none", fontFamily: "inherit", cursor: "pointer",
+                        marginBottom: 12,
+                      }}
+                    >
+                      {PDF_OPTIONS.map((p) => (
+                        <option key={p.key} value={p.key} style={{ background: "#08090f" }}>{p.label}</option>
+                      ))}
+                    </select>
+                    {pdfSent[id] ? (
+                      <div style={{ fontSize: 11, color: "#22c55e", letterSpacing: 1 }}>✓ Sent: {pdfSent[id]}</div>
+                    ) : (
+                      <ActionBtn onClick={() => sendPdf(id, email, first_name)} disabled={pdfSending === id} color="#4f8ef7">
+                        {pdfSending === id ? "Sending…" : "Send PDF"}
+                      </ActionBtn>
+                    )}
+                    {pdfError[id] && (
+                      <div style={{ fontSize: 10, color: "#ef4444", marginTop: 6 }}>{pdfError[id]}</div>
                     )}
                   </div>
                 </div>
