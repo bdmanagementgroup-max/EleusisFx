@@ -100,14 +100,14 @@ export default function Nav() {
               <div
                 style={{
                   position: "absolute",
-                  top: "calc(100% + 20px)",
+                  top: "100%",
                   right: -16,
                   background: "rgba(8,9,15,0.98)",
                   backdropFilter: "blur(24px)",
                   WebkitBackdropFilter: "blur(24px)",
                   border: "1px solid rgba(255,255,255,0.08)",
                   minWidth: 220,
-                  padding: "8px 0",
+                  padding: "20px 0 8px",
                 }}
               >
                 {DROPDOWN_ITEMS.map((item, i) =>
