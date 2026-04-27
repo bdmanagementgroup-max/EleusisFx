@@ -17,7 +17,6 @@ export async function sendWelcomeEmail({ to, firstName, tempPassword, resetLink,
   }
 
   const resend = new Resend(apiKey);
-  const guideUrl = `${siteUrl}/eleusis-fx-guide.pdf`;
   const loginBtnUrl = resetLink ?? `${siteUrl}/login`;
   const loginBtnText = resetLink ? "Set Your Password &rarr;" : "Access Dashboard &rarr;";
 
@@ -78,16 +77,30 @@ export async function sendWelcomeEmail({ to, firstName, tempPassword, resetLink,
           </p>
         </td></tr>
 
-        <!-- Free guide -->
+        <!-- Free guides -->
         <tr><td style="padding:36px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
-          <p style="margin:0 0 8px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Free Guide</p>
+          <p style="margin:0 0 8px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Your Free Resources</p>
           <h2 style="margin:0 0 12px;font-size:22px;font-weight:700;color:#e8eaf0;letter-spacing:-0.5px;font-family:Arial,sans-serif;">
-            5 Mistakes That Kill Prop Accounts
+            3 Guides to Get You Started
           </h2>
           <p style="margin:0 0 24px;font-size:14px;line-height:1.75;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">
-            The 3-Trade Rule &middot; The Drawdown Buffer System &middot; The Recovery Protocol &mdash; and exactly how to apply them.
+            We've put together three guides covering everything you need to know before your challenge begins.
           </p>
-          <a href="${guideUrl}" style="display:inline-block;background:transparent;color:#4f8ef7;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:13px 24px;text-decoration:none;border:1px solid rgba(79,142,247,0.4);font-family:Arial,sans-serif;">Download Free Guide &rarr;</a>
+          ${[
+            { url: `${siteUrl}/eleusis-fx-5-fatal-mistakes.pdf`, label: "5 Fatal Mistakes That Kill Prop Accounts" },
+            { url: `${siteUrl}/eleusis-fx-30-day-blueprint.pdf`, label: "The 30-Day Evaluation Blueprint" },
+            { url: `${siteUrl}/eleusis-fx-funded-trader-mindset.pdf`, label: "The Funded Trader Mindset" },
+          ].map(({ url, label }) => `
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:12px;background:#08090f;border:1px solid rgba(255,255,255,0.06);">
+            <tr><td style="padding:16px 20px;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">${label}</td>
+                  <td align="right"><a href="${url}" style="display:inline-block;color:#4f8ef7;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;white-space:nowrap;font-family:Arial,sans-serif;">Download &rarr;</a></td>
+                </tr>
+              </table>
+            </td></tr>
+          </table>`).join("")}
         </td></tr>
 
         <!-- What happens next -->
