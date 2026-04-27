@@ -20,8 +20,6 @@ export default async function AdminClientsPage() {
       .limit(50),
   ]);
 
-  if (appsResult.error) console.error("[admin/clients] applications query error:", appsResult.error.message, appsResult.error.code);
-  if (leadsResult.error) console.error("[admin/clients] leads query error:", leadsResult.error.message, leadsResult.error.code);
 
   const apps = (appsResult.data ?? []).map((a) => ({ ...a, status: a.status ?? "new" }));
   const emailLeads = leadsResult.data ?? [];
