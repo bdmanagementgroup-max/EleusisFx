@@ -6,6 +6,16 @@ import Link from "next/link";
 
 const PHASE_STATUSES = ["in_progress", "passed", "failed"];
 
+function generateTempPassword() {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
+  const specials = "!@#$%&";
+  let pwd = "";
+  for (let i = 0; i < 10; i++) pwd += chars[Math.floor(Math.random() * chars.length)];
+  pwd += specials[Math.floor(Math.random() * specials.length)];
+  pwd += Math.floor(Math.random() * 90 + 10);
+  return pwd;
+}
+
 export default function NewClientPage() {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
@@ -13,7 +23,7 @@ export default function NewClientPage() {
   const [createdUserId, setCreatedUserId] = useState<string | null>(null);
   const [form, setForm] = useState({
     email: "",
-    password: "",
+    password: generateTempPassword(),
     prop_firm: "",
     phase: "1",
     phase_status: "in_progress",
@@ -125,7 +135,7 @@ export default function NewClientPage() {
 
         <div style={{ fontSize: 13, color: "rgba(210,220,240,0.88)", marginBottom: 32, lineHeight: 1.6 }}>
           <p style={{ marginBottom: 12 }}>✓ Client account created and initialized with default metrics</p>
-          <p>You can now navigate to the metrics dashboard to view or edit this client's details.</p>
+          <p>You can now navigate to the metrics dashboard to view or edit this client&apos;s details.</p>
         </div>
 
         <div style={{ display: "flex", gap: 12 }}>
@@ -143,7 +153,7 @@ export default function NewClientPage() {
           <button
             onClick={() => {
               setCreatedUserId(null);
-              setForm({ email: "", password: "", prop_firm: "", phase: "1", phase_status: "in_progress", balance: "100000", profit_goal: "10", days_allowed: "30" });
+              setForm({ email: "", password: generateTempPassword(), prop_firm: "", phase: "1", phase_status: "in_progress", balance: "100000", profit_goal: "10", days_allowed: "30" });
             }}
             style={{
               flex: 1,
@@ -169,11 +179,25 @@ export default function NewClientPage() {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
           <div>
             <label style={labelStyle}>Email</label>
-            <input type="email" required value={form.email} onChange={field("email")} style={inputStyle} />
+            <input type="email" required autoComplete="off" value={form.email} onChange={field("email")} style={inputStyle} />
           </div>
           <div>
             <label style={labelStyle}>Temporary Password</label>
-            <input type="password" required minLength={6} value={form.password} onChange={field("password")} style={inputStyle} />
+            <div style={{ display: "flex", gap: 8 }}>
+              <input type="text" required minLength={6} autoComplete="new-password" value={form.password} onChange={field("password")} style={{ ...inputStyle, fontFamily: "monospace", fontSize: 12 }} />
+              <button
+                type="button"
+                onClick={() => setForm((f) => ({ ...f, password: generateTempPassword() }))}
+                title="Generate new password"
+                style={{
+                  flexShrink: 0, background: "rgba(79,142,247,0.1)",
+                  border: "1px solid rgba(79,142,247,0.25)", color: "#4f8ef7",
+                  fontSize: 16, cursor: "pointer", padding: "0 12px",
+                }}
+              >
+                ↺
+              </button>
+            </div>
           </div>
         </div>
 
