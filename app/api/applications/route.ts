@@ -104,7 +104,7 @@ export async function POST(req: NextRequest) {
       try {
         const { createClient } = await import("@supabase/supabase-js");
         const supabase = createClient(supabaseUrl, supabaseKey);
-        await supabase.from("applications").insert({
+        const { error: insertError } = await supabase.from("applications").insert({
           first_name: firstName,
           last_name: lastName,
           email,
@@ -112,7 +112,11 @@ export async function POST(req: NextRequest) {
           prop_firm: propFirm,
           notes,
         });
-        console.log("[applications] Supabase insert OK");
+        if (insertError) {
+          console.error("[applications] Supabase insert error:", insertError.message, insertError.code);
+        } else {
+          console.log("[applications] Supabase insert OK");
+        }
       } catch (sbErr: any) {
         console.error("[applications] Supabase error:", sbErr?.message);
       }

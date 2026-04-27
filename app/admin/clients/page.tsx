@@ -11,7 +11,7 @@ export default async function AdminClientsPage() {
   const [appsResult, leadsResult] = await Promise.all([
     supabase
       .from("applications")
-      .select("id, first_name, last_name, email, prop_firm, created_at, status, notes")
+      .select("*")
       .order("created_at", { ascending: false }),
     supabase
       .from("leads")
@@ -20,8 +20,8 @@ export default async function AdminClientsPage() {
       .limit(50),
   ]);
 
-
-  const apps = (appsResult.data ?? []).map((a) => ({ ...a, status: a.status ?? "new" }));
+  const appsError = appsResult.error?.message ?? null;
+  const apps = (appsResult.data ?? []).map((a: any) => ({ ...a, status: a.status ?? "new" }));
   const emailLeads = leadsResult.data ?? [];
 
   return (
@@ -48,6 +48,11 @@ export default async function AdminClientsPage() {
           Applications
           <span style={{ fontSize: 11, background: "rgba(79,142,247,0.15)", color: "#4f8ef7", padding: "3px 10px", letterSpacing: 1 }}>{apps.length}</span>
         </h2>
+        {appsError && (
+          <div style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)", color: "#ef4444", padding: "14px 20px", marginBottom: 16, fontSize: 12, fontFamily: "monospace" }}>
+            DB error: {appsError}
+          </div>
+        )}
         <AdminClientsClient applications={apps} />
       </div>
 

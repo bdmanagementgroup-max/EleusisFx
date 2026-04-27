@@ -45,6 +45,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: metricsErr.message }, { status: 500 });
     }
 
+    // Also write to applications table so the client appears on /admin/clients
+    await supabase.from("applications").insert({
+      email,
+      first_name: email.split("@")[0],
+      last_name: "",
+      prop_firm,
+      status: "active",
+    });
+
     return NextResponse.json({ id: user.user.id, email });
   } catch {
     return NextResponse.json({ error: "Server error" }, { status: 500 });
