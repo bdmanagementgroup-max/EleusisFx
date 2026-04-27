@@ -6,16 +6,17 @@ export const dynamic = "force-dynamic";
 const TILES = [
   { href: "/admin/articles", label: "Articles", desc: "Create, edit, and publish articles to the site." },
   { href: "/admin/clients", label: "Clients", desc: "View applications, manage leads, and create client accounts." },
-  { href: "/admin/metrics", label: "Metrics", desc: "Edit live challenge metrics for each client account." },
+  { href: "/admin/metrics", label: "Evaluation Metrics", desc: "Edit live challenge metrics for each client account." },
   { href: "/admin/resources", label: "Resources", desc: "Add prop firm guides, tools, and PDF downloads." },
   { href: "/admin/past-clients", label: "Past Clients", desc: "View historical client records, challenge results, and contact details." },
   { href: "/admin/tools/email", label: "Email Editor", desc: "Compose and send branded emails to clients, past clients, and custom recipients." },
+  { href: "/admin/tools/instagram", label: "Instagram Metrics", desc: "Log and track follower growth, reach, engagement, and post performance." },
 ];
 
 function StatCard({ label, value, sub, color }: { label: string; value: string; sub?: string; color?: string }) {
   return (
     <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.05)", padding: "14px 16px" }}>
-      <div style={{ fontFamily: "monospace", fontSize: 9, letterSpacing: 1, color: "rgba(210,220,240,0.28)", marginBottom: 6 }}>// {label.toLowerCase()}</div>
+      <div style={{ fontFamily: "monospace", fontSize: 9, letterSpacing: 1, color: "rgba(210,220,240,0.28)", marginBottom: 6 }}>{`// ${label.toLowerCase()}`}</div>
       <div style={{ fontFamily: "monospace", fontWeight: 700, fontSize: 20, color: color ?? "#e8eaf0", letterSpacing: -0.5 }}>{value}</div>
       {sub && <div style={{ fontFamily: "monospace", fontSize: 10, color: "rgba(210,220,240,0.3)", marginTop: 4 }}>{sub}</div>}
     </div>

@@ -9,11 +9,12 @@ const NAV = [
   { href: "/admin", label: "Overview" },
   { href: "/admin/articles", label: "Articles" },
   { href: "/admin/clients", label: "Clients" },
-  { href: "/admin/metrics", label: "Metrics" },
+  { href: "/admin/metrics", label: "Evaluation Metrics" },
   { href: "/admin/resources", label: "Resources" },
   { href: "/admin/past-clients", label: "Past Clients" },
   { divider: true },
   { href: "/admin/tools/email", label: "Email Editor", section: "Tools" },
+  { href: "/admin/tools/instagram", label: "Instagram Metrics" },
 ];
 
 export default function AdminShell({ children }: { children: React.ReactNode }) {
