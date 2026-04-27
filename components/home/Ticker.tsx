@@ -1,5 +1,5 @@
 const ITEMS = [
-  "FTMO Certified", "$100K Funded Accounts", "100% Pass Rate",
+  "FTMO Certified", "$100-$400K Accounts", "92% Pass Rate",
   "UK Based Traders", "True Forex Funds", "Zero Drawdown Violations", "Verified Results",
 ];
 

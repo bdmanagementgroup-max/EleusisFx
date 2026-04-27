@@ -3,8 +3,22 @@
 import Link from "next/link";
 import { useState } from "react";
 
+const DROPDOWN_ITEMS = [
+  { href: "/articles", label: "Articles" },
+  { href: "/compare", label: "Compare Firms" },
+  { href: "/calendar", label: "Economic Calendar" },
+  { divider: true },
+  { href: "/resources/position-size-calculator", label: "Position Size Calculator" },
+  { href: "/resources/risk-reward-calculator", label: "Risk-Reward Calculator" },
+  { href: "/resources/drawdown-tracker", label: "Drawdown Tracker" },
+  { divider: true },
+  { href: "/resources", label: "All Resources" },
+];
+
 export default function Nav() {
   const [open, setOpen] = useState(false);
+  const [dropOpen, setDropOpen] = useState(false);
+  const [mobileResOpen, setMobileResOpen] = useState(false);
 
   return (
     <>
@@ -46,10 +60,95 @@ export default function Nav() {
           <a href="/#process" className="nav-link-item">Process</a>
           <a href="/#results" className="nav-link-item">Results</a>
           <a href="/#pricing" className="nav-link-item">Pricing</a>
-          <Link href="/articles" className="nav-link-item">Articles</Link>
-          <Link href="/compare" className="nav-link-item">Compare</Link>
-          <Link href="/resources" className="nav-link-item">Resources</Link>
-          <Link href="/calendar" className="nav-link-item">Calendar</Link>
+
+          {/* Resources dropdown */}
+          <div
+            style={{ position: "relative" }}
+            onMouseEnter={() => setDropOpen(true)}
+            onMouseLeave={() => setDropOpen(false)}
+          >
+            <button
+              className="nav-link-item"
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: 5,
+                padding: 0,
+                fontFamily: "inherit",
+              }}
+            >
+              Resources
+              <svg
+                width="8"
+                height="5"
+                viewBox="0 0 8 5"
+                fill="none"
+                style={{
+                  transition: "transform 0.2s",
+                  transform: dropOpen ? "rotate(180deg)" : "none",
+                  opacity: 0.6,
+                }}
+              >
+                <path d="M1 1l3 3 3-3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+
+            {dropOpen && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "calc(100% + 20px)",
+                  right: -16,
+                  background: "rgba(8,9,15,0.98)",
+                  backdropFilter: "blur(24px)",
+                  WebkitBackdropFilter: "blur(24px)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  minWidth: 220,
+                  padding: "8px 0",
+                }}
+              >
+                {DROPDOWN_ITEMS.map((item, i) =>
+                  "divider" in item ? (
+                    <div
+                      key={i}
+                      style={{ height: 1, background: "rgba(255,255,255,0.06)", margin: "6px 0" }}
+                    />
+                  ) : (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setDropOpen(false)}
+                      style={{
+                        display: "block",
+                        padding: "10px 20px",
+                        fontSize: 11,
+                        letterSpacing: 1.5,
+                        textTransform: "uppercase",
+                        color: "rgba(210,220,240,0.8)",
+                        textDecoration: "none",
+                        transition: "color 0.15s, background 0.15s",
+                        whiteSpace: "nowrap",
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLElement).style.color = "#e8eaf0";
+                        (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.04)";
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLElement).style.color = "rgba(210,220,240,0.8)";
+                        (e.currentTarget as HTMLElement).style.background = "transparent";
+                      }}
+                    >
+                      {item.label}
+                    </Link>
+                  )
+                )}
+              </div>
+            )}
+          </div>
+
           <a href="/#free-guide" style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "#4f8ef7", textDecoration: "none" }}>
             Free Guide
           </a>
@@ -94,11 +193,6 @@ export default function Nav() {
             { href: "/#process", label: "Process" },
             { href: "/#results", label: "Results" },
             { href: "/#pricing", label: "Pricing" },
-            { href: "/articles", label: "Articles" },
-            { href: "/compare", label: "Compare" },
-            { href: "/resources", label: "Resources" },
-            { href: "/calendar", label: "Calendar" },
-            { href: "/#free-guide", label: "Free Guide" },
           ].map(({ href, label }) => (
             <a
               key={label}
@@ -119,6 +213,78 @@ export default function Nav() {
               {label}
             </a>
           ))}
+
+          {/* Mobile Resources accordion */}
+          <div style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+            <button
+              onClick={() => setMobileResOpen(!mobileResOpen)}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                width: "100%",
+                textAlign: "left",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                fontFamily: "var(--font-syne), Syne, sans-serif",
+                fontWeight: 600,
+                fontSize: 22,
+                letterSpacing: -0.5,
+                color: "rgba(232,234,240,0.6)",
+                padding: "18px 0",
+              }}
+            >
+              Resources
+              <svg width="12" height="7" viewBox="0 0 12 7" fill="none" style={{ transition: "transform 0.2s", transform: mobileResOpen ? "rotate(180deg)" : "none", flexShrink: 0 }}>
+                <path d="M1 1l5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            {mobileResOpen && (
+              <div style={{ paddingBottom: 12 }}>
+                {DROPDOWN_ITEMS.map((item, i) =>
+                  "divider" in item ? (
+                    <div key={i} style={{ height: 1, background: "rgba(255,255,255,0.06)", margin: "4px 0" }} />
+                  ) : (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => { setOpen(false); setMobileResOpen(false); }}
+                      style={{
+                        display: "block",
+                        padding: "10px 0 10px 16px",
+                        fontSize: 14,
+                        letterSpacing: 1,
+                        textTransform: "uppercase",
+                        color: "rgba(210,220,240,0.6)",
+                        textDecoration: "none",
+                      }}
+                    >
+                      {item.label}
+                    </Link>
+                  )
+                )}
+              </div>
+            )}
+          </div>
+
+          <a
+            href="/#free-guide"
+            onClick={() => setOpen(false)}
+            style={{
+              fontFamily: "var(--font-syne), Syne, sans-serif",
+              fontWeight: 600,
+              fontSize: 22,
+              letterSpacing: -0.5,
+              color: "#4f8ef7",
+              textDecoration: "none",
+              padding: "18px 0",
+              borderBottom: "1px solid rgba(255,255,255,0.06)",
+            }}
+          >
+            Free Guide
+          </a>
+
           <div style={{ marginTop: 32, display: "flex", gap: 12 }}>
             <Link
               href="/login"

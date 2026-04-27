@@ -111,7 +111,7 @@ export default function ApplyForm() {
               <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 10 }}>Prop Firm</label>
               <select required value={form.propFirm} onChange={(e) => setForm({ ...form, propFirm: e.target.value })} style={{ ...inputStyle, cursor: "pointer" }}>
                 <option value="" disabled>Select your firm</option>
-                {["FTMO", "True Forex Funds", "My Forex Funds", "Other"].map((f) => (<option key={f}>{f}</option>))}
+                {["FTMO", "FundedTrader", "E8", "The5ers", "True Forex Funds", "Topstep", "Earn2Trade", "City Traders Imperium", "Other"].map((f) => (<option key={f}>{f}</option>))}
               </select>
             </div>
 

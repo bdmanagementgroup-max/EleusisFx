@@ -44,7 +44,7 @@ export default function PublicMarketTicker() {
         alignItems: "center",
       }}
     >
-      <div style={{ display: "flex", width: "max-content", animation: "scroll 50s linear infinite" }}>
+      <div style={{ display: "flex", width: "max-content", animation: "scroll 17s linear infinite" }}>
         {doubled.map((item, i) => (
           <div key={i} style={{ display: "flex", alignItems: "center", gap: 14, padding: "0 28px", whiteSpace: "nowrap" }}>
             <span style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: "rgba(232,234,240,0.5)" }}>
