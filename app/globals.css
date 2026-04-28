@@ -27,15 +27,15 @@
 }
 
 html {
-  scroll-behavior: auto;
   background: #020305;
-  overflow-x: hidden;
-  width: 100%;
   color-scheme: dark;
 }
 
 body {
   background: #020305;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+  background-size: 80px 80px;
   color: #e8eaf0;
   font-family: "Epilogue", sans-serif;
   font-weight: 300;
@@ -43,22 +43,6 @@ body {
   -webkit-text-size-adjust: 100%;
   width: 100%;
   max-width: 100%;
-  position: relative;
-}
-
-/* GRID OVERLAY */
-body::after {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
-  background-size: 80px 80px;
-  pointer-events: none;
-  z-index: 0;
 }
 
 /* CUSTOM CURSOR */
@@ -118,7 +102,6 @@ body::after {
   align-items: center;
   gap: 10px;
   transition: all 0.25s;
-  backdrop-filter: blur(10px);
 }
 .wa-float:hover {
   background: #0d0f1a;
@@ -141,18 +124,12 @@ textarea:-webkit-autofill {
 ::-webkit-scrollbar-track { background: #020305; }
 ::-webkit-scrollbar-thumb { background: rgba(79, 142, 247, 0.3); border-radius: 3px; }
 
-/* SILVER GLOW — muted descriptive text */
-p, li, td, th, label, span:not(.cursor):not(.cursor-ring) {
-  text-shadow: 0 0 16px rgba(180, 205, 240, 0.45), 0 0 40px rgba(160, 190, 230, 0.2);
-}
-
-/* BUTTON GLOW — uses each button's text color so blue/green/red all glow correctly */
+/* BUTTON GLOW — subtle only, applied on hover not always */
 button:not([disabled]) {
-  box-shadow: 0 0 10px -2px currentColor, 0 0 4px -1px currentColor;
-  transition: box-shadow 0.15s, opacity 0.2s, background 0.15s;
+  transition: opacity 0.2s, background 0.15s;
 }
 button:not([disabled]):hover {
-  box-shadow: 0 0 22px -1px currentColor, 0 0 44px -6px currentColor;
+  box-shadow: 0 0 16px -4px currentColor;
 }
 
 /* RESPONSIVE */
