@@ -24,6 +24,8 @@ const FALLBACK_RESOURCES: Record<string, { title: string; description: string; h
   ],
 };
 
+const CATEGORY_COLORS = ["#4f8ef7", "#22c55e", "#f59e0b"];
+
 export default async function ResourcesPage() {
   const supabase = await getSupabaseAdminClient();
   const { data } = await supabase
@@ -60,11 +62,13 @@ export default async function ResourcesPage() {
           </p>
         </section>
 
-        {Object.entries(resources).map(([category, items]) => (
-          <section key={category} style={{ padding: "0 56px 80px", position: "relative", zIndex: 1 }}>
+        {Object.entries(resources).map(([category, items], idx) => {
+          const color = CATEGORY_COLORS[idx % CATEGORY_COLORS.length];
+          return (
+          <section key={category} style={{ padding: "0 56px 80px", position: "relative", zIndex: 1, ["--cat-color" as string]: color } as React.CSSProperties}>
             <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 60, marginBottom: 40 }}>
-              <div style={{ fontSize: 10, letterSpacing: 4, textTransform: "uppercase", color: "#4f8ef7", marginBottom: 12, display: "flex", alignItems: "center", gap: 14 }}>
-                <span style={{ width: 24, height: 1, background: "#4f8ef7", display: "inline-block" }} />
+              <div style={{ fontSize: 10, letterSpacing: 4, textTransform: "uppercase", color, marginBottom: 12, display: "flex", alignItems: "center", gap: 14 }}>
+                <span style={{ width: 24, height: 1, background: color, display: "inline-block" }} />
                 {category}
               </div>
             </div>
@@ -97,7 +101,8 @@ export default async function ResourcesPage() {
               })}
             </div>
           </section>
-        ))}
+          );
+        })}
       </main>
       <Footer />
 
@@ -109,13 +114,13 @@ export default async function ResourcesPage() {
         }
         .resource-card::before {
           content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-          background: linear-gradient(90deg, transparent, #4f8ef7, transparent);
+          background: linear-gradient(90deg, transparent, var(--cat-color, #4f8ef7), transparent);
           opacity: 0; transition: opacity 0.3s;
         }
-        .resource-card:hover { border-color: rgba(79,142,247,0.3); transform: translateY(-4px); }
+        .resource-card:hover { border-color: color-mix(in srgb, var(--cat-color, #4f8ef7) 35%, transparent); transform: translateY(-4px); }
         .resource-card:hover::before { opacity: 1; }
-        .resource-card:hover h3 { color: #7eb3ff; }
-        .resource-card:hover .resource-arrow { color: #4f8ef7; transform: translateX(4px); }
+        .resource-card:hover h3 { color: var(--cat-color, #7eb3ff); }
+        .resource-card:hover .resource-arrow { color: var(--cat-color, #4f8ef7); transform: translateX(4px); }
         @media (max-width: 1024px) {
           section { padding-left: 20px !important; padding-right: 20px !important; }
           div[style*="repeat(3, 1fr)"] { grid-template-columns: 1fr !important; }
