@@ -23,8 +23,7 @@ export async function PATCH(req: NextRequest) {
   const { id, ...fields } = await req.json();
   if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
 
-  // prop_firm excluded until past-clients-full-migration.sql is run in Supabase
-  const textFields = new Set(["email", "phone", "address", "notes", "challenge_result", "phase_status"]);
+  const textFields = new Set(["email", "phone", "address", "prop_firm", "notes", "challenge_result", "phase_status"]);
   const numericFields = new Set(["account_size_usd", "fee_paid_gbp", "phase", "balance", "equity", "daily_drawdown", "max_drawdown", "profit_target", "profit_goal", "days_used", "days_allowed"]);
   const allowed = [...textFields, ...numericFields];
   const update: Record<string, unknown> = {};
