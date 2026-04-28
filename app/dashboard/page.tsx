@@ -26,12 +26,13 @@ export default async function DashboardPage() {
   let m = metrics;
   if (!m && user?.email) {
     const admin = await getSupabaseAdminClient();
-    const { data: pastClient } = await admin
+    const { data: pastRows } = await admin
       .from("past_clients")
       .select("*")
       .ilike("email", user.email.trim())
       .order("created_at", { ascending: false })
-      .maybeSingle();
+      .limit(1);
+    const pastClient = pastRows?.[0] ?? null;
     if (pastClient) {
       m = pastClient;
       archived = true;
