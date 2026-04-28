@@ -1,20 +1,10 @@
-import Nav from "@/components/layout/Nav";
-import Footer from "@/components/layout/Footer";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import type { Metadata } from "next";
-import { getSupabaseAdminClient } from "@/lib/supabase/server";
+-- Update article content to full versions
+-- Run in Supabase SQL Editor
 
-export const revalidate = 3600;
-
-const HARDCODED: Record<string, { tag: string; title: string; excerpt: string; date: string; readTime: string; content: string }> = {
-  "what-is-an-ftmo-challenge": {
-    tag: "Prop Firms",
-    title: "What Is an FTMO Challenge and How Does It Work?",
-    excerpt: "A complete breakdown of the FTMO evaluation process — phases, trailing drawdown rules, profit splits, and what you need to know before starting your challenge.",
-    date: "June 2025",
-    readTime: "8 min read",
-    content: `<p>If you have spent any time in the forex or futures trading world, you have almost certainly heard of FTMO. Founded in Prague in 2014, it has grown into one of the largest and most recognised proprietary trading firms on the planet. Their evaluation model offers traders access to significant capital — up to $200,000 — without putting their own money at risk. But before you commit to a challenge, you need to understand exactly how the process works, what the rules are, and — critically — where traders most often go wrong.</p>
+UPDATE articles SET
+  excerpt = 'A complete breakdown of the FTMO evaluation process — phases, trailing drawdown rules, profit splits, and what you need to know before starting your challenge.',
+  read_time = 8,
+  content = $ARTICLE$<p>If you have spent any time in the forex or futures trading world, you have almost certainly heard of FTMO. Founded in Prague in 2014, it has grown into one of the largest and most recognised proprietary trading firms on the planet. Their evaluation model offers traders access to significant capital — up to $200,000 — without putting their own money at risk. But before you commit to a challenge, you need to understand exactly how the process works, what the rules are, and — critically — where traders most often go wrong.</p>
 
 <p>This guide walks you through the entire FTMO evaluation process in detail. No marketing fluff, no vague summaries. Just the structure, the rules, and the nuances that matter when real money is on the line.</p>
 
@@ -90,15 +80,15 @@ const HARDCODED: Record<string, { tag: string; title: string; excerpt: string; d
 
 <p>The real cause is psychological. When a real fee is on the line, traders abandon the process that made them profitable in the first place. They oversize positions early to build a buffer. They revenge trade after a losing day. They misread the trailing drawdown and believe they have more room than they do.</p>
 
-<p>The evaluation context changes behaviour. That change in behaviour — not the rules — is what ends most challenges. For traders who recognise this pattern in themselves, working with an experienced evaluation service is a rational alternative. The rules do not change, but the executor does — and removing emotional variables from a mechanical process produces measurably more consistent outcomes.</p>`,
-  },
-  "why-traders-fail-prop-firm-evaluation": {
-    tag: "Strategy",
-    title: "Why Most Traders Fail Their Prop Firm Evaluation",
-    excerpt: "Five specific failure patterns account for the majority of prop firm evaluation failures — and most of them have nothing to do with whether the trader has a working strategy.",
-    date: "May 2025",
-    readTime: "7 min read",
-    content: `<p>The statistics around prop firm evaluations are sobering. Across FTMO and the broader industry, fewer than 10% of traders who start a challenge ever receive a funded account. That number has remained stubbornly consistent for years, through bull markets and bear markets, through the explosion in prop firm popularity, and through improvements in trader education. Nine out of ten people who pay for an evaluation walk away with nothing.</p>
+<p>The evaluation context changes behaviour. That change in behaviour — not the rules — is what ends most challenges. For traders who recognise this pattern in themselves, working with an experienced evaluation service is a rational alternative. The rules do not change, but the executor does — and removing emotional variables from a mechanical process produces measurably more consistent outcomes.</p>$ARTICLE$
+WHERE slug = 'what-is-an-ftmo-challenge';
+
+-- ─────────────────────────────────────────────────────────────────────────────
+
+UPDATE articles SET
+  excerpt = 'Five specific failure patterns account for the majority of prop firm evaluation failures — and most of them have nothing to do with whether the trader has a working strategy.',
+  read_time = 7,
+  content = $ARTICLE$<p>The statistics around prop firm evaluations are sobering. Across FTMO and the broader industry, fewer than 10% of traders who start a challenge ever receive a funded account. That number has remained stubbornly consistent for years, through bull markets and bear markets, through the explosion in prop firm popularity, and through improvements in trader education. Nine out of ten people who pay for an evaluation walk away with nothing.</p>
 
 <p>What is striking about this figure is not just its scale — it is the consistency of the reasons behind it. The same five failure patterns show up again and again. And most of them have very little to do with whether the trader has a genuinely profitable strategy.</p>
 
@@ -148,15 +138,15 @@ const HARDCODED: Record<string, { tag: string; title: string; excerpt: string; d
 
 <p>This is precisely why professional evaluation services exist. The value of using an experienced team to execute an evaluation is not that their strategy is necessarily better than yours. It is that their execution is not subject to the psychological pressures that reliably cause traders to deviate from their own strategies. The process becomes mechanical, not emotional — and mechanical execution of a sound strategy is exactly what prop firm evaluations reward.</p>
 
-<p>Understanding these five patterns is useful regardless of which path you choose. If you plan to attempt your own evaluation, knowing what is likely to derail you before it happens is genuinely valuable. If you decide that the psychological variables are too significant a risk, a professional evaluation service is an equally rational conclusion.</p>`,
-  },
-  "ftmo-vs-true-forex-funds": {
-    tag: "Funding",
-    title: "FTMO vs True Forex Funds: Which Prop Firm Is Right for You?",
-    excerpt: "An honest, detailed comparison of the two most popular prop firms — drawdown methodology, profit targets, fees, trading restrictions, and which suits your trading style.",
-    date: "April 2025",
-    readTime: "9 min read",
-    content: `<p>FTMO and True Forex Funds are two of the most established names in the proprietary trading industry. Both run two-phase evaluation models, both offer accounts up to $200,000, and both have genuine track records of paying funded traders. But they are meaningfully different — in their drawdown methodology, their profit targets, their restrictions on trading behaviour, and the economics of their payout structures. Choosing the wrong firm for your style of trading does not just make the evaluation harder. It can make passing structurally unlikely no matter how well you trade.</p>
+<p>Understanding these five patterns is useful regardless of which path you choose. If you plan to attempt your own evaluation, knowing what is likely to derail you before it happens is genuinely valuable. If you decide that the psychological variables are too significant a risk, a professional evaluation service is an equally rational conclusion.</p>$ARTICLE$
+WHERE slug = 'why-traders-fail-prop-firm-evaluation';
+
+-- ─────────────────────────────────────────────────────────────────────────────
+
+UPDATE articles SET
+  excerpt = 'An honest, detailed comparison of the two most popular prop firms — drawdown methodology, profit targets, fees, trading restrictions, and which suits your trading style.',
+  read_time = 9,
+  content = $ARTICLE$<p>FTMO and True Forex Funds are two of the most established names in the proprietary trading industry. Both run two-phase evaluation models, both offer accounts up to $200,000, and both have genuine track records of paying funded traders. But they are meaningfully different — in their drawdown methodology, their profit targets, their restrictions on trading behaviour, and the economics of their payout structures. Choosing the wrong firm for your style of trading does not just make the evaluation harder. It can make passing structurally unlikely no matter how well you trade.</p>
 
 <h2>Background and Credibility</h2>
 
@@ -240,134 +230,5 @@ const HARDCODED: Record<string, { tag: string; title: string; excerpt: string; d
 
 <p>True Forex Funds offers a more forgiving drawdown structure, lower Phase 1 target, and more flexible payouts. For traders who want a slightly less punishing evaluation environment — particularly swing traders and macro traders — it is a serious contender that should not be dismissed simply because of FTMO's larger brand presence.</p>
 
-<p>Neither firm is objectively better. The right choice depends on your strategy's typical return profile, your trading style, and how you respond to drawdown risk. Both firms are legitimate, both pay out reliably, and both can serve as the foundation for a funded trading career.</p>`,
-  },
-};
-
-function formatDate(iso: string | null) {
-  if (!iso) return "";
-  return new Date(iso).toLocaleDateString("en-GB", { month: "long", year: "numeric" });
-}
-
-export async function generateStaticParams() {
-  const hardcodedSlugs = Object.keys(HARDCODED).map((slug) => ({ slug }));
-  try {
-    const supabase = await getSupabaseAdminClient();
-    const { data } = await supabase.from("articles").select("slug").eq("published", true);
-    const dbSlugs = (data ?? []).map((r) => ({ slug: r.slug }));
-    const all = [...hardcodedSlugs];
-    for (const s of dbSlugs) {
-      if (!all.find((x) => x.slug === s.slug)) all.push(s);
-    }
-    return all;
-  } catch {
-    return hardcodedSlugs;
-  }
-}
-
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params;
-  try {
-    const supabase = await getSupabaseAdminClient();
-    const { data } = await supabase.from("articles").select("title, excerpt").eq("slug", slug).eq("published", true).single();
-    if (data) return { title: `${data.title} — Eleusis FX`, description: data.excerpt ?? "", openGraph: { title: data.title, description: data.excerpt ?? "", type: "article" } };
-  } catch {}
-  const article = HARDCODED[slug];
-  if (!article) return {};
-  return { title: `${article.title} — Eleusis FX`, description: article.excerpt, openGraph: { title: article.title, description: article.excerpt, type: "article" } };
-}
-
-export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-
-  let tag: string, title: string, date: string, readTime: string, content: string;
-
-  try {
-    const supabase = await getSupabaseAdminClient();
-    const { data } = await supabase
-      .from("articles")
-      .select("category, title, excerpt, published_at, read_time, content")
-      .eq("slug", slug)
-      .eq("published", true)
-      .single();
-
-    if (data) {
-      tag = data.category ?? "Trading";
-      title = data.title;
-      date = formatDate(data.published_at);
-      readTime = data.read_time ? `${data.read_time} min read` : "";
-      content = data.content ?? "";
-    } else {
-      const h = HARDCODED[slug];
-      if (!h) notFound();
-      ({ tag, title, date, readTime, content } = h);
-    }
-  } catch {
-    const h = HARDCODED[slug];
-    if (!h) notFound();
-    ({ tag, title, date, readTime, content } = h);
-  }
-
-  return (
-    <>
-      <Nav />
-      <main style={{ paddingTop: 72 }}>
-        <article style={{ maxWidth: 800, margin: "0 auto", padding: "80px 56px 120px" }}>
-          <Link
-            href="/articles"
-            style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", textDecoration: "none", marginBottom: 48, transition: "color 0.2s" }}
-          >
-            ← Back to Articles
-          </Link>
-
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 9, letterSpacing: "2.5px", textTransform: "uppercase" as const, color: "#4f8ef7", marginBottom: 24 }}>
-            <span style={{ width: 16, height: 1, background: "#4f8ef7", display: "inline-block" }} />
-            {tag}
-          </div>
-
-          <h1 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: "clamp(28px, 5vw, 52px)", lineHeight: 1.05, letterSpacing: -1.5, marginBottom: 24 }}>
-            {title}
-          </h1>
-
-          <div style={{ display: "flex", gap: 24, marginBottom: 60, paddingBottom: 40, borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-            <span style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)" }}>Eleusis FX</span>
-            <span style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.58)" }}>{date}</span>
-            {readTime && <span style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.58)" }}>{readTime}</span>}
-          </div>
-
-          <div className="article-body" dangerouslySetInnerHTML={{ __html: content }} />
-        </article>
-      </main>
-      <Footer />
-
-      <style>{`
-        .article-body { font-size: 16px; line-height: 1.85; color: rgba(232,234,240,0.75); }
-        .article-body h2 {
-          font-family: var(--font-syne), Syne, sans-serif;
-          font-weight: 700; font-size: 24px; color: #e8eaf0;
-          margin: 48px 0 20px; letter-spacing: -0.5px;
-        }
-        .article-body h3 {
-          font-family: var(--font-syne), Syne, sans-serif;
-          font-weight: 600; font-size: 18px; color: #e8eaf0;
-          margin: 32px 0 16px;
-        }
-        .article-body p { margin-bottom: 20px; }
-        .article-body strong { color: #e8eaf0; font-weight: 600; }
-        .article-body em { color: #7eb3ff; font-style: italic; }
-        .article-body ul { list-style: none; padding: 0; margin-bottom: 20px; }
-        .article-body ul li {
-          padding: 10px 0 10px 28px; position: relative;
-          border-bottom: 1px solid rgba(255,255,255,0.04);
-          color: rgba(232,234,240,0.6);
-        }
-        .article-body ul li::before {
-          content: '→'; position: absolute; left: 0; color: #4f8ef7; font-size: 12px;
-        }
-        @media (max-width: 1024px) {
-          article { padding: 60px 20px 80px !important; }
-        }
-      `}</style>
-    </>
-  );
-}
+<p>Neither firm is objectively better. The right choice depends on your strategy's typical return profile, your trading style, and how you respond to drawdown risk. Both firms are legitimate, both pay out reliably, and both can serve as the foundation for a funded trading career.</p>$ARTICLE$
+WHERE slug = 'ftmo-vs-true-forex-funds';
