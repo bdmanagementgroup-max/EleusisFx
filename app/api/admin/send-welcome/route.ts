@@ -20,6 +20,7 @@ export async function POST(req: NextRequest) {
     const { randomBytes } = await import("crypto");
     const tempPassword = randomBytes(12).toString("base64url");
 
+    // Try to create a new account
     const { data: newUser, error: createErr } = await supabase.auth.admin.createUser({
       email,
       password: tempPassword,
@@ -29,6 +30,7 @@ export async function POST(req: NextRequest) {
     let accountCreated = false;
 
     if (!createErr && newUser?.user) {
+      // Brand new user — seed metrics and send credentials
       await supabase.from("client_metrics").insert({
         user_id: newUser.user.id,
         prop_firm: "",
@@ -42,14 +44,13 @@ export async function POST(req: NextRequest) {
       accountCreated = true;
       await sendWelcomeEmail({ to: email, firstName, tempPassword, siteUrl });
     } else {
-      // Account already exists — generate a password reset link instead
-      const { data: linkData } = await supabase.auth.admin.generateLink({
-        type: "recovery",
-        email,
-        options: { redirectTo: `${siteUrl}/auth/callback?next=/auth/reset-password` },
-      });
-      const resetLink = linkData?.properties?.action_link;
-      await sendWelcomeEmail({ to: email, firstName, resetLink: resetLink ?? undefined, siteUrl });
+      // Account already exists — force-reset their password and send the new one directly
+      const { data: { users } } = await supabase.auth.admin.listUsers();
+      const existing = users.find((u) => u.email?.toLowerCase() === email.toLowerCase());
+      if (existing) {
+        await supabase.auth.admin.updateUserById(existing.id, { password: tempPassword });
+      }
+      await sendWelcomeEmail({ to: email, firstName, tempPassword, siteUrl });
     }
 
     return NextResponse.json({ ok: true, accountCreated });
