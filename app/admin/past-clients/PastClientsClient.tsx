@@ -45,8 +45,16 @@ const PROP_FIRMS = ["FTMO", "FundedTrader", "E8", "The5ers", "True Forex Funds",
 
 const RESULT_STYLES: Record<string, { color: string; bg: string }> = {
   passed: { color: "#22c55e", bg: "rgba(34,197,94,0.08)" },
+  pass:   { color: "#22c55e", bg: "rgba(34,197,94,0.08)" },
   failed: { color: "#ef4444", bg: "rgba(239,68,68,0.08)" },
+  fail:   { color: "#ef4444", bg: "rgba(239,68,68,0.08)" },
 };
+
+function resultStyle(raw: string | null) {
+  if (!raw) return null;
+  const key = raw.toLowerCase().trim();
+  return RESULT_STYLES[key] ?? { color: "rgba(210,220,240,0.6)", bg: "rgba(255,255,255,0.04)" };
+}
 
 export default function PastClientsClient({ clients: initial }: { clients: Client[] }) {
   const [clients, setClients] = useState<Client[]>(initial);
@@ -103,8 +111,7 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
       case "prop_firm":
         return <span style={{ color: c.prop_firm ? "rgba(232,234,240,0.7)" : "rgba(232,234,240,0.15)" }}>{c.prop_firm ?? "—"}</span>;
       case "result": {
-        const result = c.challenge_result?.toLowerCase();
-        const rs = result ? RESULT_STYLES[result] : null;
+        const rs = resultStyle(c.challenge_result);
         return rs ? (
           <span style={{ fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", padding: "3px 8px", background: rs.bg, color: rs.color }}>
             {c.challenge_result}
