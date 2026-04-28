@@ -157,7 +157,7 @@ export async function POST(req: NextRequest) {
           const { data: linkData } = await supabase.auth.admin.generateLink({
             type: "recovery",
             email,
-            options: { redirectTo: `${siteUrl}/auth/reset-password` },
+            options: { redirectTo: `${siteUrl}/auth/callback?next=/auth/reset-password` },
           });
           const resetLink = linkData?.properties?.action_link;
           await sendWelcomeEmail({ to: email, firstName, resetLink: resetLink ?? undefined, siteUrl });

@@ -2,13 +2,18 @@
 
 import { useState } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const searchParams = useSearchParams();
+  const [error, setError] = useState(
+    searchParams.get("error") === "invalid_link"
+      ? "That link has expired or is invalid. Please sign in and use Forgot Password to get a new one."
+      : ""
+  );
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
