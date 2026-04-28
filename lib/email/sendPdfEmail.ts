@@ -1,9 +1,14 @@
 import { Resend } from "resend";
 
 export const PDF_OPTIONS = [
-  { key: "5-fatal-mistakes",      label: "5 Fatal Mistakes That Kill Prop Accounts",  file: "eleusis-fx-5-fatal-mistakes.pdf" },
-  { key: "30-day-blueprint",      label: "The 30-Day Evaluation Blueprint",             file: "eleusis-fx-30-day-blueprint.pdf" },
-  { key: "funded-trader-mindset", label: "The Funded Trader Mindset",                  file: "eleusis-fx-funded-trader-mindset.pdf" },
+  // Downloadable PDF guides
+  { key: "5-fatal-mistakes",          label: "5 Fatal Mistakes That Kill Prop Accounts",          file: "eleusis-fx-5-fatal-mistakes.pdf",             btnLabel: "Download Guide" },
+  { key: "30-day-blueprint",          label: "The 30-Day Evaluation Blueprint",                    file: "eleusis-fx-30-day-blueprint.pdf",              btnLabel: "Download Guide" },
+  { key: "funded-trader-mindset",     label: "The Funded Trader Mindset",                         file: "eleusis-fx-funded-trader-mindset.pdf",         btnLabel: "Download Guide" },
+  // Prop firm comparison guides (article links)
+  { key: "ftmo-vs-tff",               label: "FTMO vs True Forex Funds — Comparison Guide",       file: "articles/ftmo-vs-true-forex-funds",            btnLabel: "Read Guide"     },
+  { key: "what-is-ftmo-challenge",    label: "What Is an FTMO Challenge?",                        file: "articles/what-is-an-ftmo-challenge",           btnLabel: "Read Guide"     },
+  { key: "why-traders-fail",          label: "Why Traders Fail Prop Firm Evaluations",            file: "articles/why-traders-fail-prop-firm-evaluation", btnLabel: "Read Guide"   },
 ] as const;
 
 export type PdfKey = (typeof PDF_OPTIONS)[number]["key"];
@@ -71,7 +76,7 @@ export async function sendPdfEmail({ to, firstName, pdfKey, siteUrl }: SendPdfAr
               <p style="margin:0 0 24px;font-size:13px;line-height:1.75;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">
                 Click below to download your free guide. No sign-up required — it&apos;s yours.
               </p>
-              <a href="${pdfUrl}" style="display:inline-block;background:#4f8ef7;color:#020305;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:14px 26px;text-decoration:none;font-family:Arial,sans-serif;">Download Guide &rarr;</a>
+              <a href="${pdfUrl}" style="display:inline-block;background:#4f8ef7;color:#020305;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:14px 26px;text-decoration:none;font-family:Arial,sans-serif;">${pdf.btnLabel} &rarr;</a>
             </td></tr>
           </table>
         </td></tr>
