@@ -92,7 +92,7 @@ export default function ChartClient() {
   const [symbol, setSymbol] = useState("FX:EURUSD");
   const [interval, setInterval] = useState("D");
   const [customSymbol, setCustomSymbol] = useState("");
-  const [chartHeight, setChartHeight] = useState(800);
+  const [chartHeight, setChartHeight] = useState(600);
   const [fullscreen, setFullscreen] = useState(false);
 
   const [snapshotUrl, setSnapshotUrl] = useState<string | null>(null);
