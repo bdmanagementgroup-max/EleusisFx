@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 
 const DROPDOWN_ITEMS = [
   { href: "/articles", label: "Articles" },
@@ -19,6 +20,15 @@ export default function Nav() {
   const [open, setOpen] = useState(false);
   const [dropOpen, setDropOpen] = useState(false);
   const [mobileResOpen, setMobileResOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    void (async () => {
+      const supabase = getSupabaseBrowserClient();
+      const { data } = await supabase.auth.getSession();
+      setIsLoggedIn(!!data.session);
+    })();
+  }, []);
 
   return (
     <>
@@ -152,8 +162,14 @@ export default function Nav() {
           <a href="/#free-guide" style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "#4f8ef7", textDecoration: "none" }}>
             Free Guide
           </a>
-          <Link href="/login" className="nav-btn-item">Login</Link>
-          <a href="/#apply" className="nav-btn-apply">Apply Now</a>
+          {isLoggedIn ? (
+            <Link href="/dashboard" className="nav-btn-item" style={{ color: "#4f8ef7" }}>← Dashboard</Link>
+          ) : isLoggedIn === false ? (
+            <>
+              <Link href="/login" className="nav-btn-item">Login</Link>
+              <a href="/#apply" className="nav-btn-apply">Apply Now</a>
+            </>
+          ) : null}
         </div>
 
         {/* Hamburger */}
@@ -286,35 +302,53 @@ export default function Nav() {
           </a>
 
           <div style={{ marginTop: 32, display: "flex", gap: 12 }}>
-            <Link
-              href="/login"
-              onClick={() => setOpen(false)}
-              style={{
-                flex: 1, textAlign: "center",
-                fontFamily: "var(--font-syne), Syne, sans-serif",
-                fontWeight: 600, fontSize: 11, letterSpacing: 2,
-                textTransform: "uppercase", color: "rgba(210,220,240,0.88)",
-                textDecoration: "none", padding: "14px",
-                border: "1px solid rgba(255,255,255,0.08)",
-                transition: "color 0.2s",
-              }}
-            >
-              Login
-            </Link>
-            <a
-              href="/#apply"
-              onClick={() => setOpen(false)}
-              style={{
-                flex: 1, textAlign: "center",
-                fontFamily: "var(--font-syne), Syne, sans-serif",
-                fontWeight: 700, fontSize: 11, letterSpacing: 2,
-                textTransform: "uppercase", color: "#020305",
-                background: "#e8eaf0", padding: "14px",
-                textDecoration: "none",
-              }}
-            >
-              Apply Now
-            </a>
+            {isLoggedIn ? (
+              <Link
+                href="/dashboard"
+                onClick={() => setOpen(false)}
+                style={{
+                  flex: 1, textAlign: "center",
+                  fontFamily: "var(--font-syne), Syne, sans-serif",
+                  fontWeight: 600, fontSize: 11, letterSpacing: 2,
+                  textTransform: "uppercase", color: "#4f8ef7",
+                  textDecoration: "none", padding: "14px",
+                  border: "1px solid rgba(79,142,247,0.3)",
+                }}
+              >
+                ← Dashboard
+              </Link>
+            ) : isLoggedIn === false ? (
+              <>
+                <Link
+                  href="/login"
+                  onClick={() => setOpen(false)}
+                  style={{
+                    flex: 1, textAlign: "center",
+                    fontFamily: "var(--font-syne), Syne, sans-serif",
+                    fontWeight: 600, fontSize: 11, letterSpacing: 2,
+                    textTransform: "uppercase", color: "rgba(210,220,240,0.88)",
+                    textDecoration: "none", padding: "14px",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                  }}
+                >
+                  Login
+                </Link>
+                <a
+                  href="/#apply"
+                  onClick={() => setOpen(false)}
+                  style={{
+                    flex: 1, textAlign: "center",
+                    fontFamily: "var(--font-syne), Syne, sans-serif",
+                    fontWeight: 700, fontSize: 11, letterSpacing: 2,
+                    textTransform: "uppercase", color: "#020305",
+                    background: "#e8eaf0", padding: "14px",
+                    textDecoration: "none",
+                  }}
+                >
+                  Apply Now
+                </a>
+              </>
+            ) : null}
           </div>
         </div>
       )}
