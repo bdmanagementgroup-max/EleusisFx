@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getSupabaseAdminClient } from "@/lib/supabase/server";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 const HARDCODED: Record<string, { tag: string; title: string; excerpt: string; date: string; readTime: string; content: string }> = {
   "what-is-an-ftmo-challenge": {
@@ -296,7 +296,13 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       title = data.title;
       date = formatDate(data.published_at);
       readTime = data.read_time ? `${data.read_time} min read` : "";
-      content = data.content ?? "";
+      // Prefer DB content if substantial; fall back to hardcoded if DB has stub/empty content
+      const dbContent = data.content ?? "";
+      const hardcoded = HARDCODED[slug];
+      content = (dbContent.length > 500 || !hardcoded)
+        ? dbContent
+        : hardcoded.content;
+      if (!readTime && hardcoded) readTime = hardcoded.readTime;
     } else {
       const h = HARDCODED[slug];
       if (!h) notFound();
