@@ -11,6 +11,7 @@ const TILES = [
   { href: "/admin/past-clients", label: "Past Clients", desc: "View historical client records, challenge results, and contact details." },
   { href: "/admin/tools/email", label: "Email Editor", desc: "Compose and send branded emails to clients, past clients, and custom recipients." },
   { href: "/admin/tools/instagram", label: "Instagram Metrics", desc: "Log and track follower growth, reach, engagement, and post performance." },
+  { href: "/admin/tools/chart", label: "Chart Tool", desc: "View live TradingView charts for any forex or crypto pair, take snapshots, and post directly to Instagram and Telegram." },
 ];
 
 function StatCard({ label, value, sub, color }: { label: string; value: string; sub?: string; color?: string }) {

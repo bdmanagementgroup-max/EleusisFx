@@ -15,6 +15,7 @@ const NAV = [
   { divider: true },
   { href: "/admin/tools/email", label: "Email Editor", section: "Tools" },
   { href: "/admin/tools/instagram", label: "Instagram Metrics" },
+  { href: "/admin/tools/chart", label: "Chart Tool" },
 ];
 
 export default function AdminShell({ children }: { children: React.ReactNode }) {
