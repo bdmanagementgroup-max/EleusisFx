@@ -14,6 +14,7 @@ const NAV = [
   { href: "/admin/past-clients", label: "Past Clients" },
   { href: "/admin/documents", label: "Documents" },
   { href: "/admin/notifications", label: "Notifications" },
+  { href: "/admin/support", label: "Support Requests" },
   { divider: true },
   { href: "/admin/tools/email", label: "Email Editor", section: "Tools" },
   { href: "/admin/tools/instagram", label: "Instagram Metrics" },
