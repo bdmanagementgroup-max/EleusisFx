@@ -40,16 +40,17 @@ export default async function AdminOverview() {
   const activeFailed = active.filter((r) => r.phase_status === "failed").length;
   const activeInProgress = active.filter((r) => r.phase_status === "in_progress").length;
 
-  const pastPassed = past.filter((p) => {
-    const status = p.phase_status ?? "";
-    const result = (p.challenge_result ?? "").toLowerCase();
-    return status === "passed" || (status === "unknown" && result === "passed");
-  }).length;
-  const pastFailed = past.filter((p) => {
-    const status = p.phase_status ?? "";
-    const result = (p.challenge_result ?? "").toLowerCase();
-    return status === "failed" || (status === "unknown" && result === "failed");
-  }).length;
+  function resolveResult(phase_status: string, challenge_result: string | null) {
+    if (phase_status === "passed") return "passed";
+    if (phase_status === "failed") return "failed";
+    const r = (challenge_result ?? "").toLowerCase().trim();
+    if (r.startsWith("pass") || r === "funded" || r === "yes" || r === "p") return "passed";
+    if (r.startsWith("fail") || r === "no" || r === "f") return "failed";
+    return "unknown";
+  }
+
+  const pastPassed = past.filter((p) => resolveResult(p.phase_status ?? "", p.challenge_result) === "passed").length;
+  const pastFailed = past.filter((p) => resolveResult(p.phase_status ?? "", p.challenge_result) === "failed").length;
 
   const totalPassed = activePassed + pastPassed;
   const totalFailed = activeFailed + pastFailed;

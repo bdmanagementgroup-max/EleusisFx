@@ -46,7 +46,11 @@ function StatCard({ label, value, sub, color }: { label: string; value: string; 
 
 function statusLabel(p: PastRow) {
   if (p.phase_status && p.phase_status !== "unknown") return p.phase_status;
-  return (p.challenge_result ?? "").toLowerCase() || "unknown";
+  const r = (p.challenge_result ?? "").toLowerCase().trim();
+  if (!r) return "unknown";
+  if (r.startsWith("pass") || r === "funded" || r === "yes" || r === "p") return "passed";
+  if (r.startsWith("fail") || r === "no" || r === "f") return "failed";
+  return r;
 }
 
 export default function MetricsPageClient({ activeRows, pastRows }: { activeRows: ActiveRow[]; pastRows: PastRow[] }) {
