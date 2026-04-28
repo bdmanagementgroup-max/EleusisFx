@@ -59,7 +59,7 @@ export default async function AdminArticlesPage() {
               </div>
               <span style={{ fontSize: 11, color: "rgba(210,220,240,0.88)", whiteSpace: "nowrap" }}>{formatDate(published_at ?? created_at)}</span>
               <div style={{ display: "flex", gap: 16 }}>
-                <Link href={`/articles/${slug}`} target="_blank" style={{ fontSize: 11, letterSpacing: 1.5, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", textDecoration: "none" }}>View →</Link>
+                <Link href={`/articles/${slug}`} style={{ fontSize: 11, letterSpacing: 1.5, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", textDecoration: "none" }}>View →</Link>
               </div>
             </div>
           ))}

@@ -27,7 +27,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   background: #020305;
   overflow-x: hidden;
   width: 100%;
