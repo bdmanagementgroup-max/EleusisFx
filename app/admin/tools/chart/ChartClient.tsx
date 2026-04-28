@@ -28,7 +28,15 @@ const INTERVALS = [
   { label: "1W", value: "W" },
 ];
 
-function TradingViewChart({ symbol, interval }: { symbol: string; interval: string }) {
+const SIZES = [
+  { label: "S", value: 400 },
+  { label: "M", value: 600 },
+  { label: "L", value: 800 },
+  { label: "XL", value: 1000 },
+  { label: "XXL", value: 1200 },
+];
+
+function TradingViewChart({ symbol, interval, height }: { symbol: string; interval: string; height: number }) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -60,7 +68,7 @@ function TradingViewChart({ symbol, interval }: { symbol: string; interval: stri
     <div
       className="tradingview-widget-container"
       ref={containerRef}
-      style={{ width: "100%", height: "680px" }}
+      style={{ width: "100%", height }}
     >
       <div
         className="tradingview-widget-container__widget"
@@ -76,6 +84,7 @@ export default function ChartClient() {
   const [symbol, setSymbol] = useState("FX:EURUSD");
   const [interval, setInterval] = useState("D");
   const [customSymbol, setCustomSymbol] = useState("");
+  const [chartHeight, setChartHeight] = useState(800);
 
   const [snapshotUrl, setSnapshotUrl] = useState<string | null>(null);
   const [snapshotLoading, setSnapshotLoading] = useState(false);
@@ -321,6 +330,32 @@ export default function ChartClient() {
             ))}
           </div>
         </div>
+
+        {/* Size */}
+        <div>
+          <div
+            style={{
+              fontSize: 9,
+              letterSpacing: 2,
+              textTransform: "uppercase",
+              color: "rgba(210,220,240,0.3)",
+              marginBottom: 8,
+            }}
+          >
+            Height
+          </div>
+          <div style={{ display: "flex", gap: 4 }}>
+            {SIZES.map((s) => (
+              <button
+                key={s.value}
+                style={chipStyle(chartHeight === s.value)}
+                onClick={() => setChartHeight(s.value)}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Active symbol label */}
@@ -344,7 +379,7 @@ export default function ChartClient() {
           marginBottom: 0,
         }}
       >
-        <TradingViewChart key={`${activeSymbol}-${interval}`} symbol={activeSymbol} interval={interval} />
+        <TradingViewChart key={`${activeSymbol}-${interval}`} symbol={activeSymbol} interval={interval} height={chartHeight} />
       </div>
 
       {/* Snapshot + publish bar */}
