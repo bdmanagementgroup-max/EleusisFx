@@ -73,6 +73,8 @@ export default function AdminClientsClient({ applications: initial }: { applicat
   const [pdfSending, setPdfSending] = useState<string | null>(null);
   const [pdfSent, setPdfSent] = useState<Record<string, string>>({});
   const [pdfError, setPdfError] = useState<Record<string, string>>({});
+  const [archiving, setArchiving] = useState<string | null>(null);
+  const [archiveError, setArchiveError] = useState<Record<string, string>>({});
 
   function toggleExpand(id: string) {
     setExpanded((prev) => {
@@ -169,6 +171,28 @@ export default function AdminClientsClient({ applications: initial }: { applicat
       setPdfError((e) => ({ ...e, [id]: "Network error" }));
     }
     setPdfSending(null);
+  }
+
+  async function archiveClient(id: string, name: string) {
+    if (!confirm(`Move "${name}" to Past Clients?\n\nThis will remove them from Applications and add them to the Past Clients table. Their record will still count in metrics.`)) return;
+    setArchiving(id);
+    setArchiveError((e) => ({ ...e, [id]: "" }));
+    try {
+      const res = await fetch("/api/admin/archive-client", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setApps((prev) => prev.filter((a) => a.id !== id));
+      } else {
+        setArchiveError((e) => ({ ...e, [id]: data.error ?? "Failed to move client" }));
+      }
+    } catch {
+      setArchiveError((e) => ({ ...e, [id]: "Network error" }));
+    }
+    setArchiving(null);
   }
 
   async function generateReset(id: string, email: string) {
@@ -357,6 +381,23 @@ export default function AdminClientsClient({ applications: initial }: { applicat
                           <div style={{ fontSize: 10, color: "#ef4444", marginTop: 6 }}>{pdfError[id]}</div>
                         )}
                       </div>
+                    </div>
+
+                    {/* Move to Past Clients */}
+                    <div style={{ marginTop: 20, paddingTop: 16, borderTop: "1px solid rgba(255,255,255,0.04)", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+                      <ActionBtn
+                        onClick={() => archiveClient(id, `${first_name} ${last_name}`)}
+                        disabled={archiving === id}
+                        color="rgba(245,158,11,0.6)"
+                      >
+                        {archiving === id ? "Moving…" : "→ Move to Past Clients"}
+                      </ActionBtn>
+                      <span style={{ fontSize: 10, color: "rgba(210,220,240,0.25)", fontFamily: "monospace" }}>
+                        Removes from Applications · adds to Past Clients · counts in metrics
+                      </span>
+                      {archiveError[id] && (
+                        <span style={{ fontSize: 10, color: "#ef4444" }}>{archiveError[id]}</span>
+                      )}
                     </div>
                   </div>
                 )}
