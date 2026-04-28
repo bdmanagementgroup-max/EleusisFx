@@ -6,31 +6,12 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function ResetPasswordPage() {
-  const [ready, setReady] = useState(false);
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const router = useRouter();
-
-  useEffect(() => {
-    const supabase = getSupabaseBrowserClient();
-
-    // Handles implicit flow — fires when Supabase detects the recovery token in the URL hash
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event: string) => {
-      if (event === "PASSWORD_RECOVERY" || event === "SIGNED_IN") {
-        setReady(true);
-      }
-    });
-
-    // Handle page reload — session already exists
-    void supabase.auth.getSession().then((res: { data: { session: unknown } }) => {
-      if (res.data.session) setReady(true);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -79,10 +60,6 @@ export default function ResetPasswordPage() {
         {done ? (
           <div style={{ background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.25)", padding: "16px 20px", fontSize: 13, color: "#22c55e", lineHeight: 1.6 }}>
             Password set. Redirecting to your dashboard…
-          </div>
-        ) : !ready ? (
-          <div style={{ fontSize: 13, color: "rgba(210,220,240,0.4)", textAlign: "center", padding: "24px 0" }}>
-            Verifying link…
           </div>
         ) : (
           <form onSubmit={handleSubmit}>
