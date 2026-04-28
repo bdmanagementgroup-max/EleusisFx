@@ -109,9 +109,9 @@ export default function ProfileForm({
         </div>
 
         <div style={fieldStyle}>
-          <label style={labelStyle}>Email</label>
+          <label style={labelStyle}>Email <span style={{ color: "rgba(210,220,240,0.3)", fontSize: 9, letterSpacing: 1 }}>— cannot be changed</span></label>
           <input
-            style={{ ...inputStyle, color: "rgba(210,220,240,0.4)", cursor: "default" }}
+            style={{ ...inputStyle, color: "#e8eaf0", background: "rgba(255,255,255,0.03)", cursor: "default", borderColor: "rgba(255,255,255,0.04)" }}
             value={email}
             readOnly
           />
