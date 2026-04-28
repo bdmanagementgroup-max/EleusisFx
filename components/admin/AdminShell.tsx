@@ -140,6 +140,8 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
           .admin-main {
             margin-left: 0;
             padding-top: 56px;
+            padding-right: 0;
+            overflow-x: hidden;
           }
           .admin-hamburger {
             display: flex;

@@ -33,33 +33,36 @@ export default function AdminLeadsClient({ leads: initial }: { leads: Lead[] }) 
   if (leads.length === 0) {
     return (
       <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", padding: "40px 28px", fontSize: 13, color: "rgba(210,220,240,0.88)" }}>
-        No email leads yet — they'll appear here when someone downloads the free guide.
+        No email leads yet — they&apos;ll appear here when someone downloads the free guide.
       </div>
     );
   }
 
   return (
-    <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", overflow: "hidden" }}>
-      {leads.map(({ id, email, source, created_at }) => (
-        <div key={id} style={{ display: "grid", gridTemplateColumns: "1fr auto auto auto", padding: "14px 24px", borderBottom: "1px solid rgba(255,255,255,0.04)", alignItems: "center", gap: 20 }}>
-          <span style={{ fontSize: 13, color: "#e8eaf0" }}>{email}</span>
-          <span style={{ fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", color: "rgba(210,220,240,0.88)" }}>{source ?? "free_guide"}</span>
-          <span style={{ fontSize: 11, color: "rgba(210,220,240,0.58)", whiteSpace: "nowrap" }}>{formatDate(created_at)}</span>
-          <button
-            onClick={() => deleteLead(id)}
-            disabled={deleting === id}
-            style={{
-              background: "transparent", border: "1px solid rgba(239,68,68,0.3)",
-              color: "rgba(239,68,68,0.6)", fontSize: 9, letterSpacing: 1.5,
-              textTransform: "uppercase", padding: "4px 10px",
-              cursor: deleting === id ? "not-allowed" : "pointer",
-              opacity: deleting === id ? 0.4 : 1, fontFamily: "inherit",
-            }}
-          >
-            {deleting === id ? "…" : "Delete"}
-          </button>
-        </div>
-      ))}
+    <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" } as React.CSSProperties}>
+      <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", overflow: "hidden", minWidth: 400 }}>
+        {leads.map(({ id, email, source, created_at }) => (
+          <div key={id} style={{ display: "grid", gridTemplateColumns: "1fr auto auto auto", padding: "14px 24px", borderBottom: "1px solid rgba(255,255,255,0.04)", alignItems: "center", gap: 20 }}>
+            <span style={{ fontSize: 13, color: "#e8eaf0" }}>{email}</span>
+            <span style={{ fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", color: "rgba(210,220,240,0.88)" }}>{source ?? "free_guide"}</span>
+            <span style={{ fontSize: 11, color: "rgba(210,220,240,0.58)", whiteSpace: "nowrap" }}>{formatDate(created_at)}</span>
+            <button
+              onClick={() => deleteLead(id)}
+              disabled={deleting === id}
+              style={{
+                background: "transparent", border: "1px solid rgba(239,68,68,0.3)",
+                color: "rgba(239,68,68,0.6)", fontSize: 9, letterSpacing: 1.5,
+                textTransform: "uppercase", padding: "4px 10px",
+                cursor: deleting === id ? "not-allowed" : "pointer",
+                opacity: deleting === id ? 0.4 : 1, fontFamily: "inherit",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {deleting === id ? "…" : "Delete"}
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

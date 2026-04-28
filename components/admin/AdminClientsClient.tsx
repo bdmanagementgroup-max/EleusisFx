@@ -186,181 +186,204 @@ export default function AdminClientsClient({ applications: initial }: { applicat
   if (apps.length === 0) {
     return (
       <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", padding: "40px 28px", fontSize: 13, color: "rgba(210,220,240,0.88)" }}>
-        No applications yet — they'll appear here when someone submits the website form.
+        No applications yet — they&apos;ll appear here when someone submits the website form.
       </div>
     );
   }
 
   return (
-    <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", overflow: "hidden" }}>
-      {apps.map(({ id, first_name, last_name, email, prop_firm, created_at }) => {
-        const status = statuses[id] ?? "new";
-        const s = STATUS_COLORS[status] ?? STATUS_COLORS.new;
-        const isExpanded = expanded.has(id);
-        const resetLink = resetLinks[id];
+    <>
+      <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" } as React.CSSProperties}>
+        <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", overflow: "hidden", minWidth: 600 }}>
+          {apps.map(({ id, first_name, last_name, email, prop_firm, created_at }) => {
+            const status = statuses[id] ?? "new";
+            const s = STATUS_COLORS[status] ?? STATUS_COLORS.new;
+            const isExpanded = expanded.has(id);
+            const resetLink = resetLinks[id];
 
-        return (
-          <div key={id} style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-            {/* Main row */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr auto auto auto auto", padding: "16px 24px", alignItems: "center", gap: 16 }}>
-              <div>
-                <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 600, fontSize: 14, color: "#e8eaf0" }}>
-                  {first_name} {last_name}
-                </div>
-                <div style={{ fontSize: 11, color: "rgba(210,220,240,0.88)" }}>{email}</div>
-              </div>
-
-              <span style={{ fontSize: 12, color: "rgba(210,220,240,0.88)" }}>{prop_firm || "—"}</span>
-
-              <span style={{ fontSize: 11, color: "rgba(210,220,240,0.58)", whiteSpace: "nowrap" }}>{formatDate(created_at)}</span>
-
-              <select
-                value={status}
-                disabled={savingStatus === id}
-                onChange={(e) => updateStatus(id, e.target.value)}
-                style={{
-                  appearance: "none", background: s.bg, color: s.color,
-                  border: `1px solid ${s.color}22`, fontSize: 10, letterSpacing: 1.5,
-                  textTransform: "uppercase", padding: "4px 10px",
-                  cursor: savingStatus === id ? "not-allowed" : "pointer",
-                  outline: "none", fontFamily: "inherit",
-                  opacity: savingStatus === id ? 0.5 : 1, transition: "opacity 0.2s",
-                }}
-              >
-                {Object.keys(STATUS_COLORS).map((k) => (
-                  <option key={k} value={k} style={{ background: "#08090f", color: "#e8eaf0" }}>
-                    {k.charAt(0).toUpperCase() + k.slice(1)}
-                  </option>
-                ))}
-              </select>
-
-              <ActionBtn onClick={() => toggleExpand(id)}>
-                {isExpanded ? "▲ Close" : "▼ Details"}
-              </ActionBtn>
-
-              <ActionBtn onClick={() => deleteApp(id)} disabled={deleting === id} color="rgba(239,68,68,0.5)">
-                {deleting === id ? "…" : "Delete"}
-              </ActionBtn>
-            </div>
-
-            {/* Expanded panel */}
-            {isExpanded && (
-              <div style={{ padding: "16px 24px 24px", borderTop: "1px solid rgba(255,255,255,0.04)", background: "rgba(0,0,0,0.2)" }}>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 24 }}>
-                  {/* Notes */}
+            return (
+              <div key={id} style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                {/* Main row */}
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr auto auto auto auto", padding: "16px 24px", alignItems: "center", gap: 16 }}>
                   <div>
-                    <label style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.3)", display: "block", marginBottom: 8 }}>
-                      Internal Notes
-                    </label>
-                    <textarea
-                      value={notes[id] ?? ""}
-                      onChange={(e) => setNotes((n) => ({ ...n, [id]: e.target.value }))}
-                      rows={3}
-                      placeholder="Add notes about this applicant…"
-                      style={{
-                        width: "100%", boxSizing: "border-box", resize: "vertical",
-                        background: "#08090f", border: "1px solid rgba(255,255,255,0.1)",
-                        color: "#e8eaf0", fontSize: 13, padding: "10px 12px",
-                        outline: "none", fontFamily: "inherit",
-                      }}
-                    />
-                    <ActionBtn onClick={() => saveNotes(id)} disabled={savingNotes === id} color="#4f8ef7">
-                      {savingNotes === id ? "Saving…" : "Save Notes"}
-                    </ActionBtn>
-                    {noteErrors[id] && (
-                      <div style={{ fontSize: 10, color: "#ef4444", marginTop: 6 }}>{noteErrors[id]}</div>
-                    )}
+                    <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 600, fontSize: 14, color: "#e8eaf0" }}>
+                      {first_name} {last_name}
+                    </div>
+                    <div style={{ fontSize: 11, color: "rgba(210,220,240,0.88)" }}>{email}</div>
                   </div>
 
-                  {/* Password reset */}
-                  <div>
-                    <label style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.3)", display: "block", marginBottom: 8 }}>
-                      Password Reset
-                    </label>
-                    <p style={{ fontSize: 12, color: "rgba(210,220,240,0.88)", marginBottom: 12 }}>
-                      Generate a one-time reset link for {email}.
-                    </p>
-                    {!resetLink ? (
-                      <ActionBtn onClick={() => generateReset(id, email)} disabled={resetLoading === id} color="#7eb3ff">
-                        {resetLoading === id ? "Generating…" : "Generate Link"}
-                      </ActionBtn>
-                    ) : (
+                  <span style={{ fontSize: 12, color: "rgba(210,220,240,0.88)" }}>{prop_firm || "—"}</span>
+
+                  <span style={{ fontSize: 11, color: "rgba(210,220,240,0.58)", whiteSpace: "nowrap" }}>{formatDate(created_at)}</span>
+
+                  <select
+                    value={status}
+                    disabled={savingStatus === id}
+                    onChange={(e) => updateStatus(id, e.target.value)}
+                    style={{
+                      appearance: "none", background: s.bg, color: s.color,
+                      border: `1px solid ${s.color}22`, fontSize: 10, letterSpacing: 1.5,
+                      textTransform: "uppercase", padding: "4px 10px",
+                      cursor: savingStatus === id ? "not-allowed" : "pointer",
+                      outline: "none", fontFamily: "inherit",
+                      opacity: savingStatus === id ? 0.5 : 1, transition: "opacity 0.2s",
+                    }}
+                  >
+                    {Object.keys(STATUS_COLORS).map((k) => (
+                      <option key={k} value={k} style={{ background: "#08090f", color: "#e8eaf0" }}>
+                        {k.charAt(0).toUpperCase() + k.slice(1)}
+                      </option>
+                    ))}
+                  </select>
+
+                  <ActionBtn onClick={() => toggleExpand(id)}>
+                    {isExpanded ? "▲ Close" : "▼ Details"}
+                  </ActionBtn>
+
+                  <ActionBtn onClick={() => deleteApp(id)} disabled={deleting === id} color="rgba(239,68,68,0.5)">
+                    {deleting === id ? "…" : "Delete"}
+                  </ActionBtn>
+                </div>
+
+                {/* Expanded panel */}
+                {isExpanded && (
+                  <div style={{ padding: "16px 24px 24px", borderTop: "1px solid rgba(255,255,255,0.04)", background: "rgba(0,0,0,0.2)" }}>
+                    <div className="ac-detail-grid">
+                      {/* Notes */}
                       <div>
-                        <div style={{ fontSize: 11, color: "rgba(210,220,240,0.4)", marginBottom: 6 }}>Copy and send to client:</div>
-                        <div
-                          onClick={() => { navigator.clipboard.writeText(resetLink); }}
+                        <label style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.3)", display: "block", marginBottom: 8 }}>
+                          Internal Notes
+                        </label>
+                        <textarea
+                          value={notes[id] ?? ""}
+                          onChange={(e) => setNotes((n) => ({ ...n, [id]: e.target.value }))}
+                          rows={3}
+                          placeholder="Add notes about this applicant…"
                           style={{
-                            background: "rgba(79,142,247,0.06)", border: "1px solid rgba(79,142,247,0.2)",
-                            padding: "8px 12px", fontSize: 10, color: "#7eb3ff",
-                            overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-                            cursor: "pointer", lineHeight: 1.6,
+                            width: "100%", boxSizing: "border-box", resize: "vertical",
+                            background: "#08090f", border: "1px solid rgba(255,255,255,0.1)",
+                            color: "#e8eaf0", fontSize: 13, padding: "10px 12px",
+                            outline: "none", fontFamily: "inherit",
                           }}
-                          title={resetLink}
-                        >
-                          {resetLink.length > 60 ? resetLink.slice(0, 60) + "…" : resetLink}
-                        </div>
-                        <div style={{ fontSize: 10, color: "rgba(210,220,240,0.3)", marginTop: 6 }}>Click to copy · Link expires after one use</div>
+                        />
+                        <ActionBtn onClick={() => saveNotes(id)} disabled={savingNotes === id} color="#4f8ef7">
+                          {savingNotes === id ? "Saving…" : "Save Notes"}
+                        </ActionBtn>
+                        {noteErrors[id] && (
+                          <div style={{ fontSize: 10, color: "#ef4444", marginTop: 6 }}>{noteErrors[id]}</div>
+                        )}
                       </div>
-                    )}
-                  </div>
 
-                  {/* Send welcome email */}
-                  <div>
-                    <label style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.3)", display: "block", marginBottom: 8 }}>
-                      Welcome Email
-                    </label>
-                    <p style={{ fontSize: 12, color: "rgba(210,220,240,0.88)", marginBottom: 12 }}>
-                      Send welcome email + free guide to {email}. Creates a dashboard account if none exists.
-                    </p>
-                    {welcomeSent.has(id) ? (
-                      <div style={{ fontSize: 11, color: "#22c55e", letterSpacing: 1 }}>✓ Sent</div>
-                    ) : (
-                      <ActionBtn onClick={() => sendWelcome(id, email, first_name)} disabled={welcomeSending === id} color="#22c55e">
-                        {welcomeSending === id ? "Sending…" : "Send Welcome"}
-                      </ActionBtn>
-                    )}
-                    {welcomeError[id] && (
-                      <div style={{ fontSize: 10, color: "#ef4444", marginTop: 6 }}>{welcomeError[id]}</div>
-                    )}
-                  </div>
+                      {/* Password reset */}
+                      <div>
+                        <label style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.3)", display: "block", marginBottom: 8 }}>
+                          Password Reset
+                        </label>
+                        <p style={{ fontSize: 12, color: "rgba(210,220,240,0.88)", marginBottom: 12 }}>
+                          Generate a one-time reset link for {email}.
+                        </p>
+                        {!resetLink ? (
+                          <ActionBtn onClick={() => generateReset(id, email)} disabled={resetLoading === id} color="#7eb3ff">
+                            {resetLoading === id ? "Generating…" : "Generate Link"}
+                          </ActionBtn>
+                        ) : (
+                          <div>
+                            <div style={{ fontSize: 11, color: "rgba(210,220,240,0.4)", marginBottom: 6 }}>Copy and send to client:</div>
+                            <div
+                              onClick={() => { navigator.clipboard.writeText(resetLink); }}
+                              style={{
+                                background: "rgba(79,142,247,0.06)", border: "1px solid rgba(79,142,247,0.2)",
+                                padding: "8px 12px", fontSize: 10, color: "#7eb3ff",
+                                overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                                cursor: "pointer", lineHeight: 1.6,
+                              }}
+                              title={resetLink}
+                            >
+                              {resetLink.length > 60 ? resetLink.slice(0, 60) + "…" : resetLink}
+                            </div>
+                            <div style={{ fontSize: 10, color: "rgba(210,220,240,0.3)", marginTop: 6 }}>Click to copy · Link expires after one use</div>
+                          </div>
+                        )}
+                      </div>
 
-                  {/* Send PDF */}
-                  <div>
-                    <label style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.3)", display: "block", marginBottom: 8 }}>
-                      Send PDF
-                    </label>
-                    <select
-                      value={selectedPdf[id]}
-                      onChange={(e) => setSelectedPdf((prev) => ({ ...prev, [id]: e.target.value as PdfKey }))}
-                      style={{
-                        width: "100%", appearance: "none",
-                        background: "#08090f", border: "1px solid rgba(255,255,255,0.1)",
-                        color: "rgba(210,220,240,0.88)", fontSize: 11, padding: "8px 10px",
-                        outline: "none", fontFamily: "inherit", cursor: "pointer",
-                        marginBottom: 12,
-                      }}
-                    >
-                      {PDF_OPTIONS.map((p) => (
-                        <option key={p.key} value={p.key} style={{ background: "#08090f" }}>{p.label}</option>
-                      ))}
-                    </select>
-                    {pdfSent[id] ? (
-                      <div style={{ fontSize: 11, color: "#22c55e", letterSpacing: 1 }}>✓ Sent: {pdfSent[id]}</div>
-                    ) : (
-                      <ActionBtn onClick={() => sendPdf(id, email, first_name)} disabled={pdfSending === id} color="#4f8ef7">
-                        {pdfSending === id ? "Sending…" : "Send PDF"}
-                      </ActionBtn>
-                    )}
-                    {pdfError[id] && (
-                      <div style={{ fontSize: 10, color: "#ef4444", marginTop: 6 }}>{pdfError[id]}</div>
-                    )}
+                      {/* Send welcome email */}
+                      <div>
+                        <label style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.3)", display: "block", marginBottom: 8 }}>
+                          Welcome Email
+                        </label>
+                        <p style={{ fontSize: 12, color: "rgba(210,220,240,0.88)", marginBottom: 12 }}>
+                          Send welcome email + free guide to {email}. Creates a dashboard account if none exists.
+                        </p>
+                        {welcomeSent.has(id) ? (
+                          <div style={{ fontSize: 11, color: "#22c55e", letterSpacing: 1 }}>✓ Sent</div>
+                        ) : (
+                          <ActionBtn onClick={() => sendWelcome(id, email, first_name)} disabled={welcomeSending === id} color="#22c55e">
+                            {welcomeSending === id ? "Sending…" : "Send Welcome"}
+                          </ActionBtn>
+                        )}
+                        {welcomeError[id] && (
+                          <div style={{ fontSize: 10, color: "#ef4444", marginTop: 6 }}>{welcomeError[id]}</div>
+                        )}
+                      </div>
+
+                      {/* Send PDF */}
+                      <div>
+                        <label style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.3)", display: "block", marginBottom: 8 }}>
+                          Send PDF
+                        </label>
+                        <select
+                          value={selectedPdf[id]}
+                          onChange={(e) => setSelectedPdf((prev) => ({ ...prev, [id]: e.target.value as PdfKey }))}
+                          style={{
+                            width: "100%", appearance: "none",
+                            background: "#08090f", border: "1px solid rgba(255,255,255,0.1)",
+                            color: "rgba(210,220,240,0.88)", fontSize: 11, padding: "8px 10px",
+                            outline: "none", fontFamily: "inherit", cursor: "pointer",
+                            marginBottom: 12,
+                          }}
+                        >
+                          {PDF_OPTIONS.map((p) => (
+                            <option key={p.key} value={p.key} style={{ background: "#08090f" }}>{p.label}</option>
+                          ))}
+                        </select>
+                        {pdfSent[id] ? (
+                          <div style={{ fontSize: 11, color: "#22c55e", letterSpacing: 1 }}>✓ Sent: {pdfSent[id]}</div>
+                        ) : (
+                          <ActionBtn onClick={() => sendPdf(id, email, first_name)} disabled={pdfSending === id} color="#4f8ef7">
+                            {pdfSending === id ? "Sending…" : "Send PDF"}
+                          </ActionBtn>
+                        )}
+                        {pdfError[id] && (
+                          <div style={{ fontSize: 10, color: "#ef4444", marginTop: 6 }}>{pdfError[id]}</div>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
-            )}
-          </div>
-        );
-      })}
-    </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <style>{`
+        .ac-detail-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr 1fr;
+          gap: 24px;
+        }
+        @media (max-width: 768px) {
+          .ac-detail-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+          }
+        }
+        @media (max-width: 480px) {
+          .ac-detail-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
+    </>
   );
 }

@@ -25,9 +25,9 @@ export default async function AdminClientsPage() {
   const emailLeads = leadsResult.data ?? [];
 
   return (
-    <div style={{ padding: "56px 48px 80px" }}>
+    <div className="admin-clients-page">
       <div style={{ fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: "#4f8ef7", marginBottom: 8 }}>CRM</div>
-      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 48 }}>
+      <div className="admin-clients-header">
         <h1 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 36, letterSpacing: -1.5 }}>Clients</h1>
         <Link
           href="/admin/clients/new"
@@ -35,7 +35,7 @@ export default async function AdminClientsPage() {
             display: "inline-block", background: "#4f8ef7", color: "#020305",
             fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700,
             fontSize: 11, letterSpacing: 2, textTransform: "uppercase",
-            padding: "12px 24px", textDecoration: "none",
+            padding: "12px 24px", textDecoration: "none", flexShrink: 0,
           }}
         >
           + New Client
@@ -64,6 +64,24 @@ export default async function AdminClientsPage() {
         </h2>
         <AdminLeadsClient leads={emailLeads} />
       </div>
+
+      <style>{`
+        .admin-clients-page { padding: 56px 48px 80px; }
+        .admin-clients-header {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          margin-bottom: 48px;
+        }
+        @media (max-width: 768px) {
+          .admin-clients-page { padding: 72px 16px 60px; }
+          .admin-clients-header {
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 28px;
+          }
+        }
+      `}</style>
     </div>
   );
 }
