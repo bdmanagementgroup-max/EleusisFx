@@ -390,7 +390,25 @@ export default function EmailEditorClient({ recipients }: { recipients: Recipien
 
         {/* ── Recipients ── */}
         <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", padding: 24 }}>
-          <span style={labelStyle}>{"// recipients"}</span>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+            <span style={{ ...labelStyle, marginBottom: 0 }}>{"// recipients"}</span>
+            <div style={{ display: "flex", gap: 6 }}>
+              <button
+                onClick={() => setSelected(recipients)}
+                style={{ fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", padding: "5px 12px", background: "rgba(79,142,247,0.08)", border: "1px solid rgba(79,142,247,0.2)", color: "#4f8ef7", cursor: "pointer", borderRadius: 3, whiteSpace: "nowrap" }}
+              >
+                Select All ({recipients.length})
+              </button>
+              {selected.length > 0 && (
+                <button
+                  onClick={() => setSelected([])}
+                  style={{ fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", padding: "5px 12px", background: "transparent", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(210,220,240,0.4)", cursor: "pointer", borderRadius: 3, whiteSpace: "nowrap" }}
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+          </div>
           {selected.length > 0 && (
             <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 }}>
               {selected.map((r) => (
