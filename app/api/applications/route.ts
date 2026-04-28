@@ -152,8 +152,14 @@ export async function POST(req: NextRequest) {
           console.log("[applications] Client account created:", newUser.user.id);
           await sendWelcomeEmail({ to: email, firstName, tempPassword, siteUrl });
         } else if (createErr) {
-          console.warn("[applications] Account already exists or create failed:", createErr.message);
-          await sendWelcomeEmail({ to: email, firstName, siteUrl });
+          // Account already exists — send a password reset link so they can access their dashboard
+          console.warn("[applications] Account already exists:", createErr.message);
+          const { data: linkData } = await supabase.auth.admin.generateLink({
+            type: "recovery",
+            email,
+          });
+          const resetLink = linkData?.properties?.action_link;
+          await sendWelcomeEmail({ to: email, firstName, resetLink: resetLink ?? undefined, siteUrl });
         }
       } catch (accountErr: any) {
         console.error("[applications] Account/email error:", accountErr?.message);
