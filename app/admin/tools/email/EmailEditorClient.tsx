@@ -11,6 +11,45 @@ const TOOLBAR = [
   { cmd: "insertOrderedList",   icon: "1≡",  title: "Numbered list",  style: {} },
 ];
 
+const TEMPLATES = [
+  {
+    label: "Welcome — New Client",
+    subject: "Welcome to Eleusis FX — Let's Get You Funded",
+    html: `<p>Hi [First Name],</p><p>Welcome to Eleusis FX. We're glad to have you on board.</p><p>Your evaluation has been set up and you're ready to begin. Here's what you need to know:</p><p><strong>Your Dashboard</strong><br>Log in at <a href="https://eleusisfx.uk/login">eleusisfx.uk/login</a> to track your progress in real time — balance, drawdown, profit target, and your equity curve are all visible from your personal dashboard.</p><p><strong>Key Rules</strong></p><ul><li>Daily drawdown limit: 5%</li><li>Maximum drawdown limit: 10%</li><li>Minimum trading days: 4</li><li>Profit target: 10%</li></ul><p><strong>Support</strong><br>If you have any questions, reply to this email or reach us at <a href="mailto:admin@eleusisfx.uk">admin@eleusisfx.uk</a>.</p><p>Best of luck — we're rooting for you.</p><p>The Eleusis FX Team</p>`,
+  },
+  {
+    label: "Progress Check-In",
+    subject: "Your Evaluation Is Progressing Well",
+    html: `<p>Hi [First Name],</p><p>We wanted to check in on your evaluation progress.</p><p>Log in to your dashboard at <a href="https://eleusisfx.uk/login">eleusisfx.uk/login</a> to see your latest metrics, equity curve, and remaining days.</p><p>Keep your risk management tight, stick to your rules, and don't let any single trade put you close to your daily drawdown limit.</p><p>If you have any questions, we're here to help.</p><p>The Eleusis FX Team</p>`,
+  },
+  {
+    label: "Evaluation Passed",
+    subject: "Congratulations — You've Passed Your Evaluation",
+    html: `<p>Hi [First Name],</p><p>Congratulations — you've passed your Eleusis FX evaluation.</p><p>This is a significant achievement and reflects your discipline and risk management. We'll be in touch shortly with the next steps regarding your funded account.</p><p>In the meantime, if you have any questions, don't hesitate to reach out at <a href="mailto:admin@eleusisfx.uk">admin@eleusisfx.uk</a>.</p><p>Well done.</p><p>The Eleusis FX Team</p>`,
+  },
+  {
+    label: "Evaluation Ended",
+    subject: "Your Evaluation — Next Steps",
+    html: `<p>Hi [First Name],</p><p>Thank you for taking part in your Eleusis FX evaluation.</p><p>Unfortunately this attempt didn't go to plan — but that's part of the process. The most successful funded traders rarely pass on the first try.</p><p>When you're ready, we'd love to help you go again. Reply to this email and we can discuss your next steps.</p><p>The Eleusis FX Team</p>`,
+  },
+  {
+    label: "Re-engagement",
+    subject: "Ready for Another Challenge? — Eleusis FX",
+    html: `<p>Hi [First Name],</p><p>It's been a while — we hope your trading has been going well.</p><p>We're reaching out because we have clients successfully progressing through their evaluations right now, and we think you'd be a great fit for another run.</p><p>If you're ready to go again, reply to this email and we'll get you set up with a new challenge at the best available rate.</p><p>The Eleusis FX Team</p>`,
+  },
+];
+
+const PDF_ASSETS = [
+  { key: "5-fatal-mistakes",       label: "5 Fatal Mistakes That Kill Prop Accounts",    file: "eleusis-fx-5-fatal-mistakes.pdf" },
+  { key: "30-day-blueprint",       label: "The 30-Day Evaluation Blueprint",              file: "eleusis-fx-30-day-blueprint.pdf" },
+  { key: "funded-trader-mindset",  label: "The Funded Trader Mindset",                   file: "eleusis-fx-funded-trader-mindset.pdf" },
+  { key: "ftmo-vs-tff",            label: "FTMO vs True Forex Funds — Comparison Guide", file: "articles/ftmo-vs-true-forex-funds" },
+  { key: "what-is-ftmo-challenge", label: "What Is an FTMO Challenge?",                  file: "articles/what-is-an-ftmo-challenge" },
+  { key: "why-traders-fail",       label: "Why Traders Fail Prop Firm Evaluations",      file: "articles/why-traders-fail-prop-firm-evaluation" },
+];
+
+const SITE_URL = "https://eleusisfx.uk";
+
 const inputStyle: React.CSSProperties = {
   width: "100%", background: "#020305",
   border: "1px solid rgba(255,255,255,0.1)",
@@ -25,6 +64,13 @@ const labelStyle: React.CSSProperties = {
   color: "rgba(210,220,240,0.35)", marginBottom: 8, display: "block",
 };
 
+const selectStyle: React.CSSProperties = {
+  background: "#020305", border: "1px solid rgba(255,255,255,0.1)",
+  color: "#e8eaf0", fontFamily: "inherit",
+  fontSize: 12, padding: "10px 14px",
+  outline: "none", borderRadius: 3, cursor: "pointer",
+};
+
 export default function EmailEditorClient({ recipients }: { recipients: Recipient[] }) {
   const editorRef = useRef<HTMLDivElement>(null);
 
@@ -33,6 +79,12 @@ export default function EmailEditorClient({ recipients }: { recipients: Recipien
   const [customInput, setCustomInput]     = useState("");
   const [recipientSearch, setRecipientSearch] = useState("");
   const [dropOpen, setDropOpen]           = useState(false);
+
+  // Template
+  const [templateKey, setTemplateKey]     = useState("");
+
+  // PDF asset
+  const [pdfKey, setPdfKey]               = useState("");
 
   // Editor
   const [subject, setSubject]     = useState("");
@@ -75,6 +127,37 @@ export default function EmailEditorClient({ recipients }: { recipients: Recipien
 
   function removeRecipient(email: string) {
     setSelected((prev) => prev.filter((s) => s.email !== email));
+  }
+
+  // ── Template helpers ──
+  function applyTemplate() {
+    const tpl = TEMPLATES.find((t) => t.label === templateKey);
+    if (!tpl) return;
+    setSubject(tpl.subject);
+    setHtmlSource(tpl.html);
+    setComposeHtml(tpl.html);
+    if (editorRef.current) editorRef.current.innerHTML = tpl.html;
+    setMode("compose");
+    setPreview(false);
+    setTemplateKey("");
+  }
+
+  // ── PDF insertion ──
+  function insertPdfLink() {
+    const pdf = PDF_ASSETS.find((p) => p.key === pdfKey);
+    if (!pdf) return;
+    const url = `${SITE_URL}/${pdf.file}`;
+    const block = `<div style="margin:20px 0;"><a href="${url}" style="display:inline-block;background:#4f8ef7;color:#020305;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:12px 24px;text-decoration:none;font-family:Arial,sans-serif;">${pdf.label} &rarr;</a></div>`;
+    if (mode === "html") {
+      setHtmlSource((prev) => prev + "\n" + block);
+    } else {
+      if (editorRef.current) {
+        editorRef.current.focus();
+        document.execCommand("insertHTML", false, block);
+        setComposeHtml(editorRef.current.innerHTML);
+      }
+    }
+    setPdfKey("");
   }
 
   // ── Editor helpers ──
@@ -144,6 +227,41 @@ export default function EmailEditorClient({ recipients }: { recipients: Recipien
 
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
 
+        {/* ── Template selector ── */}
+        <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", padding: 24 }}>
+          <span style={labelStyle}>{"// template"}</span>
+          <div style={{ display: "flex", gap: 8 }}>
+            <select
+              value={templateKey}
+              onChange={(e) => setTemplateKey(e.target.value)}
+              style={{ ...selectStyle, flex: 1 }}
+            >
+              <option value="">Choose a template…</option>
+              {TEMPLATES.map((t) => (
+                <option key={t.label} value={t.label}>{t.label}</option>
+              ))}
+            </select>
+            <button
+              onClick={applyTemplate}
+              disabled={!templateKey}
+              style={{
+                background: templateKey ? "rgba(79,142,247,0.12)" : "rgba(255,255,255,0.04)",
+                border: `1px solid ${templateKey ? "rgba(79,142,247,0.3)" : "rgba(255,255,255,0.08)"}`,
+                color: templateKey ? "#4f8ef7" : "rgba(210,220,240,0.3)",
+                fontSize: 11, letterSpacing: 1.5, textTransform: "uppercase",
+                padding: "0 20px", cursor: templateKey ? "pointer" : "not-allowed",
+                borderRadius: 3, whiteSpace: "nowrap",
+                transition: "all 0.2s",
+              }}
+            >
+              Load →
+            </button>
+          </div>
+          <div style={{ marginTop: 8, fontSize: 11, color: "rgba(210,220,240,0.3)" }}>
+            Loading a template will replace the current subject and body. Remember to personalise <span style={{ color: "rgba(210,220,240,0.5)" }}>[First Name]</span> before sending.
+          </div>
+        </div>
+
         {/* ── Recipients ── */}
         <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", padding: 24 }}>
           <span style={labelStyle}>{"// recipients"}</span>
@@ -175,7 +293,6 @@ export default function EmailEditorClient({ recipients }: { recipients: Recipien
             </div>
           )}
 
-          {/* Dropdown search */}
           <div style={{ position: "relative", marginBottom: 12 }}>
             <input
               placeholder="Search clients by name or email…"
@@ -221,7 +338,6 @@ export default function EmailEditorClient({ recipients }: { recipients: Recipien
             )}
           </div>
 
-          {/* Custom recipient */}
           <div style={{ display: "flex", gap: 8 }}>
             <input
               placeholder="Or type a new email address…"
@@ -252,6 +368,41 @@ export default function EmailEditorClient({ recipients }: { recipients: Recipien
             onChange={(e) => setSubject(e.target.value)}
             style={{ ...inputStyle, fontSize: 15 }}
           />
+        </div>
+
+        {/* ── PDF asset insert ── */}
+        <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", padding: 24 }}>
+          <span style={labelStyle}>{"// insert asset"}</span>
+          <div style={{ display: "flex", gap: 8 }}>
+            <select
+              value={pdfKey}
+              onChange={(e) => setPdfKey(e.target.value)}
+              style={{ ...selectStyle, flex: 1 }}
+            >
+              <option value="">Choose a PDF / guide to insert…</option>
+              {PDF_ASSETS.map((p) => (
+                <option key={p.key} value={p.key}>{p.label}</option>
+              ))}
+            </select>
+            <button
+              onClick={insertPdfLink}
+              disabled={!pdfKey}
+              style={{
+                background: pdfKey ? "rgba(79,142,247,0.12)" : "rgba(255,255,255,0.04)",
+                border: `1px solid ${pdfKey ? "rgba(79,142,247,0.3)" : "rgba(255,255,255,0.08)"}`,
+                color: pdfKey ? "#4f8ef7" : "rgba(210,220,240,0.3)",
+                fontSize: 11, letterSpacing: 1.5, textTransform: "uppercase",
+                padding: "0 20px", cursor: pdfKey ? "pointer" : "not-allowed",
+                borderRadius: 3, whiteSpace: "nowrap",
+                transition: "all 0.2s",
+              }}
+            >
+              Insert Link →
+            </button>
+          </div>
+          <div style={{ marginTop: 8, fontSize: 11, color: "rgba(210,220,240,0.3)" }}>
+            Inserts a styled download button at the cursor position in the email body.
+          </div>
         </div>
 
         {/* ── Body ── */}
@@ -363,7 +514,6 @@ export default function EmailEditorClient({ recipients }: { recipients: Recipien
             </div>
           )}
 
-          {/* Compose editor */}
           {mode === "compose" && !preview && (
             <div
               ref={editorRef}
@@ -379,7 +529,6 @@ export default function EmailEditorClient({ recipients }: { recipients: Recipien
             />
           )}
 
-          {/* HTML source */}
           {mode === "html" && !preview && (
             <textarea
               value={htmlSource}
@@ -393,7 +542,6 @@ export default function EmailEditorClient({ recipients }: { recipients: Recipien
             />
           )}
 
-          {/* Preview */}
           {preview && (
             <div
               style={{
