@@ -1,93 +1,109 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { IGEntry } from "./page";
+
+type LiveData = {
+  account: { username: string; followers: number; following: number; posts: number };
+  insights: { reach: number | null; impressions: number | null; profile_views: number | null; website_clicks: number | null };
+  media: { id: string; caption?: string; timestamp: string; media_type: string; like_count: number; comments_count: number; thumbnail_url?: string; media_url?: string }[];
+};
 
 const BLANK_FORM = {
   recorded_at: new Date().toISOString().slice(0, 10),
-  followers: "",
-  following: "",
-  posts: "",
-  reach: "",
-  impressions: "",
-  profile_visits: "",
-  website_clicks: "",
-  likes: "",
-  comments: "",
-  saves: "",
-  shares: "",
-  notes: "",
+  followers: "", following: "", posts: "",
+  reach: "", impressions: "", profile_visits: "",
+  website_clicks: "", likes: "", comments: "",
+  saves: "", shares: "", notes: "",
 };
-
-function delta(entries: IGEntry[], key: keyof IGEntry) {
-  if (entries.length < 2) return null;
-  const a = entries[0][key] as number | null;
-  const b = entries[1][key] as number | null;
-  if (a == null || b == null) return null;
-  return a - b;
-}
 
 function fmt(n: number | null | undefined) {
   if (n == null) return "—";
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + "M";
   if (n >= 1000) return (n / 1000).toFixed(1) + "k";
   return String(n);
 }
 
-function DeltaBadge({ val }: { val: number | null }) {
-  if (val === null) return null;
-  const pos = val >= 0;
+function StatCard({ label, value, sub }: { label: string; value: string; sub?: string }) {
   return (
-    <span style={{
-      fontSize: 10, letterSpacing: 0.5, marginLeft: 8,
-      color: pos ? "#22c55e" : "#ef4444",
-    }}>
-      {pos ? "+" : ""}{val}
-    </span>
-  );
-}
-
-function StatCard({ label, value, diff }: { label: string; value: string; diff?: number | null }) {
-  return (
-    <div style={{
-      background: "#08090f", border: "1px solid rgba(255,255,255,0.07)",
-      padding: "20px 22px", position: "relative", overflow: "hidden",
-    }}>
+    <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.07)", padding: "20px 22px", position: "relative", overflow: "hidden" }}>
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1, background: "linear-gradient(90deg, transparent, rgba(79,142,247,0.3), transparent)" }} />
       <div style={{ fontFamily: "monospace", fontSize: 9, letterSpacing: 1.5, color: "rgba(210,220,240,0.3)", marginBottom: 10 }}>
         {"// " + label.toLowerCase().replace(/ /g, "_")}
       </div>
-      <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
-        <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 28, color: "#e8eaf0", letterSpacing: -1 }}>
-          {value}
-        </div>
-        {diff !== undefined && <DeltaBadge val={diff} />}
+      <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 28, color: "#e8eaf0", letterSpacing: -1 }}>
+        {value}
       </div>
+      {sub && <div style={{ fontSize: 10, color: "rgba(210,220,240,0.35)", marginTop: 4 }}>{sub}</div>}
     </div>
   );
 }
 
-export default function InstagramClient({ entries, dbError }: { entries: IGEntry[]; dbError: boolean }) {
+export default function InstagramClient({ entries: initialEntries, dbError }: { entries: IGEntry[]; dbError: boolean }) {
+  const [live, setLive]           = useState<LiveData | null>(null);
+  const [liveError, setLiveError] = useState("");
+  const [liveLoading, setLiveLoading] = useState(true);
+  const [entries, setEntries]     = useState<IGEntry[]>(initialEntries);
+  const [saving, setSaving]       = useState(false);
+  const [snapshotMsg, setSnapshotMsg] = useState("");
   const [showForm, setShowForm]   = useState(false);
   const [form, setForm]           = useState(BLANK_FORM);
-  const [saving, setSaving]       = useState(false);
-  const [saveError, setSaveError] = useState("");
-  const [localEntries, setLocalEntries] = useState<IGEntry[]>(entries);
+  const [formSaving, setFormSaving] = useState(false);
+  const [formError, setFormError] = useState("");
   const [deleting, setDeleting]   = useState<string | null>(null);
 
-  const latest = localEntries[0] ?? null;
+  useEffect(() => {
+    fetch("/api/admin/instagram-live")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.error) {
+          setLiveError(data.error === "TOKEN_EXPIRED"
+            ? "Access token has expired — update INSTAGRAM_ACCESS_TOKEN in Vercel env vars to restore live data."
+            : data.error);
+        } else {
+          setLive(data);
+        }
+      })
+      .catch(() => setLiveError("Failed to reach Instagram API."))
+      .finally(() => setLiveLoading(false));
+  }, []);
+
+  async function saveSnapshot() {
+    if (!live) return;
+    setSaving(true);
+    setSnapshotMsg("");
+    const payload = {
+      recorded_at:    new Date().toISOString().slice(0, 10),
+      followers:      live.account.followers,
+      following:      live.account.following,
+      posts:          live.account.posts,
+      reach:          live.insights.reach,
+      impressions:    live.insights.impressions,
+      profile_visits: live.insights.profile_views,
+      website_clicks: live.insights.website_clicks,
+      likes:          null, comments: null, saves: null, shares: null, notes: "Auto snapshot",
+    };
+    const res = await fetch("/api/admin/instagram", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+    const data = await res.json();
+    setSaving(false);
+    if (res.ok) {
+      setEntries((prev) => [data, ...prev]);
+      setSnapshotMsg("Snapshot saved.");
+    } else {
+      setSnapshotMsg(data.error ?? "Save failed.");
+    }
+  }
 
   function field(key: keyof typeof BLANK_FORM) {
     return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setForm((f) => ({ ...f, [key]: e.target.value }));
   }
 
-  async function handleSave(e: React.FormEvent) {
+  async function handleManualSave(e: React.FormEvent) {
     e.preventDefault();
-    setSaving(true);
-    setSaveError("");
-
+    setFormSaving(true); setFormError("");
     const payload = {
-      recorded_at: form.recorded_at,
+      recorded_at:    form.recorded_at,
       followers:      Number(form.followers),
       following:      Number(form.following),
       posts:          Number(form.posts),
@@ -101,18 +117,11 @@ export default function InstagramClient({ entries, dbError }: { entries: IGEntry
       shares:         form.shares         ? Number(form.shares)         : null,
       notes:          form.notes || null,
     };
-
-    const res = await fetch("/api/admin/instagram", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    const res = await fetch("/api/admin/instagram", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
     const data = await res.json();
-    setSaving(false);
-
-    if (!res.ok) { setSaveError(data.error ?? "Save failed"); return; }
-
-    setLocalEntries((prev) => [data, ...prev]);
+    setFormSaving(false);
+    if (!res.ok) { setFormError(data.error ?? "Save failed"); return; }
+    setEntries((prev) => [data, ...prev]);
     setShowForm(false);
     setForm({ ...BLANK_FORM, recorded_at: new Date().toISOString().slice(0, 10) });
   }
@@ -121,25 +130,22 @@ export default function InstagramClient({ entries, dbError }: { entries: IGEntry
     if (!confirm("Delete this entry?")) return;
     setDeleting(id);
     await fetch(`/api/admin/instagram?id=${id}`, { method: "DELETE" });
-    setLocalEntries((prev) => prev.filter((e) => e.id !== id));
+    setEntries((prev) => prev.filter((e) => e.id !== id));
     setDeleting(null);
   }
 
   const inputStyle: React.CSSProperties = {
-    width: "100%", background: "#020305",
-    border: "1px solid rgba(255,255,255,0.1)",
-    color: "#e8eaf0", fontSize: 13, padding: "10px 14px",
-    outline: "none", borderRadius: 3, fontFamily: "inherit",
+    width: "100%", background: "#020305", border: "1px solid rgba(255,255,255,0.1)",
+    color: "#e8eaf0", fontSize: 13, padding: "10px 14px", outline: "none",
+    borderRadius: 3, fontFamily: "inherit",
   };
-
   const labelStyle: React.CSSProperties = {
-    fontFamily: "monospace", fontSize: 9, letterSpacing: 1.5,
-    textTransform: "uppercase" as const, color: "rgba(210,220,240,0.35)",
-    marginBottom: 6, display: "block",
+    fontFamily: "monospace", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase" as const,
+    color: "rgba(210,220,240,0.35)", marginBottom: 6, display: "block",
   };
 
   return (
-    <div style={{ padding: "40px 48px", maxWidth: 960 }}>
+    <div style={{ padding: "40px 48px", maxWidth: 1000 }}>
 
       {/* Header */}
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 36 }}>
@@ -150,169 +156,183 @@ export default function InstagramClient({ entries, dbError }: { entries: IGEntry
           <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 28, color: "#e8eaf0", letterSpacing: -0.5 }}>
             Instagram Metrics
           </div>
-          <div style={{ marginTop: 6, fontSize: 13, color: "rgba(210,220,240,0.5)" }}>
-            Manual log of account performance over time.
+          {live && (
+            <div style={{ marginTop: 5, fontSize: 13, color: "rgba(210,220,240,0.4)" }}>
+              @{live.account.username}
+            </div>
+          )}
+        </div>
+        {live && (
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            {snapshotMsg && <span style={{ fontSize: 11, color: snapshotMsg.includes("failed") ? "#ef4444" : "#22c55e" }}>{snapshotMsg}</span>}
+            <button
+              onClick={saveSnapshot}
+              disabled={saving}
+              style={{
+                background: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.3)",
+                color: "#22c55e", fontFamily: "var(--font-syne), Syne, sans-serif",
+                fontWeight: 700, fontSize: 11, letterSpacing: 2, textTransform: "uppercase",
+                padding: "10px 20px", cursor: saving ? "not-allowed" : "pointer",
+              }}
+            >
+              {saving ? "Saving…" : "Save Snapshot"}
+            </button>
           </div>
+        )}
+      </div>
+
+      {/* Live data */}
+      {liveLoading && (
+        <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", padding: "32px", marginBottom: 32, textAlign: "center", color: "rgba(210,220,240,0.3)", fontSize: 12, letterSpacing: 1 }}>
+          Fetching live data…
+        </div>
+      )}
+
+      {liveError && (
+        <div style={{ background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.2)", padding: "16px 20px", marginBottom: 32, fontSize: 12, color: "rgba(239,68,68,0.9)", lineHeight: 1.6 }}>
+          ⚠ {liveError}
+        </div>
+      )}
+
+      {live && (
+        <>
+          {/* Stat cards */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, marginBottom: 28 }}>
+            <StatCard label="Followers"      value={fmt(live.account.followers)} />
+            <StatCard label="Following"      value={fmt(live.account.following)} />
+            <StatCard label="Posts"          value={fmt(live.account.posts)} />
+            <StatCard label="Reach (28d)"    value={fmt(live.insights.reach)} />
+            <StatCard label="Impressions (28d)" value={fmt(live.insights.impressions)} />
+            <StatCard label="Profile Views (28d)" value={fmt(live.insights.profile_views)} />
+            <StatCard label="Website Clicks (28d)" value={fmt(live.insights.website_clicks)} />
+          </div>
+
+          {/* Recent posts */}
+          {live.media.length > 0 && (
+            <div style={{ marginBottom: 40 }}>
+              <div style={{ fontFamily: "monospace", fontSize: 9, letterSpacing: 2, color: "rgba(210,220,240,0.3)", marginBottom: 14 }}>
+                {"// recent_posts"}
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+                {live.media.map((post) => {
+                  const thumb = post.thumbnail_url ?? post.media_url;
+                  return (
+                    <div key={post.id} style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", overflow: "hidden" }}>
+                      {thumb && (
+                        <div style={{ aspectRatio: "1", overflow: "hidden", background: "#020305" }}>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={thumb} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                        </div>
+                      )}
+                      <div style={{ padding: "10px 12px" }}>
+                        <div style={{ fontSize: 11, color: "rgba(210,220,240,0.5)", marginBottom: 6, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          {post.caption?.slice(0, 60) ?? post.media_type}
+                        </div>
+                        <div style={{ display: "flex", gap: 14, fontSize: 11, fontFamily: "monospace", color: "rgba(210,220,240,0.7)" }}>
+                          <span>♥ {fmt(post.like_count)}</span>
+                          <span>💬 {fmt(post.comments_count)}</span>
+                          <span style={{ marginLeft: "auto", color: "rgba(210,220,240,0.3)", fontSize: 10 }}>
+                            {new Date(post.timestamp).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Manual log / snapshot history */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+        <div style={{ fontFamily: "monospace", fontSize: 9, letterSpacing: 2, color: "rgba(210,220,240,0.3)" }}>
+          {"// snapshot_history"}
         </div>
         <button
           onClick={() => setShowForm((v) => !v)}
           style={{
-            background: showForm ? "rgba(255,255,255,0.06)" : "#4f8ef7",
-            border: "none", color: showForm ? "rgba(210,220,240,0.6)" : "#020305",
-            fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700,
-            fontSize: 11, letterSpacing: 2, textTransform: "uppercase",
-            padding: "12px 24px", cursor: "pointer", flexShrink: 0,
+            background: showForm ? "rgba(255,255,255,0.04)" : "rgba(79,142,247,0.1)",
+            border: `1px solid ${showForm ? "rgba(255,255,255,0.1)" : "rgba(79,142,247,0.25)"}`,
+            color: showForm ? "rgba(210,220,240,0.5)" : "#4f8ef7",
+            fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase",
+            padding: "7px 14px", cursor: "pointer",
           }}
         >
-          {showForm ? "Cancel" : "+ Log Entry"}
+          {showForm ? "Cancel" : "+ Manual Entry"}
         </button>
       </div>
 
-      {dbError && (
-        <div style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)", padding: "14px 18px", marginBottom: 24, fontSize: 12, color: "#ef4444" }}>
-          Database table not found. Run the SQL migration to create the <code>instagram_metrics</code> table.
-        </div>
-      )}
-
-      {/* Stats row */}
-      {latest && (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, marginBottom: 32 }}>
-          <StatCard label="Followers"      value={fmt(latest.followers)}      diff={delta(localEntries, "followers")} />
-          <StatCard label="Reach"          value={fmt(latest.reach)}          diff={delta(localEntries, "reach")} />
-          <StatCard label="Impressions"    value={fmt(latest.impressions)}    diff={delta(localEntries, "impressions")} />
-          <StatCard label="Profile Visits" value={fmt(latest.profile_visits)} diff={delta(localEntries, "profile_visits")} />
-          <StatCard label="Likes"          value={fmt(latest.likes)}          diff={delta(localEntries, "likes")} />
-          <StatCard label="Comments"       value={fmt(latest.comments)}       diff={delta(localEntries, "comments")} />
-          <StatCard label="Saves"          value={fmt(latest.saves)}          diff={delta(localEntries, "saves")} />
-          <StatCard label="Website Clicks" value={fmt(latest.website_clicks)} diff={delta(localEntries, "website_clicks")} />
-        </div>
-      )}
-
-      {/* Log entry form */}
+      {/* Manual entry form */}
       {showForm && (
-        <form onSubmit={handleSave} style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.08)", padding: 28, marginBottom: 32 }}>
-          <div style={{ fontFamily: "monospace", fontSize: 10, letterSpacing: 2, color: "rgba(210,220,240,0.3)", marginBottom: 20 }}>{"// new_entry"}</div>
-
-          {/* Core */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 16, marginBottom: 16 }}>
-            <div>
-              <label style={labelStyle}>Date</label>
-              <input type="date" required value={form.recorded_at} onChange={field("recorded_at")} style={inputStyle} />
-            </div>
-            <div>
-              <label style={labelStyle}>Followers</label>
-              <input type="number" required min={0} value={form.followers} onChange={field("followers")} placeholder="0" style={inputStyle} />
-            </div>
-            <div>
-              <label style={labelStyle}>Following</label>
-              <input type="number" required min={0} value={form.following} onChange={field("following")} placeholder="0" style={inputStyle} />
-            </div>
-            <div>
-              <label style={labelStyle}>Posts</label>
-              <input type="number" required min={0} value={form.posts} onChange={field("posts")} placeholder="0" style={inputStyle} />
-            </div>
+        <form onSubmit={handleManualSave} style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.08)", padding: 24, marginBottom: 20 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14, marginBottom: 14 }}>
+            {(["recorded_at", "followers", "following", "posts"] as const).map((k) => (
+              <div key={k}>
+                <label style={labelStyle}>{k.replace(/_/g, " ")}</label>
+                <input type={k === "recorded_at" ? "date" : "number"} required value={form[k]} onChange={field(k)} style={inputStyle} />
+              </div>
+            ))}
           </div>
-
-          {/* Reach & discovery */}
-          <div style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(79,142,247,0.6)", marginBottom: 10 }}>Reach &amp; Discovery</div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 16 }}>
-            {(["reach", "impressions", "profile_visits", "website_clicks"] as const).map((k) => (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14, marginBottom: 14 }}>
+            {(["reach", "impressions", "profile_visits", "website_clicks", "likes", "comments", "saves", "shares"] as const).map((k) => (
               <div key={k}>
                 <label style={labelStyle}>{k.replace(/_/g, " ")}</label>
                 <input type="number" min={0} value={form[k]} onChange={field(k)} placeholder="—" style={inputStyle} />
               </div>
             ))}
           </div>
-
-          {/* Engagement */}
-          <div style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(79,142,247,0.6)", marginBottom: 10 }}>Engagement</div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 16 }}>
-            {(["likes", "comments", "saves", "shares"] as const).map((k) => (
-              <div key={k}>
-                <label style={labelStyle}>{k}</label>
-                <input type="number" min={0} value={form[k]} onChange={field(k)} placeholder="—" style={inputStyle} />
-              </div>
-            ))}
-          </div>
-
-          {/* Notes */}
-          <div style={{ marginBottom: 20 }}>
+          <div style={{ marginBottom: 16 }}>
             <label style={labelStyle}>Notes</label>
-            <textarea value={form.notes} onChange={field("notes")} placeholder="e.g. posted reel on Tue, ran story poll…" rows={2} style={{ ...inputStyle, resize: "vertical" }} />
+            <textarea value={form.notes} onChange={field("notes")} rows={2} style={{ ...inputStyle, resize: "vertical" }} />
           </div>
-
-          {saveError && (
-            <div style={{ color: "#ef4444", fontSize: 12, marginBottom: 12 }}>{saveError}</div>
-          )}
-
-          <button
-            type="submit"
-            disabled={saving}
-            style={{
-              background: saving ? "rgba(79,142,247,0.2)" : "#4f8ef7",
-              border: "none", color: saving ? "#4f8ef7" : "#020305",
-              fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700,
-              fontSize: 11, letterSpacing: 2, textTransform: "uppercase",
-              padding: "12px 28px", cursor: saving ? "not-allowed" : "pointer",
-            }}
-          >
-            {saving ? "Saving…" : "Save Entry"}
+          {formError && <div style={{ color: "#ef4444", fontSize: 12, marginBottom: 10 }}>{formError}</div>}
+          <button type="submit" disabled={formSaving} style={{ background: formSaving ? "rgba(79,142,247,0.2)" : "#4f8ef7", border: "none", color: formSaving ? "#4f8ef7" : "#020305", fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: 2, textTransform: "uppercase", padding: "11px 24px", cursor: formSaving ? "not-allowed" : "pointer" }}>
+            {formSaving ? "Saving…" : "Save"}
           </button>
         </form>
       )}
 
       {/* History table */}
-      {localEntries.length > 0 ? (
-        <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", overflow: "auto" }}>
+      {dbError && (
+        <div style={{ background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.2)", padding: "14px 18px", fontSize: 12, color: "#ef4444" }}>
+          Run instagram-metrics-migration.sql in Supabase to enable snapshot history.
+        </div>
+      )}
+
+      {!dbError && entries.length > 0 && (
+        <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
             <thead>
               <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
                 {["Date","Followers","Following","Posts","Reach","Impressions","Visits","Clicks","Likes","Comments","Saves","Shares","Notes",""].map((h) => (
-                  <th key={h} style={{ padding: "12px 14px", textAlign: "left", fontFamily: "monospace", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: "rgba(210,220,240,0.3)", whiteSpace: "nowrap" }}>
-                    {h}
-                  </th>
+                  <th key={h} style={{ padding: "11px 14px", textAlign: "left", fontFamily: "monospace", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: "rgba(210,220,240,0.3)", whiteSpace: "nowrap" }}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {localEntries.map((e) => (
+              {entries.map((e) => (
                 <tr key={e.id} style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-                  <td style={{ padding: "11px 14px", color: "rgba(210,220,240,0.7)", whiteSpace: "nowrap", fontFamily: "monospace", fontSize: 11 }}>
-                    {e.recorded_at.slice(0, 10)}
-                  </td>
-                  {([
-                    e.followers, e.following, e.posts,
-                    e.reach, e.impressions, e.profile_visits, e.website_clicks,
-                    e.likes, e.comments, e.saves, e.shares,
-                  ] as (number | null)[]).map((v, i) => (
-                    <td key={i} style={{ padding: "11px 14px", color: v != null ? "#e8eaf0" : "rgba(210,220,240,0.2)", fontFamily: "monospace" }}>
-                      {fmt(v)}
-                    </td>
+                  <td style={{ padding: "10px 14px", color: "rgba(210,220,240,0.7)", whiteSpace: "nowrap", fontFamily: "monospace", fontSize: 11 }}>{e.recorded_at.slice(0,10)}</td>
+                  {([e.followers, e.following, e.posts, e.reach, e.impressions, e.profile_visits, e.website_clicks, e.likes, e.comments, e.saves, e.shares] as (number | null)[]).map((v, i) => (
+                    <td key={i} style={{ padding: "10px 14px", color: v != null ? "#e8eaf0" : "rgba(210,220,240,0.2)", fontFamily: "monospace" }}>{fmt(v)}</td>
                   ))}
-                  <td style={{ padding: "11px 14px", color: "rgba(210,220,240,0.5)", fontSize: 11, maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                    {e.notes ?? "—"}
-                  </td>
-                  <td style={{ padding: "11px 14px" }}>
-                    <button
-                      onClick={() => handleDelete(e.id)}
-                      disabled={deleting === e.id}
-                      style={{ background: "none", border: "none", color: "rgba(239,68,68,0.4)", cursor: "pointer", fontSize: 13, padding: 0 }}
-                      title="Delete entry"
-                    >
-                      ×
-                    </button>
+                  <td style={{ padding: "10px 14px", color: "rgba(210,220,240,0.5)", fontSize: 11, maxWidth: 140, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{e.notes ?? "—"}</td>
+                  <td style={{ padding: "10px 14px" }}>
+                    <button onClick={() => handleDelete(e.id)} disabled={deleting === e.id} style={{ background: "none", border: "none", color: "rgba(239,68,68,0.4)", cursor: "pointer", fontSize: 14, padding: 0 }} title="Delete">×</button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      ) : (
-        !dbError && (
-          <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", padding: "48px", textAlign: "center", color: "rgba(210,220,240,0.3)", fontSize: 13 }}>
-            No entries yet. Hit <strong style={{ color: "#4f8ef7" }}>+ Log Entry</strong> to add your first snapshot.
-          </div>
-        )
+      )}
+
+      {!dbError && entries.length === 0 && !liveLoading && (
+        <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", padding: "40px", textAlign: "center", color: "rgba(210,220,240,0.3)", fontSize: 13 }}>
+          No snapshots yet — hit <strong style={{ color: "#22c55e" }}>Save Snapshot</strong> to capture today&apos;s data.
+        </div>
       )}
     </div>
   );
