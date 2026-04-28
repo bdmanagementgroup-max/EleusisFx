@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import type { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies";
 
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
@@ -9,6 +10,10 @@ export async function GET(request: NextRequest) {
 
   if (code) {
     const cookieStore = await cookies();
+
+    // Capture cookies that Supabase wants to set so we can apply them to the redirect response
+    const outgoingCookies: ResponseCookie[] = [];
+
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -17,7 +22,7 @@ export async function GET(request: NextRequest) {
           getAll() { return cookieStore.getAll(); },
           setAll(cookiesToSet) {
             cookiesToSet.forEach(({ name, value, options }) => {
-              try { cookieStore.set(name, value, options); } catch {}
+              outgoingCookies.push({ name, value, ...options } as ResponseCookie);
             });
           },
         },
@@ -25,11 +30,16 @@ export async function GET(request: NextRequest) {
     );
 
     const { error } = await supabase.auth.exchangeCodeForSession(code);
+
     if (!error) {
-      return NextResponse.redirect(`${origin}${next}`);
+      const response = NextResponse.redirect(`${origin}${next}`);
+      // Write the session cookies onto the redirect response so the browser receives them
+      outgoingCookies.forEach((cookie) => {
+        response.cookies.set(cookie);
+      });
+      return response;
     }
   }
 
-  // Invalid or missing code — redirect to login with error param
   return NextResponse.redirect(`${origin}/login?error=invalid_link`);
 }
