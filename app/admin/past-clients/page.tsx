@@ -11,8 +11,10 @@ export const metadata: Metadata = {
 export default async function PastClientsPage() {
   const supabase = await getSupabaseAdminClient();
 
-  // Use RPC to bypass PostgREST schema cache issues with past_clients table
-  const { data: clients, error } = await supabase.rpc("get_past_clients");
+  const { data: clients, error } = await supabase
+    .from("past_clients")
+    .select("*")
+    .order("name", { ascending: true });
 
   return (
     <div style={{ padding: "40px 48px", background: "#020305", minHeight: "100vh" }}>
