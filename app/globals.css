@@ -146,6 +146,15 @@ p, li, td, th, label, span:not(.cursor):not(.cursor-ring) {
   text-shadow: 0 0 16px rgba(180, 205, 240, 0.45), 0 0 40px rgba(160, 190, 230, 0.2);
 }
 
+/* BUTTON GLOW — uses each button's text color so blue/green/red all glow correctly */
+button:not([disabled]) {
+  box-shadow: 0 0 10px -2px currentColor, 0 0 4px -1px currentColor;
+  transition: box-shadow 0.15s, opacity 0.2s, background 0.15s;
+}
+button:not([disabled]):hover {
+  box-shadow: 0 0 22px -1px currentColor, 0 0 44px -6px currentColor;
+}
+
 /* RESPONSIVE */
 @media (max-width: 1024px) {
   body { cursor: auto; }
