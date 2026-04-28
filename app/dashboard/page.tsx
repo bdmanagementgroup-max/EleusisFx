@@ -21,7 +21,7 @@ export default async function DashboardPage() {
       .limit(30),
   ]);
 
-  // Fall back to past_clients if no active metrics row — match by email
+  // Fall back to past_clients if no active metrics row — match by email (case-insensitive)
   let archived = false;
   let m = metrics;
   if (!m && user?.email) {
@@ -29,10 +29,9 @@ export default async function DashboardPage() {
     const { data: pastClient } = await admin
       .from("past_clients")
       .select("*")
-      .eq("email", user.email)
+      .ilike("email", user.email.trim())
       .order("created_at", { ascending: false })
-      .limit(1)
-      .single();
+      .maybeSingle();
     if (pastClient) {
       m = pastClient;
       archived = true;
@@ -127,7 +126,7 @@ function EmptyState() {
         </h1>
         <p style={{ fontSize: 14, lineHeight: 1.8, color: "rgba(210,220,240,0.88)" }}>
           Your challenge metrics will appear here once your evaluation has been set up. Contact Eleusis FX at{" "}
-          <a href="mailto:eleusiscapital@protonmail.com" style={{ color: "#4f8ef7", textDecoration: "none" }}>eleusiscapital@protonmail.com</a>
+          <a href="mailto:admin@eleusisfx.uk" style={{ color: "#4f8ef7", textDecoration: "none" }}>admin@eleusisfx.uk</a>
           {" "}if you believe this is an error.
         </p>
       </div>
