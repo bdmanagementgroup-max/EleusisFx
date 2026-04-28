@@ -66,7 +66,7 @@ export default function DashboardShell({ children }: { children: React.ReactNode
           </button>
         </div>
 
-        <nav style={{ flex: 1, padding: "24px 0" }}>
+        <nav style={{ flex: 1, padding: "24px 0", overflowY: "auto" }}>
           {NAV.map((item, i) => {
             if ("divider" in item) {
               return <div key={i} style={{ height: 1, background: "rgba(255,255,255,0.06)", margin: "12px 28px" }} />;
