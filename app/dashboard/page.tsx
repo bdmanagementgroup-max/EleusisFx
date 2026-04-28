@@ -1,5 +1,5 @@
 import MarketTickerStrip from "@/components/dashboard/MarketTickerStrip";
-import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { getSupabaseAdminClient, getSupabaseServerClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
@@ -21,13 +21,30 @@ export default async function DashboardPage() {
       .limit(30),
   ]);
 
-  if (!metrics) {
+  // Fall back to past_clients if no active metrics row — match by email
+  let archived = false;
+  let m = metrics;
+  if (!m && user?.email) {
+    const admin = await getSupabaseAdminClient();
+    const { data: pastClient } = await admin
+      .from("past_clients")
+      .select("*")
+      .eq("email", user.email)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .single();
+    if (pastClient) {
+      m = pastClient;
+      archived = true;
+    }
+  }
+
+  if (!m) {
     return <EmptyState />;
   }
 
-  const m = metrics;
-  const progressPct = (m.profit_target / m.profit_goal) * 100;
-  const daysPct = (m.days_used / m.days_allowed) * 100;
+  const progressPct = m.profit_target && m.profit_goal ? (m.profit_target / m.profit_goal) * 100 : 0;
+  const daysPct = m.days_used && m.days_allowed ? (m.days_used / m.days_allowed) * 100 : 0;
 
   const equityData: { day: string; equity: number }[] = (history ?? []).map((r, i) => ({
     day: `Day ${i + 1}`,
@@ -45,20 +62,21 @@ export default async function DashboardPage() {
         </h1>
       </div>
 
-      <div style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "rgba(79,142,247,0.07)", border: "1px solid rgba(79,142,247,0.2)", padding: "10px 20px", marginBottom: 32 }}>
-        <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#4f8ef7", display: "inline-block" }} />
-        <span style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontSize: 11, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase", color: "#7eb3ff" }}>
-          Phase {m.phase} — {m.phase_status === "in_progress" ? "In Progress" : m.phase_status === "passed" ? "Passed" : "Failed"}
+      <div style={{ display: "inline-flex", alignItems: "center", gap: 10, background: archived ? "rgba(245,158,11,0.07)" : "rgba(79,142,247,0.07)", border: `1px solid ${archived ? "rgba(245,158,11,0.2)" : "rgba(79,142,247,0.2)"}`, padding: "10px 20px", marginBottom: 32 }}>
+        <span style={{ width: 6, height: 6, borderRadius: "50%", background: archived ? "#f59e0b" : "#4f8ef7", display: "inline-block" }} />
+        <span style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontSize: 11, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase", color: archived ? "#fbbf24" : "#7eb3ff" }}>
+          {archived ? "Archived" : `Phase ${m.phase} — ${m.phase_status === "in_progress" ? "In Progress" : m.phase_status === "passed" ? "Passed" : "Failed"}`}
           {m.prop_firm ? ` · ${m.prop_firm}` : ""}
+          {archived && m.challenge_result ? ` · ${m.challenge_result}` : ""}
         </span>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 1, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.06)", marginBottom: 32 }}>
         {[
-          { label: "Account Balance", value: `$${Number(m.balance).toLocaleString()}` },
-          { label: "Current Equity",  value: `$${Number(m.equity).toLocaleString()}`, green: true },
-          { label: "Daily Drawdown",  value: `${Number(m.daily_drawdown).toFixed(2)}%`, warn: Number(m.daily_drawdown) > 4 },
-          { label: "Max Drawdown",    value: `${Number(m.max_drawdown).toFixed(2)}%`,  warn: Number(m.max_drawdown) > 8 },
+          { label: "Account Balance", value: m.balance != null ? `$${Number(m.balance).toLocaleString()}` : "—" },
+          { label: "Current Equity",  value: m.equity != null ? `$${Number(m.equity).toLocaleString()}` : "—", green: true },
+          { label: "Daily Drawdown",  value: m.daily_drawdown != null ? `${Number(m.daily_drawdown).toFixed(2)}%` : "—", warn: Number(m.daily_drawdown) > 4 },
+          { label: "Max Drawdown",    value: m.max_drawdown != null ? `${Number(m.max_drawdown).toFixed(2)}%` : "—",  warn: Number(m.max_drawdown) > 8 },
         ].map(({ label, value, green, warn }) => (
           <div key={label} style={{ background: "#08090f", padding: "32px 28px" }}>
             <div style={{ fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 12 }}>{label}</div>
@@ -78,18 +96,18 @@ export default async function DashboardPage() {
           <div style={{ height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 2, overflow: "hidden" }}>
             <div style={{ height: "100%", width: `${Math.min(progressPct, 100)}%`, background: "linear-gradient(90deg, #4f8ef7, #22c55e)", transition: "width 0.5s ease" }} />
           </div>
-          <div style={{ marginTop: 10, fontSize: 11, color: "rgba(210,220,240,0.88)" }}>{(Number(m.profit_goal) - Number(m.profit_target)).toFixed(1)}% remaining to target</div>
+          <div style={{ marginTop: 10, fontSize: 11, color: "rgba(210,220,240,0.88)" }}>{m.profit_goal != null && m.profit_target != null ? `${(Number(m.profit_goal) - Number(m.profit_target)).toFixed(1)}% remaining to target` : "—"}</div>
         </div>
 
         <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", padding: "32px 28px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
             <div style={{ fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)" }}>Days Used</div>
-            <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700, fontSize: 14, color: "#e8eaf0" }}>{m.days_used} / {m.days_allowed}</div>
+            <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700, fontSize: 14, color: "#e8eaf0" }}>{m.days_used ?? "—"} / {m.days_allowed ?? "—"}</div>
           </div>
           <div style={{ height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 2, overflow: "hidden" }}>
             <div style={{ height: "100%", width: `${Math.min(daysPct, 100)}%`, background: "#4f8ef7", transition: "width 0.5s ease" }} />
           </div>
-          <div style={{ marginTop: 10, fontSize: 11, color: "rgba(210,220,240,0.88)" }}>{m.days_allowed - m.days_used} days remaining</div>
+          <div style={{ marginTop: 10, fontSize: 11, color: "rgba(210,220,240,0.88)" }}>{m.days_allowed != null && m.days_used != null ? `${m.days_allowed - m.days_used} days remaining` : "—"}</div>
         </div>
       </div>
 
