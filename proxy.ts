@@ -39,6 +39,13 @@ export async function proxy(req: NextRequest) {
     }
   }
 
+  if (user && pathname.startsWith("/dashboard")) {
+    const role = user.app_metadata?.role;
+    if (role === "admin") {
+      return NextResponse.redirect(new URL("/admin", req.url));
+    }
+  }
+
   return res;
 }
 
