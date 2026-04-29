@@ -26,14 +26,27 @@ export async function POST(req: NextRequest) {
   }
 
   const resend = new Resend(apiKey);
-  const results = await Promise.allSettled(
-    to.map((recipient) =>
-      resend.emails.send({ from, to: recipient, subject, html })
-    )
-  );
 
-  const failed = results.filter((r) => r.status === "rejected").length;
-  const sent = results.length - failed;
+  // Resend batch.send supports up to 100 emails per call — chunk if needed
+  const BATCH_SIZE = 100;
+  const chunks: string[][] = [];
+  for (let i = 0; i < to.length; i += BATCH_SIZE) {
+    chunks.push(to.slice(i, i + BATCH_SIZE));
+  }
+
+  let sent = 0;
+  let failed = 0;
+
+  for (const chunk of chunks) {
+    const { data, error } = await resend.batch.send(
+      chunk.map((recipient) => ({ from, to: recipient, subject, html }))
+    );
+    if (error || !data) {
+      failed += chunk.length;
+    } else {
+      sent += data.length;
+    }
+  }
 
   return NextResponse.json({ sent, failed });
 }
