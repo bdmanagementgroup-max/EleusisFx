@@ -574,9 +574,15 @@ export default function EmailEditorClient({
   function applyTemplate() {
     const tpl = TEMPLATES.find((t) => t.label === templateKey);
     if (!tpl) return;
+    // If exactly one recipient is selected, substitute their first name
+    let html = tpl.html;
+    if (selected.length === 1) {
+      const firstName = selected[0].label.split(" ")[0];
+      html = html.replace(/\[First Name\]/g, firstName);
+    }
     setSubject(tpl.subject);
-    setHtmlSource(tpl.html);
-    setComposeHtml(tpl.html);
+    setHtmlSource(html);
+    setComposeHtml(html);
     setMode("html");
     setPreview(true);
     setTemplateKey("");
