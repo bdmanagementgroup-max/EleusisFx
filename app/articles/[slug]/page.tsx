@@ -92,6 +92,72 @@ const HARDCODED: Record<string, { tag: string; title: string; excerpt: string; d
 
 <p>The evaluation context changes behaviour. That change in behaviour — not the rules — is what ends most challenges. The <a href="/articles/why-traders-fail-prop-firm-evaluation" style="color:#4f8ef7">five specific patterns responsible for most failures</a> are more predictable than most traders realise. For traders who recognise this in themselves, working with an experienced evaluation service is a rational alternative. The rules do not change, but the executor does — and removing emotional variables from a mechanical process produces measurably more consistent outcomes.</p>`,
   },
+  "the-3-trade-rule": {
+    tag: "Strategy",
+    title: "The 3-Trade Rule: Why Overtrading Kills Prop Firm Evaluations",
+    excerpt: "The 3-Trade Rule is the single most effective constraint you can put on your prop firm evaluation. Here's the logic behind it and exactly how to implement it. Updated 2026.",
+    date: "April 2026",
+    readTime: "7 min read",
+    content: `<p>Overtrading is the single most common cause of prop firm evaluation failure — not a bad strategy, not bad market conditions, not bad luck. Traders who fail rarely lose in one catastrophic session. They lose incrementally: five trades on a day where their strategy produced two clean setups, positions taken in sessions outside their normal range, entries at slightly worse levels because they needed to be involved. The account drains trade by trade until the daily loss limit is hit or the drawdown floor is breached, and the challenge is over.</p>
+
+<p>The 3-Trade Rule is a hard constraint that prevents this. It is simple, it is inflexible, and it is the most effective single change most traders can make to their evaluation approach. This article explains the logic behind it, the evidence for it, and exactly how to implement it so it actually holds under the conditions where overtrading pressure is highest.</p>
+
+<h2>What the 3-Trade Rule Is</h2>
+
+<p>The rule is exactly what it sounds like. During a prop firm evaluation, you take a maximum of three trades per day. Not three setups — three trades. If your third trade closes and the market offers what looks like a fourth compelling opportunity, you close the platform. The session is over.</p>
+
+<p>Three is not a magic number derived from statistical analysis of optimal trade frequency. It is a ceiling that accounts for the practical reality of how most traders' strategies perform: the first two or three setups in any given session are typically the highest quality. The setups that emerge later in a session are increasingly products of boredom, FOMO, or the desire to recover a loss from an earlier trade. Capping at three eliminates the category of trades that produces the most damage while preserving the category that produces the most consistent results.</p>
+
+<p>The rule applies regardless of session outcome. Whether your first three trades are all winners or all losers, the fourth trade of the day does not happen. The discipline of the rule is not in following it when things are going well. It is in following it when you are down on the day and the market appears to be offering you a chance to recover.</p>
+
+<h2>Why Overtrading Kills Evaluations — The Math</h2>
+
+<p>On a $100,000 FTMO account, the daily loss limit is $5,000. A trader risking 1% per trade risks $1,000 on each position. Five consecutive losing trades wipes the daily limit. That is a realistic scenario across ten trades in a single session — not an extreme edge case.</p>
+
+<p>Now consider the same trader with the 3-Trade Rule in place. Maximum daily loss exposure is $3,000 — three losses at 1% risk each. That is 60% of the daily limit. Even a catastrophic day — all three trades losing — leaves the account alive and the challenge intact. The daily limit is not breached. The next day starts fresh.</p>
+
+<p>The cumulative effect across a 30-day challenge is significant. A trader taking ten trades per day across 22 trading days takes 220 trades. A trader taking three trades per day across the same period takes 66 trades. Every additional trade beyond the optimal setup is a trade where the edge of the strategy is absent or diminished. More trades with lower average quality produces worse outcomes than fewer trades with higher average quality — a mathematical certainty for any strategy with a defined edge.</p>
+
+<p>This compounds further because overtrading degrades the quality of the setups that follow. A trader who has taken six trades in a session and is searching for a seventh is not applying the same criteria they applied to the first trade of the day. Cognitive fatigue, anchoring to the session's P&L, and the desire to end the day on a particular note all distort judgment in ways that are difficult to detect in real time and obvious in retrospect.</p>
+
+<h2>The Psychology Behind It</h2>
+
+<p>Overtrading during a prop firm evaluation is almost never a strategy decision. It is an emotional response to one of three pressures, and understanding which pressure is driving it is essential to controlling it.</p>
+
+<p><strong>Target anxiety.</strong> The profit target is visible and the clock is running. A trader who is behind schedule — whether that is day 8 with 1% profit or day 22 with 6% profit — feels the gap acutely. The impulse to close that gap through additional trades is powerful and largely unconscious. The problem is that taking more trades to catch up on a target is precisely backwards: the trades that close the gap fastest are the highest-risk ones, and high-risk trades under pressure produce the failures that end challenges.</p>
+
+<p><strong>Loss recovery.</strong> A losing morning creates a specific kind of pressure — the desire to make it back before the session ends. This is revenge trading in its mildest form. The trader's original positions were sound, they lost for reasons beyond their control, and now they want the loss back. The trades that follow in this state are rarely at the quality of the trades that preceded them. They are selected not because the setup qualifies but because the trader needs to participate.</p>
+
+<p><strong>Boredom.</strong> The least dramatic but genuinely common cause. A trader finishes two clean trades by 10am and has nothing to do for the rest of the day. The market is moving. There are setups that are close — not quite qualifying by their normal criteria, but close. The temptation to lower the bar slightly is significant when the alternative is watching a screen for hours without acting. These are the trades that cost most challenges the most damage, precisely because they feel so innocuous at the time.</p>
+
+<p>The 3-Trade Rule addresses all three pressures through the same mechanism: it removes the decision. There is no judgment call about whether a fourth trade qualifies. The answer is already decided. This is the value of a hard rule over a soft intention — it functions under the conditions where willpower fails, which is exactly the conditions where overtrading occurs.</p>
+
+<h2>How to Implement It</h2>
+
+<p>The rule works only if it is non-negotiable before the session begins. Setting it as a firm commitment in advance — not as a guideline you will apply with judgment — is what gives it force under pressure. Write it down in your trading plan. State it explicitly before you open the platform each day. The 3-Trade Rule is today's ceiling and there are no exceptions.</p>
+
+<p>Track your trade count visibly during the session. A simple tally on paper or a sticky note on your screen works. Some traders use a physical object — three coins on the desk, moved to the other side with each trade. The physical act of tracking makes the count real in a way that a mental note does not. When the third coin moves, the session ends.</p>
+
+<p>This applies to all positions, not just directional trades. A hedge, a scale-in, a partial close that reopens — each of these counts toward the three. The rule is about trade events, not about the number of positions open simultaneously. Traders who try to find definitional loopholes in the rule are applying the same rationalising judgment that produces overtrading in the first place.</p>
+
+<h2>When the Market Tempts You to Break It</h2>
+
+<p>The moments where the rule is hardest to hold are predictable, and knowing them in advance makes them easier to navigate.</p>
+
+<p><strong>After a winning third trade.</strong> You have had three clean wins and the market is offering what looks like a fourth high-quality setup. This is the most seductive version of the temptation — you are trading well, your judgment feels sharp, and there is no obvious reason to stop. The reason to stop is the rule. A winning third trade is the best possible outcome. Protecting it is more valuable than the marginal additional profit from a fourth.</p>
+
+<p><strong>After two losses.</strong> You are down on the day, your third trade is approaching, and you need it to be a winner. This is where the rule is most important and most frequently broken. The third trade in this state carries the psychological weight of the two losses before it. It needs to be selected by the same criteria as the first trade of the day — not by the pressure of the session outcome. If the third trade loses, the session ends. The loss is absorbed. Tomorrow is a new account balance.</p>
+
+<p><strong>During high-volatility sessions.</strong> NFP days, FOMC days, major earnings releases — sessions where the market moves sharply and opportunities appear abundant. These are the sessions where the daily loss limit is most dangerous and where discipline is most valuable. The 3-Trade Rule does not expand for volatile sessions. If anything, reducing to two trades on high-impact days is a refinement worth considering.</p>
+
+<h2>The Connection to Your Drawdown</h2>
+
+<p>The 3-Trade Rule and drawdown management are directly linked. Every trade you take beyond your optimal setup count increases your daily drawdown exposure without a proportional increase in expected return. Use our <a href="/resources/drawdown-tracker" style="color:#4f8ef7">drawdown tracker</a> to see your exact floor before each session — when the gap between your current equity and your floor is narrow, the case for strict trade limiting becomes even stronger. <a href="/articles/how-to-pass-the-ftmo-challenge" style="color:#4f8ef7">The four-phase week-by-week system</a> already builds the 3-Trade Rule into the daily structure, but the underlying principle is the same regardless of which week of the challenge you are in.</p>
+
+<p>Overtrading is not a separate failure mode from drawdown breaches. It is the mechanism that produces most drawdown breaches. Control the trade count and you control the primary variable that determines whether your challenge survives a bad day or ends on one.</p>
+
+<p>Overtrading is the first of the five failure patterns that account for most evaluation losses. For the complete framework — including the Drawdown Buffer System, the No-Trade Zone Protocol, and the Recovery Protocol — download our free <a href="/eleusis-fx-5-fatal-mistakes.pdf" style="color:#4f8ef7">5 Fatal Mistakes guide</a>. It covers every pattern in the same depth as this article, with the specific rules and daily routines used across 700+ completed evaluations.</p>`,
+  },
   "prop-firm-evaluation-service-uk": {
     tag: "Evaluation Service",
     title: "Prop Firm Evaluation Service UK: How It Works & What It Costs",
