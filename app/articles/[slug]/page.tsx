@@ -10,8 +10,8 @@ export const dynamic = "force-dynamic";
 const HARDCODED: Record<string, { tag: string; title: string; excerpt: string; date: string; readTime: string; content: string }> = {
   "what-is-an-ftmo-challenge": {
     tag: "Prop Firms",
-    title: "What Is an FTMO Challenge and How Does It Work?",
-    excerpt: "A complete breakdown of the FTMO evaluation process — phases, trailing drawdown rules, profit splits, and what you need to know before starting your challenge.",
+    title: "What Is the FTMO Challenge? Complete Guide (2026)",
+    excerpt: "Everything you need to know about the FTMO Challenge — phases, trailing drawdown rules, profit targets, and why 90% of traders fail. Updated 2026.",
     date: "June 2025",
     readTime: "8 min read",
     content: `<p>If you have spent any time in the forex or futures trading world, you have almost certainly heard of FTMO. Founded in Prague in 2014, it has grown into one of the largest and most recognised proprietary trading firms on the planet. Their evaluation model offers traders access to significant capital — up to $200,000 — without putting their own money at risk. But before you commit to a challenge, you need to understand exactly how the process works, what the rules are, and — critically — where traders most often go wrong.</p>
@@ -94,8 +94,8 @@ const HARDCODED: Record<string, { tag: string; title: string; excerpt: string; d
   },
   "why-traders-fail-prop-firm-evaluation": {
     tag: "Strategy",
-    title: "Why Most Traders Fail Their Prop Firm Evaluation",
-    excerpt: "Five specific failure patterns account for the majority of prop firm evaluation failures — and most of them have nothing to do with whether the trader has a working strategy.",
+    title: "Why 90% of Traders Fail Their Prop Firm Evaluation",
+    excerpt: "The 5 failure patterns that account for most prop firm evaluation failures — and why most have nothing to do with your strategy. Updated 2026.",
     date: "May 2025",
     readTime: "7 min read",
     content: `<p>The statistics around prop firm evaluations are sobering. Across FTMO and the broader industry, fewer than 10% of traders who start a challenge ever receive a funded account. That number has remained stubbornly consistent for years, through bull markets and bear markets, through the explosion in prop firm popularity, and through improvements in trader education. Nine out of ten people who pay for an evaluation walk away with nothing.</p>
@@ -267,14 +267,25 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
+  const canonical = `https://eleusisfx.uk/articles/${slug}`;
   try {
     const supabase = await getSupabaseAdminClient();
     const { data } = await supabase.from("articles").select("title, excerpt").eq("slug", slug).eq("published", true).single();
-    if (data) return { title: `${data.title} — Eleusis FX`, description: data.excerpt ?? "", openGraph: { title: data.title, description: data.excerpt ?? "", type: "article" } };
+    if (data) return {
+      title: `${data.title} — Eleusis FX`,
+      description: data.excerpt ?? "",
+      alternates: { canonical },
+      openGraph: { title: data.title, description: data.excerpt ?? "", type: "article", url: canonical },
+    };
   } catch {}
   const article = HARDCODED[slug];
   if (!article) return {};
-  return { title: `${article.title} — Eleusis FX`, description: article.excerpt, openGraph: { title: article.title, description: article.excerpt, type: "article" } };
+  return {
+    title: `${article.title} — Eleusis FX`,
+    description: article.excerpt,
+    alternates: { canonical },
+    openGraph: { title: article.title, description: article.excerpt, type: "article", url: canonical },
+  };
 }
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
@@ -342,6 +353,24 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           </div>
 
           <div className="article-body" dangerouslySetInnerHTML={{ __html: content }} />
+
+          <div style={{ marginTop: 80, padding: "48px 40px", background: "#0A1428", border: "1.5px solid #4f8ef7", borderRadius: 8 }}>
+            <div style={{ fontSize: 9, letterSpacing: "2.5px", textTransform: "uppercase" as const, color: "#4f8ef7", marginBottom: 16 }}>
+              Eleusis FX — Evaluation Service
+            </div>
+            <h3 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: "clamp(20px, 3vw, 28px)", letterSpacing: -0.5, marginBottom: 16, color: "#f4f7ff" }}>
+              Want a guaranteed pass?
+            </h3>
+            <p style={{ fontSize: 15, lineHeight: 1.7, color: "rgba(210,220,240,0.75)", marginBottom: 32, maxWidth: 520 }}>
+              Our traders handle your entire evaluation — you get the funded account. 87% pass rate across FTMO, The5ers, FundedNext & more. If we don't pass, we re-trade it free.
+            </p>
+            <Link
+              href="/#apply"
+              style={{ display: "inline-block", padding: "14px 32px", background: "#4f8ef7", color: "#fff", fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700, fontSize: 12, letterSpacing: 2, textTransform: "uppercase" as const, textDecoration: "none", borderRadius: 4, transition: "opacity 0.2s" }}
+            >
+              Apply Now →
+            </Link>
+          </div>
         </article>
       </main>
       <Footer />
