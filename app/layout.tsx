@@ -35,11 +35,20 @@ export const metadata: Metadata = {
     siteName: "Eleusis FX",
     locale: "en_GB",
     type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Eleusis FX — Prop Firm Evaluation Service UK. We Pass Your Prop Challenge. 87% Pass Rate, 700+ Funded Traders.",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Prop Firm Evaluation Service UK — Eleusis FX",
     description: "87% pass rate. We trade your FTMO & prop firm evaluation — you get the funded account.",
+    images: ["/og-image.png"],
   },
   metadataBase: new URL("https://eleusisfx.uk"),
 };
