@@ -22,6 +22,8 @@ export default function NewClientPage() {
   const [error, setError] = useState("");
   const [createdUserId, setCreatedUserId] = useState<string | null>(null);
   const [form, setForm] = useState({
+    first_name: "",
+    last_name: "",
     email: "",
     password: generateTempPassword(),
     prop_firm: "",
@@ -46,6 +48,8 @@ export default function NewClientPage() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        first_name: form.first_name,
+        last_name: form.last_name,
         email: form.email,
         password: form.password,
         prop_firm: form.prop_firm,
@@ -153,7 +157,7 @@ export default function NewClientPage() {
           <button
             onClick={() => {
               setCreatedUserId(null);
-              setForm({ email: "", password: generateTempPassword(), prop_firm: "", phase: "1", phase_status: "in_progress", balance: "100000", profit_goal: "10", days_allowed: "30" });
+              setForm({ first_name: "", last_name: "", email: "", password: generateTempPassword(), prop_firm: "", phase: "1", phase_status: "in_progress", balance: "100000", profit_goal: "10", days_allowed: "30" });
             }}
             style={{
               flex: 1,
@@ -176,6 +180,17 @@ export default function NewClientPage() {
       <h1 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 36, letterSpacing: -1.5, marginBottom: 48 }}>New Client</h1>
 
       <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+          <div>
+            <label style={labelStyle}>First Name</label>
+            <input type="text" required value={form.first_name} onChange={field("first_name")} placeholder="e.g. James" style={inputStyle} />
+          </div>
+          <div>
+            <label style={labelStyle}>Last Name</label>
+            <input type="text" value={form.last_name} onChange={field("last_name")} placeholder="e.g. Smith" style={inputStyle} />
+          </div>
+        </div>
+
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
           <div>
             <label style={labelStyle}>Email</label>

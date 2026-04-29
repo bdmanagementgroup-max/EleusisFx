@@ -10,6 +10,7 @@ export async function POST(req: NextRequest) {
     }
 
     const {
+      first_name = "", last_name = "",
       email, password,
       prop_firm = "", phase = 1, phase_status = "in_progress",
       balance = 100000, profit_goal = 10, days_allowed = 30,
@@ -20,11 +21,13 @@ export async function POST(req: NextRequest) {
     }
 
     const supabase = await getSupabaseAdminClient();
+    const fullName = [first_name, last_name].filter(Boolean).join(" ") || email.split("@")[0];
 
     const { data: user, error: userErr } = await supabase.auth.admin.createUser({
       email,
       password,
       email_confirm: true,
+      user_metadata: { full_name: fullName },
     });
 
     if (userErr) return NextResponse.json({ error: userErr.message }, { status: 500 });
@@ -48,8 +51,8 @@ export async function POST(req: NextRequest) {
     // Also write to applications table so the client appears on /admin/clients
     await supabase.from("applications").insert({
       email,
-      first_name: email.split("@")[0],
-      last_name: "",
+      first_name: first_name || email.split("@")[0],
+      last_name,
       prop_firm,
       status: "active",
     });
