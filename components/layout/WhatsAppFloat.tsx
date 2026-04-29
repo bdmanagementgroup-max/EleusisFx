@@ -1,7 +1,8 @@
 export default function WhatsAppFloat() {
+  const number = process.env.NEXT_PUBLIC_WA_NUMBER ?? "";
   return (
     <a
-      href="https://wa.me/44XXXXXXXXXX?text=Hi%2C%20I%27m%20interested%20in%20the%20FTMO%20challenge%20service"
+      href={`https://wa.me/${number}?text=Hi%2C%20I%27m%20interested%20in%20the%20FTMO%20challenge%20service`}
       className="wa-float"
       target="_blank"
       rel="noopener noreferrer"
