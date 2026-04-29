@@ -27,6 +27,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: 'https://eleusisfx.uk/articles/can-someone-else-trade-your-prop-firm-evaluation',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
       url: 'https://eleusisfx.uk/articles/ftmo-vs-true-forex-funds',
       lastModified: new Date(),
       changeFrequency: 'monthly',

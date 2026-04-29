@@ -150,6 +150,80 @@ const HARDCODED: Record<string, { tag: string; title: string; excerpt: string; d
 
 <p>Understanding these five patterns is useful regardless of which path you choose. If you plan to attempt your own evaluation, knowing what is likely to derail you before it happens is genuinely valuable. If you decide that the psychological variables are too significant a risk, a professional evaluation service is an equally rational conclusion.</p>`,
   },
+  "can-someone-else-trade-your-prop-firm-evaluation": {
+    tag: "Evaluation Service",
+    title: "Can Someone Else Trade Your Prop Firm Evaluation? (UK Law & Legitimacy)",
+    excerpt: "The honest answer to the question every serious trader asks — is using a prop firm evaluation service legal, legitimate, and worth it? Updated 2026.",
+    date: "April 2026",
+    readTime: "9 min read",
+    content: `<p>If you have spent any time researching how to pass a prop firm evaluation, you have almost certainly come across the idea of using an evaluation service — a professional trading operation that completes the challenge on your behalf. And if you have been considering it, you have probably also asked yourself some version of the same question: is this actually legal? Is it legitimate? And what happens if the prop firm finds out?</p>
+
+<p>These are the right questions. This article gives you honest answers — not a sales pitch, not vague reassurance. The reality of how prop firm evaluation services work, what the legal and regulatory position in the UK is, what prop firms actually say in their terms of service, and how to tell a legitimate service from a scam. By the end you will have enough information to make a decision you are comfortable with.</p>
+
+<h2>Is It Against the Law?</h2>
+
+<p>In the United Kingdom, there is no law that prohibits a third party from trading a prop firm evaluation account on your behalf. This is not a legal grey area in the criminal sense — no trading regulations, FCA rules, or consumer protection statutes make this practice illegal. You are purchasing a demo evaluation account. The credentials belong to you. Who operates the account is a commercial matter between you and whoever you choose to work with, not a matter for regulators.</p>
+
+<p>This is materially different from situations where third-party trading would carry legal risk — such as using someone else's identity to open a brokerage account, or submitting falsified trading records. Prop firm evaluations are not brokerage accounts in the regulated sense. They are proprietary internal assessments run by private firms on demo infrastructure. The FCA does not regulate who trades a MetaTrader 4 demo account.</p>
+
+<p>The question of legality, then, is not the right frame for this decision. The more relevant question is whether it violates the prop firm's terms of service — and what the consequences of that are.</p>
+
+<h2>What Prop Firms Actually Say in Their Terms</h2>
+
+<p>Most major prop firms — FTMO, The5ers, FundedNext, TopStep — prohibit account sharing in their terms of service. The language varies, but the intent is consistent: the evaluation is supposed to be completed by the person who purchased it. This is because the funded account that follows is issued to that individual, and the firm's assumption is that the trader who passed the evaluation is the one who will manage the funded account going forward.</p>
+
+<p>In practice, enforcement is limited and inconsistent. Prop firms monitor for patterns that suggest coordinated trading across multiple accounts — the kind of behaviour that might indicate an automated service running a systematic strategy across hundreds of simultaneous evaluations. What they are not doing is verifying the identity of the individual behind each mouse click on each individual evaluation.</p>
+
+<p>The practical consequence of violating the ToS is account termination — not a legal penalty, not a financial liability, not a mark on any record. If the firm identifies that an account was traded by a third party, they can void the evaluation and refuse to issue the funded account. The fee paid is not refunded. That is the downside risk. It is a real risk, and worth understanding clearly before making a decision — but it is a commercial risk, not a legal one.</p>
+
+<p>Legitimate evaluation services are acutely aware of this. The way they operate — trading conservatively, avoiding extreme correlation patterns, managing exposure carefully — is designed to produce clean, normal-looking trading accounts that do not trigger the flags prop firms use to identify suspicious activity. The pass rate of a reputable service is in part a function of how well they manage this. An operation running a blunt algorithmic strategy across thousands of accounts simultaneously is flagged quickly. A professional trading desk executing with genuine discretion is indistinguishable from a skilled individual trader.</p>
+
+<h2>The 90% Failure Rate Is the Context You Need</h2>
+
+<p>To understand why the prop firm evaluation service industry exists at all, you need to sit with one number: fewer than 10% of traders who purchase an evaluation ever receive a funded account. That figure has held steady for years — across FTMO's own published data and third-party analysis of the broader prop firm market. It does not change materially with account size, experience level, or market conditions.</p>
+
+<p>The reasons for this failure rate are well-documented. They are not primarily about strategy. A trader who generates consistent 2–3% monthly returns in normal market conditions should be able to satisfy FTMO's requirements without exceptional difficulty. The rules are demanding, but they are not designed to be impossible. What they are designed to do — intentionally or not — is expose the gap between how a trader performs on their own account and how they perform when a real fee is on the line and a clock is running.</p>
+
+<p>Evaluation context changes behaviour. The same trader who executes calmly and methodically under normal conditions oversizes positions when trying to build a buffer, revenge trades after a losing day, and abandons their process when the profit target feels distant. This is not a character flaw — it is a well-documented feature of decision-making under high-stakes conditions. And it is exactly what a professional evaluation service removes from the equation. The traders executing on behalf of clients are not personally exposed to the evaluation's outcome. They trade the same process they trade every day. The emotional variable that derails individual performance simply does not exist in the same way.</p>
+
+<h2>How a Prop Firm Evaluation Service Works</h2>
+
+<p>The mechanics are straightforward. You purchase the prop firm challenge in your own name — you are the account holder, the entity to whom any funded account will be issued. You then share the trading credentials with the service, who execute the evaluation on your behalf. The service manages the position sizing, the drawdown, the profit targets, and the minimum trading day requirements. When the evaluation is complete and the funded account is activated, it is in your name and under your control from that point forward.</p>
+
+<p>A reputable prop firm evaluation service in the UK will be transparent about this process, will have a verifiable track record of completed evaluations, and will offer some form of protection if they fail — typically a re-trade at no additional cost. They will also be clear about which firms they work with and what their performance history looks like across different challenge types and account sizes.</p>
+
+<p>The fee you pay the service is separate from the challenge fee you pay the prop firm. You are paying for professional execution — the same way a business owner pays a professional to handle a task that requires specialist skill under conditions where the cost of failure is significant.</p>
+
+<h2>What Separates a Legitimate Service From a Scam</h2>
+
+<p>The prop firm evaluation service market has legitimate operators and it has fraudulent ones. The latter typically share a set of common characteristics that make them identifiable before you commit any money.</p>
+
+<p><strong>Guaranteed pass with no caveats.</strong> No evaluation service can guarantee a pass in an absolute sense — market conditions, platform issues, and firm rule changes are all outside any service's control. A legitimate service will offer a re-trade guarantee if they fail, not a promise of a 100% success rate with no conditions attached.</p>
+
+<p><strong>No verifiable track record.</strong> Legitimate services will show you completed evaluations — pass confirmations, funded account notifications, client results with dates and account references. Generic testimonials with no verifiable detail are a warning sign. A track record of 700+ completed evaluations across FTMO, The5ers, FundedNext and others is something you can interrogate. Generic five-star reviews cannot be verified.</p>
+
+<p><strong>Upfront fees with no re-trade policy.</strong> A service that takes your money, fails the evaluation, and offers nothing in return is not operating in good faith. The standard model for credible services is a one-time fee with a clear re-trade commitment if the evaluation is not passed.</p>
+
+<p><strong>No real traders behind the operation.</strong> Some operations run fully automated strategies across evaluation accounts — high volume, low discretion, easily flagged by prop firms and prone to failure when market conditions deviate from the algorithm's parameters. A professional service employs actual human traders with verifiable trading histories. The people executing your evaluation should be able to demonstrate that they trade for a living.</p>
+
+<h2>The Track Record Question</h2>
+
+<p>In a market where trust is the core product, track record is everything. The question to ask any evaluation service is not "what is your pass rate?" — anyone can claim any number — but "can you show me completed evaluations?" Pass confirmations from FTMO and other firms are not forgeable in any useful sense. A service that has completed evaluations at scale will have these on file and will share them without hesitation.</p>
+
+<p>Scale also matters for a different reason. A service that has completed 50 evaluations is a different proposition from one that has completed 700. At scale, you are not relying on a fortunate run of good market conditions. You are looking at performance across different regimes, different firms, different challenge types, and different account sizes. Consistency across that volume is evidence of a genuine process, not luck.</p>
+
+<p>The prop firm evaluation service industry is small enough that reputation travels quickly. Firms that scam clients, fail evaluations and disappear, or get flagged and banned by prop firms do not survive long. Longevity and volume are the two most reliable proxies for legitimacy available to you.</p>
+
+<h2>Who Should Use an Evaluation Service — and Who Shouldn't</h2>
+
+<p>An evaluation service is not the right choice for every trader. If you are at an early stage of developing a strategy and using the evaluation process to test it under realistic pressure, completing the challenge yourself — even if you fail — gives you information about your own trading that has value beyond the funded account. The psychological pressure of an evaluation reveals things about your process that normal demo trading does not.</p>
+
+<p>But if you have a strategy that works, a trading history that demonstrates it, and you are failing evaluations repeatedly because the evaluation context is producing different behaviour than your normal trading — that is exactly the situation an evaluation service is designed to address. The strategy is sound. The execution environment is the problem. Changing the executor changes the outcome.</p>
+
+<p>The same logic applies to traders who simply do not want to spend weeks managing a live evaluation process when a funded account is the goal. Your time has value. The evaluation fee plus a professional service fee, weighed against weeks of your own time at elevated psychological cost, is often a straightforward calculation — particularly when the alternative is a meaningful probability of failure and a full refund of nothing.</p>
+
+<p>Whether you decide to trade your own evaluation or use a professional service, the question of legitimacy has a clear answer: in the UK, it is not illegal. The ToS risk is real and should be understood clearly. And the quality of whoever executes the evaluation — whether that is you or a professional team — is the primary determinant of the outcome.</p>`,
+  },
   "ftmo-vs-true-forex-funds": {
     tag: "Funding",
     title: "FTMO vs True Forex Funds: Which Prop Firm Is Right for You?",
