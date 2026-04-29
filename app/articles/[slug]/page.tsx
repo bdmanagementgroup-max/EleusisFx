@@ -92,6 +92,82 @@ const HARDCODED: Record<string, { tag: string; title: string; excerpt: string; d
 
 <p>The evaluation context changes behaviour. That change in behaviour — not the rules — is what ends most challenges. The <a href="/articles/why-traders-fail-prop-firm-evaluation" style="color:#4f8ef7">five specific patterns responsible for most failures</a> are more predictable than most traders realise. For traders who recognise this in themselves, working with an experienced evaluation service is a rational alternative. The rules do not change, but the executor does — and removing emotional variables from a mechanical process produces measurably more consistent outcomes.</p>`,
   },
+  "ftmo-vs-the5ers": {
+    tag: "Funding",
+    title: "FTMO vs The5ers: Which Is Easier to Pass in 2026?",
+    excerpt: "FTMO vs The5ers compared — profit targets, drawdown rules, time limits, and which prop firm is genuinely easier to pass for UK traders. Updated 2026.",
+    date: "April 2026",
+    readTime: "8 min read",
+    content: `<p>FTMO and The5ers are two of the most established prop firms in the industry and they are frequently compared by traders trying to decide where to spend their evaluation fee. The question most people are actually asking is a simple one: which is easier to pass? The honest answer is more nuanced than either firm's marketing suggests — and it depends almost entirely on what kind of trader you are.</p>
+
+<p>This comparison cuts through the surface-level numbers to focus on what actually determines whether you pass or fail: the drawdown methodology, the time pressure, the daily risk limits, and the trading restrictions that catch most traders off guard. By the end you will have a clear answer for your specific situation.</p>
+
+<h2>Background</h2>
+
+<p>FTMO was founded in Prague in 2014 and is the most recognised name in the prop firm evaluation industry. Over a decade of consistent payouts and a global trader base have given it a credibility that newer firms cannot replicate. Its <a href="/articles/what-is-an-ftmo-challenge" style="color:#4f8ef7">two-phase evaluation model</a> has become the template that most of the industry has copied.</p>
+
+<p>The5ers was founded in 2016 in Israel and operates differently from most prop firms in one significant way: it started with a low-and-grow model, offering small initial accounts that scale aggressively on performance. It has since expanded its programme offering but retains a reputation for being structured around traders who want to build capital over time rather than access large sums immediately. Both firms are legitimate and have genuine payout track records — the choice between them is a strategic one, not a trust question.</p>
+
+<h2>Profit Targets — The5ers Wins Clearly</h2>
+
+<p>FTMO requires a <strong>10% profit target in Phase 1</strong> and <strong>5% in Phase 2</strong>. The5ers requires <strong>6% in Phase 1 and Phase 2</strong>. On a $100,000 account, that is the difference between needing $10,000 and needing $6,000 to clear the first phase.</p>
+
+<p>The lower target has a compounding effect on strategy. A trader generating 1.5% per week needs roughly seven weeks of performance to hit FTMO's Phase 1 target. The same trader needs roughly four weeks to hit The5ers' target. Both firms allow Phase 1 to run for the same period — except FTMO gives you 30 days and The5ers gives you unlimited time. The5ers' lower target, combined with no time pressure, means the same trader with the same strategy has a structurally wider path to passing Phase 1 at The5ers than at FTMO.</p>
+
+<h2>Time Limits — The5ers Wins Decisively</h2>
+
+<p>FTMO gives you <strong>30 calendar days for Phase 1</strong> and <strong>60 days for Phase 2</strong>. The5ers has <strong>no time limit on either phase</strong>. This is one of the most underappreciated differences between the two firms, and it is probably the single biggest factor in pass rates.</p>
+
+<p>The 30-day clock at FTMO creates pressure that does not exist in the evaluation rules themselves. A trader whose strategy generates consistent 1–2% weekly returns should pass the FTMO Challenge comfortably in 30 days. But the clock introduces urgency, and urgency produces the kind of decision-making — oversizing positions, trading outside your setup criteria, forcing trades in poor conditions — that ends challenges. The time limit is not a risk rule. It is a psychological variable that degrades performance.</p>
+
+<p>The5ers' unlimited time window removes that variable entirely. If the market is not producing setups that fit your strategy, you wait. If you have a bad week, you absorb it without the compounding pressure of a shrinking clock. For traders whose strategy is less suited to generating returns on demand within a fixed window — swing traders, macro traders, traders who are selective about session timing — The5ers' structure is a materially better fit.</p>
+
+<h2>Drawdown Rules — More Complex Than They Appear</h2>
+
+<p>Both firms enforce a daily loss limit and a maximum drawdown, but the numbers and methodology differ in ways that matter significantly for how you trade.</p>
+
+<h3>FTMO — Trailing Maximum Drawdown, Wider Daily Limit</h3>
+
+<p>FTMO's daily loss limit is <strong>5%</strong> of your account balance at the start of each day. Its maximum drawdown is <strong>10%</strong> — but critically, this is a <em>trailing</em> drawdown. The floor rises with your equity peak. If your $100,000 account reaches $108,000, the floor moves up to $98,000. The better your early performance, the less room you have for a bad stretch. Use our <a href="/resources/drawdown-tracker" style="color:#4f8ef7">drawdown tracker</a> to monitor your exact floor throughout the challenge.</p>
+
+<h3>The5ers — Static Maximum Drawdown, Tighter Daily Limit</h3>
+
+<p>The5ers uses a <strong>4% daily loss limit</strong> — one percentage point tighter than FTMO — and a <strong>5% maximum drawdown</strong> that is <em>static</em>, anchored to the initial account balance and never rising. If you start at $100,000, your floor is always $95,000, regardless of how high your equity goes.</p>
+
+<p>The practical effect of these two approaches is significant. FTMO's trailing system means a strong start narrows your margin; The5ers' static system means a strong start leaves your margin untouched. However, The5ers' lower absolute drawdown limit (5% vs 10%) means there is less total room to absorb losses in the first place. A trader who loses 5% in a single bad stretch at The5ers has breached the limit and failed. The same loss at FTMO — assuming the daily limit was not breached — leaves the account still active with 5% of drawdown room remaining.</p>
+
+<p>For conservative traders who rarely experience significant drawdown periods, The5ers' tighter limits are manageable. For traders whose equity curves involve natural retracements of 6–8% during normal strategy operation, The5ers' 5% maximum is a structural problem that no amount of skill can trade around. FTMO's 10% maximum — even with the trailing mechanism — accommodates a wider range of trading styles.</p>
+
+<h2>Trading Restrictions</h2>
+
+<p><strong>News trading:</strong> FTMO permits holding positions through high-impact economic releases — NFP, FOMC, CPI. The5ers does not. Positions must be closed before major scheduled releases. For traders whose strategy involves taking positions into macro events or holding through them as part of normal trade management, The5ers' restriction is a material compatibility issue.</p>
+
+<p><strong>Minimum trading days:</strong> FTMO requires at least 4 days of trading across each phase. The5ers has no minimum trading day requirement. You could, theoretically, pass The5ers' evaluation in 2 sessions if the trades go well. This is a structural advantage for traders whose strategy involves concentrated, infrequent positioning.</p>
+
+<p><strong>Expert Advisors:</strong> Both firms permit EAs on a single account. Both restrict coordinated strategies across multiple accounts simultaneously.</p>
+
+<p><strong>Weekend holding:</strong> FTMO permits holding positions over weekends. The5ers also permits this, though gap risk remains the trader's responsibility at both firms.</p>
+
+<h2>Profit Split and Account Scaling</h2>
+
+<p>FTMO starts funded traders at an <strong>80% profit split</strong>, upgradeable to <strong>90%</strong> after the first payout cycle. Its scaling plan can take an account to $2,000,000 in funded capital over time, triggered by consistent 10% average monthly returns over four-month windows.</p>
+
+<p>The5ers offers up to a <strong>100% profit split</strong> — the highest in the industry — though this applies to their specific programme tiers and is not universally available across all account sizes from day one. Their scaling structure is designed around lower initial capital with aggressive growth: a successful trader at The5ers can scale their account size rapidly through performance rather than paying for larger accounts upfront. The ceiling is lower than FTMO's ($400,000 vs $2,000,000) but the starting costs are also substantially lower.</p>
+
+<h2>Challenge Fees — The5ers Is Significantly Cheaper</h2>
+
+<p>FTMO's $100,000 challenge fee is approximately £540. The5ers' equivalent programme is approximately £95–£200 depending on the programme tier and account size. For traders who want to attempt an evaluation at lower cost — including those who have failed a previous attempt and are starting again — The5ers' lower entry point is a genuine advantage. Both firms refund the fee with the first profit payout from the funded account.</p>
+
+<h2>Which Is Easier to Pass — The Direct Answer</h2>
+
+<p>For the majority of retail traders, The5ers is structurally easier to pass. The lower profit target (6% vs 10%), the absence of a time limit, the no minimum trading day requirement, and the lower challenge fee all favour The5ers as the environment where a trader with a consistent but modest strategy is most likely to succeed.</p>
+
+<p>The exceptions are meaningful. If your strategy involves significant retracements as part of normal operation, The5ers' 5% maximum drawdown is a hard constraint that FTMO's 10% limit accommodates much better. If you trade news events or use macro positioning as a core part of your approach, The5ers' restrictions make it an incompatible environment. And if your long-term goal is to access $500,000 or more in funded capital, FTMO's scaling ceiling is the only realistic path.</p>
+
+<p>The question is not which firm is objectively better. It is which firm's structure is most compatible with how you actually trade. A swing trader with a low-frequency, low-drawdown strategy will find The5ers significantly more accommodating. A news trader with a strategy built around macro catalysts will find FTMO the only viable option. Everything else falls somewhere in between.</p>
+
+<p>For a full side-by-side breakdown across five prop firms — including E8 Funding, FundedNext, and True Forex Funds — see our <a href="/compare" style="color:#4f8ef7">complete prop firm comparison table</a>.</p>`,
+  },
   "how-to-pass-the-ftmo-challenge": {
     tag: "Strategy",
     title: "How to Pass the FTMO Challenge in 30 Days (Step-by-Step)",
