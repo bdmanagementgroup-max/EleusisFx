@@ -7,6 +7,7 @@ import AdminStatusBar from "@/components/admin/AdminStatusBar";
 
 const NAV = [
   { href: "/admin", label: "Overview" },
+  { href: "/admin/inbox", label: "Inbox" },
   { href: "/admin/articles", label: "Articles" },
   { href: "/admin/clients", label: "Clients" },
   { href: "/admin/metrics", label: "Evaluation Metrics" },

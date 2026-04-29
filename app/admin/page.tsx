@@ -4,6 +4,7 @@ import { getSupabaseAdminClient } from "@/lib/supabase/server";
 export const dynamic = "force-dynamic";
 
 const TILES = [
+  { href: "/admin/inbox", label: "Inbox", desc: "Emails received at admin@eleusisfx.uk — reply and mark as read." },
   { href: "/admin/articles", label: "Articles", desc: "Create, edit, and publish articles to the site." },
   { href: "/admin/clients", label: "Clients", desc: "View applications, manage leads, and create client accounts." },
   { href: "/admin/metrics", label: "Evaluation Metrics", desc: "Edit live challenge metrics for each client account." },
@@ -27,10 +28,11 @@ function StatCard({ label, value, sub, color }: { label: string; value: string; 
 export default async function AdminOverview() {
   const supabase = await getSupabaseAdminClient();
 
-  const [{ data: metrics }, { data: pastClients }, { count: newApplications }] = await Promise.all([
+  const [{ data: metrics }, { data: pastClients }, { count: newApplications }, { count: unreadEmails }] = await Promise.all([
     supabase.from("client_metrics").select("phase_status,profit_target,max_drawdown"),
     supabase.from("past_clients").select("challenge_result,phase_status"),
     supabase.from("applications").select("id", { count: "exact", head: true }).eq("status", "new"),
+    supabase.from("received_emails").select("id", { count: "exact", head: true }).is("read_at", null),
   ]);
 
   const active = metrics ?? [];
@@ -66,7 +68,7 @@ export default async function AdminOverview() {
       <h1 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 36, letterSpacing: -1.5, marginBottom: 24 }}>Overview</h1>
 
       {(newApplications ?? 0) > 0 && (
-        <Link href="/admin/clients" style={{ textDecoration: "none", display: "block", marginBottom: 32 }}>
+        <Link href="/admin/clients" style={{ textDecoration: "none", display: "block", marginBottom: 8 }}>
           <div style={{
             fontFamily: "monospace",
             background: "rgba(239,68,68,0.06)",
@@ -82,6 +84,26 @@ export default async function AdminOverview() {
               !! {newApplications} new application{(newApplications ?? 0) > 1 ? "s" : ""} waiting — status: unreviewed
             </span>
             <span style={{ marginLeft: "auto", color: "rgba(239,68,68,0.45)", fontSize: 10 }}>→ /admin/clients</span>
+          </div>
+        </Link>
+      )}
+
+      {(unreadEmails ?? 0) > 0 && (
+        <Link href="/admin/inbox" style={{ textDecoration: "none", display: "block", marginBottom: 32 }}>
+          <div style={{
+            fontFamily: "monospace",
+            background: "rgba(79,142,247,0.06)",
+            border: "1px solid rgba(79,142,247,0.3)",
+            borderLeft: "2px solid #4f8ef7",
+            padding: "10px 16px",
+            display: "flex", alignItems: "center", gap: 10,
+            cursor: "pointer",
+          }}>
+            <span style={{ color: "rgba(79,142,247,0.5)", fontSize: 11, userSelect: "none" }}>$&gt;</span>
+            <span style={{ color: "#4f8ef7", fontSize: 11, fontWeight: 700 }}>
+              !! {unreadEmails} unread email{(unreadEmails ?? 0) > 1 ? "s" : ""} — admin@eleusisfx.uk
+            </span>
+            <span style={{ marginLeft: "auto", color: "rgba(79,142,247,0.45)", fontSize: 10 }}>→ /admin/inbox</span>
           </div>
         </Link>
       )}
