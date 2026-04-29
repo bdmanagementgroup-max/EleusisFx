@@ -308,6 +308,122 @@ const TEMPLATES = [
 </html>`,
   },
   {
+    label: "Past Client — Loyalty Offer",
+    subject: "An Exclusive Offer for You — Eleusis FX",
+    html: `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#020305;-webkit-font-smoothing:antialiased;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#020305;padding:48px 20px;">
+    <tr><td align="center">
+      <table width="580" cellpadding="0" cellspacing="0" border="0" style="max-width:580px;width:100%;">
+
+        <tr><td style="padding-bottom:32px;">
+          <span style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">ELEUSIS FX</span>
+        </td></tr>
+
+        <!-- Hero -->
+        <tr><td style="padding-bottom:36px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 12px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-weight:700;font-family:Arial,sans-serif;">For Our Past Clients</p>
+          <h1 style="margin:0 0 16px;font-size:36px;font-weight:800;letter-spacing:-1.5px;color:#e8eaf0;line-height:1.1;font-family:Arial,sans-serif;">You&apos;ve Earned This.</h1>
+          <p style="margin:0;font-size:15px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Hi [First Name], thank you for trusting us with your evaluation. As one of our valued past clients, we&apos;re offering you an exclusive return rate for 2026 &mdash; half the standard price, same full service.</p>
+        </td></tr>
+
+        <!-- Offer block -->
+        <tr><td style="padding:36px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(255,255,255,0.06);border-top:2px solid #22c55e;">
+            <tr><td style="padding:32px 28px;">
+              <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#22c55e;font-weight:700;font-family:Arial,sans-serif;">Loyalty Offer — 2026</p>
+              <h2 style="margin:0 0 20px;font-size:28px;font-weight:800;letter-spacing:-1px;color:#e8eaf0;font-family:Arial,sans-serif;">50% Off Your Next Evaluation</h2>
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
+                <tr>
+                  <td style="padding:12px 16px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">
+                    Standard price &nbsp;<span style="text-decoration:line-through;color:rgba(210,220,240,0.35);">£550</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:12px 16px;background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.2);font-size:15px;font-weight:700;color:#22c55e;font-family:Arial,sans-serif;">
+                    Your price &nbsp;<strong style="font-size:20px;">£275</strong>
+                  </td>
+                </tr>
+              </table>
+              <p style="margin:0 0 24px;font-size:13px;line-height:1.8;color:rgba(210,220,240,0.7);font-family:Arial,sans-serif;">This offer is exclusive to past clients and won&apos;t be advertised publicly. Apply through our usual route below and reference your previous evaluation in the application &mdash; we&apos;ll apply the discount before we kick off.</p>
+              <a href="https://eleusisfx.uk/#apply" style="display:inline-block;background:#22c55e;color:#020305;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:14px 28px;text-decoration:none;font-family:Arial,sans-serif;">Claim Your Offer &rarr;</a>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <!-- Stats overview -->
+        <tr><td style="padding:36px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Our 2026 Track Record</p>
+          <h2 style="margin:0 0 16px;font-size:22px;font-weight:800;letter-spacing:-0.5px;color:#e8eaf0;font-family:Arial,sans-serif;">87% of Our Clients Get Funded</h2>
+          <p style="margin:0 0 24px;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">That figure isn&apos;t a marketing claim &mdash; it reflects every completed evaluation we&apos;ve managed across FTMO and True Forex Funds. The ones who don&apos;t pass typically come back, adjust their approach, and pass the second time.</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td width="33%" style="padding:16px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);text-align:center;">
+                <div style="font-size:24px;font-weight:800;color:#22c55e;font-family:Arial,sans-serif;letter-spacing:-1px;">87%</div>
+                <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(210,220,240,0.4);margin-top:4px;font-family:Arial,sans-serif;">Pass Rate</div>
+              </td>
+              <td width="2%" style="background:#020305;"></td>
+              <td width="33%" style="padding:16px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);text-align:center;">
+                <div style="font-size:24px;font-weight:800;color:#4f8ef7;font-family:Arial,sans-serif;letter-spacing:-1px;">&lt;30</div>
+                <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(210,220,240,0.4);margin-top:4px;font-family:Arial,sans-serif;">Days Avg.</div>
+              </td>
+              <td width="2%" style="background:#020305;"></td>
+              <td width="30%" style="padding:16px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);text-align:center;">
+                <div style="font-size:24px;font-weight:800;color:#e8eaf0;font-family:Arial,sans-serif;letter-spacing:-1px;">0</div>
+                <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(210,220,240,0.4);margin-top:4px;font-family:Arial,sans-serif;">Violations</div>
+              </td>
+            </tr>
+          </table>
+        </td></tr>
+
+        <!-- How it works -->
+        <tr><td style="padding:36px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 16px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">How It Works</p>
+          <table cellpadding="0" cellspacing="0" border="0" width="100%">
+            <tr>
+              <td style="padding-bottom:14px;vertical-align:top;width:32px;">
+                <span style="display:inline-block;width:26px;height:26px;border:1px solid rgba(34,197,94,0.3);font-size:9px;letter-spacing:1px;color:#22c55e;text-align:center;line-height:26px;font-family:Arial,sans-serif;">01</span>
+              </td>
+              <td style="padding:2px 0 14px 12px;font-size:13px;color:rgba(210,220,240,0.88);line-height:1.6;font-family:Arial,sans-serif;">Apply via the button above and mention your previous evaluation in the form.</td>
+            </tr>
+            <tr>
+              <td style="padding-bottom:14px;vertical-align:top;width:32px;">
+                <span style="display:inline-block;width:26px;height:26px;border:1px solid rgba(34,197,94,0.3);font-size:9px;letter-spacing:1px;color:#22c55e;text-align:center;line-height:26px;font-family:Arial,sans-serif;">02</span>
+              </td>
+              <td style="padding:2px 0 14px 12px;font-size:13px;color:rgba(210,220,240,0.88);line-height:1.6;font-family:Arial,sans-serif;">We&apos;ll confirm your discounted rate and get everything set up for your 2026 challenge.</td>
+            </tr>
+            <tr>
+              <td style="vertical-align:top;width:32px;">
+                <span style="display:inline-block;width:26px;height:26px;border:1px solid rgba(34,197,94,0.3);font-size:9px;letter-spacing:1px;color:#22c55e;text-align:center;line-height:26px;font-family:Arial,sans-serif;">03</span>
+              </td>
+              <td style="padding:2px 0 0 12px;font-size:13px;color:rgba(210,220,240,0.88);line-height:1.6;font-family:Arial,sans-serif;">Track everything live in your dashboard from day one. We manage the evaluation, you trade.</td>
+            </tr>
+          </table>
+        </td></tr>
+
+        <!-- CTA -->
+        <tr><td style="padding:36px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 16px;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Any questions before you apply &mdash; just reply to this email. We&apos;re happy to talk through the options and make sure 2026 is the year you get funded.</p>
+          <a href="https://eleusisfx.uk/#apply" style="display:inline-block;background:#e8eaf0;color:#020305;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:14px 28px;text-decoration:none;font-family:Arial,sans-serif;">Apply Now &rarr;</a>
+        </td></tr>
+
+        <!-- Footer -->
+        <tr><td style="padding-top:28px;">
+          <p style="margin:0;font-size:11px;color:rgba(210,220,240,0.28);line-height:1.7;font-family:Arial,sans-serif;">
+            Eleusis FX &nbsp;&middot;&nbsp; <a href="https://eleusisfx.uk" style="color:rgba(210,220,240,0.28);text-decoration:none;">eleusisfx.uk</a><br>
+            Questions? Reply to this email or contact <a href="mailto:admin@eleusisfx.uk" style="color:rgba(210,220,240,0.28);text-decoration:none;">admin@eleusisfx.uk</a>
+          </p>
+        </td></tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`,
+  },
+  {
     label: "Re-engagement",
     subject: "Ready for Another Run? — Eleusis FX",
     html: emailWrapper(`
