@@ -11,10 +11,12 @@ import LeadMagnet from "@/components/home/LeadMagnet";
 import FaqSection from "@/components/home/FaqSection";
 import ApplyForm from "@/components/home/ApplyForm";
 import PublicMarketTicker from "@/components/layout/PublicMarketTicker";
+import SchemaOrg from "@/components/SchemaOrg";
 
 export default function HomePage() {
   return (
     <>
+      <SchemaOrg />
       <Nav />
       <PublicMarketTicker />
       {/* 38px spacer so content clears the fixed market ticker bar */}
