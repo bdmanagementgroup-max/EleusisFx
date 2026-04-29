@@ -341,9 +341,24 @@ export default function AdminClientsClient({ applications: initial }: { applicat
                         {welcomeSent.has(id) ? (
                           <div style={{ fontSize: 11, color: "#22c55e", letterSpacing: 1 }}>✓ Sent</div>
                         ) : (
-                          <ActionBtn onClick={() => sendWelcome(id, email, first_name)} disabled={welcomeSending === id} color="#22c55e">
-                            {welcomeSending === id ? "Sending…" : "Send Welcome"}
-                          </ActionBtn>
+                          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                            <ActionBtn onClick={() => sendWelcome(id, email, first_name)} disabled={welcomeSending === id} color="#22c55e">
+                              {welcomeSending === id ? "Sending…" : "Send Welcome"}
+                            </ActionBtn>
+                            <a
+                              href={`/admin/tools/email?template=welcome&to=${encodeURIComponent(email)}&name=${encodeURIComponent(first_name)}`}
+                              style={{
+                                background: "transparent",
+                                border: "1px solid rgba(79,142,247,0.3)",
+                                color: "#4f8ef7",
+                                fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase",
+                                padding: "4px 10px", fontFamily: "inherit", whiteSpace: "nowrap",
+                                textDecoration: "none", display: "inline-flex", alignItems: "center",
+                              }}
+                            >
+                              Open in Editor →
+                            </a>
+                          </div>
                         )}
                         {welcomeError[id] && (
                           <div style={{ fontSize: 10, color: "#ef4444", marginTop: 6 }}>{welcomeError[id]}</div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import type { Recipient } from "./page";
 
 const TOOLBAR = [
@@ -360,7 +360,17 @@ const selectStyle: React.CSSProperties = {
   outline: "none", borderRadius: 3, cursor: "pointer",
 };
 
-export default function EmailEditorClient({ recipients }: { recipients: Recipient[] }) {
+export default function EmailEditorClient({
+  recipients,
+  defaultTemplate,
+  defaultTo,
+  defaultName,
+}: {
+  recipients: Recipient[];
+  defaultTemplate?: string;
+  defaultTo?: string;
+  defaultName?: string;
+}) {
   const editorRef = useRef<HTMLDivElement>(null);
 
   // Recipients
@@ -387,6 +397,28 @@ export default function EmailEditorClient({ recipients }: { recipients: Recipien
   const [sending, setSending]       = useState(false);
   const [result, setResult]         = useState<{ sent: number; failed: number } | null>(null);
   const [sendError, setSendError]   = useState("");
+
+  // ── Pre-fill from URL params (e.g. opened from a client row) ──
+  useEffect(() => {
+    if (!defaultTemplate) return;
+    const tpl = TEMPLATES.find((t) =>
+      t.label.toLowerCase().includes(defaultTemplate.toLowerCase())
+    );
+    if (!tpl) return;
+    const html = defaultName
+      ? tpl.html.replace(/\[First Name\]/g, defaultName)
+      : tpl.html;
+    setSubject(tpl.subject);
+    setHtmlSource(html);
+    setMode("html");
+    setPreview(true);
+
+    if (defaultTo) {
+      const existing = recipients.find((r) => r.email === defaultTo);
+      setSelected([existing ?? { label: defaultName ?? defaultTo, email: defaultTo, group: "Active Clients" }]);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // ── Recipient helpers ──
   const filteredRecipients = recipients.filter((r) => {
