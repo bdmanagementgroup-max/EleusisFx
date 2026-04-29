@@ -492,6 +492,21 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
               {saveError && (
                 <div style={{ fontSize: 10, color: "#ef4444", marginTop: 6 }}>{saveError}</div>
               )}
+
+              {selected.email && (
+                <a
+                  href={`/admin/tools/email?template=re-engagement&to=${encodeURIComponent(selected.email)}&name=${encodeURIComponent(selected.name.split(" ")[0])}`}
+                  style={{
+                    display: "block", textAlign: "center",
+                    background: "transparent", border: "1px solid rgba(79,142,247,0.3)",
+                    color: "#4f8ef7", fontFamily: "var(--font-syne), Syne, sans-serif",
+                    fontWeight: 700, fontSize: 11, letterSpacing: 2, textTransform: "uppercase",
+                    padding: "12px", textDecoration: "none", transition: "all 0.2s",
+                  }}
+                >
+                  Open in Email Editor →
+                </a>
+              )}
             </div>
 
             <div style={{ marginTop: 20, paddingTop: 16, borderTop: "1px solid rgba(255,255,255,0.06)", fontSize: 10, color: "rgba(232,234,240,0.2)" }}>
