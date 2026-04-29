@@ -92,6 +92,84 @@ const HARDCODED: Record<string, { tag: string; title: string; excerpt: string; d
 
 <p>The evaluation context changes behaviour. That change in behaviour — not the rules — is what ends most challenges. The <a href="/articles/why-traders-fail-prop-firm-evaluation" style="color:#4f8ef7">five specific patterns responsible for most failures</a> are more predictable than most traders realise. For traders who recognise this in themselves, working with an experienced evaluation service is a rational alternative. The rules do not change, but the executor does — and removing emotional variables from a mechanical process produces measurably more consistent outcomes.</p>`,
   },
+  "prop-firm-evaluation-service-uk": {
+    tag: "Evaluation Service",
+    title: "Prop Firm Evaluation Service UK: How It Works & What It Costs",
+    excerpt: "How a UK prop firm evaluation service works, what it costs, and what to look for before committing — an honest breakdown of the industry. Updated 2026.",
+    date: "April 2026",
+    readTime: "8 min read",
+    content: `<p>A prop firm evaluation service is a professional trading operation that completes your funded account challenge on your behalf. You purchase the challenge in your own name, share the account credentials with the service, and their traders execute the evaluation according to the firm's rules. When the challenge is passed, the funded account is issued in your name and you take full control from that point forward.</p>
+
+<p>The industry exists because the self-directed pass rate for prop firm evaluations sits below 10% across FTMO and the broader market — a figure that has remained consistent for years regardless of market conditions or improvements in trader education. The reasons for this failure rate are <a href="/articles/why-traders-fail-prop-firm-evaluation" style="color:#4f8ef7">well documented</a> and almost entirely psychological rather than strategic. A professional evaluation service removes the psychological variables that cause traders to deviate from their own strategies under evaluation pressure. The rules do not change. The executor does.</p>
+
+<p>This article covers exactly how the service works, what it costs, which firms it covers, and what separates a legitimate operation from a scam — so you can make a decision with complete information rather than marketing promises.</p>
+
+<h2>What the Service Actually Does</h2>
+
+<p>The mechanics are straightforward. A prop firm <a href="/articles/what-is-an-ftmo-challenge" style="color:#4f8ef7">evaluation challenge</a> is a demo account with specific profit targets and risk rules. You pay the prop firm a one-time fee to access the account. If you hit the targets without breaching the rules, you receive a real funded account. If you fail, the fee is gone.</p>
+
+<p>A professional evaluation service takes over the execution of that demo account on your behalf. They manage the position sizing, the drawdown, the daily loss limits, the minimum trading day requirements, and the profit targets. The account remains registered in your name throughout. The funded account that results is issued to you — the service's involvement ends when the challenge is passed and the funded account is activated.</p>
+
+<p>What you are paying the service for is professional execution under conditions where most traders' performance degrades. Their traders are not subject to the psychological pressure of the evaluation outcome. They trade the same process every day. That consistency — not a superior strategy — is the source of a meaningfully higher pass rate than the self-directed average.</p>
+
+<h2>How It Works — Step by Step</h2>
+
+<p>The process at a reputable UK evaluation service follows a consistent sequence.</p>
+
+<p><strong>Step 1 — Application.</strong> You submit an enquiry specifying which prop firm and account size you want to pass. The service confirms availability and compatibility — not every firm or programme is equally suited to professional execution, and a legitimate service will tell you which options they can accommodate confidently.</p>
+
+<p><strong>Step 2 — Purchase the challenge.</strong> You buy the evaluation challenge from the prop firm directly, in your own name. The challenge fee goes to the prop firm, not to the evaluation service. This matters: you are the account holder from the first moment.</p>
+
+<p><strong>Step 3 — Payment to the service.</strong> Once the challenge is purchased, you pay the service fee. This is confirmed before trading begins. Reputable services are clear about their fee structure upfront — there are no hidden costs, and the fee does not vary based on the outcome.</p>
+
+<p><strong>Step 4 — Trading.</strong> You share the account login credentials with the service. Their traders execute the evaluation, managing all positions according to the firm's rules. The timeline varies by firm and market conditions, but most challenges are completed well within the firm's maximum time allowance.</p>
+
+<p><strong>Step 5 — Pass confirmation and handover.</strong> When the challenge is completed, you receive pass confirmation from the prop firm. The funded account is activated in your name. Credentials are returned, and the account is entirely yours from this point. You trade it yourself and receive payouts directly from the prop firm under their standard terms.</p>
+
+<h2>What It Costs</h2>
+
+<p>A prop firm evaluation service in the UK involves two separate costs: the prop firm's challenge fee and the service fee.</p>
+
+<p>The challenge fee goes to the prop firm. For a $100,000 FTMO challenge, that is approximately £540. This fee is refunded in full with your first profit payout from the funded account — so if you pass, the challenge fee is effectively zero.</p>
+
+<p>The service fee is what you pay the evaluation service for professional execution. For a $100,000 FTMO challenge, this typically ranges from £800 to £1,500 depending on the service and the specific firm being targeted. The combined cost — challenge fee plus service fee — for a $100,000 funded account is therefore approximately £1,100 to £2,000.</p>
+
+<p>The economics are worth examining directly. A funded $100,000 account at 80% profit split generating 5% per month returns £3,200 in monthly income. The total cost of the evaluation service — including the challenge fee — is recovered in the first month of trading the funded account. Against a realistic baseline where self-directed traders have less than a 10% chance of passing, the service fee represents a meaningful expected-value improvement for anyone who intends to trade the funded account seriously.</p>
+
+<p>A legitimate service also carries a re-trade guarantee: if the evaluation is not passed, they repeat it at no additional cost. This shifts the risk profile significantly. You are not paying for an attempt. You are paying for a pass.</p>
+
+<h2>Which Prop Firms Does an Evaluation Service Cover?</h2>
+
+<p>The most established UK evaluation services work primarily with FTMO, The5ers, and FundedNext — the three firms with the largest trader bases, the clearest rule structures, and the most consistent payout histories. Some services also cover E8 Funding, TopStep, and True Forex Funds, though availability varies.</p>
+
+<p>Not every firm is equally suited to professional execution. Services typically have preferences based on their traders' experience with specific firm rules, platform infrastructure, and which firms' monitoring practices they have the most experience navigating. A reputable service will tell you clearly which firms they work with confidently and which they do not — rather than claiming to cover every firm indiscriminately.</p>
+
+<p>See our <a href="/compare" style="color:#4f8ef7">full prop firm comparison table</a> for a breakdown of rules, fees, and payout structures across the five most popular firms.</p>
+
+<h2>What Separates a Legitimate Service From a Scam</h2>
+
+<p>The evaluation service market contains legitimate operators and fraudulent ones. The warning signs are consistent and identifiable before you commit any money.</p>
+
+<p><strong>No verifiable track record.</strong> A service that has passed hundreds of evaluations will show you the evidence — pass confirmations, funded account notifications, client results with dates and firm references. These documents are not forgeable in any useful sense. Generic testimonials with no verifiable detail are not a substitute. Ask to see completed evaluations. A legitimate service produces them immediately.</p>
+
+<p><strong>Unconditional pass guarantees.</strong> No service can guarantee a pass in an absolute sense. Market conditions, platform outages, and rule changes are outside anyone's control. A legitimate service offers a re-trade commitment if they fail — not a promise of a 100% success rate with no conditions.</p>
+
+<p><strong>No re-trade policy.</strong> If a service takes your fee, fails the evaluation, and offers nothing in return, they are not operating in good faith. The standard model for credible services is a clear re-trade commitment — they absorb the cost of a failure rather than passing it to the client.</p>
+
+<p><strong>Automated execution at scale.</strong> Some operations run algorithmic strategies across hundreds of simultaneous evaluation accounts. These are flagged quickly by prop firms and produce inconsistent outcomes when market conditions deviate from the algorithm's parameters. A professional service employs human traders executing with genuine discretion — their results look like skilled individual traders, not systematic patterns.</p>
+
+<p><strong>Longevity and volume.</strong> Services that scam clients or fail at scale do not survive long in a market where reputation travels quickly. A service operating since 2019 with 700+ completed evaluations has a verifiable history across multiple market regimes, multiple firms, and multiple challenge types. That track record is the most reliable signal available.</p>
+
+<h2>Who It Is For — and Who It Is Not For</h2>
+
+<p>A prop firm evaluation service is not the right choice for every trader. If you are at an early stage of building a strategy and want to use the evaluation process to test it under realistic pressure, completing the challenge yourself — even if you fail — gives you information about your process and your psychology that has value beyond the funded account. Failure in a self-directed evaluation is expensive but educational.</p>
+
+<p>The service is the right choice when the gap between your strategy's performance under normal conditions and its performance under evaluation pressure is the primary problem. If you have a working strategy, a track record on your own account, and a history of performing differently when a fee is on the line — that is exactly the situation a professional service resolves. The strategy is sound. The execution context is the problem.</p>
+
+<p>It is also the rational choice for traders who simply want the funded account without the time cost of managing a live evaluation process. Your time has value. The combined cost of the challenge fee and service fee, compared against weeks of your own time at elevated psychological cost with a meaningful probability of failure, is often a straightforward calculation — particularly when the alternative is starting again from scratch.</p>
+
+<p>Whether you decide to use a service or attempt the evaluation yourself, understanding <a href="/articles/can-someone-else-trade-your-prop-firm-evaluation" style="color:#4f8ef7">the legal position and what to look for in a legitimate service</a> is essential before committing money to either route.</p>`,
+  },
   "ftmo-vs-the5ers": {
     tag: "Funding",
     title: "FTMO vs The5ers: Which Is Easier to Pass in 2026?",

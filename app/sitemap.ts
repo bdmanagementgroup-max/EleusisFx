@@ -27,6 +27,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: 'https://eleusisfx.uk/articles/prop-firm-evaluation-service-uk',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
       url: 'https://eleusisfx.uk/articles/ftmo-vs-the5ers',
       lastModified: new Date(),
       changeFrequency: 'monthly',
