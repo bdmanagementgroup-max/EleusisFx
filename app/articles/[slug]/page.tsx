@@ -66,7 +66,7 @@ const HARDCODED: Record<string, { tag: string; title: string; excerpt: string; d
 
 <p>Here is a concrete example. You start a $100,000 challenge. The initial drawdown floor is $90,000. Now suppose you trade well and your equity reaches $110,000. At this point, the drawdown floor rises to $99,000. Your maximum loss from peak is always capped at $10,000 — but that $10,000 is measured from your highest reached equity, not from the starting balance.</p>
 
-<p>The consequence is significant. A trader who front-loads profits early in the challenge is actually narrowing their own margin for error as they go. The better you do, the higher the floor rises, and the less room you have for a losing stretch. This is counterintuitive and is why many traders who pass Phase 1 comfortably still fail Phase 2 — they have less room than they think.</p>
+<p>The consequence is significant. A trader who front-loads profits early in the challenge is actually narrowing their own margin for error as they go. The better you do, the higher the floor rises, and the less room you have for a losing stretch. This is counterintuitive and is why many traders who pass Phase 1 comfortably still fail Phase 2 — they have less room than they think. Use our <a href="/resources/drawdown-tracker" style="color:#4f8ef7">drawdown tracker</a> to calculate your exact floor at any point in your challenge.</p>
 
 <h3>The Daily Loss Limit — Calculated From Balance, Not Equity</h3>
 
@@ -90,7 +90,7 @@ const HARDCODED: Record<string, { tag: string; title: string; excerpt: string; d
 
 <p>The real cause is psychological. When a real fee is on the line, traders abandon the process that made them profitable in the first place. They oversize positions early to build a buffer. They revenge trade after a losing day. They misread the trailing drawdown and believe they have more room than they do.</p>
 
-<p>The evaluation context changes behaviour. That change in behaviour — not the rules — is what ends most challenges. For traders who recognise this pattern in themselves, working with an experienced evaluation service is a rational alternative. The rules do not change, but the executor does — and removing emotional variables from a mechanical process produces measurably more consistent outcomes.</p>`,
+<p>The evaluation context changes behaviour. That change in behaviour — not the rules — is what ends most challenges. The <a href="/articles/why-traders-fail-prop-firm-evaluation" style="color:#4f8ef7">five specific patterns responsible for most failures</a> are more predictable than most traders realise. For traders who recognise this in themselves, working with an experienced evaluation service is a rational alternative. The rules do not change, but the executor does — and removing emotional variables from a mechanical process produces measurably more consistent outcomes.</p>`,
   },
   "why-traders-fail-prop-firm-evaluation": {
     tag: "Strategy",
@@ -124,7 +124,7 @@ const HARDCODED: Record<string, { tag: string; title: string; excerpt: string; d
 
 <p>In practice this means that open floating losses count toward the daily limit in real time. A trader who holds a position running at a $2,000 floating loss has already consumed 40% of their daily limit before placing a single new trade. If the position moves another $3,000 against them, the challenge ends — not because they made a new trade mistake, but because they did not account correctly for the position they were already holding.</p>
 
-<p>For FTMO specifically, there is an additional layer: the trailing maximum drawdown. The 10% maximum drawdown floor rises as your equity peak rises. A trader who has built their account from $100,000 to $108,000 now has a drawdown floor of $98,000 — not the original $90,000. The better you perform early in the challenge, the less room you have for a bad stretch. Many traders discover this rule only when they have already breached it.</p>
+<p>For FTMO specifically, there is an additional layer: the <a href="/articles/what-is-an-ftmo-challenge" style="color:#4f8ef7">trailing maximum drawdown</a>. The 10% maximum drawdown floor rises as your equity peak rises. A trader who has built their account from $100,000 to $108,000 now has a drawdown floor of $98,000 — not the original $90,000. The better you perform early in the challenge, the less room you have for a bad stretch. Many traders discover this rule only when they have already breached it. Knowing your exact floor before each session eliminates this uncertainty — use our <a href="/resources/drawdown-tracker" style="color:#4f8ef7">drawdown tracker</a> to calculate it in real time.</p>
 
 <h2>Failure Pattern 4 — Strategy Drift Under Pressure</h2>
 
@@ -226,15 +226,15 @@ const HARDCODED: Record<string, { tag: string; title: string; excerpt: string; d
   },
   "ftmo-vs-true-forex-funds": {
     tag: "Funding",
-    title: "FTMO vs True Forex Funds: Which Prop Firm Is Right for You?",
-    excerpt: "An honest, detailed comparison of the two most popular prop firms — drawdown methodology, profit targets, fees, trading restrictions, and which suits your trading style.",
+    title: "FTMO vs True Forex Funds: Which Prop Firm Is Right for You? (2026)",
+    excerpt: "FTMO vs True Forex Funds compared — drawdown methodology, profit targets, payout timing, and trading restrictions. Full prop firm comparison UK, updated 2026.",
     date: "April 2025",
     readTime: "9 min read",
     content: `<p>FTMO and True Forex Funds are two of the most established names in the proprietary trading industry. Both run two-phase evaluation models, both offer accounts up to $200,000, and both have genuine track records of paying funded traders. But they are meaningfully different — in their drawdown methodology, their profit targets, their restrictions on trading behaviour, and the economics of their payout structures. Choosing the wrong firm for your style of trading does not just make the evaluation harder. It can make passing structurally unlikely no matter how well you trade.</p>
 
 <h2>Background and Credibility</h2>
 
-<p>FTMO was founded in Prague in 2014. It is widely considered the oldest and most established prop firm operating the challenge-based funding model, and its payout history — running for over a decade — is essentially unquestioned in the industry. At the peak of prop firm popularity in 2022–2024, FTMO reported paying out hundreds of millions of dollars to traders globally. The brand recognition and trust it carries is genuinely significant in a sector where legitimacy is not always guaranteed.</p>
+<p>FTMO was founded in Prague in 2014. It is widely considered the oldest and most established prop firm operating the <a href="/articles/what-is-an-ftmo-challenge" style="color:#4f8ef7">challenge-based funding model</a>, and its payout history — running for over a decade — is essentially unquestioned in the industry. At the peak of prop firm popularity in 2022–2024, FTMO reported paying out hundreds of millions of dollars to traders globally. The brand recognition and trust it carries is genuinely significant in a sector where legitimacy is not always guaranteed.</p>
 
 <p>True Forex Funds was founded in 2021 in the United States. It entered the market during the period of rapid prop firm expansion and has built a solid reputation for paying consistently and operating cleanly. It does not have a decade of track record, but it has a meaningful one. Both firms are legitimate — the credibility gap is real but not the primary deciding factor for most traders.</p>
 
@@ -314,7 +314,9 @@ const HARDCODED: Record<string, { tag: string; title: string; excerpt: string; d
 
 <p>True Forex Funds offers a more forgiving drawdown structure, lower Phase 1 target, and more flexible payouts. For traders who want a slightly less punishing evaluation environment — particularly swing traders and macro traders — it is a serious contender that should not be dismissed simply because of FTMO's larger brand presence.</p>
 
-<p>Neither firm is objectively better. The right choice depends on your strategy's typical return profile, your trading style, and how you respond to drawdown risk. Both firms are legitimate, both pay out reliably, and both can serve as the foundation for a funded trading career.</p>`,
+<p>Neither firm is objectively better. The right choice depends on your strategy's typical return profile, your trading style, and how you respond to drawdown risk. Both firms are legitimate, both pay out reliably, and both can serve as the foundation for a funded trading career.</p>
+
+<p>Comparing more prop firms? See our <a href="/compare" style="color:#4f8ef7">full prop firm comparison table</a> covering FTMO, The5ers, FundedNext, E8, TopStep, and more.</p>`,
   },
 };
 
