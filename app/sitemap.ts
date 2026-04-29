@@ -27,6 +27,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: 'https://eleusisfx.uk/articles/how-to-pass-the-ftmo-challenge',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
       url: 'https://eleusisfx.uk/articles/can-someone-else-trade-your-prop-firm-evaluation',
       lastModified: new Date(),
       changeFrequency: 'monthly',

@@ -92,6 +92,96 @@ const HARDCODED: Record<string, { tag: string; title: string; excerpt: string; d
 
 <p>The evaluation context changes behaviour. That change in behaviour — not the rules — is what ends most challenges. The <a href="/articles/why-traders-fail-prop-firm-evaluation" style="color:#4f8ef7">five specific patterns responsible for most failures</a> are more predictable than most traders realise. For traders who recognise this in themselves, working with an experienced evaluation service is a rational alternative. The rules do not change, but the executor does — and removing emotional variables from a mechanical process produces measurably more consistent outcomes.</p>`,
   },
+  "how-to-pass-the-ftmo-challenge": {
+    tag: "Strategy",
+    title: "How to Pass the FTMO Challenge in 30 Days (Step-by-Step)",
+    excerpt: "The exact week-by-week approach to passing the FTMO Challenge — position sizing, drawdown management, and the four-phase system that produces consistent results. Updated 2026.",
+    date: "April 2026",
+    readTime: "10 min read",
+    content: `<p>The FTMO Challenge gives you 30 calendar days to hit a 10% profit target on a demo account without breaching a 5% daily loss limit or a 10% maximum drawdown. On paper that is not a difficult brief. A trader generating 0.5% per day — barely above break-even — clears the target comfortably with a week to spare. In practice, fewer than 10% of traders who attempt it receive a funded account.</p>
+
+<p>The gap between what the rules require and what traders actually produce is not a strategy problem. Most traders who fail have a strategy that, under normal conditions, would satisfy FTMO's requirements without exceptional effort. The problem is that the evaluation context — real money, real deadline, real consequences — changes how people trade in ways that almost always make their performance worse. The fix is not a better strategy. It is a structured approach that removes the decisions that kill challenges before they even get started.</p>
+
+<p>This is the week-by-week system. It is built on what works across hundreds of completed evaluations, not on theory. Follow the structure, and the target takes care of itself.</p>
+
+<h2>What FTMO Is Actually Testing</h2>
+
+<p>Before the week-by-week breakdown, it is worth being precise about what FTMO's evaluation is designed to measure. It is not testing whether you can generate 10% in a month. Any trader with a working strategy and a streak of good trades can do that. It is testing whether you can generate 10% <em>without breaching the risk rules</em> — which is a fundamentally different thing.</p>
+
+<p>The daily loss limit and maximum drawdown rules are the actual test. The profit target is the carrot that gets traders into positions they would not otherwise take. The rules are what separate traders who have genuine risk discipline from traders who have been lucky on their personal account. Every week of a 30-day challenge is a test of whether your risk management holds under pressure — and pressure is highest in week one, when the emotional impulse to build a buffer early is at its strongest.</p>
+
+<p>Understanding this reframes the whole approach. You are not trying to make as much money as possible in 30 days. You are trying to make enough money while not making any catastrophic decisions. Those are different goals, and they require a different mindset.</p>
+
+<h2>The Week-by-Week Breakdown</h2>
+
+<h3>Week 1 — Calibration (Days 1–7)</h3>
+
+<p>The single most important week of the challenge. More challenges end in week one than in any other period — not because of bad luck, but because traders enter with the wrong objective. The instinct in week one is to build a buffer. Get to 4–5% quickly, then trade the rest of the challenge conservatively. The problem is that building a buffer requires taking larger positions or more frequent trades than your strategy normally calls for — and that is exactly how the daily loss limit gets breached before the challenge has properly started.</p>
+
+<p>Week 1 protocol: maximum 2 trades per day, 1% risk per trade, no exceptions. Target 0–2% total profit across the week. This feels painfully slow. It is supposed to. The purpose of week 1 is calibration — you are re-establishing the habits and execution patterns that your strategy was built on, not chasing a target. Any profit in week 1 is a bonus. What matters is that you finish the week with your drawdown intact and your process intact.</p>
+
+<p>The traders who pass consistently are the ones who enter week 2 slightly ahead of schedule rather than scrambling to recover from an early loss. Conservative week ones produce comfortable week twos. Aggressive week ones produce broken challenges.</p>
+
+<h3>Week 2 — Execution (Days 8–16)</h3>
+
+<p>By day 8 you should have a clear read on market conditions, your strategy is running at its normal tempo, and the pressure to perform is starting to build. This is the week where you step up — slightly. Maximum 3 trades per day, 1–1.5% risk per trade. Target 3–5% total profit across the week. If you hit 5% cumulative by the end of week 2, you are in an excellent position. If you are at 3%, you are still on track.</p>
+
+<p>The discipline in week 2 is sticking to your trade selection criteria exactly. The market will offer setups that are close to what your strategy looks for but not quite there — lower timeframe entries, weaker confluences, pairs you do not normally trade. The pressure to participate is real. Resist it. Your strategy has an edge on specific setups. Trading outside those setups produces random outcomes, and random outcomes in week 2 can derail a challenge that was previously on track.</p>
+
+<p>Review your trades at the end of each day in week 2. Not to judge the P&L — to judge the process. Did you enter on criteria, or on impatience? The answer to that question is a better leading indicator of how the challenge will end than the running profit figure.</p>
+
+<h3>Week 3 — Push (Days 17–23)</h3>
+
+<p>Week 3 is where the challenge is won or lost for most traders. If you have followed the week 1 and week 2 protocols, you should be somewhere between 4% and 7% in profit by day 17. The target is 10%. You have roughly 13 days left. The math is straightforward — you need 3–6% more, and you have nearly two weeks to produce it.</p>
+
+<p>Raise your quality bar, not your position size. In week 3, only take setups that score a 9 or higher on your own criteria. Trade maximum 3 times per day. Risk stays at 1–1.5%. The difference between week 3 and week 2 is that you are now more selective, not more aggressive. When the market gives you a genuinely strong setup, take it with full conviction. When conditions are uncertain or your strategy is not producing clean signals, sit on your hands.</p>
+
+<p>Target 7–8% cumulative profit by the end of week 3. If you hit that, week 4 becomes a formality. If you are at 5–6%, you are still in a strong position. What you do not want is to enter week 4 needing 4–5% in the final week — that pressure produces the kind of desperation trading that ends challenges on day 28.</p>
+
+<h3>Week 4 — Protect and Cross the Line (Days 24–30)</h3>
+
+<p>The objective in week 4 changes completely. You are no longer trying to grow the account. You are trying to not lose what you have built. Drop back to 2 trades per day maximum. Reduce your lot size by 25% from your week 3 standard. The profit target is close — your job is to cross the line cleanly, not to add a few extra percent you do not need.</p>
+
+<p>The most common week 4 mistake is continuing to trade at week 3 intensity when the challenge is nearly won. Traders who are at 8% with six days left take unnecessary trades because they are bored, or because a setup looks good, or because they want to finish at 12% rather than 10%. Those unnecessary trades produce unnecessary risk, and unnecessary risk in week 4 is how traders blow challenges they had essentially already passed.</p>
+
+<p>Once you hit 10%, stop trading for the day. Once the minimum trading day requirement is satisfied — FTMO requires at least 4 trading days — there is no rule that says you must continue. Protecting the pass is more valuable than adding marginally to the profit figure.</p>
+
+<h2>The Three Numbers That End Most Challenges</h2>
+
+<p>Regardless of which week you are in, three numbers govern everything. Know them precisely before every session.</p>
+
+<p><strong>Your daily loss limit in pounds or dollars.</strong> On a $100,000 account, FTMO's 5% daily limit is $5,000. This resets from your account balance at the start of each day — not from your current equity. If you are holding an open position with a $2,000 floating loss, you have already consumed 40% of your daily limit before placing a new trade. Account for open positions before sizing any new entry.</p>
+
+<p><strong>Your trailing drawdown floor.</strong> FTMO's maximum drawdown is not fixed at 10% below your starting balance. It trails upward with your equity peak. If your account has reached $107,000, your drawdown floor is now $97,000 — not the original $90,000. The better your first two weeks go, the more constrained your floor becomes. Use our <a href="/resources/drawdown-tracker" style="color:#4f8ef7">drawdown tracker</a> to calculate your exact floor before every session. Many traders discover the <a href="/articles/what-is-an-ftmo-challenge" style="color:#4f8ef7">trailing drawdown rule</a> only when they have already breached it.</p>
+
+<p><strong>Your minimum trading days count.</strong> FTMO requires at least 4 days of active trading across the challenge period. This catches traders who try to complete the challenge in two or three exceptional sessions. Track your day count from day one — you cannot pass without satisfying it, regardless of your profit figure.</p>
+
+<h2>Position Sizing — The Only Number That Actually Matters</h2>
+
+<p>Every mistake traders make during an FTMO challenge can be traced back to a single source: position sizes that are too large for the risk rules in play. Overleveraging in week one causes most early failures. Revenge trading after a loss is overleveraging by another name. Even strategy drift often manifests as taking a borderline setup at normal size rather than passing on it — one more expression of the same underlying problem.</p>
+
+<p>The calculation is straightforward. On a $100,000 account with a 1% risk rule, you are risking $1,000 per trade. Five losing trades in a week costs you $5,000 — exactly your daily limit on a bad day. That is the boundary. Trade inside it with every position, every session, every day of the challenge. When in doubt, size down rather than up. A half-size trade on a borderline setup costs you half the loss if it fails. The upside difference is marginal. The downside difference is significant.</p>
+
+<p>The <a href="/articles/why-traders-fail-prop-firm-evaluation" style="color:#4f8ef7">five patterns that end most challenges</a> all share a position sizing component. Overleveraging is the most obvious. But revenge trading is also a position sizing failure — it is the decision to risk more after a loss to recover faster. Strategy drift often leads to the same outcome via a different route. Controlling position size is not one element of passing the challenge. It is the central discipline that every other element depends on.</p>
+
+<h2>What to Do After a Losing Day</h2>
+
+<p>You will have a losing day during the challenge. Assume it. Plan for it now rather than improvising when it happens. A structured response to a losing day is the difference between a temporary setback and a challenge-ending spiral.</p>
+
+<p>The protocol is simple. After a losing day — defined as any day where you close with a net loss — you do one thing before the next session: you reduce your maximum daily trade count by one. If you normally take three trades, take two tomorrow. If you normally take two, take one. This is not a punishment. It is a circuit breaker that forces you to be more selective on the session immediately following a loss, which is when the pressure to recover is highest and the judgment is least reliable.</p>
+
+<p>You do not increase position size to recover. You do not trade pairs or sessions outside your normal range. You do not set a mental target of making back yesterday's loss before the week ends. The challenge has 30 days. One losing day, managed correctly, is a minor event. One losing day managed incorrectly — by revenge trading, oversizing, or trading outside your criteria — is frequently how challenges end.</p>
+
+<h2>When to Stop Trading and Lock In the Pass</h2>
+
+<p>The question traders rarely think about before starting a challenge: at what point do you stop? The instinctive answer is when you hit 10%. The correct answer is slightly more nuanced.</p>
+
+<p>Once you hit 10%, stop trading for the remainder of that day. The following day, assess whether you still need more trading days to satisfy the 4-day minimum. If yes, trade one session with your smallest lot size, take one clean setup, and close. If your minimum days are already satisfied and you are at 10% or above, the challenge is done. Close the platform.</p>
+
+<p>The psychological pull to keep trading once a target is hit is well-documented. It feels like leaving money on the table. What it actually is is taking on risk you do not need to take. A challenge passed at 10.1% is identical in value to one passed at 14%. There is no prize for margin. Once the target is crossed and the rules are satisfied, every additional trade is pure downside risk with no meaningful upside. The correct decision is always to stop.</p>
+
+<p>If you want the full day-by-day structure — including the exact metrics, position sizing tables, and the protocol for handling every type of setback — download our free <a href="/eleusis-fx-30-day-blueprint.pdf" style="color:#4f8ef7">30-Day Evaluation Blueprint</a>. It covers the same framework used across every challenge we have passed for 700+ clients since 2019.</p>`,
+  },
   "why-traders-fail-prop-firm-evaluation": {
     tag: "Strategy",
     title: "Why 90% of Traders Fail Their Prop Firm Evaluation",
