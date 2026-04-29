@@ -21,13 +21,16 @@ const epilogue = Epilogue({
 });
 
 export const metadata: Metadata = {
-  title: "Eleusis FX — Prop Firm Specialists",
+  title: "Prop Firm Evaluation Service UK — Eleusis FX",
   description:
-    "Skip the failed attempts. Our expert traders handle your entire prop firm evaluation — you receive a funded $100,000 account. Proven. Professional. Guaranteed.",
+    "We trade your prop firm evaluation on your behalf. 87% pass rate across FTMO, The5ers, FundedNext & more. UK-based. Guaranteed results or we re-trade it.",
+  verification: {
+    google: "jDgtfjHtql7jiX7IburnuH4C5tzsL3ixjSJNMD3FHYo",
+  },
   openGraph: {
-    title: "Eleusis FX — Prop Firm Specialists",
+    title: "Prop Firm Evaluation Service UK — Eleusis FX",
     description:
-      "Skip the failed attempts. Our expert traders handle your entire prop firm evaluation — you receive a funded $100,000 account.",
+      "We trade your prop firm evaluation on your behalf. 87% pass rate across FTMO, The5ers, FundedNext & more. UK-based.",
     url: "https://eleusisfx.uk",
     siteName: "Eleusis FX",
     locale: "en_GB",
@@ -35,8 +38,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Eleusis FX — Prop Firm Specialists",
-    description: "Get your FTMO challenge passed by our expert traders.",
+    title: "Prop Firm Evaluation Service UK — Eleusis FX",
+    description: "87% pass rate. We trade your FTMO & prop firm evaluation — you get the funded account.",
   },
   metadataBase: new URL("https://eleusisfx.uk"),
 };
