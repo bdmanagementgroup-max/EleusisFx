@@ -85,6 +85,21 @@ export default function Hero() {
 
         <p
           style={{
+            fontSize: "clamp(12px, 1.4vw, 14px)",
+            fontWeight: 600,
+            letterSpacing: "0.3px",
+            color: "rgba(210,220,240,0.55)",
+            maxWidth: 480,
+            marginBottom: 20,
+            opacity: 0,
+            animation: "fadeIn 0.8s 0.65s forwards",
+          }}
+        >
+          The UK&apos;s leading prop firm evaluation service — 87% pass rate, 700+ funded traders.
+        </p>
+
+        <p
+          style={{
             fontSize: "clamp(14px, 2vw, 16px)",
             lineHeight: 1.8,
             color: "rgba(210,220,240,0.88)",

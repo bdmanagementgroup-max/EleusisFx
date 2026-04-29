@@ -4,8 +4,8 @@ import PublicMarketTicker from "@/components/layout/PublicMarketTicker";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Prop Firm Comparison — Eleusis FX",
-  description: "Side-by-side comparison of FTMO, True Forex Funds, The5ers, E8 Funding, and FundingNext. Rules, fees, payout splits, and our verdict.",
+  title: "Best Prop Firms UK Compared (2026): FTMO, The5ers, FundedNext & More — Eleusis FX",
+  description: "Side-by-side comparison of the best prop firms for UK traders in 2026 — FTMO, The5ers, FundedNext, E8, and more. Rules, fees, drawdown methodology, profit splits, and our honest verdict.",
 };
 
 const FIRMS = [
@@ -147,10 +147,13 @@ export default function ComparePage() {
             Prop Firm Comparison
           </div>
           <h1 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: "clamp(32px, 5vw, 64px)", lineHeight: 0.95, letterSpacing: -2, marginBottom: 20 }}>
-            Which Prop Firm<br />Is Right for You?
+            Best Prop Firms UK<br />Compared (2026)
           </h1>
-          <p style={{ fontSize: 15, lineHeight: 1.8, color: "rgba(232,234,240,0.45)", maxWidth: 580 }}>
-            Side-by-side breakdown of the 5 most popular prop firms — rules, fees, payout structures, and our honest verdict on each.
+          <p style={{ fontSize: 15, lineHeight: 1.8, color: "rgba(232,234,240,0.65)", maxWidth: 620, marginBottom: 16 }}>
+            Side-by-side breakdown of the five most popular prop firms for UK traders — FTMO, The5ers, FundedNext, E8 Funding, and True Forex Funds. Rules, fees, drawdown methodology, profit splits, and an honest verdict on each.
+          </p>
+          <p style={{ fontSize: 15, lineHeight: 1.8, color: "rgba(232,234,240,0.45)", maxWidth: 620 }}>
+            At Eleusis FX we have passed evaluations across all five firms since 2019. Our team works with FTMO and The5ers most frequently — if you want a guaranteed pass rather than attempting it yourself, <a href="/#apply" style={{ color: "#4f8ef7", textDecoration: "none" }}>apply here</a>.
           </p>
         </section>
 
