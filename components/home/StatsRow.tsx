@@ -1,5 +1,5 @@
 const STATS = [
-  { num: "100%", label: "Challenge Pass Rate" },
+  { num: "87%", label: "Challenge Pass Rate" },
   { num: "$100K", label: "Funded Account Value" },
   { num: "<30", label: "Days Average to Funded" },
 ];

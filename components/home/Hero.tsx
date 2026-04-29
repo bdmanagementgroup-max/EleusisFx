@@ -155,7 +155,7 @@ export default function Hero() {
 
           {[
             { label: "Specialisation", value: "FTMO & TFF" },
-            { label: "Pass Rate", value: "100%", green: true },
+            { label: "Pass Rate", value: "87%", green: true },
             { label: "Drawdown Violations", value: "None", green: true },
             { label: "Avg. Duration", value: "< 30 Days" },
             { label: "Base", value: "United Kingdom" },
