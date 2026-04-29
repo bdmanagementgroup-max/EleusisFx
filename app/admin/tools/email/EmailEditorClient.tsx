@@ -338,12 +338,12 @@ const TEMPLATES = [
               <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
                 <tr>
                   <td style="padding:12px 16px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">
-                    Standard price &nbsp;<span style="text-decoration:line-through;color:rgba(210,220,240,0.35);">£550</span>
+                    Standard price &nbsp;<span style="text-decoration:line-through;color:rgba(210,220,240,0.35);">£1,150</span>
                   </td>
                 </tr>
                 <tr>
                   <td style="padding:12px 16px;background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.2);font-size:15px;font-weight:700;color:#22c55e;font-family:Arial,sans-serif;">
-                    Your price &nbsp;<strong style="font-size:20px;">£275</strong>
+                    Your price &nbsp;<strong style="font-size:20px;">£550</strong>
                   </td>
                 </tr>
               </table>
