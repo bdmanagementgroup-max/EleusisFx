@@ -424,6 +424,227 @@ const TEMPLATES = [
 </html>`,
   },
   {
+    label: "Article — What Is an FTMO Challenge?",
+    subject: "What Exactly Is an FTMO Challenge? — Eleusis FX",
+    html: emailWrapper(`
+        <tr><td style="padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 12px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">New Article</p>
+          <h1 style="margin:0 0 16px;font-size:34px;font-weight:800;letter-spacing:-1px;color:#e8eaf0;line-height:1.1;font-family:Arial,sans-serif;">What Is an FTMO Challenge and How Does It Work?</h1>
+          <p style="margin:0;font-size:15px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Hi [First Name], we&apos;ve just published a complete breakdown of the FTMO evaluation process &mdash; every phase, every rule, and everything you need to know before you start.</p>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#4f8ef7;margin-right:10px;">→</span> Phase 1 &amp; Phase 2 explained — what each stage actually tests</td></tr>
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#4f8ef7;margin-right:10px;">→</span> Trailing vs. fixed drawdown — the difference that catches most traders out</td></tr>
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#4f8ef7;margin-right:10px;">→</span> Profit targets, minimum trading days, and payout splits</td></tr>
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#4f8ef7;margin-right:10px;">→</span> Common mistakes that get accounts disqualified in the first week</td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 20px;font-size:14px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Whether you&apos;re considering an FTMO challenge for the first time or prepping for another run, this guide covers everything in one place.</p>
+          <a href="https://eleusisfx.uk/articles/what-is-an-ftmo-challenge" style="display:inline-block;background:#4f8ef7;color:#020305;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:14px 26px;text-decoration:none;font-family:Arial,sans-serif;">Read the Full Article &rarr;</a>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(255,255,255,0.06);border-top:2px solid #4f8ef7;">
+            <tr><td style="padding:24px 28px;">
+              <p style="margin:0 0 8px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Want Us To Handle It?</p>
+              <p style="margin:0 0 16px;font-size:14px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">87% of our clients get funded. Let us manage your evaluation.</p>
+              <a href="https://eleusisfx.uk/#apply" style="display:inline-block;background:transparent;color:#4f8ef7;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:12px 24px;text-decoration:none;border:1px solid rgba(79,142,247,0.4);font-family:Arial,sans-serif;">Apply Now &rarr;</a>
+            </td></tr>
+          </table>
+        </td></tr>`),
+  },
+  {
+    label: "Article — Why Traders Fail Evaluations",
+    subject: "The Real Reason Most Traders Fail Their Prop Firm Evaluation",
+    html: emailWrapper(`
+        <tr><td style="padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 12px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">New Article</p>
+          <h1 style="margin:0 0 16px;font-size:32px;font-weight:800;letter-spacing:-1px;color:#e8eaf0;line-height:1.1;font-family:Arial,sans-serif;">Why Most Traders Fail Their Prop Firm Evaluation</h1>
+          <p style="margin:0;font-size:15px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Hi [First Name], it&apos;s rarely the strategy. We&apos;ve broken down the three most common reasons funded traders get disqualified &mdash; and how to avoid every one of them.</p>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 16px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">What We Cover</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr><td style="padding:14px 16px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;">
+              <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#4f8ef7;margin-bottom:6px;font-family:Arial,sans-serif;">Mistake 01</div>
+              <div style="font-size:13px;color:#e8eaf0;font-weight:700;font-family:Arial,sans-serif;">Oversizing on early trades</div>
+              <div style="font-size:12px;color:rgba(210,220,240,0.65);margin-top:4px;line-height:1.6;font-family:Arial,sans-serif;">One bad trade at 3% risk wipes out most of your daily drawdown allowance before the day has started.</div>
+            </td></tr>
+            <tr><td style="padding:14px 16px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;">
+              <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#4f8ef7;margin-bottom:6px;font-family:Arial,sans-serif;">Mistake 02</div>
+              <div style="font-size:13px;color:#e8eaf0;font-weight:700;font-family:Arial,sans-serif;">Revenge trading after a loss</div>
+              <div style="font-size:12px;color:rgba(210,220,240,0.65);margin-top:4px;line-height:1.6;font-family:Arial,sans-serif;">Evaluations punish emotional decisions harder than any live account. The daily limit doesn&apos;t care about your conviction.</div>
+            </td></tr>
+            <tr><td style="padding:14px 16px;background:#08090f;border:1px solid rgba(255,255,255,0.06);">
+              <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#4f8ef7;margin-bottom:6px;font-family:Arial,sans-serif;">Mistake 03</div>
+              <div style="font-size:13px;color:#e8eaf0;font-weight:700;font-family:Arial,sans-serif;">Misreading the drawdown rules</div>
+              <div style="font-size:12px;color:rgba(210,220,240,0.65);margin-top:4px;line-height:1.6;font-family:Arial,sans-serif;">Trailing vs. fixed drawdown works very differently. Most failures happen because traders assumed they had more room than they did.</div>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 20px;font-size:14px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">The full article goes deeper on each mistake, with specific numbers and approaches that our clients use to stay clean throughout their evaluation.</p>
+          <a href="https://eleusisfx.uk/articles/why-traders-fail-prop-firm-evaluation" style="display:inline-block;background:#4f8ef7;color:#020305;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:14px 26px;text-decoration:none;font-family:Arial,sans-serif;">Read the Full Article &rarr;</a>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(255,255,255,0.06);border-top:2px solid #4f8ef7;">
+            <tr><td style="padding:24px 28px;">
+              <p style="margin:0 0 8px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Prefer to Skip the Risk?</p>
+              <p style="margin:0 0 16px;font-size:14px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">We manage your evaluation for you. 87% pass rate.</p>
+              <a href="https://eleusisfx.uk/#apply" style="display:inline-block;background:transparent;color:#4f8ef7;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:12px 24px;text-decoration:none;border:1px solid rgba(79,142,247,0.4);font-family:Arial,sans-serif;">Apply Now &rarr;</a>
+            </td></tr>
+          </table>
+        </td></tr>`),
+  },
+  {
+    label: "Article — FTMO vs True Forex Funds",
+    subject: "FTMO vs True Forex Funds — Which One Is Right for You?",
+    html: emailWrapper(`
+        <tr><td style="padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 12px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">New Article</p>
+          <h1 style="margin:0 0 16px;font-size:32px;font-weight:800;letter-spacing:-1px;color:#e8eaf0;line-height:1.1;font-family:Arial,sans-serif;">FTMO vs True Forex Funds: The Honest Verdict</h1>
+          <p style="margin:0;font-size:15px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Hi [First Name], two of the biggest names in prop funding &mdash; but they&apos;re very different products. We&apos;ve put together a full side-by-side comparison with no affiliate bias.</p>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td width="48%" style="padding:20px;background:#08090f;border:1px solid rgba(255,255,255,0.06);vertical-align:top;">
+                <div style="font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);margin-bottom:10px;font-family:Arial,sans-serif;">FTMO</div>
+                <div style="font-size:13px;color:rgba(210,220,240,0.88);line-height:1.75;font-family:Arial,sans-serif;">
+                  &bull; Trailing drawdown (Phase 1)<br>
+                  &bull; 80% profit split<br>
+                  &bull; 10% max drawdown<br>
+                  &bull; 4-day minimum trade days
+                </div>
+              </td>
+              <td width="4%" style="background:#020305;"></td>
+              <td width="48%" style="padding:20px;background:#08090f;border:1px solid rgba(255,255,255,0.06);vertical-align:top;">
+                <div style="font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);margin-bottom:10px;font-family:Arial,sans-serif;">True Forex Funds</div>
+                <div style="font-size:13px;color:rgba(210,220,240,0.88);line-height:1.75;font-family:Arial,sans-serif;">
+                  &bull; Fixed drawdown (both phases)<br>
+                  &bull; Up to 90% profit split<br>
+                  &bull; 12% max drawdown<br>
+                  &bull; No minimum trading days
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 20px;font-size:14px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">The full article covers fees, scaling plans, payout frequency, and which trading styles each firm suits best &mdash; so you can make the right call before you spend a penny.</p>
+          <a href="https://eleusisfx.uk/articles/ftmo-vs-true-forex-funds" style="display:inline-block;background:#4f8ef7;color:#020305;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:14px 26px;text-decoration:none;font-family:Arial,sans-serif;">Read the Full Comparison &rarr;</a>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(255,255,255,0.06);border-top:2px solid #4f8ef7;">
+            <tr><td style="padding:24px 28px;">
+              <p style="margin:0 0 8px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Already Know Which Firm?</p>
+              <p style="margin:0 0 16px;font-size:14px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">We work with both. Tell us which you&apos;re targeting and we&apos;ll handle the rest.</p>
+              <a href="https://eleusisfx.uk/#apply" style="display:inline-block;background:transparent;color:#4f8ef7;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:12px 24px;text-decoration:none;border:1px solid rgba(79,142,247,0.4);font-family:Arial,sans-serif;">Apply Now &rarr;</a>
+            </td></tr>
+          </table>
+        </td></tr>`),
+  },
+  {
+    label: "Newsletter — The Funded Trader #3",
+    subject: "The Funded Trader — Issue #3 | Eleusis FX",
+    html: `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#020305;-webkit-font-smoothing:antialiased;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#020305;padding:48px 20px;">
+    <tr><td align="center">
+      <table width="580" cellpadding="0" cellspacing="0" border="0" style="max-width:580px;width:100%;">
+
+        <tr><td style="padding-bottom:8px;">
+          <span style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">ELEUSIS<span style="color:#e8eaf0;">.</span>FX</span>
+        </td></tr>
+        <tr><td style="padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(210,220,240,0.3);font-family:Arial,sans-serif;">The Funded Trader &nbsp;&middot;&nbsp; Issue #3</p>
+        </td></tr>
+
+        <tr><td style="padding:40px 0 32px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <h1 style="margin:0 0 16px;font-size:38px;font-weight:800;letter-spacing:-1.5px;color:#e8eaf0;line-height:1.1;font-family:Arial,sans-serif;">Know the Rules.<br>Beat the Odds.</h1>
+          <p style="margin:0;font-size:15px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Issue #3 of The Funded Trader. This month we&apos;ve published three new articles covering everything from how evaluations actually work to which prop firm suits your style &mdash; plus this month&apos;s practical tip.</p>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 16px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">In This Issue</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#4f8ef7;margin-right:10px;">01</span> What Is an FTMO Challenge and How Does It Work?</td></tr>
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#4f8ef7;margin-right:10px;">02</span> Why Most Traders Fail Their Prop Firm Evaluation</td></tr>
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#4f8ef7;margin-right:10px;">03</span> FTMO vs True Forex Funds &mdash; The Honest Verdict</td></tr>
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#4f8ef7;margin-right:10px;">04</span> This Month&apos;s Tip &mdash; How to Read Your Equity Curve</td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">Article 01</p>
+          <h2 style="margin:0 0 12px;font-size:22px;font-weight:800;letter-spacing:-0.5px;color:#e8eaf0;line-height:1.2;font-family:Arial,sans-serif;">What Is an FTMO Challenge and How Does It Work?</h2>
+          <p style="margin:0 0 20px;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">A complete breakdown of both evaluation phases, trailing vs. fixed drawdown, profit targets, minimum trading days, and the specific rules that catch traders off guard in week one.</p>
+          <a href="https://eleusisfx.uk/articles/what-is-an-ftmo-challenge" style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#4f8ef7;text-decoration:none;font-family:Arial,sans-serif;">Read Article &rarr;</a>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">Article 02</p>
+          <h2 style="margin:0 0 12px;font-size:22px;font-weight:800;letter-spacing:-0.5px;color:#e8eaf0;line-height:1.2;font-family:Arial,sans-serif;">Why Most Traders Fail Their Prop Firm Evaluation</h2>
+          <p style="margin:0 0 20px;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Three specific failure patterns account for most disqualifications &mdash; and they have nothing to do with market read. Oversizing, revenge trading, and misreading drawdown rules explained.</p>
+          <a href="https://eleusisfx.uk/articles/why-traders-fail-prop-firm-evaluation" style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#4f8ef7;text-decoration:none;font-family:Arial,sans-serif;">Read Article &rarr;</a>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">Article 03</p>
+          <h2 style="margin:0 0 12px;font-size:22px;font-weight:800;letter-spacing:-0.5px;color:#e8eaf0;line-height:1.2;font-family:Arial,sans-serif;">FTMO vs True Forex Funds: The Honest Verdict</h2>
+          <p style="margin:0 0 20px;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Fees, drawdown methodology, payout splits, and which trading styles each firm suits best. No affiliate bias &mdash; just the comparison that actually matters before you commit.</p>
+          <a href="https://eleusisfx.uk/articles/ftmo-vs-true-forex-funds" style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#4f8ef7;text-decoration:none;font-family:Arial,sans-serif;">Read Article &rarr;</a>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">This Month&apos;s Tip</p>
+          <h2 style="margin:0 0 16px;font-size:20px;font-weight:800;letter-spacing:-0.5px;color:#e8eaf0;line-height:1.3;font-family:Arial,sans-serif;">How to Read Your Equity Curve During an Evaluation</h2>
+          <p style="margin:0 0 16px;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">A smooth equity curve during an evaluation isn&apos;t a bonus &mdash; it&apos;s evidence of discipline. Spiky curves with big drawdown recoveries tend to mean you got lucky once. Prop firms know this, and many reviewers flag volatile equity histories even if the account technically passed.</p>
+          <p style="margin:0 0 16px;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Aim for a curve that trends up gradually, with each drawdown being smaller than the last recovery. That pattern reflects consistent position sizing and selective trade entry &mdash; both qualities that get you funded and keep you funded.</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(255,255,255,0.06);">
+            <tr><td style="padding:16px 20px;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">
+              <strong style="color:#e8eaf0;">Track yours live:</strong> Your equity curve is updated in real time on your <a href="https://eleusisfx.uk/login" style="color:#4f8ef7;text-decoration:none;">Eleusis FX dashboard</a>.
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(255,255,255,0.06);border-top:2px solid #4f8ef7;">
+            <tr><td style="padding:28px;">
+              <p style="margin:0 0 8px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Ready to Get Started?</p>
+              <p style="margin:0 0 20px;font-size:15px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">87% of our clients pass. Let us handle yours.</p>
+              <a href="https://eleusisfx.uk/#apply" style="display:inline-block;background:#e8eaf0;color:#020305;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:14px 26px;text-decoration:none;font-family:Arial,sans-serif;">Apply Now &rarr;</a>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding-top:28px;">
+          <p style="margin:0;font-size:11px;color:rgba(210,220,240,0.28);line-height:1.7;font-family:Arial,sans-serif;">
+            Eleusis FX &nbsp;&middot;&nbsp; <a href="https://eleusisfx.uk" style="color:rgba(210,220,240,0.28);text-decoration:none;">eleusisfx.uk</a><br>
+            Questions? Reply to this email or contact <a href="mailto:admin@eleusisfx.uk" style="color:rgba(210,220,240,0.28);text-decoration:none;">admin@eleusisfx.uk</a><br>
+            <a href="https://eleusisfx.uk" style="color:rgba(210,220,240,0.15);text-decoration:none;font-size:10px;">Unsubscribe</a>
+          </p>
+        </td></tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`,
+  },
+  {
     label: "Re-engagement",
     subject: "Ready for Another Run? — Eleusis FX",
     html: emailWrapper(`
