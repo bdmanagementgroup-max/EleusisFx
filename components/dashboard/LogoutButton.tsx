@@ -14,9 +14,9 @@ export default function LogoutButton() {
       style={{
         fontFamily: "var(--font-syne), Syne, sans-serif",
         fontSize: 11, fontWeight: 600, letterSpacing: 2,
-        textTransform: "uppercase", color: "rgba(210,220,240,0.88)",
+        textTransform: "uppercase", color: "rgba(239,68,68,0.7)",
         background: "transparent", border: "none", cursor: "pointer",
-        padding: "8px 16px", transition: "color 0.2s",
+        padding: "6px 8px", transition: "color 0.2s",
       }}
     >
       Sign Out
