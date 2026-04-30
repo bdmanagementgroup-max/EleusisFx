@@ -35,7 +35,7 @@ export default async function AdminArticlesPage() {
             <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1, background: "linear-gradient(90deg, transparent, #4f8ef7 40%, transparent)" }} />
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr auto auto auto", padding: "14px 28px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 130px 130px 80px", padding: "14px 28px", borderBottom: "1px solid rgba(255,255,255,0.06)", gap: 24, alignItems: "center" }}>
             {["Title", "Status", "Date", "Actions"].map((h) => (
               <span key={h} style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)" }}>{h}</span>
             ))}
@@ -48,7 +48,7 @@ export default async function AdminArticlesPage() {
           )}
 
           {rows.map(({ id, slug, title, published, published_at, created_at }) => (
-            <div key={id} style={{ display: "grid", gridTemplateColumns: "1fr auto auto auto", padding: "20px 28px", borderBottom: "1px solid rgba(255,255,255,0.04)", alignItems: "center", gap: 24 }}>
+            <div key={id} style={{ display: "grid", gridTemplateColumns: "1fr 130px 130px 80px", padding: "20px 28px", borderBottom: "1px solid rgba(255,255,255,0.04)", alignItems: "center", gap: 24 }}>
               <div>
                 <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 600, fontSize: 14, color: "#e8eaf0", marginBottom: 4 }}>{title}</div>
                 <div style={{ fontSize: 11, color: "rgba(210,220,240,0.88)" }}>/articles/{slug}</div>
