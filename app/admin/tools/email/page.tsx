@@ -26,19 +26,23 @@ export default async function EmailEditorPage({
     supabase.auth.admin.listUsers({ perPage: 1000 }),
   ]);
 
+  const seen = new Set<string>();
   const recipients: Recipient[] = [];
 
   for (const u of users ?? []) {
     if (u.app_metadata?.role === "admin") continue;
-    const email = u.email;
-    if (!email) continue;
+    const email = u.email?.toLowerCase().trim();
+    if (!email || seen.has(email)) continue;
+    seen.add(email);
     const label = u.user_metadata?.name ?? u.user_metadata?.full_name ?? email;
     recipients.push({ label, email, group: "Active Clients" });
   }
 
   for (const c of pastClients ?? []) {
-    if (!c.email) continue;
-    recipients.push({ label: c.name ?? c.email, email: c.email, group: "Past Clients" });
+    const email = c.email?.toLowerCase().trim();
+    if (!email || seen.has(email)) continue;
+    seen.add(email);
+    recipients.push({ label: c.name ?? email, email, group: "Past Clients" });
   }
 
   return (

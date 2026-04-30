@@ -770,7 +770,7 @@ export default function EmailEditorClient({
   })).filter((g) => g.items.length > 0);
 
   function addRecipient(r: Recipient) {
-    setSelected((prev) => [...prev, r]);
+    setSelected((prev) => prev.find((s) => s.email === r.email) ? prev : [...prev, r]);
     setRecipientSearch("");
   }
   function addCustom() {
@@ -937,7 +937,10 @@ export default function EmailEditorClient({
             <span style={{ ...labelStyle, marginBottom: 0 }}>{"// recipients"}</span>
             <div style={{ display: "flex", gap: 6 }}>
               <button
-                onClick={() => setSelected(recipients)}
+                onClick={() => {
+                  const unique = recipients.filter((r, i, arr) => arr.findIndex((x) => x.email === r.email) === i);
+                  setSelected(unique);
+                }}
                 style={{ fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", padding: "5px 12px", background: "rgba(79,142,247,0.08)", border: "1px solid rgba(79,142,247,0.2)", color: "#4f8ef7", cursor: "pointer", borderRadius: 3, whiteSpace: "nowrap" }}
               >
                 Select All ({recipients.length})
@@ -954,7 +957,7 @@ export default function EmailEditorClient({
           </div>
           {selected.length > 0 && (
             <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 }}>
-              {selected.map((r) => (
+              {selected.filter((r, i, arr) => arr.findIndex((x) => x.email === r.email) === i).map((r) => (
                 <div key={r.email} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(79,142,247,0.12)", border: "1px solid rgba(79,142,247,0.25)", borderRadius: 3, padding: "3px 8px 3px 10px", fontSize: 11, letterSpacing: 1, color: "#a8c8ff" }}>
                   <span>{r.label !== r.email ? `${r.label} ` : ""}<span style={{ opacity: 0.65 }}>&lt;{r.email}&gt;</span></span>
                   <button onClick={() => removeRecipient(r.email)} style={{ background: "none", border: "none", color: "rgba(168,200,255,0.6)", cursor: "pointer", padding: 0, lineHeight: 1, fontSize: 13 }}>×</button>
