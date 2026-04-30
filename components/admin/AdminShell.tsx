@@ -91,7 +91,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
           })}
         </nav>
 
-        <div style={{ padding: "24px 28px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+        <div style={{ padding: "10px 28px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
           <LogoutButton />
         </div>
       </aside>
