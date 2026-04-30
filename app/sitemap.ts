@@ -27,6 +27,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: 'https://eleusisfx.uk/articles/what-happens-if-you-fail-ftmo-challenge',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: 'https://eleusisfx.uk/articles/ftmo-drawdown-rules-explained',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: 'https://eleusisfx.uk/articles/prop-firm-passing-service-legit',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
       url: 'https://eleusisfx.uk/articles/the-3-trade-rule',
       lastModified: new Date(),
       changeFrequency: 'monthly',
