@@ -1,8 +1,8 @@
 import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
-import Link from "next/link";
 import type { Metadata } from "next";
 import { getSupabaseAdminClient } from "@/lib/supabase/server";
+import ArticlesList from "@/components/articles/ArticlesList";
 
 export const dynamic = "force-dynamic";
 
@@ -19,6 +19,7 @@ const FALLBACK_ARTICLES = [
     excerpt: "A complete breakdown of the FTMO evaluation process — phases, rules, drawdown limits, and what you need to know before starting your challenge.",
     date: "June 2025",
     readTime: "8 min read",
+    sortKey: "2025-06-01",
   },
   {
     slug: "why-traders-fail-prop-firm-evaluation",
@@ -27,6 +28,7 @@ const FALLBACK_ARTICLES = [
     excerpt: "The three most common reasons traders get disqualified — and how professional evaluation services eliminate these risks entirely.",
     date: "May 2025",
     readTime: "7 min read",
+    sortKey: "2025-05-01",
   },
   {
     slug: "ftmo-vs-true-forex-funds",
@@ -35,6 +37,7 @@ const FALLBACK_ARTICLES = [
     excerpt: "A side-by-side comparison of the two most popular prop firms — fees, rules, payout structures, and which suits different trading styles.",
     date: "April 2025",
     readTime: "9 min read",
+    sortKey: "2025-04-01",
   },
 ];
 
@@ -60,6 +63,7 @@ export default async function ArticlesPage() {
         excerpt: a.excerpt ?? "",
         date: formatDate(a.published_at),
         readTime: a.read_time ? `${a.read_time} min read` : "",
+        sortKey: a.published_at ?? "",
       }))
     : FALLBACK_ARTICLES;
 
@@ -81,24 +85,7 @@ export default async function ArticlesPage() {
         </section>
 
         <section style={{ padding: "0 56px 140px", position: "relative", zIndex: 1 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
-            {articles.map(({ slug, tag, title, excerpt, date, readTime }) => (
-              <Link key={slug} href={`/articles/${slug}`} className="article-card-item">
-                <div style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 9, letterSpacing: "2.5px", textTransform: "uppercase" as const, color: "#4f8ef7", marginBottom: 20 }}>
-                  <span style={{ width: 16, height: 1, background: "#4f8ef7", display: "inline-block" }} />
-                  {tag}
-                </div>
-                <h2 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700, fontSize: 20, lineHeight: 1.25, letterSpacing: -0.4, marginBottom: 16, color: "#e8eaf0", transition: "color 0.2s" }}>
-                  {title}
-                </h2>
-                <p style={{ fontSize: 13, lineHeight: 1.85, color: "rgba(210,220,240,0.88)", flex: 1, marginBottom: 28 }}>{excerpt}</p>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: 20, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-                  <span style={{ fontSize: 10, letterSpacing: "1.5px", textTransform: "uppercase" as const, color: "rgba(210,220,240,0.58)" }}>{date}{readTime ? ` · ${readTime}` : ""}</span>
-                  <span className="article-arrow-item" style={{ fontSize: 12, color: "rgba(210,220,240,0.58)", transition: "all 0.2s" }}>→</span>
-                </div>
-              </Link>
-            ))}
-          </div>
+          <ArticlesList articles={articles} />
         </section>
       </main>
       <Footer />
