@@ -34,6 +34,8 @@ export async function POST(req: NextRequest) {
 
     const { error: metricsErr } = await supabase.from("client_metrics").insert({
       user_id: user.user.id,
+      email,
+      full_name: fullName,
       prop_firm,
       phase,
       phase_status,
