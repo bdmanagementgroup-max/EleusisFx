@@ -13,6 +13,7 @@ const TILES = [
   { href: "/admin/tools/email", label: "Email Editor", desc: "Compose and send branded emails to clients, past clients, and custom recipients." },
   { href: "/admin/tools/instagram", label: "Instagram Metrics", desc: "Log and track follower growth, reach, engagement, and post performance." },
   { href: "/admin/tools/chart", label: "Chart Tool", desc: "View live TradingView charts for any forex or crypto pair, take snapshots, and post directly to Instagram and Telegram." },
+  { href: "/admin/tools/trading-analysis", label: "Trading Analysis", desc: "AI market scanner — select session, DXY bias, and news level to generate confluence-based signals + Instagram captions." },
 ];
 
 function StatCard({ label, value, sub, color }: { label: string; value: string; sub?: string; color?: string }) {
