@@ -21,6 +21,7 @@ const NAV = [
   { href: "/admin/tools/instagram", label: "Instagram Metrics" },
   { href: "/admin/tools/chart", label: "Chart Tool" },
   { href: "/admin/tools/trading-analysis", label: "Trading Analysis" },
+  { href: "/admin/tools/snapshots", label: "Analysis Snapshots" },
 ];
 
 export default function AdminShell({ children }: { children: React.ReactNode }) {

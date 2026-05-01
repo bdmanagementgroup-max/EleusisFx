@@ -101,6 +101,8 @@ export default function TradingAnalysisClient() {
   const [output, setOutput] = useState("");
   const [error, setError] = useState("");
   const [ran, setRan] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   const outputRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
@@ -121,6 +123,7 @@ export default function TradingAnalysisClient() {
     setOutput("");
     setError("");
     setRan(true);
+    setSaved(false);
 
     const ctrl = new AbortController();
     abortRef.current = ctrl;
@@ -161,6 +164,21 @@ export default function TradingAnalysisClient() {
       setRunning(false);
     }
   }, [session, focus, newsLevel, running]);
+
+  const saveSnapshot = useCallback(async () => {
+    if (!output || saving) return;
+    setSaving(true);
+    try {
+      const res = await fetch("/api/admin/trading-snapshots", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ session, focus, newsLevel, content: output }),
+      });
+      if (res.ok) setSaved(true);
+    } finally {
+      setSaving(false);
+    }
+  }, [output, saving, session, focus, newsLevel]);
 
   const commandPreview = `trading-analysis --session "${session.toLowerCase().replace(" ", "-")}" --focus ${focus} --news ${newsLevel}`;
 
@@ -314,16 +332,31 @@ export default function TradingAnalysisClient() {
               {session.toLowerCase()} session · {focus === "all" ? "all markets" : focus} · news:{newsLevel}
             </span>
             {!running && output && (
-              <button
-                onClick={() => navigator.clipboard.writeText(output)}
-                style={{
-                  marginLeft: "auto", fontFamily: "monospace", fontSize: 10,
-                  color: "rgba(210,220,240,0.3)", background: "none",
-                  border: "1px solid rgba(255,255,255,0.06)", padding: "3px 8px", cursor: "pointer",
-                }}
-              >
-                copy
-              </button>
+              <div style={{ marginLeft: "auto", display: "flex", gap: 6 }}>
+                <button
+                  onClick={() => navigator.clipboard.writeText(output)}
+                  style={{
+                    fontFamily: "monospace", fontSize: 10,
+                    color: "rgba(210,220,240,0.3)", background: "none",
+                    border: "1px solid rgba(255,255,255,0.06)", padding: "3px 8px", cursor: "pointer",
+                  }}
+                >
+                  copy
+                </button>
+                <button
+                  onClick={saveSnapshot}
+                  disabled={saving || saved}
+                  style={{
+                    fontFamily: "monospace", fontSize: 10, cursor: saving || saved ? "default" : "pointer",
+                    color: saved ? "#22c55e" : saving ? "rgba(79,142,247,0.5)" : "#4f8ef7",
+                    background: "none",
+                    border: `1px solid ${saved ? "rgba(34,197,94,0.3)" : saving ? "rgba(79,142,247,0.2)" : "rgba(79,142,247,0.3)"}`,
+                    padding: "3px 10px",
+                  }}
+                >
+                  {saved ? "✓ saved" : saving ? "saving..." : "save snapshot"}
+                </button>
+              </div>
             )}
           </div>
           <div ref={outputRef} style={{ padding: "20px 24px 24px", maxHeight: 700, overflowY: "auto" }}>
