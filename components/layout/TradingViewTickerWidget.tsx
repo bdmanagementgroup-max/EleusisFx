@@ -38,7 +38,7 @@ export default function TradingViewTickerWidget({ style }: Props) {
     script.innerHTML = JSON.stringify({
       symbols: SYMBOLS,
       showSymbolLogo: false,
-      isTransparent: true,
+      isTransparent: false,
       displayMode: "compact",
       colorTheme: "dark",
       locale: "en",
