@@ -2,6 +2,56 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 
+// ─── Signal parser ────────────────────────────────────────────────────────────
+
+interface ParsedSignal {
+  pair: string; direction: string; bias: string; timeframe: string;
+  confluence: string; setupDetail: string; entryPrice: string;
+  stopLoss: string; tp1: string; tp2: string; riskReward: string;
+  invalidation: string; content: string;
+}
+
+function field(text: string, pattern: RegExp): string {
+  return text.match(pattern)?.[1]?.trim() ?? "";
+}
+
+function parseSignals(output: string): ParsedSignal[] {
+  const blocks = output.split(/\n---\n/);
+  const signals: ParsedSignal[] = [];
+  for (const block of blocks) {
+    const header = block.match(/####\s+([\w/]+)\s+[—–-]\s+(BUY|SELL)\s+SIGNAL/i);
+    if (!header) continue;
+    const confluenceBlock = block.match(/\*\*Confluence signals:\*\*\n((?:- .+\n?)+)/);
+    const bullets = confluenceBlock
+      ? confluenceBlock[1].trim().split("\n").map(l => l.replace(/^-\s*/, "").replace(/\*\*/g, ""))
+      : [];
+    const setupMatch = block.match(/\*\*Setup detail:\*\*\n([\s\S]+?)(?=\n\*\*Trade levels)/);
+    signals.push({
+      pair:        header[1].trim(),
+      direction:   header[2].toUpperCase(),
+      bias:        field(block, /\*\*Bias:\*\*\s*(.+)/),
+      timeframe:   field(block, /\*\*Timeframe:\*\*\s*(.+)/),
+      confluence:  JSON.stringify(bullets),
+      setupDetail: setupMatch?.[1]?.trim() ?? "",
+      entryPrice:  field(block, /[-•]\s*Entry:\s*(.+)/),
+      stopLoss:    field(block, /[-•]\s*Stop Loss:\s*([^—\n]+)/),
+      tp1:         field(block, /[-•]\s*TP1:\s*([^—\n]+)/),
+      tp2:         field(block, /[-•]\s*TP2:\s*([^—\n]+)/),
+      riskReward:  field(block, /\*\*Risk\/Reward:\*\*\s*(.+)/),
+      invalidation:field(block, /\*\*Invalidation:\*\*\s*(.+)/),
+      content:     block.trim(),
+    });
+  }
+  return signals;
+}
+
+function randomUUID() {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
+    const r = Math.random() * 16 | 0;
+    return (c === "x" ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+}
+
 type Session = "London" | "New York" | "Asian" | "Overlap";
 type Focus = "all" | "forex" | "crypto";
 type NewsLevel = "none" | "light" | "major";
@@ -102,7 +152,7 @@ export default function TradingAnalysisClient() {
   const [error, setError] = useState("");
   const [ran, setRan] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
+  const [saved, setSaved] = useState<number | false>(false);
   const [saveError, setSaveError] = useState("");
 
   const outputRef = useRef<HTMLDivElement>(null);
@@ -169,16 +219,19 @@ export default function TradingAnalysisClient() {
 
   const saveSnapshot = useCallback(async () => {
     if (!output || saving) return;
+    const signals = parseSignals(output);
+    if (signals.length === 0) { setSaveError("no signals found in output"); return; }
     setSaving(true);
     setSaveError("");
     try {
-      const res = await fetch("/api/admin/trading-snapshots", {
+      const res = await fetch("/api/admin/trading-signals", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ session, focus, newsLevel, content: output }),
+        body: JSON.stringify({ sessionId: randomUUID(), session, focus, newsLevel, signals }),
       });
       if (res.ok) {
-        setSaved(true);
+        const body = await res.json();
+        setSaved(body.saved ?? signals.length);
       } else {
         const body = await res.json().catch(() => ({}));
         setSaveError(body.error ?? `HTTP ${res.status}`);
@@ -241,7 +294,7 @@ export default function TradingAnalysisClient() {
         <div style={{ padding: "20px 20px 24px", display: "flex", flexDirection: "column", gap: 16 }}>
           {/* Session */}
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <span style={{ fontFamily: "monospace", fontSize: 10, letterSpacing: 1.5, color: "rgba(210,220,240,0.28)", width: 72, textTransform: "uppercase" }}>// session</span>
+            <span style={{ fontFamily: "monospace", fontSize: 10, letterSpacing: 1.5, color: "rgba(210,220,240,0.28)", width: 72, textTransform: "uppercase" }}>{"// session"}</span>
             <div style={{ display: "flex", gap: 1 }}>
               {SESSION_OPTS.map((s) => (
                 <button key={s} className={`param-btn${session === s ? " active-blue" : ""}`} onClick={() => setSession(s)} disabled={running}>
@@ -253,7 +306,7 @@ export default function TradingAnalysisClient() {
 
           {/* Focus */}
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <span style={{ fontFamily: "monospace", fontSize: 10, letterSpacing: 1.5, color: "rgba(210,220,240,0.28)", width: 72, textTransform: "uppercase" }}>// focus</span>
+            <span style={{ fontFamily: "monospace", fontSize: 10, letterSpacing: 1.5, color: "rgba(210,220,240,0.28)", width: 72, textTransform: "uppercase" }}>{"// focus"}</span>
             <div style={{ display: "flex", gap: 1 }}>
               {FOCUS_OPTS.map((f) => (
                 <button key={f.value} className={`param-btn${focus === f.value ? " active-blue" : ""}`} onClick={() => setFocus(f.value)} disabled={running}>
@@ -265,7 +318,7 @@ export default function TradingAnalysisClient() {
 
           {/* News */}
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <span style={{ fontFamily: "monospace", fontSize: 10, letterSpacing: 1.5, color: "rgba(210,220,240,0.28)", width: 72, textTransform: "uppercase" }}>// news</span>
+            <span style={{ fontFamily: "monospace", fontSize: 10, letterSpacing: 1.5, color: "rgba(210,220,240,0.28)", width: 72, textTransform: "uppercase" }}>{"// news"}</span>
             <div style={{ display: "flex", gap: 1 }}>
               {NEWS_OPTS.map((n) => {
                 const activeClass = newsLevel === n.value
@@ -355,17 +408,17 @@ export default function TradingAnalysisClient() {
                 </button>
                 <button
                   onClick={saveSnapshot}
-                  disabled={saving || saved}
+                  disabled={saving || saved !== false}
                   title={saveError || undefined}
                   style={{
-                    fontFamily: "monospace", fontSize: 10, cursor: saving || saved ? "default" : "pointer",
-                    color: saveError ? "#ef4444" : saved ? "#22c55e" : saving ? "rgba(79,142,247,0.5)" : "#4f8ef7",
+                    fontFamily: "monospace", fontSize: 10, cursor: saving || saved !== false ? "default" : "pointer",
+                    color: saveError ? "#ef4444" : saved !== false ? "#22c55e" : saving ? "rgba(79,142,247,0.5)" : "#4f8ef7",
                     background: "none",
-                    border: `1px solid ${saveError ? "rgba(239,68,68,0.3)" : saved ? "rgba(34,197,94,0.3)" : saving ? "rgba(79,142,247,0.2)" : "rgba(79,142,247,0.3)"}`,
+                    border: `1px solid ${saveError ? "rgba(239,68,68,0.3)" : saved !== false ? "rgba(34,197,94,0.3)" : saving ? "rgba(79,142,247,0.2)" : "rgba(79,142,247,0.3)"}`,
                     padding: "3px 10px",
                   }}
                 >
-                  {saveError ? `✗ ${saveError}` : saved ? "✓ saved" : saving ? "saving..." : "save snapshot"}
+                  {saveError ? `✗ ${saveError}` : saved ? `✓ ${saved} signal${saved === 1 ? "" : "s"} saved` : saving ? "saving..." : "save signals"}
                 </button>
               </div>
             )}
@@ -387,7 +440,7 @@ export default function TradingAnalysisClient() {
       {!ran && !running && (
         <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.04)", padding: "40px 24px", textAlign: "center" }}>
           <div style={{ fontFamily: "monospace", fontSize: 11, color: "rgba(210,220,240,0.2)", lineHeight: 2 }}>
-            <div>// set session + focus + news, then run</div>
+            <div>{"// set session + focus + news, then run"}</div>
             <div style={{ marginTop: 8, color: "rgba(210,220,240,0.12)" }}>
               RSI(14) · EMA50 · EMA200 · MACD(12,26,9) · ATR(14) — Yahoo Finance OHLCV, calculated server-side<br />
               DXY bias derived automatically · min 3-signal confluence · report + instagram captions

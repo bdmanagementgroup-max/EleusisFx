@@ -11,8 +11,8 @@ export default async function SnapshotsPage() {
 
   const db = await getSupabaseAdminClient();
   const { data, error } = await db
-    .from("trading_snapshots")
-    .select("id, created_at, session, focus, news_level")
+    .from("trading_signals")
+    .select("id, session_id, created_at, session, focus, news_level, pair, direction, entry_price, stop_loss, tp1, tp2, risk_reward")
     .order("created_at", { ascending: false });
 
   return <SnapshotsClient initial={data ?? []} dbError={error?.message} />;
