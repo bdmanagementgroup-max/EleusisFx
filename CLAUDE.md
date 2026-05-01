@@ -26,7 +26,7 @@ ALTER TABLE applications ADD COLUMN IF NOT EXISTS notes text;
 
 **Eleusis FX** is a Next.js 16 (App Router) + TypeScript prop firm evaluation platform serving a public marketing site, protected client dashboard, and admin portal.
 
-**Stack:** Next.js 16, React 19, Tailwind CSS 4, Supabase (auth + PostgreSQL), Notion API, Twelve Data API (forex), CoinGecko API (crypto), Recharts, SWR, Resend (email), Vercel.
+**Stack:** Next.js 16, React 19, Tailwind CSS 4, Supabase (auth + PostgreSQL), Notion API, Yahoo Finance API (forex + crypto OHLCV, free/keyless), CoinGecko API (crypto display), Recharts, SWR, Resend (email), Vercel.
 
 ## Proxy / Middleware
 
@@ -156,7 +156,24 @@ Collapsible sidebar shell: `components/admin/AdminShell.tsx`
 - **Send welcome** → `POST /api/admin/send-welcome` → creates/resets account + sends email with temp password
 - **Bulk email** → `POST /api/admin/send-email` → `resend.batch.send()` (100/batch)
 - **Inbound email** → ForwardEmail.net MX → personal Gmail (+ future webhook → `received_emails`)
-- **Market data** → `/api/market/forex` (Twelve Data) + `/api/market/crypto` (CoinGecko), 60s server cache
+- **Market data** → `/api/market/forex` (Yahoo Finance, free/keyless) + `/api/market/crypto` (CoinGecko), 60s server cache
+
+## Market Data Architecture (updated 2026-05-01)
+
+### Site Tickers
+All three ticker components (`PublicMarketTicker`, `AdminMarketTicker`, `MarketTickerStrip`) now use the **TradingView Ticker Tape widget** — no API key, no rate limits, always live.
+- Component: `components/layout/TradingViewTickerWidget.tsx` (shared, loaded client-side via useEffect script injection)
+- Symbols: EUR/USD, GBP/USD, USD/JPY, AUD/USD, GBP/JPY, BTC/USD, ETH/USD, XRP/USD, SOL/USD
+- Height: 46px (compact mode). Spacer divs on public pages updated to match.
+- `/api/market/forex` and `/api/market/crypto` routes are still present but unused by the UI — kept for potential future use.
+
+### Trading Analysis Agent (`/admin/tools/trading-analysis`)
+Fetches **Yahoo Finance** daily OHLCV (1 year, free, no API key) for all 12 forex pairs + 4 crypto, then calculates all indicators server-side:
+- **Forex symbols:** `EURUSD=X`, `GBPUSD=X`, `USDJPY=X`, `AUDUSD=X`, `GBPJPY=X`, `USDCAD=X`, `NZDUSD=X`, `EURGBP=X`, `USDCHF=X`, `EURJPY=X`, `CADJPY=X`, `AUDNZD=X`
+- **Crypto symbols:** `BTC-USD`, `ETH-USD`, `SOL-USD`, `XRP-USD`
+- **Indicators (inline JS, no library):** RSI(14) Wilder smoothing, EMA50, EMA200, MACD(12,26,9), ATR(14)
+- **Endpoint:** `https://query1.finance.yahoo.com/v8/finance/chart/{symbol}?interval=1d&range=1y`
+- Crypto now gets full technical indicator analysis (was price-only before). Streams to Claude Opus via Anthropic SDK.
 
 ## Key Database Tables
 
@@ -187,7 +204,7 @@ Collapsible sidebar shell: `components/admin/AdminShell.tsx`
 - **Inline styles** throughout — muted text `rgba(210,220,240,0.88)`, faint `rgba(210,220,240,0.58)`
 - **No global text-shadow** — removed for scroll performance (was causing site-wide jank)
 - **Grid background** on `body` via `background-image` (not `::after` pseudo-element — that caused GPU repaint on scroll)
-- **Scroll animation** — `@keyframes scroll` in `globals.css`, used by Ticker, PublicMarketTicker, ProofFeedTicker
+- **Scroll animation** — `@keyframes scroll` in `globals.css`, used by Ticker and ProofFeedTicker (PublicMarketTicker now uses TradingView widget, no scroll animation)
 - **Admin UI** — dark `#08090f` panels, `#4f8ef7` blue accent, `#22c55e` green, `#ef4444` red
 
 ## Public PDFs (in `public/`)
@@ -204,7 +221,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY
 SUPABASE_SERVICE_ROLE_KEY
 NOTION_API_KEY
 NOTION_LEADS_DATABASE_ID
-TWELVE_DATA_API_KEY
+# TWELVE_DATA_API_KEY — REMOVED (replaced by Yahoo Finance, no key needed)
 NEXT_PUBLIC_SITE_URL
 NEXT_PUBLIC_WA_NUMBER          # WhatsApp number (international format, no +)
 RESEND_API_KEY
