@@ -103,6 +103,7 @@ export default function TradingAnalysisClient() {
   const [ran, setRan] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState("");
 
   const outputRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
@@ -124,6 +125,7 @@ export default function TradingAnalysisClient() {
     setError("");
     setRan(true);
     setSaved(false);
+    setSaveError("");
 
     const ctrl = new AbortController();
     abortRef.current = ctrl;
@@ -168,13 +170,21 @@ export default function TradingAnalysisClient() {
   const saveSnapshot = useCallback(async () => {
     if (!output || saving) return;
     setSaving(true);
+    setSaveError("");
     try {
       const res = await fetch("/api/admin/trading-snapshots", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ session, focus, newsLevel, content: output }),
       });
-      if (res.ok) setSaved(true);
+      if (res.ok) {
+        setSaved(true);
+      } else {
+        const body = await res.json().catch(() => ({}));
+        setSaveError(body.error ?? `HTTP ${res.status}`);
+      }
+    } catch (e) {
+      setSaveError(e instanceof Error ? e.message : "network error");
     } finally {
       setSaving(false);
     }
@@ -346,15 +356,16 @@ export default function TradingAnalysisClient() {
                 <button
                   onClick={saveSnapshot}
                   disabled={saving || saved}
+                  title={saveError || undefined}
                   style={{
                     fontFamily: "monospace", fontSize: 10, cursor: saving || saved ? "default" : "pointer",
-                    color: saved ? "#22c55e" : saving ? "rgba(79,142,247,0.5)" : "#4f8ef7",
+                    color: saveError ? "#ef4444" : saved ? "#22c55e" : saving ? "rgba(79,142,247,0.5)" : "#4f8ef7",
                     background: "none",
-                    border: `1px solid ${saved ? "rgba(34,197,94,0.3)" : saving ? "rgba(79,142,247,0.2)" : "rgba(79,142,247,0.3)"}`,
+                    border: `1px solid ${saveError ? "rgba(239,68,68,0.3)" : saved ? "rgba(34,197,94,0.3)" : saving ? "rgba(79,142,247,0.2)" : "rgba(79,142,247,0.3)"}`,
                     padding: "3px 10px",
                   }}
                 >
-                  {saved ? "✓ saved" : saving ? "saving..." : "save snapshot"}
+                  {saveError ? `✗ ${saveError}` : saved ? "✓ saved" : saving ? "saving..." : "save snapshot"}
                 </button>
               </div>
             )}

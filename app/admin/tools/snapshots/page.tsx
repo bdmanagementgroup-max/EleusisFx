@@ -10,10 +10,10 @@ export default async function SnapshotsPage() {
   if (!user || user.app_metadata?.role !== "admin") redirect("/login");
 
   const db = await getSupabaseAdminClient();
-  const { data } = await db
+  const { data, error } = await db
     .from("trading_snapshots")
     .select("id, created_at, session, focus, news_level")
     .order("created_at", { ascending: false });
 
-  return <SnapshotsClient initial={data ?? []} />;
+  return <SnapshotsClient initial={data ?? []} dbError={error?.message} />;
 }
