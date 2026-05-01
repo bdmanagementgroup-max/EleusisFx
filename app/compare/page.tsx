@@ -137,7 +137,7 @@ export default function ComparePage() {
     <>
       <Nav />
       <PublicMarketTicker />
-      <div style={{ height: 38 }} />
+      <div style={{ height: 46 }} />
       <main style={{ paddingTop: 72, background: "#020305", minHeight: "100vh" }}>
 
         {/* Header */}

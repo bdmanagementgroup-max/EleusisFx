@@ -14,7 +14,7 @@ export default function CalendarPage() {
     <>
       <Nav />
       <PublicMarketTicker />
-      <div style={{ height: 38 }} />
+      <div style={{ height: 46 }} />
       <main style={{ paddingTop: 72 }}>
         <section style={{ padding: "60px 56px 40px", position: "relative", zIndex: 1 }}>
           <div style={{ fontSize: 10, letterSpacing: 4, textTransform: "uppercase", color: "#4f8ef7", marginBottom: 20, display: "flex", alignItems: "center", gap: 14 }}>

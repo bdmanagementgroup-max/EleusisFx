@@ -6,111 +6,151 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 120;
 
 const FOREX_PAIRS = [
-  "EUR/USD", "GBP/USD", "USD/JPY", "AUD/USD", "GBP/JPY",
-  "USD/CAD", "NZD/USD", "EUR/GBP", "USD/CHF", "EUR/JPY",
-  "CAD/JPY", "AUD/NZD",
+  { label: "EUR/USD", yahoo: "EURUSD=X" },
+  { label: "GBP/USD", yahoo: "GBPUSD=X" },
+  { label: "USD/JPY", yahoo: "USDJPY=X" },
+  { label: "AUD/USD", yahoo: "AUDUSD=X" },
+  { label: "GBP/JPY", yahoo: "GBPJPY=X" },
+  { label: "USD/CAD", yahoo: "USDCAD=X" },
+  { label: "NZD/USD", yahoo: "NZDUSD=X" },
+  { label: "EUR/GBP", yahoo: "EURGBP=X" },
+  { label: "USD/CHF", yahoo: "USDCHF=X" },
+  { label: "EUR/JPY", yahoo: "EURJPY=X" },
+  { label: "CAD/JPY", yahoo: "CADJPY=X" },
+  { label: "AUD/NZD", yahoo: "AUDNZD=X" },
 ];
 
-const CRYPTO_IDS: Record<string, string> = {
-  "BTC/USDT": "bitcoin",
-  "ETH/USDT": "ethereum",
-  "SOL/USDT": "solana",
-  "XRP/USDT": "ripple",
-};
+const CRYPTO_PAIRS = [
+  { label: "BTC/USDT", yahoo: "BTC-USD" },
+  { label: "ETH/USDT", yahoo: "ETH-USD" },
+  { label: "SOL/USDT", yahoo: "SOL-USD" },
+  { label: "XRP/USDT", yahoo: "XRP-USD" },
+];
 
-type TwelveEntry = Record<string, { values?: Array<Record<string, string>>; status?: string }>;
+// ─── Indicator engine ────────────────────────────────────────────────────────
 
-async function td<T>(path: string, apiKey: string): Promise<T | null> {
+function calcEMA(values: number[], period: number): number[] {
+  const k = 2 / (period + 1);
+  const out: number[] = new Array(values.length).fill(NaN);
+  let prev: number | null = null;
+  for (let i = 0; i < values.length; i++) {
+    if (prev === null) {
+      if (i === period - 1) {
+        prev = values.slice(0, period).reduce((a, b) => a + b, 0) / period;
+        out[i] = prev;
+      }
+    } else {
+      prev = values[i] * k + prev * (1 - k);
+      out[i] = prev;
+    }
+  }
+  return out;
+}
+
+function calcRSI(closes: number[], period = 14): number {
+  if (closes.length < period + 1) return NaN;
+  const changes = closes.slice(1).map((c, i) => c - closes[i]);
+  const gains = changes.map(c => (c > 0 ? c : 0));
+  const losses = changes.map(c => (c < 0 ? -c : 0));
+  let ag = gains.slice(0, period).reduce((a, b) => a + b, 0) / period;
+  let al = losses.slice(0, period).reduce((a, b) => a + b, 0) / period;
+  for (let i = period; i < changes.length; i++) {
+    ag = (ag * (period - 1) + gains[i]) / period;
+    al = (al * (period - 1) + losses[i]) / period;
+  }
+  return al === 0 ? 100 : 100 - 100 / (1 + ag / al);
+}
+
+function calcATR(highs: number[], lows: number[], closes: number[], period = 14): number {
+  if (highs.length < period + 1) return NaN;
+  const trs: number[] = [];
+  for (let i = 1; i < highs.length; i++) {
+    trs.push(Math.max(highs[i] - lows[i], Math.abs(highs[i] - closes[i - 1]), Math.abs(lows[i] - closes[i - 1])));
+  }
+  let val = trs.slice(0, period).reduce((a, b) => a + b, 0) / period;
+  for (let i = period; i < trs.length; i++) val = (val * (period - 1) + trs[i]) / period;
+  return val;
+}
+
+function calcMACD(closes: number[]): { macd: number; signal: number; hist: number } | null {
+  const e12 = calcEMA(closes, 12);
+  const e26 = calcEMA(closes, 26);
+  const macdLine = closes.map((_, i) => (isNaN(e12[i]) || isNaN(e26[i]) ? NaN : e12[i] - e26[i]));
+  const valid = macdLine.filter(v => !isNaN(v));
+  if (valid.length < 9) return null;
+  const sig = calcEMA(valid, 9);
+  const m = valid[valid.length - 1];
+  const s = sig[sig.length - 1];
+  return { macd: m, signal: s, hist: m - s };
+}
+
+// ─── Yahoo Finance fetch ─────────────────────────────────────────────────────
+
+interface OHLCV { open: number[]; high: number[]; low: number[]; close: number[] }
+
+async function fetchYahoo(symbol: string): Promise<OHLCV | null> {
   try {
-    const res = await fetch(`https://api.twelvedata.com${path}&apikey=${apiKey}`, { cache: "no-store" });
+    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1y`;
+    const res = await fetch(url, { cache: "no-store", headers: { "User-Agent": "Mozilla/5.0" } });
     if (!res.ok) return null;
     const json = await res.json();
-    if (json?.status === "error") return null;
-    return json as T;
-  } catch {
-    return null;
-  }
+    const q = json?.chart?.result?.[0]?.indicators?.quote?.[0];
+    if (!q) return null;
+    const open: number[] = [], high: number[] = [], low: number[] = [], close: number[] = [];
+    for (let i = 0; i < (q.close ?? []).length; i++) {
+      if (q.close[i] != null && q.open[i] != null && q.high[i] != null && q.low[i] != null) {
+        open.push(q.open[i]); high.push(q.high[i]); low.push(q.low[i]); close.push(q.close[i]);
+      }
+    }
+    return open.length >= 50 ? { open, high, low, close } : null;
+  } catch { return null; }
 }
 
-function latestValue(entry: TwelveEntry[string] | undefined, field: string): string {
-  return entry?.values?.[0]?.[field] ?? "n/a";
+function dp(price: number): number {
+  if (price < 1) return 5;
+  if (price < 10) return 5;
+  if (price < 500) return 3;
+  if (price < 10000) return 2;
+  return 0;
 }
 
-async function fetchForexTA(apiKey: string, pairs: string[]): Promise<string> {
-  const sym = pairs.join(",");
+function buildLine(label: string, data: OHLCV): string {
+  const c = data.close; const h = data.high; const l = data.low;
+  const n = c.length;
+  const last = c[n - 1]; const prev = c[n - 2];
+  const d = dp(last);
+  const pct = ((last - prev) / prev * 100);
+  const chg = `${pct >= 0 ? "+" : ""}${pct.toFixed(3)}%`;
 
-  const [quoteRaw, rsiRaw, ema50Raw, ema200Raw, macdRaw, atrRaw] = await Promise.all([
-    td<Record<string, { close?: string; previous_close?: string; percent_change?: string; high?: string; low?: string; volume?: string }>>(`/quote?symbol=${encodeURIComponent(sym)}`, apiKey),
-    td<TwelveEntry>(`/rsi?symbol=${encodeURIComponent(sym)}&interval=1day&time_period=14&outputsize=1`, apiKey),
-    td<TwelveEntry>(`/ema?symbol=${encodeURIComponent(sym)}&interval=1day&time_period=50&outputsize=1`, apiKey),
-    td<TwelveEntry>(`/ema?symbol=${encodeURIComponent(sym)}&interval=1day&time_period=200&outputsize=1`, apiKey),
-    td<TwelveEntry>(`/macd?symbol=${encodeURIComponent(sym)}&interval=1day&fast_period=12&slow_period=26&signal_period=9&outputsize=1`, apiKey),
-    td<TwelveEntry>(`/atr?symbol=${encodeURIComponent(sym)}&interval=1day&time_period=14&outputsize=1`, apiKey),
-  ]);
+  const e50 = calcEMA(c, 50); const e200 = calcEMA(c, 200);
+  const rsiVal = calcRSI(c); const atrVal = calcATR(h, l, c); const macdVal = calcMACD(c);
 
-  if (!quoteRaw) return "Forex data unavailable.";
+  const e50l = e50[n - 1]; const e200l = e200[n - 1];
+  const vsE50  = !isNaN(e50l)  ? (last > e50l  ? "above" : "below") : "n/a";
+  const vsE200 = !isNaN(e200l) ? (last > e200l ? "above" : "below") : "n/a";
+  const macdBias = macdVal ? (macdVal.hist > 0 ? "bullish" : "bearish") : "n/a";
 
-  const lines = pairs.map((pair) => {
-    const q = quoteRaw[pair];
-    if (!q) return `${pair}: unavailable`;
+  return [
+    `${label}: ${last.toFixed(d)} (${chg}) | D-High: ${h[n-1].toFixed(d)} D-Low: ${l[n-1].toFixed(d)}`,
+    `  RSI(14): ${isNaN(rsiVal) ? "n/a" : rsiVal.toFixed(1)} | ATR(14): ${isNaN(atrVal) ? "n/a" : atrVal.toFixed(d)}`,
+    `  EMA50: ${isNaN(e50l) ? "n/a" : e50l.toFixed(d)} (price ${vsE50}) | EMA200: ${isNaN(e200l) ? "n/a" : e200l.toFixed(d)} (price ${vsE200})`,
+    `  MACD: ${macdVal ? macdVal.macd.toFixed(d) : "n/a"} | Signal: ${macdVal ? macdVal.signal.toFixed(d) : "n/a"} | Hist: ${macdVal ? macdVal.hist.toFixed(d) : "n/a"} (${macdBias})`,
+  ].join("\n");
+}
 
-    const price   = parseFloat(q.close ?? q.previous_close ?? "0");
-    const change  = q.percent_change ? `${parseFloat(q.percent_change) >= 0 ? "+" : ""}${parseFloat(q.percent_change).toFixed(3)}%` : "n/a";
-    const high    = q.high ?? "n/a";
-    const low     = q.low ?? "n/a";
-    const rsi     = rsiRaw   ? parseFloat(latestValue(rsiRaw[pair],   "rsi")).toFixed(1)   : "n/a";
-    const ema50   = ema50Raw ? parseFloat(latestValue(ema50Raw[pair],  "ema")).toFixed(5)   : "n/a";
-    const ema200  = ema200Raw? parseFloat(latestValue(ema200Raw[pair], "ema")).toFixed(5)   : "n/a";
-    const macdVal = macdRaw  ? parseFloat(latestValue(macdRaw[pair],   "macd")).toFixed(5)  : "n/a";
-    const macdSig = macdRaw  ? parseFloat(latestValue(macdRaw[pair],   "macd_signal")).toFixed(5) : "n/a";
-    const macdHist= macdRaw  ? parseFloat(latestValue(macdRaw[pair],   "macd_hist")).toFixed(5)   : "n/a";
-    const atr     = atrRaw   ? parseFloat(latestValue(atrRaw[pair],    "atr")).toFixed(5)   : "n/a";
-
-    const priceAbove50  = price && ema50  !== "n/a" ? (price > parseFloat(ema50)  ? "above" : "below") : "n/a";
-    const priceAbove200 = price && ema200 !== "n/a" ? (price > parseFloat(ema200) ? "above" : "below") : "n/a";
-    const macdBias = macdHist !== "n/a" ? (parseFloat(macdHist) > 0 ? "bullish" : "bearish") : "n/a";
-
-    return [
-      `${pair}: ${price.toFixed(5)} (${change}) | D-High: ${high} D-Low: ${low}`,
-      `  RSI(14): ${rsi} | ATR(14): ${atr}`,
-      `  EMA50: ${ema50} (price ${priceAbove50}) | EMA200: ${ema200} (price ${priceAbove200})`,
-      `  MACD: ${macdVal} | Signal: ${macdSig} | Hist: ${macdHist} (${macdBias})`,
-    ].join("\n");
-  });
-
+async function fetchMarketTA(pairs: Array<{ label: string; yahoo: string }>): Promise<string> {
+  const lines = await Promise.all(pairs.map(async ({ label, yahoo }) => {
+    const data = await fetchYahoo(yahoo);
+    return data ? buildLine(label, data) : `${label}: unavailable`;
+  }));
   return lines.join("\n\n");
 }
 
-async function fetchCryptoTA(): Promise<string> {
-  try {
-    const ids = Object.values(CRYPTO_IDS).join(",");
-    const res = await fetch(
-      `https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true&include_24hr_vol=true&include_7d_change=true&include_market_cap=true`,
-      { cache: "no-store" }
-    );
-    if (!res.ok) return "Crypto data unavailable.";
-    const raw = await res.json();
-
-    const lines = Object.entries(CRYPTO_IDS).map(([pair, id]) => {
-      const e = raw[id];
-      if (!e) return `${pair}: unavailable`;
-      const price   = e.usd?.toLocaleString("en-US", { maximumFractionDigits: 4 }) ?? "?";
-      const chg24   = e.usd_24h_change != null ? `${e.usd_24h_change >= 0 ? "+" : ""}${e.usd_24h_change.toFixed(2)}%` : "n/a";
-      const chg7    = e.usd_7d_change  != null ? `${e.usd_7d_change  >= 0 ? "+" : ""}${e.usd_7d_change.toFixed(2)}%`  : "n/a";
-      const vol24   = e.usd_24h_vol    != null ? `$${(e.usd_24h_vol / 1e9).toFixed(2)}B`  : "n/a";
-      const mcap    = e.usd_market_cap != null ? `$${(e.usd_market_cap / 1e9).toFixed(1)}B` : "n/a";
-      const trend   = e.usd_7d_change  != null ? (e.usd_7d_change > 2 ? "bullish weekly trend" : e.usd_7d_change < -2 ? "bearish weekly trend" : "ranging/neutral") : "n/a";
-      return `${pair}: $${price} | 24h: ${chg24} | 7d: ${chg7} (${trend})\n  Vol 24h: ${vol24} | MCap: ${mcap}`;
-    });
-    return lines.join("\n\n");
-  } catch {
-    return "Crypto data unavailable.";
-  }
-}
+// ─── System prompt (unchanged) ───────────────────────────────────────────────
 
 const SYSTEM_PROMPT = `You are the Eleusis Fx trading analyst with 15+ years of professional experience. You think like a funded trader — disciplined, data-driven, never forcing setups.
 
-You will receive live market data including price, RSI(14), EMA(50), EMA(200), MACD(12,26,9), and ATR(14) from Twelve Data, plus CoinGecko crypto data. Use this data as your primary technical foundation.
+You will receive live market data including price, RSI(14), EMA(50), EMA(200), MACD(12,26,9), and ATR(14) calculated from Yahoo Finance daily OHLCV data, for both forex and crypto. Use this data as your primary technical foundation.
 
 ## DXY Analysis (derive yourself)
 Do not rely on a DXY input. Determine USD strength/weakness yourself by reading the USD-correlated pairs in the data:
@@ -211,6 +251,8 @@ For each qualifying pair:
 - The Instagram caption must stand alone without the full report.
 - Tone: direct, credible, experienced. Not hype. Not retail noise.`;
 
+// ─── Route handler ───────────────────────────────────────────────────────────
+
 export async function POST(req: NextRequest) {
   const supabase = await getSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -228,12 +270,12 @@ export async function POST(req: NextRequest) {
 
   const { session, focus, newsLevel } = await req.json();
 
-  const twelveDataKey = process.env.TWELVE_DATA_API_KEY ?? "";
   const forexPairs = focus === "crypto" ? [] : FOREX_PAIRS;
+  const cryptoPairs = focus === "forex" ? [] : CRYPTO_PAIRS;
 
   const [forexData, cryptoData] = await Promise.all([
-    forexPairs.length > 0 ? fetchForexTA(twelveDataKey, forexPairs) : Promise.resolve("Forex skipped."),
-    focus !== "forex" ? fetchCryptoTA() : Promise.resolve("Crypto skipped."),
+    forexPairs.length > 0 ? fetchMarketTA(forexPairs) : Promise.resolve("Forex skipped."),
+    cryptoPairs.length > 0 ? fetchMarketTA(cryptoPairs) : Promise.resolve("Crypto skipped."),
   ]);
 
   const dateStr = new Date().toLocaleDateString("en-GB", {
@@ -258,11 +300,11 @@ export async function POST(req: NextRequest) {
 **News Environment:** ${newsCtx}
 
 ---
-**LIVE TECHNICAL DATA (Twelve Data — Daily timeframe):**
+**LIVE TECHNICAL DATA (Yahoo Finance — Daily OHLCV, indicators calculated server-side):**
 
 ${forexPairs.length > 0 ? `FOREX:\n${forexData}` : ""}
 
-${focus !== "forex" ? `CRYPTO (CoinGecko):\n${cryptoData}` : ""}
+${cryptoPairs.length > 0 ? `CRYPTO:\n${cryptoData}` : ""}
 
 ---
 
@@ -295,9 +337,6 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
   });
 
   return new Response(stream, {
-    headers: {
-      "Content-Type": "text/plain; charset=utf-8",
-      "Cache-Control": "no-cache",
-    },
+    headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-cache" },
   });
 }

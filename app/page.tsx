@@ -19,8 +19,8 @@ export default function HomePage() {
       <SchemaOrg />
       <Nav />
       <PublicMarketTicker />
-      {/* 38px spacer so content clears the fixed market ticker bar */}
-      <div style={{ height: 38 }} />
+      {/* spacer clears the fixed 46px market ticker bar */}
+      <div style={{ height: 46 }} />
       <Hero />
       <Ticker />
       <StatsRow />

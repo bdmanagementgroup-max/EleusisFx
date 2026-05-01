@@ -191,7 +191,7 @@ export default function TradingAnalysisClient() {
       <div style={{ fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: "#4f8ef7", marginBottom: 8 }}>Admin / Tools</div>
       <h1 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 36, letterSpacing: -1.5, marginBottom: 8 }}>Trading Analysis</h1>
       <p style={{ fontFamily: "monospace", fontSize: 12, color: "rgba(210,220,240,0.4)", marginBottom: 40 }}>
-        Live RSI · EMA 50/200 · MACD · ATR — confluence scanner across 12 forex pairs + 4 crypto
+        RSI · EMA 50/200 · MACD · ATR — calculated from Yahoo Finance OHLCV · 12 forex pairs + 4 crypto
       </p>
 
       {/* Config panel */}
@@ -280,7 +280,7 @@ export default function TradingAnalysisClient() {
         {running ? "■ STOP ANALYSIS" : "▶ RUN ANALYSIS"}
         {running && (
           <span style={{ marginLeft: "auto", fontSize: 10, opacity: 0.6, animation: "pulse-dot 1.2s ease-in-out infinite" }}>
-            ● fetching RSI / EMA / MACD → claude-opus
+            ● fetching OHLCV → calculating RSI / EMA / MACD → claude-opus
           </span>
         )}
       </button>
@@ -332,7 +332,7 @@ export default function TradingAnalysisClient() {
             ) : (
               <div style={{ fontFamily: "monospace", fontSize: 12, color: "rgba(79,142,247,0.6)" }}>
                 <span style={{ animation: "pulse-dot 1.2s ease-in-out infinite", display: "inline-block" }}>●</span>
-                {" "}fetching RSI · EMA 50/200 · MACD · ATR from Twelve Data...
+                {" "}fetching OHLCV from Yahoo Finance · calculating RSI · EMA 50/200 · MACD · ATR...
               </div>
             )}
           </div>
@@ -345,7 +345,7 @@ export default function TradingAnalysisClient() {
           <div style={{ fontFamily: "monospace", fontSize: 11, color: "rgba(210,220,240,0.2)", lineHeight: 2 }}>
             <div>// set session + focus + news, then run</div>
             <div style={{ marginTop: 8, color: "rgba(210,220,240,0.12)" }}>
-              RSI(14) · EMA50 · EMA200 · MACD(12,26,9) · ATR(14) fetched live from Twelve Data<br />
+              RSI(14) · EMA50 · EMA200 · MACD(12,26,9) · ATR(14) — Yahoo Finance OHLCV, calculated server-side<br />
               DXY bias derived automatically · min 3-signal confluence · report + instagram captions
             </div>
           </div>
