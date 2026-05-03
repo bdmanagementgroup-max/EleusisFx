@@ -308,6 +308,159 @@ const TEMPLATES = [
 </html>`,
   },
   {
+    label: "Weekly Market Analysis — Prospect",
+    subject: "This Week's Live Setups — USDJPY Sell + EURUSD Buy | Eleusis FX",
+    html: `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#020305;-webkit-font-smoothing:antialiased;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#020305;padding:48px 20px;">
+    <tr><td align="center">
+      <table width="580" cellpadding="0" cellspacing="0" border="0" style="max-width:580px;width:100%;">
+
+        <tr><td style="padding-bottom:8px;">
+          <span style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">ELEUSIS<span style="color:#e8eaf0;">.</span>FX</span>
+        </td></tr>
+        <tr><td style="padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(210,220,240,0.3);font-family:Arial,sans-serif;">Weekly Market Analysis &nbsp;&middot;&nbsp; 3 May 2026</p>
+        </td></tr>
+
+        <!-- Hero -->
+        <tr><td style="padding:40px 0 32px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <h1 style="margin:0 0 16px;font-size:38px;font-weight:800;letter-spacing:-1.5px;color:#e8eaf0;line-height:1.1;font-family:Arial,sans-serif;">This Week&apos;s<br>Live Setups.</h1>
+          <p style="margin:0 0 20px;font-size:15px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Each week, the Eleusis FX desk scans 16 forex and crypto pairs and filters for the highest-conviction setups only. This week we have two live signals &mdash; both driven by the same macro theme: US Dollar weakness.</p>
+          <p style="margin:0;font-size:13px;color:rgba(210,220,240,0.45);font-family:Arial,sans-serif;">Not financial advice. For educational purposes. Always trade your own plan.</p>
+        </td></tr>
+
+        <!-- Macro context -->
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 16px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Macro Context</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(79,142,247,0.15);border-left:3px solid #4f8ef7;">
+            <tr><td style="padding:20px 24px;">
+              <p style="margin:0 0 14px;font-size:14px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">DXY at ~98 &mdash; Dollar weak and falling.</p>
+              <p style="margin:0 0 12px;font-size:13px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">The Fed held rates at the April 28&ndash;29 FOMC meeting. The Bank of Japan deployed an estimated $30B in yen-buying on April 30&ndash;May 1 to slam USD/JPY back from the 160.00 danger zone. Dollar weakness is the dominant theme.</p>
+              <p style="margin:0;font-size:13px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><strong style="color:#f39c12;">&#9888; NFP Friday 8 May</strong> &mdash; Non-Farm Payrolls drops Friday. High-volatility event. Professional traders reduce size or step aside before major data releases.</p>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <!-- Signal 1: USDJPY -->
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#e74c3c;font-weight:700;font-family:Arial,sans-serif;">Live Setup #1 &mdash; Bearish</p>
+          <h2 style="margin:0 0 16px;font-size:26px;font-weight:800;letter-spacing:-0.5px;color:#e8eaf0;line-height:1.2;font-family:Arial,sans-serif;">USD/JPY &mdash; Sell Setup &#9989;</h2>
+          <p style="margin:0 0 20px;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">USD/JPY broke above 160.00 last week &mdash; a level Japanese authorities had been defending for months. Within hours they responded with an estimated $30 billion in yen-buying, sending the pair crashing back below 158. That&apos;s not a random candle. That&apos;s a government enforcing a ceiling.</p>
+          <p style="margin:0 0 24px;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">158.00 has now <strong style="color:#e8eaf0;">flipped from support to resistance</strong>. The play is to sell any rally back into that zone. Downside targets: 156.30 then 154.80.</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(255,255,255,0.06);border-top:2px solid #e74c3c;">
+            <tr><td style="padding:20px 24px;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="padding:7px 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;width:90px;">Entry</td>
+                  <td style="padding:7px 0;font-size:13px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">Sell 157.80 &ndash; 158.00</td>
+                </tr>
+                <tr>
+                  <td style="padding:7px 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Stop Loss</td>
+                  <td style="padding:7px 0;font-size:13px;font-weight:700;color:#e74c3c;font-family:Arial,sans-serif;">158.80</td>
+                </tr>
+                <tr>
+                  <td style="padding:7px 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">TP1</td>
+                  <td style="padding:7px 0;font-size:13px;font-weight:700;color:#22c55e;font-family:Arial,sans-serif;">156.30 &nbsp;<span style="font-size:11px;font-weight:400;color:rgba(210,220,240,0.5);">(1.8:1 R:R)</span></td>
+                </tr>
+                <tr>
+                  <td style="padding:7px 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">TP2</td>
+                  <td style="padding:7px 0;font-size:13px;font-weight:700;color:#22c55e;font-family:Arial,sans-serif;">154.80 &nbsp;<span style="font-size:11px;font-weight:400;color:rgba(210,220,240,0.5);">(3.2:1 R:R)</span></td>
+                </tr>
+                <tr>
+                  <td style="padding:7px 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Invalidation</td>
+                  <td style="padding:7px 0;font-size:13px;color:rgba(210,220,240,0.7);font-family:Arial,sans-serif;">Daily close above 158.80</td>
+                </tr>
+              </table>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <!-- Signal 2: EURUSD -->
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#22c55e;font-weight:700;font-family:Arial,sans-serif;">Live Setup #2 &mdash; Bullish</p>
+          <h2 style="margin:0 0 16px;font-size:26px;font-weight:800;letter-spacing:-0.5px;color:#e8eaf0;line-height:1.2;font-family:Arial,sans-serif;">EUR/USD &mdash; Buy Setup &#9989;</h2>
+          <p style="margin:0 0 20px;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">EUR/USD has been making higher highs and higher lows all year. The pair pushed to new 2026 highs near 1.1790 before pulling back to its Daily 20 EMA &mdash; the moving average that has acted as support throughout this entire uptrend. That pullback is now over.</p>
+          <p style="margin:0 0 24px;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Dollar weakness + clean trend structure + key level bounce. Three confluence signals from three different categories. This is how professional traders filter noise from opportunity.</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(255,255,255,0.06);border-top:2px solid #22c55e;">
+            <tr><td style="padding:20px 24px;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="padding:7px 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;width:90px;">Entry</td>
+                  <td style="padding:7px 0;font-size:13px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">1.1710 &ndash; 1.1720</td>
+                </tr>
+                <tr>
+                  <td style="padding:7px 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Stop Loss</td>
+                  <td style="padding:7px 0;font-size:13px;font-weight:700;color:#e74c3c;font-family:Arial,sans-serif;">1.1655</td>
+                </tr>
+                <tr>
+                  <td style="padding:7px 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">TP1</td>
+                  <td style="padding:7px 0;font-size:13px;font-weight:700;color:#22c55e;font-family:Arial,sans-serif;">1.1790 &nbsp;<span style="font-size:11px;font-weight:400;color:rgba(210,220,240,0.5);">(1.2:1 R:R)</span></td>
+                </tr>
+                <tr>
+                  <td style="padding:7px 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">TP2</td>
+                  <td style="padding:7px 0;font-size:13px;font-weight:700;color:#22c55e;font-family:Arial,sans-serif;">1.1838 &nbsp;<span style="font-size:11px;font-weight:400;color:rgba(210,220,240,0.5);">(2.0:1 R:R)</span></td>
+                </tr>
+                <tr>
+                  <td style="padding:7px 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Invalidation</td>
+                  <td style="padding:7px 0;font-size:13px;color:rgba(210,220,240,0.7);font-family:Arial,sans-serif;">Daily close below 1.1655</td>
+                </tr>
+              </table>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <!-- Watchlist -->
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 16px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Also On Watchlist</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#f39c12;margin-right:10px;">&#9654;</span> <strong style="color:#e8eaf0;">GBP/USD</strong> &mdash; Watching for pullback to 1.3350&ndash;1.3380 before entry</td></tr>
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#f39c12;margin-right:10px;">&#9654;</span> <strong style="color:#e8eaf0;">BTC/USDT</strong> &mdash; Waiting for clean daily close above $80,500 before entry</td></tr>
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#f39c12;margin-right:10px;">&#9654;</span> <strong style="color:#e8eaf0;">USD/CAD</strong> &mdash; Bearish bias, waiting for resistance retest ~1.3700</td></tr>
+          </table>
+        </td></tr>
+
+        <!-- PDF CTA -->
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(79,142,247,0.2);border-top:2px solid #4f8ef7;">
+            <tr><td style="padding:28px;">
+              <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">Free Download</p>
+              <h2 style="margin:0 0 12px;font-size:20px;font-weight:800;letter-spacing:-0.5px;color:#e8eaf0;font-family:Arial,sans-serif;">Full Analysis Report &mdash; PDF</h2>
+              <p style="margin:0 0 20px;font-size:14px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Get the full branded analysis report including detailed setup breakdowns, macro context, NFP risk protocol, and the complete watchlist &mdash; all in one premium PDF.</p>
+              <a href="https://eleusisfx.uk" style="display:inline-block;background:transparent;color:#4f8ef7;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:13px 24px;text-decoration:none;border:1px solid rgba(79,142,247,0.4);font-family:Arial,sans-serif;">Download the Report &rarr;</a>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <!-- Main CTA -->
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(255,255,255,0.06);border-top:2px solid #4f8ef7;">
+            <tr><td style="padding:28px;">
+              <p style="margin:0 0 8px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Want These Trades Executed For You?</p>
+              <p style="margin:0 0 8px;font-size:20px;font-weight:800;color:#e8eaf0;font-family:Arial,sans-serif;">Evaluation Pass &mdash; &pound;1,150</p>
+              <p style="margin:0 0 20px;font-size:13px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">We trade your prop firm evaluation on your behalf. You keep 80% of all profits from your live funded account. 700+ clients passed since 2019.</p>
+              <a href="https://eleusisfx.uk/#apply" style="display:inline-block;background:#4f8ef7;color:#020305;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:14px 26px;text-decoration:none;font-family:Arial,sans-serif;">Apply Now &rarr;</a>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding-top:28px;">
+          <p style="margin:0;font-size:11px;color:rgba(210,220,240,0.28);line-height:1.7;font-family:Arial,sans-serif;">
+            Eleusis FX &nbsp;&middot;&nbsp; <a href="https://eleusisfx.uk" style="color:rgba(210,220,240,0.28);text-decoration:none;">eleusisfx.uk</a><br>
+            Questions? Reply to this email or contact <a href="mailto:admin@eleusisfx.uk" style="color:rgba(210,220,240,0.28);text-decoration:none;">admin@eleusisfx.uk</a><br>
+            <a href="https://eleusisfx.uk" style="color:rgba(210,220,240,0.15);text-decoration:none;font-size:10px;">Unsubscribe</a>
+          </p>
+        </td></tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`,
+  },
+  {
     label: "Past Client — Loyalty Offer",
     subject: "An Exclusive Offer for You — Eleusis FX",
     html: `<!DOCTYPE html>
