@@ -82,32 +82,7 @@ body {
   to { transform: translateX(-50%); }
 }
 
-/* WHATSAPP FLOAT */
-.wa-float {
-  position: fixed;
-  bottom: 28px;
-  right: 28px;
-  z-index: 400;
-  background: #1a1a2e;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #e8eaf0;
-  font-family: "Syne", sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  padding: 14px 22px;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  transition: all 0.25s;
-}
-.wa-float:hover {
-  background: #0d0f1a;
-  border-color: rgba(79, 142, 247, 0.3);
-  box-shadow: 0 8px 32px rgba(79, 142, 247, 0.1);
-}
+
 
 /* AUTOFILL OVERRIDE */
 input:-webkit-autofill,
@@ -136,7 +111,6 @@ button:not([disabled]):hover {
 @media (max-width: 1024px) {
   body { cursor: auto; }
   .cursor, .cursor-ring { display: none; }
-  .wa-float { bottom: 16px; right: 16px; font-size: 10px; padding: 11px 16px; }
   * { max-width: 100%; }
   img, video, iframe { max-width: 100%; }
 

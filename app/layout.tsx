@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Syne, Epilogue } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/layout/CustomCursor";
-import WhatsAppFloat from "@/components/layout/WhatsAppFloat";
 import RevealInit from "@/components/layout/RevealInit";
 
 const syne = Syne({
@@ -64,7 +63,6 @@ export default function RootLayout({
         <CustomCursor />
         <RevealInit />
         {children}
-        <WhatsAppFloat />
       </body>
     </html>
   );
