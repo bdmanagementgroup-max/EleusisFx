@@ -310,7 +310,7 @@ ${cryptoPairs.length > 0 ? `CRYPTO:\n${cryptoData}` : ""}
 
 Use the indicator values above as your primary analysis foundation. Derive DXY bias yourself from the USD pairs. Apply the full confluence framework. Only report pairs with genuine 3+ signal alignment.`;
 
-  const anthropic = new Anthropic({ apiKey });
+  const anthropic = new Anthropic({ apiKey, maxRetries: 3 });
   const encoder = new TextEncoder();
 
   const stream = new ReadableStream({
@@ -329,7 +329,15 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
         }
         controller.close();
       } catch (err) {
-        const msg = err instanceof Error ? err.message : "Analysis failed";
+        let msg = "Analysis failed";
+        if (err instanceof Error) {
+          try {
+            const parsed = JSON.parse(err.message);
+            msg = parsed?.error?.message ?? err.message;
+          } catch {
+            msg = err.message;
+          }
+        }
         controller.enqueue(encoder.encode(`\n\n[ERROR] ${msg}`));
         controller.close();
       }
