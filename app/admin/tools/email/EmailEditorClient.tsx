@@ -461,6 +461,186 @@ const TEMPLATES = [
 </html>`,
   },
   {
+    label: "Weekly Market Analysis — ProSelect · 6 May 2026",
+    subject: "This Week's Live Setups — NZD/USD Buy · USD/CHF Sell · SOL Buy | Eleusis FX",
+    html: `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#020305;-webkit-font-smoothing:antialiased;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#020305;padding:48px 20px;">
+    <tr><td align="center">
+      <table width="580" cellpadding="0" cellspacing="0" border="0" style="max-width:580px;width:100%;">
+
+        <tr><td style="padding-bottom:8px;">
+          <span style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">ELEUSIS<span style="color:#e8eaf0;">.</span>FX</span>
+        </td></tr>
+        <tr><td style="padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(210,220,240,0.3);font-family:Arial,sans-serif;">Weekly Market Analysis &nbsp;&middot;&nbsp; 6 May 2026</p>
+        </td></tr>
+
+        <tr><td style="padding:40px 0 32px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <h1 style="margin:0 0 16px;font-size:38px;font-weight:800;letter-spacing:-1.5px;color:#e8eaf0;line-height:1.1;font-family:Arial,sans-serif;">Three Live<br>Setups.</h1>
+          <p style="margin:0 0 20px;font-size:15px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">The Eleusis FX desk scanned 16 forex and crypto pairs in today&apos;s New York session. The theme is unmistakable: broad-based USD weakness. Three high-conviction setups passed every filter &mdash; two FX, one crypto.</p>
+          <p style="margin:0;font-size:13px;color:rgba(210,220,240,0.45);font-family:Arial,sans-serif;">Not financial advice. For educational purposes. Always trade your own plan.</p>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 16px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Macro Context</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(79,142,247,0.15);border-left:3px solid #4f8ef7;">
+            <tr><td style="padding:20px 24px;">
+              <p style="margin:0 0 14px;font-size:14px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">DXY clearly bearish &mdash; broad USD selling across every major.</p>
+              <p style="margin:0 0 12px;font-size:13px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">USD/JPY breaking below EMA50 (RSI 35.7), USD/CHF through both EMAs, and every major rallying against the dollar &mdash; EUR/USD +0.53%, GBP/USD +0.44%, AUD/USD +0.92%, NZD/USD +1.39%. This is coordinated USD weakness, not pair-specific noise.</p>
+              <p style="margin:0;font-size:13px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">NY session opens with no scheduled event risk &mdash; a textbook environment for momentum continuation. Crypto constructive: BTC +1.04% testing EMA200 overhead, SOL leading altcoins at +3.16%.</p>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#22c55e;font-weight:700;font-family:Arial,sans-serif;">Live Setup #1 &mdash; Bullish</p>
+          <h2 style="margin:0 0 16px;font-size:26px;font-weight:800;letter-spacing:-0.5px;color:#e8eaf0;line-height:1.2;font-family:Arial,sans-serif;">NZD/USD &mdash; Buy Setup &#9989;</h2>
+          <p style="margin:0 0 20px;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">NZD/USD is the cleanest dollar-weakness expression on the board today. Price has reclaimed the EMA200 with conviction &mdash; the largest single-day gain across all FX majors at +1.39% &mdash; closing near the daily high (0.59916). MACD just crossed bullish with histogram expanding, and RSI at 58.8 leaves meaningful headroom before overbought.</p>
+          <p style="margin:0 0 24px;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">A shallow NY pullback toward the <strong style="color:#e8eaf0;">EMA50/EMA200 cluster (0.5920&ndash;0.5930)</strong> offers the highest-quality entry. Three-category confluence: trend structure, momentum, and macro all aligned.</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(255,255,255,0.06);border-top:2px solid #22c55e;">
+            <tr><td style="padding:20px 24px;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="padding:7px 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;width:90px;">Entry</td>
+                  <td style="padding:7px 0;font-size:13px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">0.59250 &ndash; limit on pullback</td>
+                </tr>
+                <tr>
+                  <td style="padding:7px 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Stop Loss</td>
+                  <td style="padding:7px 0;font-size:13px;font-weight:700;color:#e74c3c;font-family:Arial,sans-serif;">0.58750</td>
+                </tr>
+                <tr>
+                  <td style="padding:7px 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">TP1</td>
+                  <td style="padding:7px 0;font-size:13px;font-weight:700;color:#22c55e;font-family:Arial,sans-serif;">0.60250 &nbsp;<span style="font-size:11px;font-weight:400;color:rgba(210,220,240,0.5);">(2.0:1 R:R)</span></td>
+                </tr>
+                <tr>
+                  <td style="padding:7px 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">TP2</td>
+                  <td style="padding:7px 0;font-size:13px;font-weight:700;color:#22c55e;font-family:Arial,sans-serif;">0.60750 &nbsp;<span style="font-size:11px;font-weight:400;color:rgba(210,220,240,0.5);">(3.0:1 R:R)</span></td>
+                </tr>
+                <tr>
+                  <td style="padding:7px 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Invalidation</td>
+                  <td style="padding:7px 0;font-size:13px;color:rgba(210,220,240,0.7);font-family:Arial,sans-serif;">Daily close below 0.58744 (EMA200)</td>
+                </tr>
+              </table>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#e74c3c;font-weight:700;font-family:Arial,sans-serif;">Live Setup #2 &mdash; Bearish</p>
+          <h2 style="margin:0 0 16px;font-size:26px;font-weight:800;letter-spacing:-0.5px;color:#e8eaf0;line-height:1.2;font-family:Arial,sans-serif;">USD/CHF &mdash; Sell Setup &#9989;</h2>
+          <p style="margin:0 0 20px;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">USD/CHF is in a defined downtrend: price below EMA50, EMA50 below EMA200 &mdash; the full bearish stack. Today&apos;s -0.55% candle rejected from 0.78338 and closed in the lower third of the daily range. MACD histogram expanding negative, RSI 42.3 not stretched &mdash; momentum has room to continue lower.</p>
+          <p style="margin:0 0 24px;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Sell the retest of <strong style="color:#e8eaf0;">0.7820&ndash;0.7830</strong> (former support, now EMA50 supply). USD weakness plus CHF as a defensive safe-haven currency adds structural tailwind. Trend, momentum, and macro all aligned.</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(255,255,255,0.06);border-top:2px solid #e74c3c;">
+            <tr><td style="padding:20px 24px;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="padding:7px 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;width:90px;">Entry</td>
+                  <td style="padding:7px 0;font-size:13px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">0.78250 &ndash; limit on retest</td>
+                </tr>
+                <tr>
+                  <td style="padding:7px 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Stop Loss</td>
+                  <td style="padding:7px 0;font-size:13px;font-weight:700;color:#e74c3c;font-family:Arial,sans-serif;">0.78900</td>
+                </tr>
+                <tr>
+                  <td style="padding:7px 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">TP1</td>
+                  <td style="padding:7px 0;font-size:13px;font-weight:700;color:#22c55e;font-family:Arial,sans-serif;">0.76950 &nbsp;<span style="font-size:11px;font-weight:400;color:rgba(210,220,240,0.5);">(2.0:1 R:R)</span></td>
+                </tr>
+                <tr>
+                  <td style="padding:7px 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">TP2</td>
+                  <td style="padding:7px 0;font-size:13px;font-weight:700;color:#22c55e;font-family:Arial,sans-serif;">0.76300 &nbsp;<span style="font-size:11px;font-weight:400;color:rgba(210,220,240,0.5);">(3.0:1 R:R)</span></td>
+                </tr>
+                <tr>
+                  <td style="padding:7px 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Invalidation</td>
+                  <td style="padding:7px 0;font-size:13px;color:rgba(210,220,240,0.7);font-family:Arial,sans-serif;">Daily close above 0.78578 (EMA50)</td>
+                </tr>
+              </table>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#22c55e;font-weight:700;font-family:Arial,sans-serif;">Live Setup #3 &mdash; Bullish</p>
+          <h2 style="margin:0 0 16px;font-size:26px;font-weight:800;letter-spacing:-0.5px;color:#e8eaf0;line-height:1.2;font-family:Arial,sans-serif;">SOL/USDT &mdash; Buy Setup &#9989;</h2>
+          <p style="margin:0 0 20px;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Solana printed the strongest crypto candle in the basket at +3.16%, closing near its high (89.88) with price above EMA50 (86.27). MACD just crossed bullish &mdash; histogram turned positive and expanding &mdash; RSI at 60.9 is in the sweet spot: trending, not overbought. This is an early-stage momentum setup, not a late chase.</p>
+          <p style="margin:0 0 24px;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Entry on a shallow pullback toward <strong style="color:#e8eaf0;">87.50</strong>, stop below EMA50 + 1&times; ATR (2.81) buffer. The EMA200 at 112.43 is well above and not in play for this swing leg.</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(255,255,255,0.06);border-top:2px solid #22c55e;">
+            <tr><td style="padding:20px 24px;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="padding:7px 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;width:90px;">Entry</td>
+                  <td style="padding:7px 0;font-size:13px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">87.50 &ndash; limit on pullback</td>
+                </tr>
+                <tr>
+                  <td style="padding:7px 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Stop Loss</td>
+                  <td style="padding:7px 0;font-size:13px;font-weight:700;color:#e74c3c;font-family:Arial,sans-serif;">84.50</td>
+                </tr>
+                <tr>
+                  <td style="padding:7px 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">TP1</td>
+                  <td style="padding:7px 0;font-size:13px;font-weight:700;color:#22c55e;font-family:Arial,sans-serif;">93.50 &nbsp;<span style="font-size:11px;font-weight:400;color:rgba(210,220,240,0.5);">(2.0:1 R:R)</span></td>
+                </tr>
+                <tr>
+                  <td style="padding:7px 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">TP2</td>
+                  <td style="padding:7px 0;font-size:13px;font-weight:700;color:#22c55e;font-family:Arial,sans-serif;">96.50 &nbsp;<span style="font-size:11px;font-weight:400;color:rgba(210,220,240,0.5);">(3.0:1 R:R)</span></td>
+                </tr>
+                <tr>
+                  <td style="padding:7px 0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Invalidation</td>
+                  <td style="padding:7px 0;font-size:13px;color:rgba(210,220,240,0.7);font-family:Arial,sans-serif;">Daily close below 86.27 (EMA50)</td>
+                </tr>
+              </table>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 16px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Also On Watchlist</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#f39c12;margin-right:10px;">&#9654;</span> <strong style="color:#e8eaf0;">EUR/USD</strong> &mdash; Bullish structure but MACD histogram diverging &mdash; waiting for momentum confirmation</td></tr>
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#f39c12;margin-right:10px;">&#9654;</span> <strong style="color:#e8eaf0;">GBP/USD</strong> &mdash; Bullish bias valid, no clean entry trigger today &mdash; prefer pullback setup</td></tr>
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#f39c12;margin-right:10px;">&#9654;</span> <strong style="color:#e8eaf0;">BTC/USDT</strong> &mdash; RSI 69.8 approaching overbought at EMA200 resistance ($82,793) &mdash; watching for resolution</td></tr>
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#f39c12;margin-right:10px;">&#9654;</span> <strong style="color:#e8eaf0;">AUD/USD</strong> &mdash; Bullish but extended near daily high (RSI 61.1) &mdash; prefer pullback before entry</td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(79,142,247,0.2);border-top:2px solid #4f8ef7;">
+            <tr><td style="padding:28px;">
+              <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">Free Download</p>
+              <h2 style="margin:0 0 12px;font-size:20px;font-weight:800;letter-spacing:-0.5px;color:#e8eaf0;font-family:Arial,sans-serif;">Full Analysis Report &mdash; PDF</h2>
+              <p style="margin:0 0 20px;font-size:14px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Get the full branded analysis report including all three setup breakdowns, macro context, and the complete watchlist review across 16 pairs &mdash; all in one premium PDF.</p>
+              <a href="https://eleusisfx.uk" style="display:inline-block;background:transparent;color:#4f8ef7;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:13px 24px;text-decoration:none;border:1px solid rgba(79,142,247,0.4);font-family:Arial,sans-serif;">Download the Report &rarr;</a>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(255,255,255,0.06);border-top:2px solid #4f8ef7;">
+            <tr><td style="padding:28px;">
+              <p style="margin:0 0 8px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Want These Trades Executed For You?</p>
+              <p style="margin:0 0 8px;font-size:20px;font-weight:800;color:#e8eaf0;font-family:Arial,sans-serif;">Evaluation Pass &mdash; &pound;1,150</p>
+              <p style="margin:0 0 20px;font-size:13px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">We trade your prop firm evaluation on your behalf. You keep 80% of all profits from your live funded account. 700+ clients passed since 2019.</p>
+              <a href="https://eleusisfx.uk/#apply" style="display:inline-block;background:#4f8ef7;color:#020305;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:14px 26px;text-decoration:none;font-family:Arial,sans-serif;">Apply Now &rarr;</a>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding-top:28px;">
+          <p style="margin:0;font-size:11px;color:rgba(210,220,240,0.28);line-height:1.7;font-family:Arial,sans-serif;">
+            Eleusis FX &nbsp;&middot;&nbsp; <a href="https://eleusisfx.uk" style="color:rgba(210,220,240,0.28);text-decoration:none;">eleusisfx.uk</a><br>
+            Questions? Reply to this email or contact <a href="mailto:admin@eleusisfx.uk" style="color:rgba(210,220,240,0.28);text-decoration:none;">admin@eleusisfx.uk</a><br>
+            <a href="https://eleusisfx.uk" style="color:rgba(210,220,240,0.15);text-decoration:none;font-size:10px;">Unsubscribe</a>
+          </p>
+        </td></tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`,
+  },
+  {
     label: "Past Client — Loyalty Offer",
     subject: "An Exclusive Offer for You — Eleusis FX",
     html: `<!DOCTYPE html>
