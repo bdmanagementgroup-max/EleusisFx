@@ -1,4 +1,5 @@
 import MarketTickerStrip from "@/components/dashboard/MarketTickerStrip";
+import PerformanceInsights from "@/components/dashboard/PerformanceInsights";
 import { getSupabaseAdminClient, getSupabaseServerClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -112,6 +113,7 @@ export default async function DashboardPage() {
       </div>
 
       {equityData.length > 1 && <EquityChart data={equityData} />}
+      <PerformanceInsights />
     </div>
   );
 }

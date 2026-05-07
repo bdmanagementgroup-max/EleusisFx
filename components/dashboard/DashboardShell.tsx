@@ -12,6 +12,7 @@ const NAV: NavItem[] = [
   { href: "/dashboard",          label: "Overview" },
   { href: "/dashboard/markets",  label: "Live Markets" },
   { href: "/dashboard/calendar", label: "Economic Calendar" },
+  { href: "/dashboard/coach",   label: "AI Coach" },
   { divider: true },
   {
     accordion: true,

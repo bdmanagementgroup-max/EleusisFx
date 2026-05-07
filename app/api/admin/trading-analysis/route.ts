@@ -26,7 +26,9 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { session, focus, newsLevel } = await req.json();
+  const body = await req.json();
+  const { session, focus, newsLevel } = body;
+  const macroMode: boolean = body.macroMode ?? false;
 
   const forexPairs = focus === "crypto" ? [] : FOREX_PAIRS;
   const cryptoPairs = focus === "forex" ? [] : CRYPTO_PAIRS;
@@ -50,6 +52,21 @@ export async function POST(req: NextRequest) {
     : focus === "crypto" ? "Scan CRYPTO pairs only."
     : "Scan both FOREX and CRYPTO.";
 
+  const macroInstruction = macroMode ? `
+
+---
+**MACRO MODE — REQUIRED ADDITIONAL SECTION:**
+
+Before outputting individual signals, open with a "### MACRO OVERVIEW" section covering:
+1. **Dollar Strength** — Derive DXY bias from all USD pairs (EURUSD, GBPUSD, USDJPY, AUDUSD, USDCAD, USDCHF, NZDUSD). State clearly: USD Bullish / USD Bearish / USD Neutral.
+2. **Market Regime** — Based on ATR across major pairs: Trending, Ranging, or High Volatility. Name the 2–3 pairs with highest current ATR.
+3. **Correlation Clusters** — Identify which pairs are moving together (e.g. GBP pairs, commodity currencies). Warn about stacking correlated positions.
+4. **Risk Sentiment** — Risk-On, Risk-Off, or Mixed. Base on: JPY strength/weakness, AUD/NZD direction, BTC trend.
+5. **${session} Session Bias** — 2 sentences on what this session typically drives and what to watch for today given the macro context.
+
+Keep the macro overview to 5 bullet-style paragraphs, one per point above. Then proceed to individual pair signals as normal.
+` : "";
+
   const userMessage = `Run the Eleusis Fx market analysis.
 
 **Date:** ${dateStr}
@@ -63,7 +80,7 @@ export async function POST(req: NextRequest) {
 ${forexPairs.length > 0 ? `FOREX:\n${forexData}` : ""}
 
 ${cryptoPairs.length > 0 ? `CRYPTO:\n${cryptoData}` : ""}
-
+${macroInstruction}
 ---
 
 Use the indicator values above as your primary analysis foundation. Derive DXY bias yourself from the USD pairs. Apply the full confluence framework. Only report pairs with genuine 3+ signal alignment.`;

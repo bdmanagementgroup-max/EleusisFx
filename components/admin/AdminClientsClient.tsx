@@ -76,6 +76,17 @@ export default function AdminClientsClient({ applications: initial }: { applicat
   const [archiving, setArchiving] = useState<string | null>(null);
   const [archiveError, setArchiveError] = useState<Record<string, string>>({});
 
+  type AiReview = {
+    score: number;
+    label: string;
+    flags: string[];
+    recommendation: string;
+    resources: string[];
+  };
+  const [aiReviews, setAiReviews] = useState<Record<string, AiReview>>({});
+  const [aiReviewLoading, setAiReviewLoading] = useState<string | null>(null);
+  const [aiReviewError, setAiReviewError] = useState<Record<string, string>>({});
+
   function toggleExpand(id: string) {
     setExpanded((prev) => {
       const next = new Set(prev);
@@ -193,6 +204,27 @@ export default function AdminClientsClient({ applications: initial }: { applicat
       setArchiveError((e) => ({ ...e, [id]: "Network error" }));
     }
     setArchiving(null);
+  }
+
+  async function screenApplication(id: string) {
+    setAiReviewLoading(id);
+    setAiReviewError((e) => ({ ...e, [id]: "" }));
+    try {
+      const res = await fetch("/api/admin/screen-application", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setAiReviews((prev) => ({ ...prev, [id]: data }));
+      } else {
+        setAiReviewError((e) => ({ ...e, [id]: data.error ?? "Screening failed" }));
+      }
+    } catch {
+      setAiReviewError((e) => ({ ...e, [id]: "Network error" }));
+    }
+    setAiReviewLoading(null);
   }
 
   async function generateReset(id: string, email: string) {
@@ -396,6 +428,94 @@ export default function AdminClientsClient({ applications: initial }: { applicat
                           <div style={{ fontSize: 10, color: "#ef4444", marginTop: 6 }}>{pdfError[id]}</div>
                         )}
                       </div>
+                    </div>
+
+                    {/* AI Screen */}
+                    <div style={{ marginTop: 20, paddingTop: 16, borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, flexWrap: "wrap", gap: 8 }}>
+                        <label style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(232,234,240,0.3)" }}>
+                          AI Screen
+                        </label>
+                        <ActionBtn
+                          onClick={() => screenApplication(id)}
+                          disabled={aiReviewLoading === id}
+                          color="#a78bfa"
+                        >
+                          {aiReviewLoading === id ? "Screening…" : aiReviews[id] ? "Re-screen" : "AI Screen"}
+                        </ActionBtn>
+                      </div>
+
+                      {aiReviewLoading === id && (
+                        <div style={{ fontSize: 12, color: "rgba(210,220,240,0.58)" }}>Screening applicant…</div>
+                      )}
+
+                      {aiReviewError[id] && (
+                        <div style={{ fontSize: 10, color: "#ef4444" }}>{aiReviewError[id]}</div>
+                      )}
+
+                      {aiReviews[id] && aiReviewLoading !== id && (() => {
+                        const review = aiReviews[id];
+                        const scoreColor = review.score <= 3 ? "#22c55e" : review.score <= 6 ? "#f59e0b" : "#ef4444";
+                        return (
+                          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                            <div>
+                              <span style={{
+                                display: "inline-block",
+                                background: `${scoreColor}18`,
+                                border: `1px solid ${scoreColor}44`,
+                                color: scoreColor,
+                                fontSize: 11,
+                                fontWeight: 600,
+                                padding: "3px 10px",
+                                letterSpacing: 0.5,
+                              }}>
+                                Score: {review.score}/10 — {review.label}
+                              </span>
+                            </div>
+
+                            <div>
+                              <span style={{ fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: "rgba(232,234,240,0.3)", display: "block", marginBottom: 4 }}>Flags</span>
+                              {review.flags.length === 0 ? (
+                                <span style={{ fontSize: 12, color: "rgba(210,220,240,0.58)" }}>None detected</span>
+                              ) : (
+                                <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                                  {review.flags.map((flag, i) => (
+                                    <div key={i} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                                      <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#f59e0b", flexShrink: 0, display: "inline-block" }} />
+                                      <span style={{ fontSize: 12, color: "rgba(210,220,240,0.88)" }}>{flag}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+
+                            <div>
+                              <span style={{ fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: "rgba(232,234,240,0.3)", display: "block", marginBottom: 4 }}>Recommendation</span>
+                              <span style={{ fontSize: 12, color: "rgba(210,220,240,0.88)" }}>{review.recommendation}</span>
+                            </div>
+
+                            {review.resources.length > 0 && (
+                              <div>
+                                <span style={{ fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: "rgba(232,234,240,0.3)", display: "block", marginBottom: 4 }}>Suggested</span>
+                                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                                  {review.resources.map((r, i) => (
+                                    <span key={i} style={{
+                                      fontSize: 10,
+                                      color: "#4f8ef7",
+                                      background: "rgba(79,142,247,0.1)",
+                                      border: "1px solid rgba(79,142,247,0.25)",
+                                      padding: "2px 8px",
+                                      letterSpacing: 0.3,
+                                    }}>
+                                      {r}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })()}
                     </div>
 
                     {/* Move to Past Clients */}

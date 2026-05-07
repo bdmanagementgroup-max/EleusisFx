@@ -146,6 +146,7 @@ export default function TradingAnalysisClient() {
   const [session, setSession] = useState<Session>("London");
   const [focus, setFocus] = useState<Focus>("all");
   const [newsLevel, setNewsLevel] = useState<NewsLevel>("none");
+  const [macroMode, setMacroMode] = useState(false);
 
   const [running, setRunning] = useState(false);
   const [output, setOutput] = useState("");
@@ -184,7 +185,7 @@ export default function TradingAnalysisClient() {
       const res = await fetch("/api/admin/trading-analysis", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ session, focus, newsLevel }),
+        body: JSON.stringify({ session, focus, newsLevel, macroMode }),
         signal: ctrl.signal,
       });
 
@@ -215,7 +216,7 @@ export default function TradingAnalysisClient() {
     } finally {
       setRunning(false);
     }
-  }, [session, focus, newsLevel, running]);
+  }, [session, focus, newsLevel, macroMode, running]);
 
   const saveSnapshot = useCallback(async () => {
     if (!output || saving) return;
@@ -331,6 +332,38 @@ export default function TradingAnalysisClient() {
                 );
               })}
             </div>
+          </div>
+
+          {/* Macro Mode */}
+          <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+            <span style={{ fontFamily: "monospace", fontSize: 10, letterSpacing: 1.5, color: "rgba(210,220,240,0.28)", width: 72, textTransform: "uppercase" }}>{"// macro"}</span>
+            <div style={{ display: "flex", gap: 2 }}>
+              {[
+                { label: "Standard", value: false },
+                { label: "✦ Macro", value: true },
+              ].map(({ label, value }) => (
+                <button
+                  key={String(value)}
+                  onClick={() => setMacroMode(value)}
+                  disabled={running}
+                  style={{
+                    background: macroMode === value ? "rgba(167,139,250,0.12)" : "rgba(255,255,255,0.03)",
+                    border: `1px solid ${macroMode === value ? "rgba(167,139,250,0.35)" : "rgba(255,255,255,0.06)"}`,
+                    color: macroMode === value ? "#a78bfa" : "rgba(210,220,240,0.35)",
+                    fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase",
+                    padding: "6px 14px", cursor: running ? "not-allowed" : "pointer", fontFamily: "inherit",
+                    transition: "all 0.15s", opacity: running ? 0.4 : 1,
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            {macroMode && (
+              <span style={{ fontFamily: "monospace", fontSize: 10, color: "rgba(167,139,250,0.5)" }}>
+                Adds macro overview before signals
+              </span>
+            )}
           </div>
         </div>
       </div>

@@ -7,9 +7,9 @@ interface Signal {
   session: string; focus: string; news_level: string;
   pair: string; direction: string;
   entry_price?: string; stop_loss?: string; tp1?: string; tp2?: string; risk_reward?: string;
-  // full export fields
   bias?: string; timeframe?: string; confluence?: string;
   setup_detail?: string; invalidation?: string; content?: string;
+  outcome?: string; outcome_pnl?: number | null;
 }
 
 interface SessionGroup {
@@ -215,6 +215,10 @@ export default function SnapshotsClient({ initial, dbError }: { initial: Signal[
   const [expanded, setExpanded] = useState<string | null>(null);
   const [exporting, setExporting] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [outcomes, setOutcomes] = useState<Record<string, string>>(
+    Object.fromEntries(initial.map((s) => [s.id, s.outcome ?? "pending"]))
+  );
+  const [savingOutcome, setSavingOutcome] = useState<string | null>(null);
 
   async function exportHtml(group: SessionGroup) {
     setExporting(group.session_id);
@@ -240,6 +244,17 @@ export default function SnapshotsClient({ initial, dbError }: { initial: Signal[
     setDeleting(sessionId);
     await fetch(`/api/admin/trading-signals?session_id=${sessionId}`, { method: "DELETE" });
     window.location.reload();
+  }
+
+  async function saveOutcome(id: string, outcome: string) {
+    setSavingOutcome(id);
+    setOutcomes((prev) => ({ ...prev, [id]: outcome }));
+    await fetch("/api/admin/trading-signals-outcome", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, outcome }),
+    });
+    setSavingOutcome(null);
   }
 
   return (
@@ -286,6 +301,24 @@ export default function SnapshotsClient({ initial, dbError }: { initial: Signal[
                 </span>
                 <span style={{ fontFamily: "monospace", fontSize: 10, letterSpacing: 1, color: "#4f8ef7", textTransform: "uppercase" }}>{group.session}</span>
                 <span style={{ fontFamily: "monospace", fontSize: 10, color: "rgba(210,220,240,0.4)" }}>{group.signals.length} signal{group.signals.length !== 1 ? "s" : ""}</span>
+                {(() => {
+                  const decided = group.signals.filter(s => outcomes[s.id] === "won" || outcomes[s.id] === "lost");
+                  const wins = group.signals.filter(s => outcomes[s.id] === "won").length;
+                  const winRate = decided.length > 0 ? Math.round((wins / decided.length) * 100) : null;
+                  return winRate !== null ? (
+                    <span style={{
+                      fontFamily: "monospace", fontSize: 10,
+                      color: winRate >= 60 ? "#22c55e" : winRate >= 40 ? "#f59e0b" : "#ef4444",
+                      background: winRate >= 60 ? "rgba(34,197,94,0.08)" : winRate >= 40 ? "rgba(245,158,11,0.08)" : "rgba(239,68,68,0.08)",
+                      border: `1px solid ${winRate >= 60 ? "rgba(34,197,94,0.2)" : winRate >= 40 ? "rgba(245,158,11,0.2)" : "rgba(239,68,68,0.2)"}`,
+                      padding: "2px 8px",
+                    }}>
+                      {winRate}% WR
+                    </span>
+                  ) : (
+                    <span style={{ fontFamily: "monospace", fontSize: 10, color: "rgba(210,220,240,0.2)" }}>—% WR</span>
+                  );
+                })()}
                 <span style={{ fontFamily: "monospace", fontSize: 10, color: newsColour(group.news_level), textTransform: "uppercase" }}>{group.news_level === "none" ? "no news" : group.news_level}</span>
                 <button
                   onClick={() => exportHtml(group)}
@@ -314,7 +347,39 @@ export default function SnapshotsClient({ initial, dbError }: { initial: Signal[
                       <span style={{ fontFamily: "monospace", fontSize: 11, color: "#ef4444" }}>SL: {s.stop_loss ?? "—"}</span>
                       <span style={{ fontFamily: "monospace", fontSize: 11, color: "#22c55e" }}>TP1: {s.tp1 ?? "—"}</span>
                       <span style={{ fontFamily: "monospace", fontSize: 11, color: "#22c55e" }}>TP2: {s.tp2 ?? "—"}</span>
-                      <span style={{ fontFamily: "monospace", fontSize: 11, color: "#f59e0b", marginLeft: "auto" }}>R:R {s.risk_reward ?? "—"}</span>
+                      <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 12 }}>
+                        <span style={{ fontFamily: "monospace", fontSize: 11, color: "#f59e0b" }}>R:R {s.risk_reward ?? "—"}</span>
+                        <select
+                          value={outcomes[s.id] ?? "pending"}
+                          disabled={savingOutcome === s.id}
+                          onChange={(e) => saveOutcome(s.id, e.target.value)}
+                          style={{
+                            appearance: "none",
+                            background: (() => {
+                              const o = outcomes[s.id] ?? "pending";
+                              return o === "won" ? "rgba(34,197,94,0.08)" : o === "lost" ? "rgba(239,68,68,0.08)" : o === "invalidated" ? "rgba(245,158,11,0.06)" : "rgba(255,255,255,0.03)";
+                            })(),
+                            border: `1px solid ${(() => {
+                              const o = outcomes[s.id] ?? "pending";
+                              return o === "won" ? "rgba(34,197,94,0.3)" : o === "lost" ? "rgba(239,68,68,0.3)" : o === "invalidated" ? "rgba(245,158,11,0.2)" : "rgba(255,255,255,0.06)";
+                            })()}`,
+                            color: (() => {
+                              const o = outcomes[s.id] ?? "pending";
+                              return o === "won" ? "#22c55e" : o === "lost" ? "#ef4444" : o === "invalidated" ? "#f59e0b" : "rgba(210,220,240,0.4)";
+                            })(),
+                            fontSize: 10, letterSpacing: 1, textTransform: "uppercase",
+                            padding: "3px 10px", fontFamily: "monospace",
+                            cursor: savingOutcome === s.id ? "not-allowed" : "pointer",
+                            opacity: savingOutcome === s.id ? 0.5 : 1,
+                            outline: "none",
+                          }}
+                        >
+                          <option value="pending" style={{ background: "#08090f" }}>Pending</option>
+                          <option value="won" style={{ background: "#08090f" }}>Won</option>
+                          <option value="lost" style={{ background: "#08090f" }}>Lost</option>
+                          <option value="invalidated" style={{ background: "#08090f" }}>Invalidated</option>
+                        </select>
+                      </div>
                     </div>
                   ))}
                 </div>

@@ -1063,6 +1063,10 @@ export default function EmailEditorClient({
   const [composeHtml, setComposeHtml] = useState("");
   const [preview, setPreview]       = useState(false);
 
+  // AI generation
+  const [aiGenerating, setAiGenerating] = useState(false);
+  const [aiError, setAiError]           = useState("");
+
   // Send
   const [sending, setSending]       = useState(false);
   const [result, setResult]         = useState<{ sent: number; failed: number } | null>(null);
@@ -1198,6 +1202,39 @@ export default function EmailEditorClient({
     } finally { setSending(false); }
   }
 
+  // ── AI generation ──
+  async function generateWithAI() {
+    if (selected.length !== 1) return;
+    setAiGenerating(true);
+    setAiError("");
+    try {
+      const res = await fetch("/api/admin/generate-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          recipientEmail: selected[0].email,
+          templateLabel: templateKey || "Progress Check-In",
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setAiError(data.error ?? "Generation failed");
+        return;
+      }
+      if (data.subject) setSubject(data.subject);
+      if (data.html) {
+        setHtmlSource(data.html);
+        setComposeHtml(data.html);
+        setMode("html");
+        setPreview(true);
+      }
+    } catch {
+      setAiError("Network error — generation failed");
+    } finally {
+      setAiGenerating(false);
+    }
+  }
+
   return (
     <div style={{ padding: "40px 48px", maxWidth: 900 }}>
       <div style={{ marginBottom: 36 }}>
@@ -1236,6 +1273,48 @@ export default function EmailEditorClient({
             >
               Load into Editor →
             </button>
+          </div>
+
+          {/* AI Generate divider */}
+          <div style={{ height: 1, background: "rgba(255,255,255,0.06)", margin: "16px 0" }} />
+
+          <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+            <div style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.3)", flexShrink: 0 }}>
+              AI Personalise
+            </div>
+            <button
+              onClick={generateWithAI}
+              disabled={aiGenerating || selected.length !== 1}
+              style={{
+                background: selected.length === 1 ? "rgba(167,139,250,0.1)" : "rgba(255,255,255,0.03)",
+                border: `1px solid ${selected.length === 1 ? "rgba(167,139,250,0.3)" : "rgba(255,255,255,0.06)"}`,
+                color: selected.length === 1 ? "#a78bfa" : "rgba(210,220,240,0.2)",
+                fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase",
+                padding: "8px 16px", cursor: selected.length === 1 ? "pointer" : "not-allowed",
+                fontFamily: "inherit", transition: "all 0.2s",
+                opacity: aiGenerating ? 0.6 : 1,
+              }}
+            >
+              {aiGenerating ? "Generating…" : "✦ Generate with AI"}
+            </button>
+            {selected.length !== 1 && (
+              <span style={{ fontSize: 10, color: "rgba(210,220,240,0.25)" }}>
+                Select exactly one recipient to personalise
+              </span>
+            )}
+            {selected.length === 1 && !aiGenerating && !aiError && templateKey && (
+              <span style={{ fontSize: 10, color: "rgba(167,139,250,0.5)" }}>
+                Will personalise: {templateKey}
+              </span>
+            )}
+            {selected.length === 1 && !aiGenerating && !aiError && !templateKey && (
+              <span style={{ fontSize: 10, color: "rgba(210,220,240,0.3)" }}>
+                Uses Progress Check-In if no template selected
+              </span>
+            )}
+            {aiError && (
+              <span style={{ fontSize: 10, color: "#ef4444" }}>{aiError}</span>
+            )}
           </div>
 
           {/* Instant iframe preview */}
