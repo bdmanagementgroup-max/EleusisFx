@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import {
@@ -15,18 +15,18 @@ export async function POST(req: NextRequest) {
   const supabase = await getSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user || user.app_metadata?.role !== "admin") {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
-    return new Response(
-      JSON.stringify({ error: "ANTHROPIC_API_KEY not set — add it to Vercel environment variables and redeploy" }),
+    return NextResponse.json(
+      { error: "ANTHROPIC_API_KEY not set — add it to Vercel environment variables and redeploy" },
       { status: 500 }
     );
   }
 
-  const { session, focus, newsLevel } = await req.json();
+  const { session, focus, news } = await req.json();
 
   const forexPairs = focus === "crypto" ? [] : FOREX_PAIRS;
   const cryptoPairs = focus === "forex" ? [] : CRYPTO_PAIRS;
@@ -41,8 +41,8 @@ export async function POST(req: NextRequest) {
   });
 
   const newsCtx =
-    newsLevel === "major" ? "⚠️ MAJOR HIGH-IMPACT NEWS DUE TODAY (NFP/FOMC/CPI) — flag risk on correlated pairs or avoid."
-    : newsLevel === "light" ? "Minor news scheduled today. Flag pairs with correlated data risk."
+    news === "major" ? "⚠️ MAJOR HIGH-IMPACT NEWS DUE TODAY (NFP/FOMC/CPI) — flag risk on correlated pairs or avoid."
+    : news === "light" ? "Minor news scheduled today. Flag pairs with correlated data risk."
     : "No major news events today. Clean technical environment.";
 
   const focusCtx =
@@ -68,41 +68,34 @@ ${cryptoPairs.length > 0 ? `CRYPTO:\n${cryptoData}` : ""}
 
 Use the indicator values above as your primary analysis foundation. Derive DXY bias yourself from the USD pairs. Apply the full confluence framework. Only report pairs with genuine 3+ signal alignment.`;
 
-  const anthropic = new Anthropic({ apiKey, maxRetries: 3 });
-  const encoder = new TextEncoder();
+  try {
+    const anthropic = new Anthropic({ apiKey, maxRetries: 3 });
+    const msg = await anthropic.messages.create({
+      model: "claude-opus-4-7",
+      max_tokens: 4096,
+      system: SYSTEM_PROMPT,
+      messages: [{ role: "user", content: userMessage }],
+    });
 
-  const stream = new ReadableStream({
-    async start(controller) {
+    const report = msg.content[0]?.type === "text" ? msg.content[0].text : "";
+
+    return NextResponse.json({
+      report,
+      session,
+      focus,
+      news,
+      generatedAt: new Date().toISOString(),
+    });
+  } catch (err) {
+    let message = "Analysis failed";
+    if (err instanceof Error) {
       try {
-        const msgStream = anthropic.messages.stream({
-          model: "claude-opus-4-7",
-          max_tokens: 4096,
-          system: SYSTEM_PROMPT,
-          messages: [{ role: "user", content: userMessage }],
-        });
-        for await (const event of msgStream) {
-          if (event.type === "content_block_delta" && event.delta.type === "text_delta") {
-            controller.enqueue(encoder.encode(event.delta.text));
-          }
-        }
-        controller.close();
-      } catch (err) {
-        let msg = "Analysis failed";
-        if (err instanceof Error) {
-          try {
-            const parsed = JSON.parse(err.message);
-            msg = parsed?.error?.message ?? err.message;
-          } catch {
-            msg = err.message;
-          }
-        }
-        controller.enqueue(encoder.encode(`\n\n[ERROR] ${msg}`));
-        controller.close();
+        const parsed = JSON.parse(err.message);
+        message = parsed?.error?.message ?? err.message;
+      } catch {
+        message = err.message;
       }
-    },
-  });
-
-  return new Response(stream, {
-    headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-cache" },
-  });
+    }
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
 }
