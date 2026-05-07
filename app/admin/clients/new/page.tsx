@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-const PHASE_STATUSES = ["in_progress", "passed", "failed"];
+const PHASE_STATUSES = ["ready_to_start", "in_progress", "passed", "failed"];
 
 function generateTempPassword() {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
@@ -28,8 +28,8 @@ export default function NewClientPage() {
     password: generateTempPassword(),
     prop_firm: "",
     phase: "1",
-    phase_status: "in_progress",
-    balance: "100000",
+    phase_status: "ready_to_start",
+    balance: "0",
     profit_goal: "10",
     days_allowed: "30",
   });
@@ -157,7 +157,7 @@ export default function NewClientPage() {
           <button
             onClick={() => {
               setCreatedUserId(null);
-              setForm({ first_name: "", last_name: "", email: "", password: generateTempPassword(), prop_firm: "", phase: "1", phase_status: "in_progress", balance: "100000", profit_goal: "10", days_allowed: "30" });
+              setForm({ first_name: "", last_name: "", email: "", password: generateTempPassword(), prop_firm: "", phase: "1", phase_status: "ready_to_start", balance: "0", profit_goal: "10", days_allowed: "30" });
             }}
             style={{
               flex: 1,

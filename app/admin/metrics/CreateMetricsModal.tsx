@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 const PROP_FIRMS = ["FTMO", "FundedTrader", "E8", "The5ers", "True Forex Funds", "Topstep", "Earn2Trade", "City Traders Imperium"];
-const PHASE_STATUSES = ["in_progress", "passed", "failed"];
+const PHASE_STATUSES = ["ready_to_start", "in_progress", "passed", "failed"];
 
 interface CreateMetricsModalProps {
   onClose: () => void;
@@ -14,9 +14,9 @@ export default function CreateMetricsModal({ onClose, onSuccess }: CreateMetrics
   const [userId, setUserId] = useState("");
   const [propFirm, setPropFirm] = useState("");
   const [phase, setPhase] = useState(1);
-  const [phaseStatus, setPhaseStatus] = useState("in_progress");
-  const [balance, setBalance] = useState(100000);
-  const [equity, setEquity] = useState(100000);
+  const [phaseStatus, setPhaseStatus] = useState("ready_to_start");
+  const [balance, setBalance] = useState(0);
+  const [equity, setEquity] = useState(0);
   const [dailyDD, setDailyDD] = useState(0);
   const [maxDD, setMaxDD] = useState(0);
   const [profitTarget, setProfitTarget] = useState(0);
