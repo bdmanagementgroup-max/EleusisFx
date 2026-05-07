@@ -190,7 +190,7 @@ export default function MetricsPageClient({ activeRows, pastRows }: { activeRows
                   }}>
                     {status.replace("_", " ")}
                   </span>
-                  <Link href="/admin/past-clients" style={{ fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", color: "#4f8ef7", textDecoration: "none", border: "1px solid rgba(79,142,247,0.2)", padding: "4px 10px", whiteSpace: "nowrap" }}>
+                  <Link href={`/admin/past-clients/${p.id}`} style={{ fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", color: "#4f8ef7", textDecoration: "none", border: "1px solid rgba(79,142,247,0.2)", padding: "4px 10px", whiteSpace: "nowrap" }}>
                     Edit →
                   </Link>
                 </div>
