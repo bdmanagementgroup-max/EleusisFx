@@ -73,6 +73,140 @@ const TEMPLATES = [
           <p style="margin:0;font-size:14px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Best of luck — we&apos;re rooting for you.</p>
         </td></tr>`),
   },
+  // ─── Application Nurture Sequence (Days 2–5) ──────────────────────────────
+  {
+    label: "Nurture Day 2 — Why Eleusis FX",
+    subject: "Why 700+ Traders Chose Eleusis FX — Eleusis FX",
+    html: emailWrapper(`
+        <tr><td style="padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 12px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">Day 2</p>
+          <h1 style="margin:0 0 16px;font-size:34px;font-weight:800;letter-spacing:-1px;color:#e8eaf0;line-height:1.1;font-family:Arial,sans-serif;">Why Traders Choose Us.</h1>
+          <p style="margin:0;font-size:15px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Hi [First Name], we&apos;ll follow up on your application shortly. In the meantime — here&apos;s why over 700 traders have trusted Eleusis FX with their evaluations.</p>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 16px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">What Sets Us Apart</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr><td style="padding:14px 18px;background:#08090f;border:1px solid rgba(79,142,247,0.2);border-bottom:none;">
+              <p style="margin:0 0 4px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">15 Years Experience</p>
+              <p style="margin:0;font-size:13px;color:rgba(210,220,240,0.88);line-height:1.6;font-family:Arial,sans-serif;">Manual price action and volume analysis — no black box, no automated system. We trade it the right way.</p>
+            </td></tr>
+            <tr><td style="padding:14px 18px;background:#08090f;border:1px solid rgba(79,142,247,0.2);border-bottom:none;">
+              <p style="margin:0 0 4px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">Guaranteed Pass</p>
+              <p style="margin:0;font-size:13px;color:rgba(210,220,240,0.88);line-height:1.6;font-family:Arial,sans-serif;">We trade on your behalf. If the evaluation doesn&apos;t pass, we make it right — no excuses, no grey areas.</p>
+            </td></tr>
+            <tr><td style="padding:14px 18px;background:#08090f;border:1px solid rgba(79,142,247,0.2);">
+              <p style="margin:0 0 4px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">Transparent &amp; Verified</p>
+              <p style="margin:0;font-size:13px;color:rgba(210,220,240,0.88);line-height:1.6;font-family:Arial,sans-serif;">Real face, real track record, verified throughout trading communities. Not another faceless service.</p>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 16px;font-size:14px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">We&apos;ll be in touch within 24 hours to confirm your spot and walk you through the process. Any questions in the meantime — just reply here.</p>
+          <a href="https://eleusisfx.uk" style="display:inline-block;background:#4f8ef7;color:#020305;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:14px 26px;text-decoration:none;font-family:Arial,sans-serif;">Learn More &rarr;</a>
+        </td></tr>`),
+  },
+  {
+    label: "Nurture Day 3 — The ROI Case",
+    subject: "Is £1,150 Worth It? Here's the Maths — Eleusis FX",
+    html: emailWrapper(`
+        <tr><td style="padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 12px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">Day 3</p>
+          <h1 style="margin:0 0 16px;font-size:34px;font-weight:800;letter-spacing:-1px;color:#e8eaf0;line-height:1.1;font-family:Arial,sans-serif;">The Numbers Don&apos;t Lie.</h1>
+          <p style="margin:0;font-size:15px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Hi [First Name], we know what you&apos;re thinking. Is £1,150 worth it? Let&apos;s break it down.</p>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 16px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">The Return on a £100K Account</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(79,142,247,0.2);border-top:2px solid #4f8ef7;">
+            <tr><td style="padding:24px 24px 0;">
+              <p style="margin:0 0 20px;font-size:13px;line-height:1.7;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">A funded £100K account at a conservative 5% monthly return generates <strong style="color:#22c55e;">£5,000/month</strong>. At 80% profit split that&apos;s <strong style="color:#22c55e;">£4,000 in your pocket — every month.</strong></p>
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="padding:10px 0;border-top:1px solid rgba(255,255,255,0.06);font-size:13px;color:rgba(210,220,240,0.58);font-family:Arial,sans-serif;">Evaluation Pass Fee</td>
+                  <td align="right" style="padding:10px 0;border-top:1px solid rgba(255,255,255,0.06);font-size:13px;color:#e8eaf0;font-family:Arial,sans-serif;">£1,150</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 0;border-top:1px solid rgba(255,255,255,0.06);font-size:13px;color:rgba(210,220,240,0.58);font-family:Arial,sans-serif;">Month 1 Return (conservative)</td>
+                  <td align="right" style="padding:10px 0;border-top:1px solid rgba(255,255,255,0.06);font-size:13px;color:#22c55e;font-family:Arial,sans-serif;">+£4,000</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 0;border-top:1px solid rgba(255,255,255,0.06);font-size:13px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">ROI After Month 1</td>
+                  <td align="right" style="padding:10px 0;border-top:1px solid rgba(255,255,255,0.06);font-size:13px;font-weight:700;color:#22c55e;font-family:Arial,sans-serif;">+248%</td>
+                </tr>
+              </table>
+            </td></tr>
+            <tr><td style="padding:16px 24px 24px;">
+              <p style="margin:0;font-size:12px;color:rgba(210,220,240,0.4);line-height:1.6;font-family:Arial,sans-serif;">The fee pays for itself in the first month. Everything after that is profit.</p>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 16px;font-size:14px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Ready to move forward? Reply to this email or DM us on Instagram <a href="https://instagram.com/eleusisfx" style="color:#4f8ef7;text-decoration:none;">@EleusisFx</a> and we&apos;ll get you started.</p>
+          <a href="https://eleusisfx.uk/#apply" style="display:inline-block;background:#4f8ef7;color:#020305;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:14px 26px;text-decoration:none;font-family:Arial,sans-serif;">Secure Your Spot &rarr;</a>
+        </td></tr>`),
+  },
+  {
+    label: "Nurture Day 4 — Urgency",
+    subject: "We Only Take a Limited Number of Clients — Eleusis FX",
+    html: emailWrapper(`
+        <tr><td style="padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 12px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">Day 4</p>
+          <h1 style="margin:0 0 16px;font-size:34px;font-weight:800;letter-spacing:-1px;color:#e8eaf0;line-height:1.1;font-family:Arial,sans-serif;">Spots Are Limited.</h1>
+          <p style="margin:0;font-size:15px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Hi [First Name], a quick note on how we work — and why it matters for your application.</p>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 16px;font-size:14px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">We don&apos;t run a volume business. We trade every evaluation account manually — that means we can only take on a limited number of clients at any one time.</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(255,255,255,0.06);border-left:3px solid #4f8ef7;">
+            <tr><td style="padding:20px 24px;">
+              <p style="margin:0;font-size:14px;line-height:1.75;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">&ldquo;Each account gets the same attention as if it were my own money on the line. That&apos;s the standard we hold.&rdquo;</p>
+              <p style="margin:12px 0 0;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#4f8ef7;font-family:Arial,sans-serif;">— Ben Davies, Eleusis FX</p>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 16px;font-size:14px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Your application is still under review. If you haven&apos;t heard back yet, now is the right time to confirm your interest — spots go quickly and we work on a first-confirmed basis.</p>
+          <a href="mailto:admin@eleusisfx.uk" style="display:inline-block;background:#4f8ef7;color:#020305;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:14px 26px;text-decoration:none;font-family:Arial,sans-serif;">Confirm My Interest &rarr;</a>
+        </td></tr>`),
+  },
+  {
+    label: "Nurture Day 5 — Final CTA",
+    subject: "Still Interested? Here's How to Get Started — Eleusis FX",
+    html: emailWrapper(`
+        <tr><td style="padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 12px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">Day 5</p>
+          <h1 style="margin:0 0 16px;font-size:34px;font-weight:800;letter-spacing:-1px;color:#e8eaf0;line-height:1.1;font-family:Arial,sans-serif;">Last One From Us.</h1>
+          <p style="margin:0;font-size:15px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Hi [First Name], we don&apos;t believe in chasing. If the timing isn&apos;t right, that&apos;s fine — but if you&apos;re still serious about getting funded, here&apos;s exactly what to do next.</p>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 16px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">How to Get Started</p>
+          <table cellpadding="0" cellspacing="0" border="0">
+            ${["Reply to this email with &ldquo;I&apos;m in&rdquo; — we&apos;ll confirm availability and send you the details.", "We set up your evaluation account and start trading on your behalf.", "You track progress in your dashboard. We handle the rest.", "You pass. You get funded. We take 20% of monthly profits after that."].map((t, i) => `
+            <tr>
+              <td style="padding-bottom:16px;vertical-align:top;">
+                <span style="display:inline-block;width:28px;height:28px;border:1px solid rgba(79,142,247,0.25);font-size:9px;letter-spacing:1px;color:#4f8ef7;text-align:center;line-height:28px;font-family:Arial,sans-serif;">0${i + 1}</span>
+              </td>
+              <td style="padding:4px 0 16px 14px;font-size:13px;color:rgba(210,220,240,0.88);line-height:1.6;font-family:Arial,sans-serif;">${t}</td>
+            </tr>`).join("")}
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 20px;font-size:14px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">700+ traders have been through this process. The ones who got funded are the ones who took the step.</p>
+          <a href="mailto:admin@eleusisfx.uk?subject=I'm in" style="display:inline-block;background:#4f8ef7;color:#020305;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:14px 26px;text-decoration:none;font-family:Arial,sans-serif;">I&apos;m In &rarr;</a>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;">
+          <p style="margin:0;font-size:13px;line-height:1.8;color:rgba(210,220,240,0.58);font-family:Arial,sans-serif;">Or DM us on Instagram: <a href="https://instagram.com/eleusisfx" style="color:#4f8ef7;text-decoration:none;">@EleusisFx</a></p>
+        </td></tr>`),
+  },
+  // ─── End Nurture Sequence ──────────────────────────────────────────────────
+
   {
     label: "Progress Check-In",
     subject: "Checking In — Your Evaluation",

@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
       first_name = "", last_name = "",
       email, password,
       prop_firm = "", phase = 1, phase_status = "in_progress",
-      balance = 100000, profit_goal = 10, days_allowed = 30,
+      balance = 0, profit_goal = 10, days_allowed = 30,
     } = await req.json();
 
     if (!email || !password) {

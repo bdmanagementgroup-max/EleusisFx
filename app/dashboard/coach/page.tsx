@@ -1,12 +1,8 @@
-import { redirect } from "next/navigation";
-import { getSupabaseServerClient } from "@/lib/supabase/server";
-import CoachClient from "./CoachClient";
+import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
-export default async function CoachPage() {
-  const supabase = await getSupabaseServerClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-  return <CoachClient />;
+// AI Coach is disabled — remove notFound() call to re-enable
+export default function CoachPage() {
+  notFound();
 }

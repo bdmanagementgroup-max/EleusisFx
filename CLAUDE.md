@@ -127,8 +127,8 @@ Collapsible sidebar shell: `components/admin/AdminShell.tsx`
 - **From address:** `admin@eleusisfx.uk` (set via `RESEND_FROM` env var)
 - **Welcome email:** `lib/email/sendWelcomeEmail.ts` — includes temp password + dashboard link + free PDF guides
 - **PDF email:** `lib/email/sendPdfEmail.ts`
-- **Inbound (receiving):** ForwardEmail.net free plan — MX records on Vercel DNS forward `admin@eleusisfx.uk` to personal Gmail. Tested working.
-- **Admin inbox panel** (`/admin/inbox`): Built and awaiting `received-emails-migration.sql` to be run in Supabase. Webhook at `/api/webhooks/inbound-email` ready — needs ForwardEmail Pro ($3/mo) to activate webhook support.
+- **Inbound (receiving):** ForwardEmail.net Pro — MX records on Vercel DNS. Webhook at `/api/webhooks/inbound-email` active, stores emails in `received_emails` table.
+- **Admin inbox panel** (`/admin/inbox`): Live. Split-pane list + detail, mark-as-read, mailto reply.
 - **Email editor templates (8):**
   1. Welcome — New Client
   2. Progress Check-In
@@ -155,7 +155,7 @@ Collapsible sidebar shell: `components/admin/AdminShell.tsx`
 - **New client (admin)** → `POST /api/admin/create-client` → Supabase auth + `client_metrics` + `applications`
 - **Send welcome** → `POST /api/admin/send-welcome` → creates/resets account + sends email with temp password
 - **Bulk email** → `POST /api/admin/send-email` → `resend.batch.send()` (100/batch)
-- **Inbound email** → ForwardEmail.net MX → personal Gmail (+ future webhook → `received_emails`)
+- **Inbound email** → ForwardEmail.net Pro MX → webhook → `received_emails` table → `/admin/inbox`
 - **Market data** → `/api/market/forex` (Yahoo Finance, free/keyless) + `/api/market/crypto` (CoinGecko), 60s server cache
 
 ## Market Data Architecture (updated 2026-05-01)
@@ -191,12 +191,7 @@ Fetches **Yahoo Finance** daily OHLCV (1 year, free, no API key) for all 12 fore
 | `support_tickets` | Client support requests (RLS) | `client-dashboard-migration.sql` |
 | `client_documents` | Admin docs visible to clients (RLS) | `client-dashboard-migration.sql` |
 | `client_notifications` | Admin → client internal messages (RLS) | `client-dashboard-migration.sql` |
-| `received_emails` | Inbound emails at admin@eleusisfx.uk | `received-emails-migration.sql` ⚠️ **not yet run** |
-
-## Pending Migrations (run in Supabase SQL Editor)
-
-- `received-emails-migration.sql` — required for `/admin/inbox` to store emails
-- `client-dashboard-migration.sql` — required for profile/support/documents/notifications pages
+| `received_emails` | Inbound emails at admin@eleusisfx.uk | `received-emails-migration.sql` |
 
 ## Styling
 

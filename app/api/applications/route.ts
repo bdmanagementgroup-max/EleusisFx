@@ -70,7 +70,8 @@ export async function POST(req: NextRequest) {
     }
 
     const notionKey = process.env.NOTION_API_KEY;
-    const notionDb = process.env.NOTION_LEADS_DATABASE_ID;
+    // Strip any query string that may have been copied from the Notion URL (e.g. ?v=...)
+    const notionDb = process.env.NOTION_LEADS_DATABASE_ID?.split("?")[0];
 
     if (notionKey && notionDb) {
       try {
@@ -91,10 +92,10 @@ export async function POST(req: NextRequest) {
         });
         console.log("[applications] Notion page created successfully");
       } catch (notionErr: any) {
-        console.error("[applications] Notion error:", notionErr?.message);
+        console.error("[applications] Notion error:", notionErr?.message, notionErr?.code, notionErr?.status);
       }
     } else {
-      console.log("[applications] Notion not configured — skipping");
+      console.warn("[applications] Notion not configured — NOTION_API_KEY or NOTION_LEADS_DATABASE_ID missing");
     }
 
     // Also write to Supabase
