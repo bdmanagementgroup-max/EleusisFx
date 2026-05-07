@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-const PHASE_STATUSES = ["ready_to_start", "in_progress", "passed", "failed"];
+const PHASE_STATUSES = ["ready_to_start", "in_progress", "neutral", "passed", "failed"];
 
 function generateTempPassword() {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";

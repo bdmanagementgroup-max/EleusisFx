@@ -66,7 +66,7 @@ export default async function DashboardPage() {
       <div style={{ display: "inline-flex", alignItems: "center", gap: 10, background: archived ? "rgba(245,158,11,0.07)" : "rgba(79,142,247,0.07)", border: `1px solid ${archived ? "rgba(245,158,11,0.2)" : "rgba(79,142,247,0.2)"}`, padding: "10px 20px", marginBottom: 32 }}>
         <span style={{ width: 6, height: 6, borderRadius: "50%", background: archived ? "#f59e0b" : "#4f8ef7", display: "inline-block" }} />
         <span style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontSize: 11, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase", color: archived ? "#fbbf24" : "#7eb3ff" }}>
-          {archived ? "Archived" : `Phase ${m.phase} — ${m.phase_status === "ready_to_start" ? "Ready To Start" : m.phase_status === "in_progress" ? "In Progress" : m.phase_status === "passed" ? "Passed" : "Failed"}`}
+          {archived ? "Archived" : `Phase ${m.phase} — ${m.phase_status === "ready_to_start" ? "Ready To Start" : m.phase_status === "in_progress" ? "In Progress" : m.phase_status === "neutral" ? "Neutral" : m.phase_status === "passed" ? "Passed" : "Failed"}`}
           {m.prop_firm ? ` · ${m.prop_firm}` : ""}
           {archived && m.challenge_result ? ` · ${m.challenge_result}` : ""}
         </span>

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-const PHASE_STATUSES = ["ready_to_start", "in_progress", "passed", "failed"];
+const PHASE_STATUSES = ["ready_to_start", "in_progress", "neutral", "passed", "failed"];
 
 const inputStyle: React.CSSProperties = {
   width: "100%", boxSizing: "border-box",

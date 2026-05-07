@@ -21,7 +21,7 @@ type MetricsRow = {
   updated_at: string | null;
 };
 
-const PHASE_STATUSES = ["ready_to_start", "in_progress", "passed", "failed"];
+const PHASE_STATUSES = ["ready_to_start", "in_progress", "neutral", "passed", "failed"];
 
 const inputStyle: React.CSSProperties = {
   width: "100%", boxSizing: "border-box",
@@ -152,8 +152,8 @@ export default function MetricsClient({ rows: initial }: { rows: MetricsRow[] })
               <span style={{ fontSize: 11, color: "rgba(210,220,240,0.88)" }}>Phase {row.phase}</span>
               <span style={{
                 fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", padding: "3px 10px",
-                background: row.phase_status === "passed" ? "rgba(34,197,94,0.08)" : row.phase_status === "failed" ? "rgba(239,68,68,0.08)" : row.phase_status === "ready_to_start" ? "rgba(245,158,11,0.08)" : "rgba(79,142,247,0.08)",
-                color: row.phase_status === "passed" ? "#22c55e" : row.phase_status === "failed" ? "#ef4444" : row.phase_status === "ready_to_start" ? "#f59e0b" : "#4f8ef7",
+                background: row.phase_status === "passed" ? "rgba(34,197,94,0.08)" : row.phase_status === "failed" ? "rgba(239,68,68,0.08)" : row.phase_status === "ready_to_start" ? "rgba(245,158,11,0.08)" : row.phase_status === "neutral" ? "rgba(107,114,128,0.08)" : "rgba(79,142,247,0.08)",
+                color: row.phase_status === "passed" ? "#22c55e" : row.phase_status === "failed" ? "#ef4444" : row.phase_status === "ready_to_start" ? "#f59e0b" : row.phase_status === "neutral" ? "#6b7280" : "#4f8ef7",
               }}>
                 {row.phase_status.replace("_", " ")}
               </span>
