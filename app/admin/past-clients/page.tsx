@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Past Clients — Admin",
+  title: "Clients Database — Admin",
 };
 
 export default async function PastClientsPage() {
@@ -20,7 +20,7 @@ export default async function PastClientsPage() {
     <div style={{ padding: "40px 48px", background: "#020305", minHeight: "100vh" }}>
       <div style={{ marginBottom: 36 }}>
         <div style={{ fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: "#4f8ef7", marginBottom: 12 }}>
-          Admin · Past Clients
+          Admin · Clients Database
         </div>
         <h1 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 32, letterSpacing: -1, color: "#e8eaf0", marginBottom: 8 }}>
           FTMO Client Database
