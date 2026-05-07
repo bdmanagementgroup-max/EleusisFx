@@ -185,8 +185,8 @@ export default function MetricsPageClient({ activeRows, pastRows }: { activeRows
                   )}
                   <span style={{
                     fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", padding: "3px 10px",
-                    background: isPass ? "rgba(34,197,94,0.08)" : isFail ? "rgba(239,68,68,0.08)" : "rgba(255,255,255,0.04)",
-                    color: isPass ? "#22c55e" : isFail ? "#ef4444" : "rgba(210,220,240,0.3)",
+                    background: isPass ? "rgba(34,197,94,0.08)" : isFail ? "rgba(239,68,68,0.08)" : status === "neutral" ? "rgba(210,220,240,0.05)" : "rgba(255,255,255,0.04)",
+                    color: isPass ? "#22c55e" : isFail ? "#ef4444" : status === "neutral" ? "rgba(210,220,240,0.45)" : "rgba(210,220,240,0.3)",
                   }}>
                     {status.replace("_", " ")}
                   </span>

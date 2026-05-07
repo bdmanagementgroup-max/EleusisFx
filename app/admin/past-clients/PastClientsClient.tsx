@@ -401,6 +401,7 @@ export default function PastClientsClient({ clients: initial }: { clients: Clien
                       <label style={labelStyle}>Phase Status</label>
                       <select value={editFields.phase_status} onChange={(e) => setEditFields((f) => ({ ...f, phase_status: e.target.value }))} style={inputStyle}>
                         <option value="unknown">Unknown</option>
+                        <option value="neutral">Neutral</option>
                         <option value="in_progress">In Progress</option>
                         <option value="passed">Passed</option>
                         <option value="failed">Failed</option>
