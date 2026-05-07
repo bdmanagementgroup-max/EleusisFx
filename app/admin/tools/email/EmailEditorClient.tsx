@@ -61,10 +61,21 @@ const TEMPLATES = [
         <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
           <p style="margin:0 0 16px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Key Rules</p>
           <table width="100%" cellpadding="0" cellspacing="0" border="0">
-            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Daily drawdown limit: <strong style="color:#e8eaf0;">5%</strong></td></tr>
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Daily drawdown limit: <strong style="color:#e8eaf0;">2%</strong></td></tr>
             <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Maximum drawdown: <strong style="color:#e8eaf0;">10%</strong></td></tr>
             <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Minimum trading days: <strong style="color:#e8eaf0;">4</strong></td></tr>
             <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Profit target: <strong style="color:#22c55e;">10%</strong></td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 8px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Your VPS &amp; AI Risk Manager</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(79,142,247,0.2);border-top:2px solid #4f8ef7;">
+            <tr><td style="padding:24px 24px 20px;">
+              <p style="margin:0 0 12px;font-size:14px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">Dedicated VPS assigned to your account.</p>
+              <p style="margin:0 0 14px;font-size:13px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">To ensure full compliance and protect against any IP-related issues with your prop firm, every client account is assigned a dedicated Virtual Private Server (VPS) running the Eleusis FX proprietary AI risk manager.</p>
+              <p style="margin:0;font-size:13px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">This means all trading activity originates from a clean, isolated environment &mdash; completely separate from your personal IP address &mdash; with our AI risk manager monitoring every position in real time to enforce drawdown limits and protect the account at all times.</p>
+            </td></tr>
           </table>
         </td></tr>
 
