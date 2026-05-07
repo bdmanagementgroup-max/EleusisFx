@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 const PROP_FIRMS = ["FTMO", "FundedTrader", "E8", "The5ers", "True Forex Funds", "Topstep", "Earn2Trade", "City Traders Imperium"];
-const PHASE_STATUSES = ["ready_to_start", "in_progress", "neutral", "passed", "failed"];
+const PHASE_STATUSES = ["ready_to_start", "in_progress", "passed", "failed"];
 
 interface CreateMetricsModalProps {
   onClose: () => void;

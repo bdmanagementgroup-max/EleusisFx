@@ -65,7 +65,7 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ u
     equity: Number(r.equity),
   }));
 
-  const phaseColor = m.phase_status === "passed" ? "#22c55e" : m.phase_status === "failed" ? "#ef4444" : m.phase_status === "ready_to_start" ? "#f59e0b" : m.phase_status === "neutral" ? "#6b7280" : "#4f8ef7";
+  const phaseColor = m.phase_status === "passed" ? "#22c55e" : m.phase_status === "failed" ? "#ef4444" : m.phase_status === "ready_to_start" ? "#f59e0b" : "#4f8ef7";
 
   return (
     <div style={{ padding: "40px 48px 80px" }}>
