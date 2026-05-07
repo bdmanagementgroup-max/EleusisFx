@@ -6,7 +6,7 @@ create table if not exists client_metrics (
   user_id        uuid references auth.users(id) on delete cascade unique,
   prop_firm      text,
   phase          int default 1,
-  phase_status   text default 'in_progress', -- in_progress | passed | failed
+  phase_status   text default 'in_progress', -- neutral | ready_to_start | in_progress | passed | failed
   balance        numeric default 100000,
   equity         numeric default 100000,
   daily_drawdown numeric default 0,  -- percentage
