@@ -978,6 +978,222 @@ const TEMPLATES = [
 </html>`,
   },
   {
+    label: "Prospect — £550 · Evaluation Pass",
+    subject: "Your Application — £550 Evaluation Pass | Eleusis FX",
+    html: emailWrapper(`
+        <tr><td style="padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 12px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">New Application</p>
+          <h1 style="margin:0 0 16px;font-size:36px;font-weight:800;letter-spacing:-1px;color:#e8eaf0;line-height:1.1;font-family:Arial,sans-serif;">Your Application&apos;s In.</h1>
+          <p style="margin:0;font-size:15px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Hi [First Name], we&apos;ve reviewed your application. Based on your evaluation target, here&apos;s exactly what we&apos;re putting in front of you.</p>
+        </td></tr>
+
+        <tr><td style="padding:36px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 8px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">The Offer</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(79,142,247,0.2);border-top:2px solid #4f8ef7;">
+            <tr><td style="padding:28px 28px 24px;">
+              <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">$50,000 Evaluation Pass</p>
+              <p style="margin:0 0 4px;font-size:40px;font-weight:800;letter-spacing:-1.5px;color:#e8eaf0;line-height:1;font-family:Arial,sans-serif;">&pound;550</p>
+              <p style="margin:0 0 24px;font-size:12px;color:rgba(210,220,240,0.45);font-family:Arial,sans-serif;">One payment. No monthly fees. No hidden costs.</p>
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr><td style="padding:9px 0;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <span style="color:#4f8ef7;margin-right:10px;">&#10003;</span> We trade Phase 1 &amp; Phase 2 on your behalf
+                </td></tr>
+                <tr><td style="padding:9px 0;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <span style="color:#4f8ef7;margin-right:10px;">&#10003;</span> Strict rules compliance &mdash; zero violations
+                </td></tr>
+                <tr><td style="padding:9px 0;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <span style="color:#4f8ef7;margin-right:10px;">&#10003;</span> You keep 80% of all profits on the funded account
+                </td></tr>
+                <tr><td style="padding:9px 0;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">
+                  <span style="color:#4f8ef7;margin-right:10px;">&#10003;</span> Re-trade at no charge if we fail (we never have)
+                </td></tr>
+              </table>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:36px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 8px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">The Numbers</p>
+          <p style="margin:0 0 20px;font-size:14px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Once you&apos;re funded, your $50,000 account starts generating returns immediately. Here&apos;s what conservative monthly performance looks like after costs:</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;width:50%;">Monthly Return</td>
+              <td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Your 80% Share</td>
+            </tr>
+            <tr>
+              <td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">3% &mdash; conservative</td>
+              <td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;font-weight:700;color:#22c55e;font-family:Arial,sans-serif;">~&pound;1,185/month</td>
+            </tr>
+            <tr>
+              <td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">5% &mdash; typical</td>
+              <td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);font-size:13px;font-weight:700;color:#22c55e;font-family:Arial,sans-serif;">~&pound;1,975/month</td>
+            </tr>
+          </table>
+          <p style="margin:16px 0 0;font-size:12px;color:rgba(210,220,240,0.45);font-family:Arial,sans-serif;">Your &pound;550 investment pays for itself inside the first two weeks of live trading.</p>
+        </td></tr>
+
+        <tr><td style="padding:36px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 8px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Why It Works</p>
+          <p style="margin:0 0 20px;font-size:14px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">The FTMO pass rate for self-directed traders sits below 10%. That&apos;s not because traders don&apos;t have a strategy. It&apos;s because the evaluation environment changes how people trade &mdash; they oversize, they revenge trade, they abandon their process under pressure.</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(255,255,255,0.06);border-left:3px solid #4f8ef7;">
+            <tr><td style="padding:20px 24px;">
+              <p style="margin:0 0 10px;font-size:14px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">We remove the psychological variable entirely.</p>
+              <p style="margin:0;font-size:13px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Our traders are not personally exposed to the outcome of your evaluation. They execute the same disciplined process they run every day &mdash; 15 years of experience, 700+ evaluations passed since 2019.</p>
+            </td></tr>
+          </table>
+          <p style="margin:16px 0 0;font-size:13px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Read the full breakdown: <a href="https://eleusisfx.uk/articles/why-traders-fail-prop-firm-evaluation" style="color:#4f8ef7;text-decoration:none;">Why Traders Fail Prop Firm Evaluations &rarr;</a></p>
+        </td></tr>
+
+        <tr><td style="padding:36px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(255,255,255,0.06);border-top:2px solid #4f8ef7;">
+            <tr><td style="padding:28px;">
+              <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Track Record</p>
+              <p style="margin:0 0 20px;font-size:15px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">87% pass rate &nbsp;&middot;&nbsp; 700+ clients &nbsp;&middot;&nbsp; Operating since 2019.</p>
+              <p style="margin:0;font-size:13px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">UK-based, face-on-camera, fully verifiable. We don&apos;t run automated strategies. Every evaluation is traded by an experienced human trader with a documented track record.</p>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:36px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 8px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">What Happens Next</p>
+          <table cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td style="padding-bottom:14px;vertical-align:top;">
+                <span style="display:inline-block;width:28px;height:28px;border:1px solid rgba(79,142,247,0.25);font-size:9px;letter-spacing:1px;color:#4f8ef7;text-align:center;line-height:28px;font-family:Arial,sans-serif;">01</span>
+              </td>
+              <td style="padding:4px 0 14px 14px;font-size:13px;color:rgba(210,220,240,0.88);line-height:1.6;font-family:Arial,sans-serif;">Reply to this email to confirm you want to proceed.</td>
+            </tr>
+            <tr>
+              <td style="padding-bottom:14px;vertical-align:top;">
+                <span style="display:inline-block;width:28px;height:28px;border:1px solid rgba(79,142,247,0.25);font-size:9px;letter-spacing:1px;color:#4f8ef7;text-align:center;line-height:28px;font-family:Arial,sans-serif;">02</span>
+              </td>
+              <td style="padding:4px 0 14px 14px;font-size:13px;color:rgba(210,220,240,0.88);line-height:1.6;font-family:Arial,sans-serif;">We send a payment link and confirm your evaluation start date.</td>
+            </tr>
+            <tr>
+              <td style="vertical-align:top;">
+                <span style="display:inline-block;width:28px;height:28px;border:1px solid rgba(79,142,247,0.25);font-size:9px;letter-spacing:1px;color:#4f8ef7;text-align:center;line-height:28px;font-family:Arial,sans-serif;">03</span>
+              </td>
+              <td style="padding:4px 0 0 14px;font-size:13px;color:rgba(210,220,240,0.88);line-height:1.6;font-family:Arial,sans-serif;">We trade your evaluation. You watch your dashboard. You get funded.</td>
+            </tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:36px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 20px;font-size:14px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Spots are limited this month. Reply to this email to confirm your place or ask any questions.</p>
+          <a href="https://eleusisfx.uk/#apply" style="display:inline-block;background:#4f8ef7;color:#020305;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:14px 26px;text-decoration:none;font-family:Arial,sans-serif;">Confirm Your Spot &rarr;</a>
+        </td></tr>`),
+  },
+  {
+    label: "Prospect — £1,100 · Evaluation Pass",
+    subject: "Your Application — £1,100 Evaluation Pass | Eleusis FX",
+    html: emailWrapper(`
+        <tr><td style="padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 12px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">New Application</p>
+          <h1 style="margin:0 0 16px;font-size:36px;font-weight:800;letter-spacing:-1px;color:#e8eaf0;line-height:1.1;font-family:Arial,sans-serif;">Your Application&apos;s In.</h1>
+          <p style="margin:0;font-size:15px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Hi [First Name], we&apos;ve reviewed your application. This is the offer we put to most of our clients &mdash; and the one that produces the strongest return on investment.</p>
+        </td></tr>
+
+        <tr><td style="padding:36px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 8px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">The Offer</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(79,142,247,0.2);border-top:2px solid #4f8ef7;">
+            <tr><td style="padding:28px 28px 24px;">
+              <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">$100,000 Evaluation Pass</p>
+              <p style="margin:0 0 4px;font-size:40px;font-weight:800;letter-spacing:-1.5px;color:#e8eaf0;line-height:1;font-family:Arial,sans-serif;">&pound;1,100</p>
+              <p style="margin:0 0 24px;font-size:12px;color:rgba(210,220,240,0.45);font-family:Arial,sans-serif;">One payment. No monthly fees. No hidden costs.</p>
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr><td style="padding:9px 0;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <span style="color:#4f8ef7;margin-right:10px;">&#10003;</span> We trade Phase 1 &amp; Phase 2 on your behalf
+                </td></tr>
+                <tr><td style="padding:9px 0;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <span style="color:#4f8ef7;margin-right:10px;">&#10003;</span> Strict rules compliance &mdash; zero violations
+                </td></tr>
+                <tr><td style="padding:9px 0;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <span style="color:#4f8ef7;margin-right:10px;">&#10003;</span> You keep 80% of all profits on the funded account
+                </td></tr>
+                <tr><td style="padding:9px 0;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">
+                  <span style="color:#4f8ef7;margin-right:10px;">&#10003;</span> Re-trade at no charge if we fail (we never have)
+                </td></tr>
+              </table>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:36px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 8px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">The Numbers</p>
+          <p style="margin:0 0 20px;font-size:14px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Once you&apos;re funded on a $100,000 account, your 80% profit share builds quickly. Here&apos;s what conservative monthly performance looks like:</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;width:50%;">Monthly Return</td>
+              <td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Your 80% Share</td>
+            </tr>
+            <tr>
+              <td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">3% &mdash; conservative</td>
+              <td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;font-weight:700;color:#22c55e;font-family:Arial,sans-serif;">~&pound;2,370/month</td>
+            </tr>
+            <tr>
+              <td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">5% &mdash; typical</td>
+              <td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;font-weight:700;color:#22c55e;font-family:Arial,sans-serif;">~&pound;3,950/month</td>
+            </tr>
+            <tr>
+              <td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">10% &mdash; strong month</td>
+              <td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);font-size:13px;font-weight:700;color:#22c55e;font-family:Arial,sans-serif;">~&pound;7,900/month</td>
+            </tr>
+          </table>
+          <p style="margin:16px 0 0;font-size:12px;color:rgba(210,220,240,0.45);font-family:Arial,sans-serif;">Your &pound;1,100 investment pays for itself inside the first two weeks of live trading at conservative returns.</p>
+        </td></tr>
+
+        <tr><td style="padding:36px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 8px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">What You&apos;re Avoiding</p>
+          <p style="margin:0 0 20px;font-size:14px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">FTMO&apos;s trailing maximum drawdown rule catches more traders than any other part of the evaluation &mdash; including experienced ones. The floor rises with your equity, meaning a strong start actively reduces your margin for error later. Most traders don&apos;t discover this until the challenge ends.</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(255,255,255,0.06);border-left:3px solid #4f8ef7;">
+            <tr><td style="padding:20px 24px;">
+              <p style="margin:0 0 10px;font-size:14px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">We manage the drawdown mechanics so you don&apos;t have to.</p>
+              <p style="margin:0;font-size:13px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Our traders track every rule parameter in real time across every session. We&apos;ve passed 700+ evaluations and know exactly where challenges end &mdash; and how to ensure they don&apos;t.</p>
+            </td></tr>
+          </table>
+          <p style="margin:16px 0 0;font-size:13px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Full breakdown: <a href="https://eleusisfx.uk/articles/ftmo-drawdown-rules-explained" style="color:#4f8ef7;text-decoration:none;">FTMO Drawdown Rules Explained &rarr;</a></p>
+        </td></tr>
+
+        <tr><td style="padding:36px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(255,255,255,0.06);border-top:2px solid #4f8ef7;">
+            <tr><td style="padding:28px;">
+              <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Track Record</p>
+              <p style="margin:0 0 20px;font-size:15px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">87% pass rate &nbsp;&middot;&nbsp; 700+ clients &nbsp;&middot;&nbsp; Operating since 2019.</p>
+              <p style="margin:0;font-size:13px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">UK-based, face-on-camera, fully verifiable. We don&apos;t run automated strategies or outsource. Every evaluation is traded by an experienced human trader with 15 years of documented track record across FTMO, True Forex Funds, and other leading prop firms.</p>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:36px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 8px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">What Happens Next</p>
+          <table cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td style="padding-bottom:14px;vertical-align:top;">
+                <span style="display:inline-block;width:28px;height:28px;border:1px solid rgba(79,142,247,0.25);font-size:9px;letter-spacing:1px;color:#4f8ef7;text-align:center;line-height:28px;font-family:Arial,sans-serif;">01</span>
+              </td>
+              <td style="padding:4px 0 14px 14px;font-size:13px;color:rgba(210,220,240,0.88);line-height:1.6;font-family:Arial,sans-serif;">Reply to this email to confirm you want to proceed.</td>
+            </tr>
+            <tr>
+              <td style="padding-bottom:14px;vertical-align:top;">
+                <span style="display:inline-block;width:28px;height:28px;border:1px solid rgba(79,142,247,0.25);font-size:9px;letter-spacing:1px;color:#4f8ef7;text-align:center;line-height:28px;font-family:Arial,sans-serif;">02</span>
+              </td>
+              <td style="padding:4px 0 14px 14px;font-size:13px;color:rgba(210,220,240,0.88);line-height:1.6;font-family:Arial,sans-serif;">We send a payment link and confirm your evaluation start date.</td>
+            </tr>
+            <tr>
+              <td style="vertical-align:top;">
+                <span style="display:inline-block;width:28px;height:28px;border:1px solid rgba(79,142,247,0.25);font-size:9px;letter-spacing:1px;color:#4f8ef7;text-align:center;line-height:28px;font-family:Arial,sans-serif;">03</span>
+              </td>
+              <td style="padding:4px 0 0 14px;font-size:13px;color:rgba(210,220,240,0.88);line-height:1.6;font-family:Arial,sans-serif;">We trade your evaluation. You track progress live in your dashboard. You get funded.</td>
+            </tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:36px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 20px;font-size:14px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Spots are limited this month. Reply to confirm your place or ask any questions &mdash; we respond same day.</p>
+          <a href="https://eleusisfx.uk/#apply" style="display:inline-block;background:#4f8ef7;color:#020305;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:14px 26px;text-decoration:none;font-family:Arial,sans-serif;">Confirm Your Spot &rarr;</a>
+        </td></tr>`),
+  },
+  {
     label: "Re-engagement",
     subject: "Ready for Another Run? — Eleusis FX",
     html: emailWrapper(`
