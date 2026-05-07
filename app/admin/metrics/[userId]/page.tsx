@@ -81,7 +81,7 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ u
           fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", padding: "4px 12px",
           background: `${phaseColor}18`, color: phaseColor,
         }}>
-          Phase {m.phase} · {m.phase_status.replace("_", " ")}
+          {m.phase === 0 ? "Neutral" : `Phase ${m.phase}`} · {m.phase_status.replace("_", " ")}
         </span>
         {m.prop_firm && (
           <span style={{ fontSize: 11, color: "rgba(210,220,240,0.4)" }}>{m.prop_firm}</span>

@@ -120,6 +120,7 @@ export default function CreateMetricsModal({ onClose, onSuccess }: CreateMetrics
             <div>
               <label style={labelStyle}>Phase</label>
               <select value={phase} onChange={(e) => setPhase(Number(e.target.value))} style={inputStyle}>
+                <option value={0}>Neutral</option>
                 <option value={1}>Phase 1</option>
                 <option value={2}>Phase 2</option>
               </select>
