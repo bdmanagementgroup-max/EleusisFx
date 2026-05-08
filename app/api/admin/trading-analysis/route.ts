@@ -119,9 +119,7 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
             body_md,
             posted_telegram: true,
             posted_instagram: false,
-          }).catch((err) =>
-            console.error("[Signals DB] Failed to persist signal:", err)
-          ),
+          }),
         ]);
       } catch (err) {
         let msg = "Analysis failed";

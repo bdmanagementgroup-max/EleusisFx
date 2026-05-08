@@ -17,7 +17,7 @@ const CHIPS = [
   "What should I focus on today?",
 ];
 
-export default function CoachClient() {
+export default function CoachClient({ metrics }: { metrics?: any } = {}) {
   const [messages, setMessages] = useState<Message[]>([WELCOME]);
   const [input, setInput] = useState("");
   const [streaming, setStreaming] = useState(false);

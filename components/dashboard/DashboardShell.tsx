@@ -8,30 +8,32 @@ type NavItem =
   | { divider: true }
   | { accordion: true; label: string; items: { href: string; label: string }[] };
 
-const NAV: NavItem[] = [
-  { href: "/dashboard",          label: "Overview" },
-  { href: "/dashboard/markets",  label: "Live Markets" },
-  ...(coachEnabled ? [{ href: "/dashboard/coach",    label: "AI Coach" }] : []),
-  { href: "/dashboard/calendar", label: "Economic Calendar" },
-  { divider: true },
-  {
-    accordion: true,
-    label: "Resources",
-    items: [
-      { href: "/resources/position-size-calculator", label: "Position Size" },
-      { href: "/resources/risk-reward-calculator",   label: "Risk / Reward" },
-      { href: "/resources/drawdown-tracker",         label: "Drawdown Tracker" },
-    ],
-  },
-  { divider: true },
-  { href: "/dashboard/notifications", label: "Notifications" },
-  { href: "/dashboard/support",       label: "Support" },
-  { href: "/dashboard/documents",     label: "Documents" },
-]
 
-export default function DashboardShell({ children }: { children: React.ReactNode }) {
+
+export default function DashboardShell({ children, coachEnabled = false }: { children: React.ReactNode; coachEnabled?: boolean }) {
   const [open, setOpen] = useState(false);
   const [resourcesOpen, setResourcesOpen] = useState(false);
+
+  const NAV: NavItem[] = [
+    { href: "/dashboard",          label: "Overview" },
+    { href: "/dashboard/markets",  label: "Live Markets" },
+    ...(coachEnabled ? [{ href: "/dashboard/coach",    label: "AI Coach" }] : []),
+    { href: "/dashboard/calendar", label: "Economic Calendar" },
+    { divider: true },
+    {
+      accordion: true,
+      label: "Resources",
+      items: [
+        { href: "/resources/position-size-calculator", label: "Position Size" },
+        { href: "/resources/risk-reward-calculator",   label: "Risk / Reward" },
+        { href: "/resources/drawdown-tracker",         label: "Drawdown Tracker" },
+      ],
+    },
+    { divider: true },
+    { href: "/dashboard/notifications", label: "Notifications" },
+    { href: "/dashboard/support",       label: "Support" },
+    { href: "/dashboard/documents",     label: "Documents" },
+  ];
 
   return (
     <div style={{ minHeight: "100vh", display: "flex", background: "#020305" }}>
