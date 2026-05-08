@@ -107,9 +107,22 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
           }
         }
         controller.close();
-        sendToTelegram(chunks.join("")).catch((err) =>
-          console.error("[Telegram] Failed to post report:", err)
-        );
+        const body_md = chunks.join("");
+
+        Promise.all([
+          sendToTelegram(body_md).catch((err) =>
+            console.error("[Telegram] Failed to post report:", err)
+          ),
+          supabase.from("signals").insert({
+            session,
+            focus,
+            body_md,
+            posted_telegram: true,
+            posted_instagram: false,
+          }).catch((err) =>
+            console.error("[Signals DB] Failed to persist signal:", err)
+          ),
+        ]);
       } catch (err) {
         let msg = "Analysis failed";
         if (err instanceof Error) {
