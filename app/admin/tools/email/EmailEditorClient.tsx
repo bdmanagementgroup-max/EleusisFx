@@ -1208,6 +1208,70 @@ const TEMPLATES = [
 </html>`,
   },
   {
+    label: "NFP Day Warning — Do Not Trade",
+    subject: "\u26a0\ufe0f NFP Today \u2014 Read This Before You Open a Position",
+    html: emailWrapper(`
+        <tr><td style="padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 10px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#e74c3c;font-weight:700;font-family:Arial,sans-serif;">&#9888; High-Impact News Event</p>
+          <h1 style="margin:0 0 16px;font-size:36px;font-weight:800;letter-spacing:-1.5px;color:#e8eaf0;line-height:1.1;font-family:Arial,sans-serif;">NFP Day.<br>Step Away From the Charts.</h1>
+          <p style="margin:0;font-size:15px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Today is Non-Farm Payrolls day. Before you open a single position, read this &mdash; it could save your evaluation.</p>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 16px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">What Is NFP?</p>
+          <p style="margin:0 0 14px;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Non-Farm Payrolls is the United States monthly employment report. It measures how many jobs were added or lost outside the agricultural sector. It releases on the first Friday of every month at <strong style="color:#e8eaf0;">13:30 UTC (08:30 ET)</strong>.</p>
+          <p style="margin:0;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">It is consistently the <strong style="color:#e8eaf0;">highest-impact scheduled data release</strong> in the forex calendar. The volatility it produces is not normal market movement &mdash; it is structured chaos that professional desks specifically prepare for.</p>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 16px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Why NFP Destroys Prop Firm Evaluations</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(231,76,60,0.3);border-top:2px solid #e74c3c;margin-bottom:20px;">
+            <tr><td style="padding:20px 24px;">
+              <p style="margin:0 0 16px;font-size:13px;font-weight:700;color:#e74c3c;font-family:Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;">The 4 Ways NFP Kills Your Account</p>
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr><td style="padding:10px 14px;background:#0d0e17;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><strong style="color:#e74c3c;">1. Spread widening</strong> &mdash; Spreads on major pairs can widen 10&ndash;50x during the release window. A trade that looks fine at a 1.2 pip spread can instantly carry a 30+ pip cost against you.</td></tr>
+                <tr><td style="padding:10px 14px;background:#0d0e17;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><strong style="color:#e74c3c;">2. Slippage</strong> &mdash; Your stop loss is not guaranteed during high-impact news. The market can gap clean through it, filling you at a significantly worse price and breaching your daily drawdown in a single candle.</td></tr>
+                <tr><td style="padding:10px 14px;background:#0d0e17;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><strong style="color:#e74c3c;">3. Liquidity sweeps</strong> &mdash; The first 60&ndash;90 seconds after release often moves against the obvious direction before reversing. Retail reads the headline and enters. Institutions use that flow to fill the other side.</td></tr>
+                <tr><td style="padding:10px 14px;background:#0d0e17;border:1px solid rgba(255,255,255,0.06);font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><strong style="color:#e74c3c;">4. Prop firm rules</strong> &mdash; Most firms (FTMO, The5ers, FundingNext) explicitly restrict trading during high-impact news events. Holding a position through NFP can result in automatic disqualification, regardless of the P&amp;L outcome.</td></tr>
+              </table>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 16px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">The No-Trade Zone Protocol</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(79,142,247,0.2);border-top:2px solid #4f8ef7;">
+            <tr><td style="padding:20px 24px;">
+              <p style="margin:0 0 12px;font-size:14px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">Follow this every NFP Friday:</p>
+              <p style="margin:0 0 8px;padding-left:14px;font-size:13px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">&#8226;&nbsp;&nbsp;<strong style="color:#4f8ef7;">Close all open positions</strong> by 13:15 UTC (08:15 ET) &mdash; 15 minutes before the release.</p>
+              <p style="margin:0 0 8px;padding-left:14px;font-size:13px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">&#8226;&nbsp;&nbsp;<strong style="color:#4f8ef7;">No new positions</strong> between 13:15 and 14:00 UTC. Mandatory no-trade window.</p>
+              <p style="margin:0 0 8px;padding-left:14px;font-size:13px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">&#8226;&nbsp;&nbsp;<strong style="color:#4f8ef7;">Wait for the dust to settle</strong> &mdash; let the initial spike and reversal play out. Do not chase the first move.</p>
+              <p style="margin:0;padding-left:14px;font-size:13px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">&#8226;&nbsp;&nbsp;<strong style="color:#4f8ef7;">Re-enter only after structure forms</strong> &mdash; clean pullback or consolidation on the 15M after 14:15 UTC, directional bias confirmed.</p>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 14px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Today&rsquo;s NFP Context</p>
+          <p style="margin:0 0 14px;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Consensus for today&rsquo;s release is approximately <strong style="color:#e8eaf0;">62&ndash;65K jobs added</strong>, against a prior reading of 177K &mdash; a sharp deceleration. A miss below consensus will hammer USD further; a beat could produce a sharp counter-rally. DXY is already trading near <strong style="color:#e8eaf0;">98.00</strong> after sustained weakness, meaning any sharp USD move will be amplified across all pairs.</p>
+          <p style="margin:0;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">This is not a day for guessing. This is a day for protecting your account and letting others blow up.</p>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(79,142,247,0.2);">
+            <tr><td style="padding:24px;">
+              <p style="margin:0 0 10px;font-size:13px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">The professional approach is simple:</p>
+              <p style="margin:0;font-size:13px;line-height:1.9;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Funded traders don&rsquo;t gamble on economic data. They protect capital, let the event pass, and look for clean setups once price has established a new range. Sitting on your hands today <em style="color:#4f8ef7;">is</em> a trade &mdash; and it&rsquo;s the right one.</p>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;">
+          <p style="margin:0 0 6px;font-size:14px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Trade safe,</p>
+          <p style="margin:0;font-size:14px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">Ben &mdash; Eleusis FX</p>
+        </td></tr>`),
+  },
+  {
     label: "Past Client — Loyalty Offer",
     subject: "An Exclusive Offer for You — Eleusis FX",
     html: `<!DOCTYPE html>
