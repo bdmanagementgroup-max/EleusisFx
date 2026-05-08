@@ -1473,6 +1473,24 @@ const TEMPLATES = [
           <p style="margin:0;font-size:13px;line-height:1.8;color:rgba(210,220,240,0.58);font-family:Arial,sans-serif;">Or simply reply to this email — we&apos;ll take it from there.</p>
         </td></tr>`),
   },
+  // ─── Blank branded template ───────────────────────────────────────────────
+  {
+    label: "Blank — Direct Email",
+    subject: "",
+    html: emailWrapper(`
+        <tr><td style="padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0;font-size:15px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Hi [First Name],</p>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0;font-size:15px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">[Your message here]</p>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;">
+          <p style="margin:0 0 6px;font-size:14px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Best,</p>
+          <p style="margin:0;font-size:14px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">Ben — Eleusis FX</p>
+        </td></tr>`),
+  },
 ];
 
 const PDF_ASSETS = [
