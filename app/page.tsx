@@ -10,6 +10,7 @@ import PricingSection from "@/components/home/PricingSection";
 import LeadMagnet from "@/components/home/LeadMagnet";
 import FaqSection from "@/components/home/FaqSection";
 import ApplyForm from "@/components/home/ApplyForm";
+import ArticlesPreview from "@/components/home/ArticlesPreview";
 import PublicMarketTicker from "@/components/layout/PublicMarketTicker";
 import SchemaOrg from "@/components/SchemaOrg";
 
@@ -30,6 +31,7 @@ export default function HomePage() {
       <PricingSection />
       <LeadMagnet />
       <FaqSection />
+      <ArticlesPreview />
       <ApplyForm />
       <Footer />
     </>
