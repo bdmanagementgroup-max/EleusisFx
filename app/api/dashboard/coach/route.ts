@@ -5,6 +5,42 @@ import { getSupabaseServerClient, getSupabaseAdminClient } from "@/lib/supabase/
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
+export async function GET(req: NextRequest) {
+  const supabase = await getSupabaseServerClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+  }
+
+  try {
+    const { data: messages, error } = await supabase
+      .from("coach_sessions")
+      .select("id, user_id, message, role, created_at")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: true })
+      .limit(50);
+
+    if (error) {
+      return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+    }
+
+    return new Response(
+      JSON.stringify({
+        messages: messages?.map((m) => ({
+          role: m.role as "user" | "assistant",
+          content: m.message,
+        })) || [],
+      }),
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Failed to load session history";
+    return new Response(JSON.stringify({ error: message }), { status: 500 });
+  }
+}
+
 export async function POST(req: NextRequest) {
   const supabase = await getSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -21,6 +57,16 @@ export async function POST(req: NextRequest) {
   }
 
   const { messages } = await req.json();
+
+  // Save user's latest message to session
+  const userMessage = messages[messages.length - 1];
+  if (userMessage?.role === "user") {
+    await supabase.from("coach_sessions").insert({
+      user_id: user.id,
+      message: userMessage.content,
+      role: "user",
+    });
+  }
 
   const adminClient = await getSupabaseAdminClient();
 
@@ -119,11 +165,18 @@ COACHING RULES:
 
   const stream = new ReadableStream({
     async start(controller) {
+      let fullResponse = "";
       try {
         const msgStream = anthropic.messages.stream({
           model: "claude-opus-4-7",
           max_tokens: 2048,
-          system,
+          system: [
+            {
+              type: "text",
+              text: system,
+              cache_control: { type: "ephemeral" }
+            }
+          ],
           messages,
         });
         for await (const event of msgStream) {
@@ -131,9 +184,18 @@ COACHING RULES:
             event.type === "content_block_delta" &&
             event.delta.type === "text_delta"
           ) {
+            fullResponse += event.delta.text;
             controller.enqueue(encoder.encode(event.delta.text));
           }
         }
+
+        // Save assistant response to session
+        await supabase.from("coach_sessions").insert({
+          user_id: user.id,
+          message: fullResponse,
+          role: "assistant",
+        });
+
         controller.close();
       } catch (err) {
         let msg = "Coaching unavailable";

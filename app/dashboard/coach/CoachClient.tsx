@@ -17,16 +17,38 @@ const CHIPS = [
   "What should I focus on today?",
 ];
 
-interface CoachClientProps {
-  metrics?: Record<string, any> | null;
-}
-
-export default function CoachClient({ metrics }: CoachClientProps) {
+export default function CoachClient() {
   const [messages, setMessages] = useState<Message[]>([WELCOME]);
   const [input, setInput] = useState("");
   const [streaming, setStreaming] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Load session history on mount
+  useEffect(() => {
+    const loadSessionHistory = async () => {
+      try {
+        const response = await fetch("/api/dashboard/coach", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
+
+        if (response.ok) {
+          const data = await response.json() as { messages: Message[] };
+          if (data.messages && data.messages.length > 0) {
+            setMessages(data.messages);
+          }
+        }
+      } catch {
+        // If loading fails, keep the welcome message
+      } finally {
+        setLoaded(true);
+      }
+    };
+
+    loadSessionHistory();
+  }, []);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -107,7 +129,7 @@ export default function CoachClient({ metrics }: CoachClientProps) {
     send(chip);
   };
 
-  const showChips = messages.length === 1;
+  const showChips = loaded && messages.length === 1 && messages[0].role === "assistant" && messages[0].content === WELCOME.content;
 
   return (
     <div style={{ padding: "40px 40px 80px", display: "flex", flexDirection: "column", minHeight: "100vh" }}>

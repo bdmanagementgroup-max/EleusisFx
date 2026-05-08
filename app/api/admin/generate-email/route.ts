@@ -145,7 +145,13 @@ No metrics data available for this recipient. Write a warm, personalized "${temp
     const response = await anthropic.messages.create({
       model: "claude-opus-4-7",
       max_tokens: 2048,
-      system: systemPrompt,
+      system: [
+        {
+          type: "text",
+          text: systemPrompt,
+          cache_control: { type: "ephemeral" }
+        }
+      ],
       messages: [{ role: "user", content: userMessage }],
     });
 
