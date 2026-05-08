@@ -61,13 +61,13 @@ export default function ApplyForm() {
         </p>
 
         {[
-          { icon: "📸", title: "@eleusisfx", sub: "Instagram DMs welcome" },
-          { icon: "💬", title: "WhatsApp", sub: "Message us directly for fast response" },
-        ].map(({ icon, title, sub }) => (
+          { icon: "📸", title: "@eleusisfx", sub: "Instagram DMs welcome", href: "https://instagram.com/eleusisfx" },
+          { icon: "✉️", title: "admin@eleusisfx.uk", sub: "Email us directly for fast response", href: "mailto:admin@eleusisfx.uk" },
+        ].map(({ icon, title, sub, href }) => (
           <div key={title} style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 16 }}>
             <div style={{ width: 40, height: 40, border: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0 }}>{icon}</div>
             <div>
-              <strong style={{ display: "block", color: "#e8eaf0", fontSize: 14, fontWeight: 400, marginBottom: 2 }}>{title}</strong>
+              <a href={href} style={{ display: "block", color: "#e8eaf0", fontSize: 14, fontWeight: 400, marginBottom: 2, textDecoration: "none" }}>{title}</a>
               <span style={{ fontSize: 13, color: "rgba(210,220,240,0.88)" }}>{sub}</span>
             </div>
           </div>
