@@ -4,6 +4,8 @@ import { useState } from "react";
 
 export default function ApplyForm() {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({ firstName: "", lastName: "", email: "", phone: "", propFirm: "", notes: "" });
 
   const inputStyle: React.CSSProperties = {
@@ -23,12 +25,21 @@ export default function ApplyForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    fetch("/api/applications", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    }).catch(() => {});
+    setLoading(true);
+    setError("");
+    try {
+      const response = await fetch("/api/applications", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      setSubmitted(true);
+    } catch (err) {
+      setError("Something went wrong — please try again or email us at admin@eleusisfx.uk");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -92,18 +103,18 @@ export default function ApplyForm() {
               {[{ name: "firstName", label: "First Name", placeholder: "John" }, { name: "lastName", label: "Last Name", placeholder: "Smith" }].map(({ name, label, placeholder }) => (
                 <div key={name}>
                   <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 10 }}>{label}</label>
-                  <input type="text" placeholder={placeholder} required value={(form as any)[name]} onChange={(e) => setForm({ ...form, [name]: e.target.value })} style={inputStyle} />
+                  <input type="text" placeholder={placeholder} required maxLength={100} value={(form as any)[name]} onChange={(e) => setForm({ ...form, [name]: e.target.value })} style={inputStyle} />
                 </div>
               ))}
             </div>
 
             {[
-              { name: "email", label: "Email Address", type: "email", placeholder: "john@email.com" },
-              { name: "phone", label: "WhatsApp / Phone", type: "tel", placeholder: "+44 7700 000000" },
-            ].map(({ name, label, type, placeholder }) => (
+              { name: "email", label: "Email Address", type: "email", placeholder: "john@email.com", maxLen: 254 },
+              { name: "phone", label: "WhatsApp / Phone", type: "tel", placeholder: "+44 7700 000000", maxLen: 20 },
+            ].map(({ name, label, type, placeholder, maxLen }) => (
               <div key={name} style={{ marginBottom: 16 }}>
                 <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 10 }}>{label}</label>
-                <input type={type} placeholder={placeholder} required={type === "email"} value={(form as any)[name]} onChange={(e) => setForm({ ...form, [name]: e.target.value })} style={inputStyle} />
+                <input type={type} placeholder={placeholder} required={type === "email"} maxLength={maxLen} value={(form as any)[name]} onChange={(e) => setForm({ ...form, [name]: e.target.value })} style={inputStyle} />
               </div>
             ))}
 
@@ -117,10 +128,11 @@ export default function ApplyForm() {
 
             <div style={{ marginBottom: 16 }}>
               <label style={{ display: "block", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 10 }}>Additional Info (Optional)</label>
-              <textarea rows={3} placeholder="Anything else we should know..." value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} style={{ ...inputStyle, resize: "none" }} />
+              <textarea rows={3} placeholder="Anything else we should know..." maxLength={500} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} style={{ ...inputStyle, resize: "none" }} />
             </div>
 
-            <button type="submit" className="form-submit-btn"><span>Submit Application →</span></button>
+            <button type="submit" className="form-submit-btn" disabled={loading}><span>{loading ? "Submitting..." : "Submit Application →"}</span></button>
+            {error && <p style={{ fontSize: 12, color: "#ff6b6b", lineHeight: 1.6, marginTop: 16, textAlign: "center" }}>{error}</p>}
             <p style={{ fontSize: 11, color: "rgba(210,220,240,0.58)", lineHeight: 1.7, marginTop: 16, textAlign: "center" }}>
               We review all applications within 24 hours. Submitting does not guarantee a spot.
             </p>
@@ -144,14 +156,17 @@ export default function ApplyForm() {
           transition: all 0.25s; position: relative; overflow: hidden;
           border-radius: 0;
         }
+        .form-submit-btn:disabled {
+          opacity: 0.6; cursor: not-allowed;
+        }
         .form-submit-btn::after {
           content: ''; position: absolute; inset: 0;
           background: #4f8ef7; transform: translateX(-101%);
           transition: transform 0.3s ease;
         }
-        .form-submit-btn:hover::after { transform: translateX(0); }
+        .form-submit-btn:not(:disabled):hover::after { transform: translateX(0); }
         .form-submit-btn span { position: relative; z-index: 1; color: #020305; }
-        .form-submit-btn:hover span { color: #e8eaf0; }
+        .form-submit-btn:not(:disabled):hover span { color: #e8eaf0; }
         @media (max-width: 1024px) {
           section#apply { grid-template-columns: 1fr !important; padding: 80px 20px !important; gap: 48px !important; }
           div[style*="gridTemplateColumns: '1fr 1fr'"] { grid-template-columns: 1fr !important; }

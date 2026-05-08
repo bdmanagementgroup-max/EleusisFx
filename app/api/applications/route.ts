@@ -63,15 +63,23 @@ export async function DELETE(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { firstName, lastName, email, phone, propFirm, notes } = body;
+    let { firstName, lastName, email, phone, propFirm, notes } = body;
 
     if (!firstName || !lastName || !email) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
+    // Sanitize inputs
+    firstName = (firstName as string)?.trim() || "";
+    lastName = (lastName as string)?.trim() || "";
+    email = (email as string)?.trim().toLowerCase() || "";
+    phone = (phone as string)?.trim() || "";
+    propFirm = (propFirm as string)?.trim() || "";
+    notes = (notes as string)?.trim().slice(0, 500) || "";
+
     const notionKey = process.env.NOTION_API_KEY;
     // Strip any query string that may have been copied from the Notion URL (e.g. ?v=...)
-    const notionDb = process.env.NOTION_LEADS_DATABASE_ID?.split("?")[0];
+    const notionDb = process.env.NOTION_APPLICATIONS_DATABASE_ID?.split("?")[0];
 
     if (notionKey && notionDb) {
       try {
@@ -95,7 +103,7 @@ export async function POST(req: NextRequest) {
         console.error("[applications] Notion error:", notionErr?.message, notionErr?.code, notionErr?.status);
       }
     } else {
-      console.warn("[applications] Notion not configured — NOTION_API_KEY or NOTION_LEADS_DATABASE_ID missing");
+      console.warn("[applications] Notion not configured — NOTION_API_KEY or NOTION_APPLICATIONS_DATABASE_ID missing");
     }
 
     // Also write to Supabase
@@ -155,10 +163,13 @@ export async function POST(req: NextRequest) {
         } else if (createErr) {
           // Account already exists — force-reset password and send credentials directly
           console.warn("[applications] Account already exists:", createErr.message);
-          const { data: { users } } = await supabase.auth.admin.listUsers();
-          const existing = users.find((u: { email?: string }) => u.email?.toLowerCase() === email.toLowerCase());
-          if (existing) {
-            await supabase.auth.admin.updateUserById(existing.id, { password: tempPassword });
+          const { data: userRows, error: lookupErr } = await supabase
+            .from("auth.users")
+            .select("id")
+            .eq("email", email.toLowerCase())
+            .single();
+          if (userRows && !lookupErr) {
+            await supabase.auth.admin.updateUserById(userRows.id as string, { password: tempPassword });
           }
           await sendWelcomeEmail({ to: email, firstName, tempPassword, siteUrl });
         }
