@@ -11,6 +11,7 @@ type NavItem =
 const NAV: NavItem[] = [
   { href: "/dashboard",          label: "Overview" },
   { href: "/dashboard/markets",  label: "Live Markets" },
+  { href: "/dashboard/coach",    label: "AI Coach" },
   { href: "/dashboard/calendar", label: "Economic Calendar" },
   { divider: true },
   {
