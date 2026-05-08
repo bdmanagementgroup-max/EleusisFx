@@ -875,6 +875,130 @@ const TEMPLATES = [
 </html>`,
   },
   {
+    label: "Newsletter — The Funded Trader #5",
+    subject: "The Funded Trader — Issue #5 | Eleusis FX",
+    html: `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#020305;-webkit-font-smoothing:antialiased;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#020305;padding:48px 20px;">
+    <tr><td align="center">
+      <table width="580" cellpadding="0" cellspacing="0" border="0" style="max-width:580px;width:100%;">
+
+        <tr><td style="padding-bottom:8px;">
+          <span style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">ELEUSIS<span style="color:#e8eaf0;">.</span>FX</span>
+        </td></tr>
+        <tr><td style="padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(210,220,240,0.3);font-family:Arial,sans-serif;">The Funded Trader &nbsp;&middot;&nbsp; Issue #5</p>
+        </td></tr>
+
+        <tr><td style="padding:40px 0 32px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <h1 style="margin:0 0 16px;font-size:38px;font-weight:800;letter-spacing:-1.5px;color:#e8eaf0;line-height:1.1;font-family:Arial,sans-serif;">Trade the Mind.<br>Win the Account.</h1>
+          <p style="margin:0;font-size:15px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Issue #5 of The Funded Trader. This month we&apos;re tackling the real reason most traders fail their evaluations &mdash; not strategy, not timing, not luck. Psychology. And the consistency habits that separate traders who pass from those who keep restarting.</p>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 16px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">In This Issue</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#4f8ef7;margin-right:10px;">01</span> Why Your Psychology Is Costing You Funded Accounts</td></tr>
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#4f8ef7;margin-right:10px;">02</span> The Consistency Blueprint — 5 Non-Negotiable Habits</td></tr>
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#4f8ef7;margin-right:10px;">03</span> The Emotional Escalation Trap — How to Spot It Before It Kills Your Account</td></tr>
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#4f8ef7;margin-right:10px;">04</span> This Month&apos;s Tip &mdash; The Pre-Trade Mental Checklist</td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">Article 01</p>
+          <h2 style="margin:0 0 12px;font-size:22px;font-weight:800;letter-spacing:-0.5px;color:#e8eaf0;line-height:1.2;font-family:Arial,sans-serif;">Why Your Psychology Is Costing You Funded Accounts</h2>
+          <p style="margin:0 0 16px;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Most traders who fail evaluations have a working strategy. They know where to enter. They understand the rules. The breakdown happens when emotion overrides logic &mdash; and it happens to almost everyone in the first few sessions of any new challenge.</p>
+          <p style="margin:0 0 16px;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">The pattern is predictable: a bad early session triggers urgency. Urgency triggers oversizing. Oversizing triggers a blown daily loss limit. Challenge over. It&apos;s not bad luck. It&apos;s the same sequence every time &mdash; just a different trader.</p>
+          <p style="margin:0 0 20px;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Our most successful clients share one trait: they treat the evaluation like a business operation, not a performance test. There&apos;s no ego in it. Just process.</p>
+          <a href="https://eleusisfx.uk/articles" style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#4f8ef7;text-decoration:none;font-family:Arial,sans-serif;">Read More on the Blog &rarr;</a>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(79,142,247,0.15);border-left:3px solid #4f8ef7;">
+            <tr><td style="padding:28px;">
+              <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">The Blueprint</p>
+              <h2 style="margin:0 0 12px;font-size:20px;font-weight:800;letter-spacing:-0.5px;color:#e8eaf0;font-family:Arial,sans-serif;">5 Consistency Habits of Funded Traders</h2>
+              <p style="margin:0 0 20px;font-size:14px;line-height:1.8;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Consistency isn&apos;t about winning every day. It&apos;s about removing variance from your decision-making so that your edge has room to play out over time.</p>
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid rgba(255,255,255,0.06);">
+                <tr><td style="padding:14px 18px;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;border-bottom:1px solid rgba(255,255,255,0.04);"><strong style="color:#4f8ef7;">01 &nbsp;</strong><strong style="color:#e8eaf0;">Same session start time, every day.</strong> Routine builds state. Traders who drift their start times drift their entries too.</td></tr>
+                <tr><td style="padding:14px 18px;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;border-bottom:1px solid rgba(255,255,255,0.04);"><strong style="color:#4f8ef7;">02 &nbsp;</strong><strong style="color:#e8eaf0;">Fixed risk per trade &mdash; no exceptions.</strong> Adjusting size based on &ldquo;feel&rdquo; is the fastest way to blow a streak of winners with one oversized loser.</td></tr>
+                <tr><td style="padding:14px 18px;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;border-bottom:1px solid rgba(255,255,255,0.04);"><strong style="color:#4f8ef7;">03 &nbsp;</strong><strong style="color:#e8eaf0;">Journal every trade before and after.</strong> Not to analyse performance &mdash; to track your emotional state. The pattern of &ldquo;I felt rushed&rdquo; appearing before losses is more valuable than any indicator.</td></tr>
+                <tr><td style="padding:14px 18px;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;border-bottom:1px solid rgba(255,255,255,0.04);"><strong style="color:#4f8ef7;">04 &nbsp;</strong><strong style="color:#e8eaf0;">Hard stop after two consecutive losses.</strong> Session over. No exceptions. The third trade after two losses is rarely taken with a clear head.</td></tr>
+                <tr><td style="padding:14px 18px;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><strong style="color:#4f8ef7;">05 &nbsp;</strong><strong style="color:#e8eaf0;">Weekly review &mdash; every Friday.</strong> Not to celebrate wins. To identify where emotion crept into execution. One pattern removed per week compounds over a 30-day evaluation.</td></tr>
+              </table>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">Risk Pattern</p>
+          <h2 style="margin:0 0 16px;font-size:20px;font-weight:800;letter-spacing:-0.5px;color:#e8eaf0;line-height:1.3;font-family:Arial,sans-serif;">The Emotional Escalation Trap</h2>
+          <p style="margin:0 0 20px;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Emotional escalation is a specific sequence that plays out in funded account failures more often than any other cause. It starts subtly &mdash; a slightly larger position after a win, a quicker entry after a loss &mdash; and compounds until a single session undoes weeks of work.</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(255,255,255,0.06);">
+            <tr><td style="padding:16px 20px;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;border-bottom:1px solid rgba(255,255,255,0.04);">
+              <strong style="color:#f39c12;">Stage 1 &mdash; Overconfidence:</strong> After 3+ winning days, position size creeps up. Feels like reward. It&apos;s actually elevated exposure at the worst time.
+            </td></tr>
+            <tr><td style="padding:16px 20px;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;border-bottom:1px solid rgba(255,255,255,0.04);">
+              <strong style="color:#f39c12;">Stage 2 &mdash; The Trigger Loss:</strong> Oversized position hits stop. Emotional response kicks in immediately. The instinct is to make it back now, in the same session.
+            </td></tr>
+            <tr><td style="padding:16px 20px;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;border-bottom:1px solid rgba(255,255,255,0.04);">
+              <strong style="color:#e74c3c;">Stage 3 &mdash; Revenge Entry:</strong> Trade entered without full confluence. Larger size again &mdash; &ldquo;to recover quicker.&rdquo; Second loss amplifies the first.
+            </td></tr>
+            <tr><td style="padding:16px 20px;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">
+              <strong style="color:#22c55e;">The Circuit Breaker:</strong> Two losses = session done. No exceptions. This single rule stops 80% of emotional escalation before it reaches Stage 3.
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">This Month&apos;s Tip</p>
+          <h2 style="margin:0 0 16px;font-size:20px;font-weight:800;letter-spacing:-0.5px;color:#e8eaf0;line-height:1.3;font-family:Arial,sans-serif;">The Pre-Trade Mental Checklist</h2>
+          <p style="margin:0 0 16px;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Before every trade entry, run this four-question check. If you answer &ldquo;no&rdquo; or &ldquo;unsure&rdquo; to any of them &mdash; the trade does not get placed. No exceptions, no negotiation with yourself.</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(255,255,255,0.06);">
+            <tr><td style="padding:16px 20px;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;border-bottom:1px solid rgba(255,255,255,0.04);">
+              <strong style="color:#e8eaf0;">&#10067; Am I within my daily risk limit?</strong><br><span style="color:rgba(210,220,240,0.5);">Check your current balance vs. daily loss floor before any entry.</span>
+            </td></tr>
+            <tr><td style="padding:16px 20px;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;border-bottom:1px solid rgba(255,255,255,0.04);">
+              <strong style="color:#e8eaf0;">&#10067; Is this setup in my plan?</strong><br><span style="color:rgba(210,220,240,0.5);">If you didn&apos;t identify this setup pre-session, it&apos;s reactive &mdash; not planned. Skip it.</span>
+            </td></tr>
+            <tr><td style="padding:16px 20px;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;border-bottom:1px solid rgba(255,255,255,0.04);">
+              <strong style="color:#e8eaf0;">&#10067; Am I entering for the right reason?</strong><br><span style="color:rgba(210,220,240,0.5);">Is this based on structure and confluences, or am I entering because I&apos;m bored, or want to recover a loss?</span>
+            </td></tr>
+            <tr><td style="padding:16px 20px;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">
+              <strong style="color:#e8eaf0;">&#10067; Could I walk away right now and feel fine?</strong><br><span style="color:rgba(210,220,240,0.5);">If closing the platform for the day feels uncomfortable, you&apos;re not in the right headspace to trade.</span>
+            </td></tr>
+          </table>
+          <p style="margin:20px 0 0;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">These questions take 30 seconds. They have saved our clients from more unnecessary losses than any strategy tweak ever has.</p>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(255,255,255,0.06);border-top:2px solid #4f8ef7;">
+            <tr><td style="padding:28px;">
+              <p style="margin:0 0 8px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Ready to Get Started?</p>
+              <p style="margin:0 0 20px;font-size:15px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">87% of our clients pass. Let us handle yours.</p>
+              <a href="https://eleusisfx.uk/#apply" style="display:inline-block;background:#e8eaf0;color:#020305;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:14px 26px;text-decoration:none;font-family:Arial,sans-serif;">Apply Now &rarr;</a>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding-top:28px;">
+          <p style="margin:0;font-size:11px;color:rgba(210,220,240,0.28);line-height:1.7;font-family:Arial,sans-serif;">
+            Eleusis FX &nbsp;&middot;&nbsp; <a href="https://eleusisfx.uk" style="color:rgba(210,220,240,0.28);text-decoration:none;">eleusisfx.uk</a><br>
+            Questions? Reply to this email or contact <a href="mailto:admin@eleusisfx.uk" style="color:rgba(210,220,240,0.28);text-decoration:none;">admin@eleusisfx.uk</a><br>
+            <a href="https://eleusisfx.uk" style="color:rgba(210,220,240,0.15);text-decoration:none;font-size:10px;">Unsubscribe</a>
+          </p>
+        </td></tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`,
+  },
+  {
     label: "Weekly Market Analysis — Prospect",
     subject: "This Week's Live Setups — USDJPY Sell + EURUSD Buy | Eleusis FX",
     html: `<!DOCTYPE html>
