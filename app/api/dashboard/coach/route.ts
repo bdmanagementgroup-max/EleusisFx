@@ -5,7 +5,7 @@ import { getSupabaseServerClient, getSupabaseAdminClient } from "@/lib/supabase/
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const supabase = await getSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
