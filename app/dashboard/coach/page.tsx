@@ -1,9 +1,16 @@
+import { notFound } from "next/navigation";
 import CoachClient from "./CoachClient";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { isAiCoachEnabled } from "@/lib/features/isCoachEnabled";
 
 export const dynamic = "force-dynamic";
 
 export default async function CoachPage() {
+  const enabled = await isAiCoachEnabled();
+  if (!enabled) {
+    notFound();
+  }
+
   const supabase = await getSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
 

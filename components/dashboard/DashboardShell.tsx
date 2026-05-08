@@ -11,7 +11,7 @@ type NavItem =
 const NAV: NavItem[] = [
   { href: "/dashboard",          label: "Overview" },
   { href: "/dashboard/markets",  label: "Live Markets" },
-  { href: "/dashboard/coach",    label: "AI Coach" },
+  ...(coachEnabled ? [{ href: "/dashboard/coach",    label: "AI Coach" }] : []),
   { href: "/dashboard/calendar", label: "Economic Calendar" },
   { divider: true },
   {
@@ -27,7 +27,7 @@ const NAV: NavItem[] = [
   { href: "/dashboard/notifications", label: "Notifications" },
   { href: "/dashboard/support",       label: "Support" },
   { href: "/dashboard/documents",     label: "Documents" },
-];
+]
 
 export default function DashboardShell({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
