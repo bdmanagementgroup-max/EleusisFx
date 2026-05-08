@@ -7,6 +7,7 @@ import {
   SYSTEM_PROMPT,
   fetchMarketTA,
 } from "@/lib/trading/indicators";
+import { sendToTelegram } from "@/lib/telegram/sendToTelegram";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 120;
@@ -87,6 +88,7 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
 
   const anthropic = new Anthropic({ apiKey, maxRetries: 3 });
   const encoder = new TextEncoder();
+  const chunks: string[] = [];
 
   const stream = new ReadableStream({
     async start(controller) {
@@ -99,10 +101,15 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
         });
         for await (const event of msgStream) {
           if (event.type === "content_block_delta" && event.delta.type === "text_delta") {
-            controller.enqueue(encoder.encode(event.delta.text));
+            const text = event.delta.text;
+            chunks.push(text);
+            controller.enqueue(encoder.encode(text));
           }
         }
         controller.close();
+        sendToTelegram(chunks.join("")).catch((err) =>
+          console.error("[Telegram] Failed to post report:", err)
+        );
       } catch (err) {
         let msg = "Analysis failed";
         if (err instanceof Error) {

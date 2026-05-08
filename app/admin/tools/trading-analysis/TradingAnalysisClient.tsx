@@ -155,6 +155,7 @@ export default function TradingAnalysisClient() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState<number | false>(false);
   const [saveError, setSaveError] = useState("");
+  const [postedToTelegram, setPostedToTelegram] = useState(false);
 
   const outputRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
@@ -177,6 +178,7 @@ export default function TradingAnalysisClient() {
     setRan(true);
     setSaved(false);
     setSaveError("");
+    setPostedToTelegram(false);
 
     const ctrl = new AbortController();
     abortRef.current = ctrl;
@@ -209,6 +211,7 @@ export default function TradingAnalysisClient() {
         if (done) break;
         setOutput((prev) => prev + decoder.decode(value, { stream: true }));
       }
+      setPostedToTelegram(true);
     } catch (err) {
       if ((err as Error).name !== "AbortError") {
         setError((err as Error).message ?? "Unknown error");
@@ -427,6 +430,17 @@ export default function TradingAnalysisClient() {
             <span style={{ fontFamily: "monospace", fontSize: 10, color: "rgba(210,220,240,0.3)" }}>
               {session.toLowerCase()} session · {focus === "all" ? "all markets" : focus} · news:{newsLevel}
             </span>
+            {postedToTelegram && (
+              <span style={{
+                display: "inline-flex", alignItems: "center", gap: 4,
+                padding: "2px 8px", borderRadius: 4,
+                background: "rgba(34,197,94,0.08)",
+                border: "1px solid rgba(34,197,94,0.25)",
+                color: "#22c55e", fontSize: 10, fontFamily: "monospace",
+              }}>
+                ✓ telegram
+              </span>
+            )}
             {!running && output && (
               <div style={{ marginLeft: "auto", display: "flex", gap: 6 }}>
                 <button
