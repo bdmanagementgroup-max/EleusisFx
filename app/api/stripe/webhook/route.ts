@@ -3,7 +3,7 @@ import Stripe from "stripe";
 import { getSupabaseAdminClient } from "@/lib/supabase/server";
 import { sendTelegramInviteEmail, generateTelegramInviteLink } from "@/lib/email/sendTelegramInvite";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", { apiVersion: "2024-11-20" });
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "");
 
 export async function POST(req: NextRequest) {
   const signature = req.headers.get("stripe-signature");
