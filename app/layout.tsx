@@ -3,7 +3,7 @@ import { Syne, Epilogue } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/layout/CustomCursor";
 import RevealInit from "@/components/layout/RevealInit";
-import FloatingWhatsAppCTA from "@/components/layout/FloatingWhatsAppCTA";
+import WhatsAppButton from "@/components/layout/WhatsAppButton";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -63,17 +63,8 @@ export default function RootLayout({
       <body>
         <CustomCursor />
         <RevealInit />
+        <WhatsAppButton />
         {children}
-        <div id="floating-cta">
-          <FloatingWhatsAppCTA />
-        </div>
-        <style>{`
-          @media (min-width: 769px) {
-            #floating-cta {
-              display: none;
-            }
-          }
-        `}</style>
       </body>
     </html>
   );
