@@ -159,6 +159,9 @@ export default function Nav() {
             )}
           </div>
 
+          <Link href="/signals" className="nav-link-item" style={{ color: "#22c55e" }}>
+            Signals
+          </Link>
           <a href="/#free-guide" style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "#4f8ef7", textDecoration: "none" }}>
             Free Guide
           </a>
@@ -284,6 +287,23 @@ export default function Nav() {
             )}
           </div>
 
+          <Link
+            href="/signals"
+            onClick={() => setOpen(false)}
+            style={{
+              fontFamily: "var(--font-syne), Syne, sans-serif",
+              fontWeight: 600,
+              fontSize: 22,
+              letterSpacing: -0.5,
+              color: "#22c55e",
+              textDecoration: "none",
+              padding: "18px 0",
+              borderBottom: "1px solid rgba(255,255,255,0.06)",
+              display: "block",
+            }}
+          >
+            Signals
+          </Link>
           <a
             href="/#free-guide"
             onClick={() => setOpen(false)}

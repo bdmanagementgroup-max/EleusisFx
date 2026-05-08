@@ -15,14 +15,24 @@ export default function StripeButton() {
         method: "POST",
       });
 
+      if (response.status === 401) {
+        window.location.href = "/login?redirect=/signals";
+        return;
+      }
+
       if (!response.ok) {
-        setError("Failed to redirect to checkout");
+        setError("Failed to redirect to checkout. Please try again.");
         setLoading(false);
         return;
       }
 
-      // Response is a redirect, the browser should follow it automatically
-      // But just in case, we'll wait a moment for the redirect to happen
+      const data = await response.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setError("Checkout unavailable. Please try again.");
+        setLoading(false);
+      }
     } catch (err) {
       setError("An error occurred. Please try again.");
       setLoading(false);
