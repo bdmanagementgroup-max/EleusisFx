@@ -160,7 +160,7 @@ export default function Nav() {
           </div>
 
           <Link href="/signals" className="nav-link-item" style={{ color: "#22c55e" }}>
-            Signals
+            Analysis
           </Link>
           <a href="/#free-guide" style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "#4f8ef7", textDecoration: "none" }}>
             Free Guide
@@ -302,7 +302,7 @@ export default function Nav() {
               display: "block",
             }}
           >
-            Signals
+            Analysis
           </Link>
           <a
             href="/#free-guide"

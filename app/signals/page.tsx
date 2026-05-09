@@ -4,8 +4,8 @@ import StripeButton from "./StripeButton";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Signals — Eleusis FX",
-  description: "Professional daily trading signals from AI-powered technical analysis. Hand-picked setups with strict confluence rules.",
+  title: "Analysis — Eleusis FX",
+  description: "Professional daily market analysis from AI-powered technical research. Real-time entries with strict confluence rules.",
 };
 
 const SAMPLE_SIGNAL = `## GBP/USD — Long (D-Chart Breakout)
@@ -55,7 +55,7 @@ export default function SignalsPage() {
           />
           <div style={{ position: "relative", zIndex: 1, maxWidth: 800, margin: "0 auto" }}>
             <div style={{ fontSize: 10, letterSpacing: 4, textTransform: "uppercase", color: "#4f8ef7", marginBottom: 20 }}>
-              Premium Signals
+              Premium Analysis
             </div>
             <h1
               style={{
@@ -70,7 +70,7 @@ export default function SignalsPage() {
                 WebkitTextFillColor: "transparent",
               }}
             >
-              Daily Trading Signals
+              Daily Market Analysis
             </h1>
             <p style={{ fontSize: 18, lineHeight: 1.8, color: "rgba(210,220,240,0.88)", marginBottom: 16, maxWidth: 600, margin: "0 auto 32px" }}>
               Real-time, hand-picked setups from AI-powered technical analysis. Strict confluence rules, actionable entries, clear risk management.
@@ -110,7 +110,7 @@ export default function SignalsPage() {
                 Daily Analysis
               </h3>
               <p style={{ fontSize: 15, lineHeight: 1.8, color: "rgba(210,220,240,0.88)" }}>
-                Each trading session (London, New York, Asia), receive updated signals from our AI analysis engine scanning 12+ forex pairs + major cryptos.
+                Each trading session (London, New York, Asia), receive updated analysis from our AI engine scanning 12+ forex pairs + major cryptos.
               </p>
             </div>
 
@@ -119,7 +119,7 @@ export default function SignalsPage() {
                 Strict Confluence
               </h3>
               <p style={{ fontSize: 15, lineHeight: 1.8, color: "rgba(210,220,240,0.88)" }}>
-                Only pairs with 3+ signal alignment make the cut: technical structure + momentum + macro context. No noise, no over-trading.
+                Only pairs with 3+ confluence factors make the cut: technical structure + momentum + macro context. No noise, no over-trading.
               </p>
             </div>
 
@@ -137,7 +137,7 @@ export default function SignalsPage() {
                 Telegram Community
               </h3>
               <p style={{ fontSize: 15, lineHeight: 1.8, color: "rgba(210,220,240,0.88)" }}>
-                Private subscribers-only channel. Real-time updates, signal alerts, and a community of serious traders using the same setups.
+                Private subscribers-only channel. Real-time analysis updates and a community of serious traders using the same entries.
               </p>
             </div>
           </div>
@@ -156,7 +156,7 @@ export default function SignalsPage() {
               }}
             >
               <div style={{ fontSize: 11, color: "#7eb3ff", textTransform: "uppercase", letterSpacing: 2, marginBottom: 16 }}>
-                Sample Signal (May 8, 2026)
+                Sample Analysis (May 8, 2026)
               </div>
               <div
                 style={{
@@ -194,7 +194,7 @@ export default function SignalsPage() {
                   color: "#fff",
                 }}
               >
-                £29
+                £79
               </div>
               <p style={{ fontSize: 12, color: "rgba(210,220,240,0.7)", marginBottom: 32, height: 36, display: "flex", alignItems: "center", justifyContent: "center" }}>
                 Billed monthly, cancel anytime
@@ -236,10 +236,10 @@ export default function SignalsPage() {
             }}
           >
             {[
-              { q: "How often do signals post?", a: "3 times daily (London, New York, Asia sessions). You'll receive alerts in our private Telegram channel." },
-              { q: "What about false signals?", a: "We only post setups with strict 3+ signal confluence. False signals happen, but our approach minimizes them. Track your stats in the subscriber dashboard." },
-              { q: "Can I use these with prop firm challenges?", a: "Absolutely. Many Eleusis clients use these signals as part of their challenge trading. Always respect your firm's rules." },
-              { q: "Refund policy?", a: "7-day money-back guarantee. If the signals don't match your style after 7 days, we'll refund you, no questions." },
+              { q: "How often does the analysis post?", a: "3 times daily (London, New York, Asia sessions). You'll receive alerts in our private Telegram channel." },
+              { q: "How accurate is the analysis?", a: "We only publish setups with strict 3+ confluence factors. No analysis is guaranteed, but our approach filters out low-probability setups. Track your stats in the subscriber dashboard." },
+              { q: "Can I use this with prop firm challenges?", a: "Absolutely. Many Eleusis clients use our analysis as part of their challenge trading. Always respect your firm's rules." },
+              { q: "Refund policy?", a: "7-day money-back guarantee. If the analysis doesn't suit your style after 7 days, we'll refund you, no questions." },
             ].map((item, i) => (
               <div key={i}>
                 <h3 style={{ fontSize: 15, fontWeight: 600, marginBottom: 12 }}>{item.q}</h3>

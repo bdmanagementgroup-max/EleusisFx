@@ -5,7 +5,7 @@ import ReactMarkdown from "react-markdown";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Signals — Eleusis FX Dashboard",
+  title: "Analysis — Eleusis FX Dashboard",
 };
 
 interface Signal {
@@ -37,10 +37,10 @@ export default async function SignalsPage() {
     <div style={{ padding: "40px 40px 80px" }}>
       <div style={{ marginBottom: 40 }}>
         <div style={{ fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: "#4f8ef7", marginBottom: 8 }}>
-          Signals
+          Analysis
         </div>
         <h1 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 32, letterSpacing: -1 }}>
-          Last 30 Signals
+          Latest Analysis
         </h1>
       </div>
 
@@ -52,7 +52,7 @@ export default async function SignalsPage() {
 
       {signalList.length === 0 && !error && (
         <div style={{ padding: "40px", background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 4, textAlign: "center" }}>
-          <p style={{ color: "rgba(210,220,240,0.88)" }}>No signals yet. Check back soon.</p>
+          <p style={{ color: "rgba(210,220,240,0.88)" }}>No analysis posted yet. Check back soon.</p>
         </div>
       )}
 
