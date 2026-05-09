@@ -371,36 +371,63 @@ export default function TradingAnalysisClient() {
         </div>
       </div>
 
-      {/* Run button */}
-      <button
-        onClick={runAnalysis}
-        style={{
-          width: "100%",
-          fontFamily: "monospace",
-          fontSize: 12,
-          letterSpacing: 1.5,
-          padding: "14px 24px",
-          border: running ? "1px solid rgba(239,68,68,0.4)" : "1px solid rgba(79,142,247,0.4)",
-          borderTop: "none",
-          background: running ? "rgba(239,68,68,0.05)" : "rgba(79,142,247,0.06)",
-          color: running ? "#ef4444" : "#4f8ef7",
-          cursor: "pointer",
-          textAlign: "left",
-          transition: "all 0.2s",
-          marginBottom: 24,
-          display: "flex",
-          alignItems: "center",
-          gap: 10,
-        }}
-      >
-        <span style={{ opacity: 0.5 }}>$&gt;</span>
-        {running ? "■ STOP ANALYSIS" : "▶ RUN ANALYSIS"}
-        {running && (
-          <span style={{ marginLeft: "auto", fontSize: 10, opacity: 0.6, animation: "pulse-dot 1.2s ease-in-out infinite" }}>
-            ● fetching OHLCV → calculating RSI / EMA / MACD → claude-opus
-          </span>
-        )}
-      </button>
+      {/* Run button + review link */}
+      <div style={{ display: "flex", marginBottom: 24 }}>
+        <button
+          onClick={runAnalysis}
+          style={{
+            flex: 1,
+            fontFamily: "monospace",
+            fontSize: 12,
+            letterSpacing: 1.5,
+            padding: "14px 24px",
+            border: running ? "1px solid rgba(239,68,68,0.4)" : "1px solid rgba(79,142,247,0.4)",
+            borderTop: "none",
+            borderRight: "none",
+            background: running ? "rgba(239,68,68,0.05)" : "rgba(79,142,247,0.06)",
+            color: running ? "#ef4444" : "#4f8ef7",
+            cursor: "pointer",
+            textAlign: "left",
+            transition: "all 0.2s",
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+          }}
+        >
+          <span style={{ opacity: 0.5 }}>$&gt;</span>
+          {running ? "■ STOP ANALYSIS" : "▶ RUN ANALYSIS"}
+          {running && (
+            <span style={{ marginLeft: "auto", fontSize: 10, opacity: 0.6, animation: "pulse-dot 1.2s ease-in-out infinite" }}>
+              ● fetching OHLCV → calculating RSI / EMA / MACD → claude-opus
+            </span>
+          )}
+        </button>
+        <a
+          href="/admin/tools/trade-review"
+          style={{
+            fontFamily: "monospace", fontSize: 11, letterSpacing: 1,
+            padding: "14px 20px",
+            border: "1px solid rgba(255,255,255,0.07)",
+            borderTop: "none",
+            background: "rgba(255,255,255,0.02)",
+            color: "rgba(210,220,240,0.35)",
+            textDecoration: "none",
+            display: "flex", alignItems: "center",
+            whiteSpace: "nowrap",
+            transition: "color 0.15s, border-color 0.15s",
+          }}
+          onMouseEnter={e => {
+            (e.currentTarget as HTMLAnchorElement).style.color = "#4f8ef7";
+            (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(79,142,247,0.3)";
+          }}
+          onMouseLeave={e => {
+            (e.currentTarget as HTMLAnchorElement).style.color = "rgba(210,220,240,0.35)";
+            (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(255,255,255,0.07)";
+          }}
+        >
+          → review trades
+        </a>
+      </div>
 
       {/* Error */}
       {error && (
