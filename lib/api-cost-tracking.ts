@@ -70,14 +70,6 @@ export function calculateAnthropicCost(
 }
 
 /**
- * Calculate cost for Stripe transactions
- * Standard: 1.4% + 20p
- */
-export function calculateStripeCost(amountGBP: number): number {
-  return amountGBP * 0.014 + 0.2;
-}
-
-/**
  * Get cost summary for a given date range
  */
 export async function getCostSummary(

@@ -1,7 +1,7 @@
 -- Create api_usage_log table for tracking API costs
 CREATE TABLE IF NOT EXISTS api_usage_log (
   id BIGSERIAL PRIMARY KEY,
-  service TEXT NOT NULL, -- 'anthropic', 'twelve_data', 'coingecko', 'stripe', etc.
+  service TEXT NOT NULL, -- 'anthropic', 'twelve_data', 'coingecko', etc.
   endpoint TEXT,         -- e.g. '/api/trading-analysis', '/api/market/forex'
   method TEXT,           -- 'GET', 'POST', etc.
   cost DECIMAL(10, 4),   -- Cost in GBP
