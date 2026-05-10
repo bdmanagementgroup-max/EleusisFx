@@ -73,7 +73,7 @@ Label rules: 1-3 = "Low Risk", 4-6 = "Medium Risk", 7-10 = "High Risk". Keep fla
   const userMessage = `Screen this application:\n\n${fields.join("\n")}`;
 
   const response = await anthropic.messages.create({
-    model: "claude-opus-4-7",
+    model: "claude-sonnet-4-6",
     max_tokens: 1024,
     system: systemPrompt,
     messages: [{ role: "user", content: userMessage }],

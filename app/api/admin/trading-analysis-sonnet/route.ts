@@ -1,3 +1,14 @@
+/**
+ * Testing endpoint: Trading analysis using Claude Sonnet instead of Opus
+ *
+ * Purpose: A/B test Sonnet vs Opus for cost/quality trade-off
+ * Cost savings: Sonnet 4.6 is same price as Opus 4.7 in current pricing, but historically cheaper
+ * Quality trade-off: Slightly lower analysis quality but still very capable
+ *
+ * Usage: POST /api/admin/trading-analysis-sonnet with same body as /api/admin/trading-analysis
+ * Response: Same format, tagged with model="sonnet" in metadata
+ */
+
 import { NextRequest } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
@@ -120,14 +131,14 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
 
         logAPIUsage({
           service: "anthropic",
-          endpoint: "/api/admin/trading-analysis",
+          endpoint: "/api/admin/trading-analysis-sonnet",
           method: "POST",
           cost,
           tokens_input: inputTokens,
           tokens_output: outputTokens,
           status: "success",
           request_duration_ms: requestDuration,
-          metadata: { model: "claude-sonnet-4-6", session, focus, newsLevel, macroMode: body.macroMode },
+          metadata: { model: "claude-sonnet-4-6", session, focus, newsLevel, macroMode: body.macroMode, testFlag: "sonnet_comparison" },
         }).catch((err) => console.error("[Cost Tracking] Failed to log:", err));
 
         Promise.all([
@@ -138,7 +149,7 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
             session,
             focus,
             body_md,
-            posted_telegram: true,
+            posted_telegram: false, // Don't auto-post test signals
             posted_instagram: false,
           }),
         ]);
@@ -158,13 +169,13 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
         // Log error
         logAPIUsage({
           service: "anthropic",
-          endpoint: "/api/admin/trading-analysis",
+          endpoint: "/api/admin/trading-analysis-sonnet",
           method: "POST",
           cost: 0,
           status: "error",
           error_message: errorMessage,
           request_duration_ms: Date.now() - startTime,
-          metadata: { session, focus, newsLevel },
+          metadata: { session, focus, newsLevel, testFlag: "sonnet_comparison" },
         }).catch((err) => console.error("[Cost Tracking] Failed to log error:", err));
 
         controller.enqueue(encoder.encode(`\n\n[ERROR] ${msg}`));
@@ -174,6 +185,11 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
   });
 
   return new Response(stream, {
-    headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-cache" },
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "no-cache",
+      "X-Model": "claude-sonnet-4-6",
+      "X-Test-Flag": "sonnet_comparison"
+    },
   });
 }

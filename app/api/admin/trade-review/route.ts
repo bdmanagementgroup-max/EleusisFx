@@ -371,7 +371,7 @@ Use the programmatic evaluation and price path data above as your source of trut
     async start(controller) {
       try {
         const msgStream = anthropic.messages.stream({
-          model: "claude-opus-4-7",
+          model: "claude-sonnet-4-6",
           max_tokens: 4096,
           system: REVIEW_SYSTEM_PROMPT,
           messages: [{ role: "user", content: userMessage }],

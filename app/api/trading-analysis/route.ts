@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { logAPIUsage, calculateAnthropicCost } from "@/lib/api-cost-tracking";
 import {
   FOREX_PAIRS,
   CRYPTO_PAIRS,
@@ -69,15 +70,34 @@ ${cryptoPairs.length > 0 ? `CRYPTO:\n${cryptoData}` : ""}
 Use the indicator values above as your primary analysis foundation. Derive DXY bias yourself from the USD pairs. Apply the full confluence framework. Only report pairs with genuine 3+ signal alignment.`;
 
   try {
+    const startTime = Date.now();
     const anthropic = new Anthropic({ apiKey, maxRetries: 3 });
     const msg = await anthropic.messages.create({
-      model: "claude-opus-4-7",
+      model: "claude-sonnet-4-6",
       max_tokens: 4096,
       system: SYSTEM_PROMPT,
       messages: [{ role: "user", content: userMessage }],
     });
 
     const report = msg.content[0]?.type === "text" ? msg.content[0].text : "";
+
+    // Log API usage for cost tracking
+    const inputTokens = msg.usage?.input_tokens || 0;
+    const outputTokens = msg.usage?.output_tokens || 0;
+    const cost = calculateAnthropicCost(inputTokens, outputTokens, "sonnet");
+    const requestDuration = Date.now() - startTime;
+
+    await logAPIUsage({
+      service: "anthropic",
+      endpoint: "/api/trading-analysis",
+      method: "POST",
+      cost,
+      tokens_input: inputTokens,
+      tokens_output: outputTokens,
+      status: "success",
+      request_duration_ms: requestDuration,
+      metadata: { model: "claude-sonnet-4-6", session, focus, news },
+    });
 
     return NextResponse.json({
       report,
@@ -88,6 +108,7 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
     });
   } catch (err) {
     let message = "Analysis failed";
+    let errorMessage = "";
     if (err instanceof Error) {
       try {
         const parsed = JSON.parse(err.message);
@@ -95,7 +116,20 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
       } catch {
         message = err.message;
       }
+      errorMessage = err.message;
     }
+
+    // Log the error for cost tracking
+    await logAPIUsage({
+      service: "anthropic",
+      endpoint: "/api/trading-analysis",
+      method: "POST",
+      cost: 0,
+      status: "error",
+      error_message: errorMessage,
+      metadata: { session, focus, news },
+    });
+
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
