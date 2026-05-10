@@ -95,7 +95,9 @@ Only 3+ confluence signals and minimum 1:2 R:R make the report.
 ### Step 5 — Save and post to Telegram
 
 After generating the report:
-1. **Save** the full report as `Trading Analysis [DD-MM-YYYY].md` to the Eleusis Fx workspace folder
+1. **Save** two files to `/Users/benjamindavies/Documents/Claude - Eleusis/Trading Analysis/`:
+   - Full report as `YYYY-MM-DD-daily-report.md`
+   - Structured signal cards as `YYYY-MM-DD-signals.md` (one card per qualifying pair with entry, SL, TP1, TP2, confidence rating)
 2. **Post to Telegram** by opening the Telegram desktop app (request computer access), navigating to the **Eleusis Fx Official** channel, and sending each section as a separate message in this order:
    - Header (date + session + signal count)
    - Macro overview

@@ -1,6 +1,6 @@
 import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
-import StripeButton from "./StripeButton";
+import CryptoPayment from "./CryptoPayment";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -200,12 +200,10 @@ export default function SignalsPage() {
                 Billed monthly, cancel anytime
               </p>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                <StripeButton />
-              </div>
+              <CryptoPayment />
 
               <p style={{ fontSize: 11, color: "rgba(210,220,240,0.6)", marginTop: 24 }}>
-                No card required to browse. Secure checkout powered by Stripe.
+                Crypto payments only. Send BTC on the Bitcoin network and confirm via WhatsApp.
               </p>
             </div>
           </div>
