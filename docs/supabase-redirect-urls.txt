@@ -1,0 +1,44 @@
+# Supabase Auth Redirect URLs for Eleusis FX
+
+These URLs must be added to the Supabase Auth Configuration dashboard at:
+https://app.supabase.com/project/{project-id}/auth/url-configuration
+
+## Production & Custom Domain
+https://eleusisfx.uk/auth/callback
+
+## Vercel Production Deployments
+https://eleusis-49th1god1-bdmanagementgroup-maxs-projects.vercel.app/auth/callback
+https://eleusis-mg4q9a0ox-bdmanagementgroup-maxs-projects.vercel.app/auth/callback
+https://eleusis-k11yq0ntj-bdmanagementgroup-maxs-projects.vercel.app/auth/callback
+https://eleusis-hobjc4hup-bdmanagementgroup-maxs-projects.vercel.app/auth/callback
+https://eleusis-8um24nl2d-bdmanagementgroup-maxs-projects.vercel.app/auth/callback
+https://eleusis-6j2qvdnji-bdmanagementgroup-maxs-projects.vercel.app/auth/callback
+https://eleusis-mc7k4hswg-bdmanagementgroup-maxs-projects.vercel.app/auth/callback
+
+## Development (Local)
+http://localhost:3000/auth/callback
+
+## Notes
+
+- **Custom Domain (eleusisfx.uk)**: This is the primary production domain and should remain whitelisted at all times.
+- **Vercel URLs**: These are historical production deployment URLs from Vercel. Include recent successful deployments to ensure continuity during rollbacks.
+- **Localhost**: Required for local development. Only needed in Development environment in Supabase if configured separately.
+- **Auth Callback Route**: All URLs point to `/auth/callback`, which is the Supabase OAuth callback handler configured in the Next.js app at `app/auth/callback/route.ts`.
+
+## How to Apply
+
+1. Log into your Supabase dashboard
+2. Navigate to Project Settings → Auth → URL Configuration
+3. Add each URL above to the "Authorized redirect URLs" section
+4. Save changes
+5. Test OAuth flow to verify URLs are properly whitelisted
+
+## Git Branches
+
+Active branches for this project:
+- main (production branch)
+- claude/flamboyant-cray-05fe55 (local development)
+- claude/rebuild-eleusis-fx-stack-oCL1v (remote feature branch)
+
+Preview deployments for branches are created automatically by Vercel on commit, following the URL pattern:
+`https://<project>-<git-hash>-bdmanagementgroup-maxs-projects.vercel.app`
