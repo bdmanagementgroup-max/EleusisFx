@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, after } from "next/server";
 import OpenAI from "openai";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { logAPIUsage } from "@/lib/api-cost-tracking";
@@ -134,18 +134,27 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
           metadata: { model: "openai/gpt-oss-120b:free", session, focus, newsLevel, macroMode: body.macroMode },
         }).catch((err) => console.error("[Cost Tracking] Failed to log:", err));
 
-        await Promise.all([
-          sendToTelegram(body_md).catch((err) =>
-            console.error("[Telegram] Failed to post report:", err)
-          ),
-          supabase.from("signals").insert({
-            session,
-            focus,
-            body_md,
-            posted_telegram: true,
-            posted_instagram: false,
-          }),
-        ]);
+        // after() keeps the Vercel function alive after the stream response is sent
+        after(async () => {
+          try {
+            console.log("[Telegram] Starting post to channel...");
+            await sendToTelegram(body_md);
+            console.log("[Telegram] ✅ Posted successfully");
+          } catch (err) {
+            console.error("[Telegram] ❌ Failed to post report:", err);
+          }
+          try {
+            await supabase.from("signals").insert({
+              session,
+              focus,
+              body_md,
+              posted_telegram: true,
+              posted_instagram: false,
+            });
+          } catch (err) {
+            console.error("[Supabase] ❌ Failed to save signal:", err);
+          }
+        });
       } catch (err) {
         let msg = "Analysis failed";
         let errorMessage = "";
