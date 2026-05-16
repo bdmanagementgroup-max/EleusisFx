@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
-import { logAPIUsage, calculateAnthropicCost } from "@/lib/api-cost-tracking";
+import { logAPIUsage } from "@/lib/api-cost-tracking";
 import {
   FOREX_PAIRS,
   CRYPTO_PAIRS,
@@ -20,10 +20,9 @@ export async function POST(req: NextRequest) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
   }
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) {
+  if (!process.env.OPENROUTER_API_KEY) {
     return new Response(
-      JSON.stringify({ error: "ANTHROPIC_API_KEY not set — add it to Vercel environment variables and redeploy" }),
+      JSON.stringify({ error: "OPENROUTER_API_KEY not set — add it to Vercel environment variables and redeploy" }),
       { status: 500 }
     );
   }
@@ -87,7 +86,15 @@ ${macroInstruction}
 
 Use the indicator values above as your primary analysis foundation. Derive DXY bias yourself from the USD pairs. Apply the full confluence framework. Only report pairs with genuine 3+ signal alignment.`;
 
-  const anthropic = new Anthropic({ apiKey, maxRetries: 3 });
+  const openrouter = new OpenAI({
+    baseURL: "https://openrouter.ai/api/v1",
+    apiKey: process.env.OPENROUTER_API_KEY,
+    defaultHeaders: {
+      "HTTP-Referer": process.env.NEXT_PUBLIC_SITE_URL ?? "https://eleusisfx.com",
+      "X-Title": "Eleusis FX Trading Analysis",
+    },
+  });
+
   const encoder = new TextEncoder();
   const chunks: string[] = [];
   const startTime = Date.now();
@@ -95,39 +102,36 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        const msgStream = anthropic.messages.stream({
-          model: "claude-sonnet-4-6",
+        const completion = await openrouter.chat.completions.create({
+          model: "nousresearch/hermes-3-llama-3.1-70b:free",
           max_tokens: 4096,
-          system: SYSTEM_PROMPT,
-          messages: [{ role: "user", content: userMessage }],
+          messages: [
+            { role: "system", content: SYSTEM_PROMPT },
+            { role: "user", content: userMessage },
+          ],
+          stream: true,
         });
-        for await (const event of msgStream) {
-          if (event.type === "content_block_delta" && event.delta.type === "text_delta") {
-            const text = event.delta.text;
+
+        for await (const chunk of completion) {
+          const text = chunk.choices[0]?.delta?.content ?? "";
+          if (text) {
             chunks.push(text);
             controller.enqueue(encoder.encode(text));
           }
         }
         controller.close();
-        const body_md = chunks.join("");
 
-        // Log API usage after stream completes
-        const finalMsg = await msgStream.finalMessage();
-        const inputTokens = finalMsg.usage?.input_tokens || 0;
-        const outputTokens = finalMsg.usage?.output_tokens || 0;
-        const cost = calculateAnthropicCost(inputTokens, outputTokens, "sonnet");
+        const body_md = chunks.join("");
         const requestDuration = Date.now() - startTime;
 
         logAPIUsage({
-          service: "anthropic",
+          service: "openrouter",
           endpoint: "/api/admin/trading-analysis",
           method: "POST",
-          cost,
-          tokens_input: inputTokens,
-          tokens_output: outputTokens,
+          cost: 0,
           status: "success",
           request_duration_ms: requestDuration,
-          metadata: { model: "claude-sonnet-4-6", session, focus, newsLevel, macroMode: body.macroMode },
+          metadata: { model: "nousresearch/hermes-3-llama-3.1-70b:free", session, focus, newsLevel, macroMode: body.macroMode },
         }).catch((err) => console.error("[Cost Tracking] Failed to log:", err));
 
         Promise.all([
@@ -155,9 +159,8 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
           errorMessage = err.message;
         }
 
-        // Log error
         logAPIUsage({
-          service: "anthropic",
+          service: "openrouter",
           endpoint: "/api/admin/trading-analysis",
           method: "POST",
           cost: 0,
