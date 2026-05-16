@@ -134,7 +134,7 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
           metadata: { model: "openai/gpt-oss-120b:free", session, focus, newsLevel, macroMode: body.macroMode },
         }).catch((err) => console.error("[Cost Tracking] Failed to log:", err));
 
-        Promise.all([
+        await Promise.all([
           sendToTelegram(body_md).catch((err) =>
             console.error("[Telegram] Failed to post report:", err)
           ),
