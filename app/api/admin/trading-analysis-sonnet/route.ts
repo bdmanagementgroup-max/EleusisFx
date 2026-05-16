@@ -109,7 +109,7 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
     async start(controller) {
       try {
         const completion = await openrouter.chat.completions.create({
-          model: "nousresearch/hermes-3-llama-3.1-70b:free",
+          model: "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
           max_tokens: 4096,
           messages: [
             { role: "system", content: SYSTEM_PROMPT },
@@ -137,7 +137,7 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
           cost: 0,
           status: "success",
           request_duration_ms: requestDuration,
-          metadata: { model: "nousresearch/hermes-3-llama-3.1-70b:free", session, focus, newsLevel, macroMode: body.macroMode, testFlag: "hermes_test" },
+          metadata: { model: "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free", session, focus, newsLevel, macroMode: body.macroMode, testFlag: "hermes_test" },
         }).catch((err) => console.error("[Cost Tracking] Failed to log:", err));
 
         // Do NOT auto-post to Telegram from the test endpoint
@@ -182,7 +182,7 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
     headers: {
       "Content-Type": "text/plain; charset=utf-8",
       "Cache-Control": "no-cache",
-      "X-Model": "nousresearch/hermes-3-llama-3.1-70b:free",
+      "X-Model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
     },
   });
 }
