@@ -103,7 +103,7 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
     async start(controller) {
       try {
         const completion = await openrouter.chat.completions.create({
-          model: "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+          model: "openai/gpt-oss-120b:free",
           max_tokens: 4096,
           messages: [
             { role: "system", content: SYSTEM_PROMPT },
@@ -131,7 +131,7 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
           cost: 0,
           status: "success",
           request_duration_ms: requestDuration,
-          metadata: { model: "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free", session, focus, newsLevel, macroMode: body.macroMode },
+          metadata: { model: "openai/gpt-oss-120b:free", session, focus, newsLevel, macroMode: body.macroMode },
         }).catch((err) => console.error("[Cost Tracking] Failed to log:", err));
 
         Promise.all([
