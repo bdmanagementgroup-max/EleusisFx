@@ -289,8 +289,8 @@ export default function ComparePage() {
               <a href="/#apply" style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: 3, textTransform: "uppercase", color: "#020305", background: "#e8eaf0", padding: "16px 32px", textDecoration: "none", transition: "all 0.2s", display: "inline-block" }}>
                 Apply Now →
               </a>
-              <a href="/articles" style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 600, fontSize: 11, letterSpacing: 3, textTransform: "uppercase", color: "rgba(232,234,240,0.5)", border: "1px solid rgba(255,255,255,0.12)", padding: "16px 32px", textDecoration: "none", transition: "all 0.2s", display: "inline-block" }}>
-                Read the Guides
+              <a href="/articles/best-prop-firm-passing-service-uk-2026" style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 600, fontSize: 11, letterSpacing: 3, textTransform: "uppercase", color: "rgba(232,234,240,0.5)", border: "1px solid rgba(255,255,255,0.12)", padding: "16px 32px", textDecoration: "none", transition: "all 0.2s", display: "inline-block" }}>
+                How to Choose a Service
               </a>
             </div>
           </div>

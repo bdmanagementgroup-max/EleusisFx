@@ -2,25 +2,25 @@ import Link from "next/link";
 
 const ARTICLES = [
   {
+    slug: "best-prop-firm-passing-service-uk-2026",
+    tag: "Prop Firms",
+    title: "Best Prop Firm Passing Service UK 2026 — Honest Comparison",
+    excerpt: "A no-fluff comparison of the leading prop firm passing services available to UK traders in 2026 — what to look for, what to avoid, and how to evaluate any service before you pay.",
+    date: "May 2026",
+  },
+  {
+    slug: "client-case-study-ftmo-100k-18-days",
+    tag: "Results",
+    title: "Case Study: £100,000 FTMO Account Funded in 18 Days",
+    excerpt: "How a UK-based trader received a funded $100,000 FTMO account in under three weeks — without risking a single failed attempt on their own.",
+    date: "May 2026",
+  },
+  {
     slug: "what-is-an-ftmo-challenge",
     tag: "Prop Firms",
     title: "What Is an FTMO Challenge and How Does It Work?",
     excerpt: "A complete breakdown of the FTMO evaluation process — phases, rules, drawdown limits, and what you need to know before starting your challenge.",
     date: "June 2025",
-  },
-  {
-    slug: "why-traders-fail-prop-firm-evaluation",
-    tag: "Strategy",
-    title: "Why Most Traders Fail Their Prop Firm Evaluation",
-    excerpt: "The three most common reasons traders get disqualified — and how professional evaluation services eliminate these risks entirely.",
-    date: "May 2025",
-  },
-  {
-    slug: "ftmo-vs-true-forex-funds",
-    tag: "Funding",
-    title: "FTMO vs True Forex Funds: Which Prop Firm Is Right for You?",
-    excerpt: "A side-by-side comparison of the two most popular prop firms — fees, rules, payout structures, and which suits different trading styles.",
-    date: "April 2025",
   },
 ];
 

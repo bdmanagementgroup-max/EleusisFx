@@ -427,6 +427,13 @@ export default function ReviewsPage() {
           <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
             {[
               {
+                href: "/articles/best-prop-firm-passing-service-uk-2026",
+                title: "Best Prop Firm Passing Service UK 2026 — Honest Comparison",
+                desc: "What separates a legitimate passing service from a risky one, what to look for before you pay, and how Eleusis FX compares against the broader landscape.",
+                tag: "Prop Firms · 9 min read",
+                time: "",
+              },
+              {
                 href: "/articles/client-case-study-ftmo-100k-18-days",
                 title: "FTMO $100,000 — Funded in 18 Days",
                 desc: "A UK trader who had failed Phase 2 twice independently. Both phases completed in 18 days total. Account now scaled to $200,000.",
@@ -463,7 +470,7 @@ export default function ReviewsPage() {
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 24, flexWrap: "wrap" }}>
                   <div style={{ flex: 1, minWidth: 200 }}>
                     <div style={{ fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "#4f8ef7", marginBottom: 12 }}>
-                      {tag} · {time}
+                      {tag}{time ? ` · ${time}` : ""}
                     </div>
                     <div
                       style={{
