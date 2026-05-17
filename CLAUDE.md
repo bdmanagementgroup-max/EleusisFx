@@ -22,6 +22,23 @@ ALTER TABLE applications ADD COLUMN IF NOT EXISTS status text DEFAULT 'new';
 ALTER TABLE applications ADD COLUMN IF NOT EXISTS notes text;
 ```
 
+## SEO & Content Notes
+
+**Calculator pages are `"use client"`** — add metadata via a sibling `layout.tsx` in the same directory (e.g. `app/resources/position-size-calculator/layout.tsx`), not the page file itself.
+
+**No `<img>` elements exist in public-facing pages** — the site is CSS/text-only with inline SVGs. Image alt text audits are not applicable.
+
+**`SchemaOrg.tsx`** already renders FAQ + Organization JSON-LD on the homepage — do not add duplicate schema there.
+
+**New Supabase articles auto-appear on `/articles`** but NOT on the homepage `ArticlesPreview` (`components/home/ArticlesPreview.tsx`) or the `/reviews` case studies section — both are hardcoded arrays requiring manual updates.
+
+**`/links` is noindexed** (`robots: { index: false }`) — social link-in-bio page, no SEO value. Do not remove.
+
+**To append cross-links inside existing Supabase articles:**
+```sql
+UPDATE articles SET content = content || '<p>...</p>' WHERE slug = '...';
+```
+
 ## Architecture
 
 **Eleusis FX** is a Next.js 16 (App Router) + TypeScript prop firm evaluation platform serving a public marketing site, protected client dashboard, and admin portal.
