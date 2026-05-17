@@ -38,6 +38,8 @@ type OutcomeCode =
 
 interface SignalRow {
   id: string;
+  session_id: string | null;
+  session: string | null;
   pair: string;
   direction: string;
   entry_price: string | null;
@@ -210,38 +212,43 @@ function evaluateSignal(sig: SignalRow, bars: DayBar[]): EvalResult {
   return { ...base, currentPrice, outcome, entryDate, outcomeDate, priceNarrative: pathNotes.slice(0, 6).join(" | ") };
 }
 
-const REVIEW_SYSTEM_PROMPT = `You are the Eleusis FX performance analyst reviewing trading signals. You have been given:
-1. The original signal details (pair, direction, entry, SL, TP1, TP2)
-2. Actual daily OHLCV price data since each signal was issued
-3. A programmatic evaluation of whether each signal's levels were hit
+const REVIEW_SYSTEM_PROMPT = `You are the Eleusis FX performance analyst reviewing all trading signals across every analysis session. You receive programmatic evaluations of every signal's outcome based on real daily OHLCV data.
 
-Your job: write a professional trade review report. Be honest, direct, and specific. No padding.
+Your job: write a comprehensive trade review report. Be honest, direct, and specific. No padding.
 
 Format your report exactly as:
 
-### ELEUSIS FX — TRADE REVIEW
+### ELEUSIS FX — FULL TRADE REVIEW
 **Review Date:** [date]
-**Signals Reviewed:** [N] · **Won:** [N] · **Lost:** [N] · **Pending:** [N] · **Skipped:** [N]
+**Sessions Reviewed:** [N] · **Total Signals:** [N] · **Win Rate:** [N]% (excludes pending/skipped)
 
 ---
 
-#### SUMMARY TABLE
-| # | Pair | Dir | Outcome | Entry Hit | Details |
-|---|------|-----|---------|-----------|---------|
-[one row per signal]
+#### OVERALL SUMMARY
+| Metric | Value |
+|--------|-------|
+| Won (TP hit) | [N] |
+| Lost (SL hit) | [N] |
+| Pending (active or never entered) | [N] |
+| Skipped (neutral/no signal) | [N] |
+| **Win Rate** | **[N]%** |
 
 ---
 
-#### SIGNAL REVIEWS
+#### BY SESSION
 
-For each signal, write:
-#### [PAIR] — [BUY/SELL] — [OUTCOME LABEL]
-Price path, what happened, and why. 2–4 sentences. Specific prices and dates.
+For each analysis session:
+##### [Session name] — [Date] · Won: [N] Lost: [N] Pending: [N]
+| Pair | Dir | Outcome | Entry Hit | TP Hit |
+|------|-----|---------|-----------|--------|
+[one row per signal in this session]
+
+Brief 1–2 sentence narrative on what drove outcomes in this session.
 
 ---
 
 #### ANALYST NOTES
-2–3 sentences on the overall batch quality. What worked, what to improve.`;
+3–5 sentences covering: overall win rate quality, which pairs/sessions performed best, any patterns in losses, and one concrete improvement suggestion.`;
 
 // ─── GET — list past reviews ──────────────────────────────────────────────────
 
@@ -277,27 +284,21 @@ export async function POST(req: NextRequest) {
 
   const db = await getSupabaseAdminClient();
 
-  // Fetch pending signals (fall back to all if none pending)
-  let { data: signals } = await db
+  // Fetch ALL signals across every analysis run — no filter, no limit
+  const { data: signals, error: signalsError } = await db
     .from("trading_signals")
-    .select("id, pair, direction, entry_price, stop_loss, tp1, tp2, created_at, outcome")
-    .eq("outcome", "pending")
+    .select("id, session_id, session, pair, direction, entry_price, stop_loss, tp1, tp2, created_at, outcome")
     .order("created_at", { ascending: false });
 
-  if (!signals || signals.length === 0) {
-    const { data: all } = await db
-      .from("trading_signals")
-      .select("id, pair, direction, entry_price, stop_loss, tp1, tp2, created_at, outcome")
-      .order("created_at", { ascending: false })
-      .limit(20);
-    signals = all ?? [];
+  if (signalsError) {
+    return new Response(JSON.stringify({ error: signalsError.message }), { status: 500 });
   }
 
   if (!signals || signals.length === 0) {
     return new Response(JSON.stringify({ error: "No signals found — run an analysis and save signals first." }), { status: 404 });
   }
 
-  // Fetch OHLCV for each unique pair
+  // Fetch OHLCV for each unique pair in parallel
   const uniquePairs = [...new Set((signals as SignalRow[]).map(s => s.pair))];
   const ohlcvMap = new Map<string, DayBar[]>();
   await Promise.all(
@@ -309,12 +310,12 @@ export async function POST(req: NextRequest) {
     })
   );
 
-  // Evaluate each signal
+  // Evaluate every signal from scratch using live price data
   const evals = (signals as SignalRow[]).map(sig =>
     evaluateSignal(sig, ohlcvMap.get(sig.pair) ?? [])
   );
 
-  // Auto-update resolved outcomes in DB
+  // Update DB outcome for any signal now resolved (win or loss confirmed)
   const resolved = evals.filter(e => e.outcome === "won_tp1" || e.outcome === "won_tp2" || e.outcome === "lost");
   if (resolved.length > 0) {
     await Promise.all(
@@ -326,20 +327,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Build user message for Claude
-  const reviewDate = new Date().toLocaleDateString("en-GB", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
-
-  const signalBlocks = evals.map((e, i) => `
-Signal ${i + 1}: ${e.pair} — ${e.direction}
-  Signal date: ${e.signalDate}
-  Entry: ${e.entryStr} | SL: ${e.slStr} | TP1: ${e.tp1Str} | TP2: ${e.tp2Str}
-  Current price: ${fmt(e.currentPrice)}
-  Programmatic evaluation: ${e.outcome.replace(/_/g, " ")}
-  Entry triggered: ${e.entryDate ?? "no"}
-  Outcome date: ${e.outcomeDate ?? "unresolved"}
-  Price path: ${e.priceNarrative}
-`).join("\n---\n");
-
+  // Aggregate counts across all signals
   const counts = {
     won:     evals.filter(e => e.outcome === "won_tp1" || e.outcome === "won_tp2").length,
     lost:    evals.filter(e => e.outcome === "lost").length,
@@ -347,19 +335,54 @@ Signal ${i + 1}: ${e.pair} — ${e.direction}
     skipped: evals.filter(e => e.outcome === "skipped").length,
   };
 
-  const userMessage = `Write the Eleusis FX trade review report.
+  const winRate = counts.won + counts.lost > 0
+    ? Math.round((counts.won / (counts.won + counts.lost)) * 100)
+    : null;
+
+  // Group evals by session_id so the AI can narrate per analysis run
+  const sessionOrder: string[] = [];
+  const sessionMap = new Map<string, { session: string | null; date: string; results: Array<{ sig: SignalRow; ev: EvalResult }> }>();
+
+  (signals as SignalRow[]).forEach((sig, i) => {
+    const key = sig.session_id ?? sig.created_at.slice(0, 10);
+    if (!sessionMap.has(key)) {
+      sessionOrder.push(key);
+      sessionMap.set(key, { session: sig.session, date: sig.created_at.slice(0, 10), results: [] });
+    }
+    sessionMap.get(key)!.results.push({ sig, ev: evals[i] });
+  });
+
+  const sessionBlocks = sessionOrder.map(key => {
+    const grp = sessionMap.get(key)!;
+    const gWon     = grp.results.filter(r => r.ev.outcome === "won_tp1" || r.ev.outcome === "won_tp2").length;
+    const gLost    = grp.results.filter(r => r.ev.outcome === "lost").length;
+    const gPending = grp.results.filter(r => r.ev.outcome === "pending_active" || r.ev.outcome === "pending_never_entered").length;
+
+    const rows = grp.results.map(({ ev }) =>
+      `  ${ev.pair} ${ev.direction}: [${ev.outcome.replace(/_/g, " ").toUpperCase()}] ` +
+      `Entry ${ev.entryStr} | SL ${ev.slStr} | TP1 ${ev.tp1Str} | TP2 ${ev.tp2Str} | ` +
+      `Triggered: ${ev.entryDate ?? "no"} | Resolved: ${ev.outcomeDate ?? "pending"} | ` +
+      `Path: ${ev.priceNarrative}`
+    ).join("\n");
+
+    return `**${grp.session ?? "Unknown"} Session — ${grp.date}** · Won: ${gWon} Lost: ${gLost} Pending: ${gPending}\n${rows}`;
+  }).join("\n\n---\n\n");
+
+  const reviewDate = new Date().toLocaleDateString("en-GB", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+
+  const userMessage = `Write the Eleusis FX trade review report covering ALL signals across ALL analysis runs.
 
 **Review Date:** ${reviewDate}
-**Signals to review:** ${evals.length}
-**Programmatic results:** Won: ${counts.won} · Lost: ${counts.lost} · Pending: ${counts.pending} · Skipped: ${counts.skipped}
+**Total Signals:** ${evals.length} across ${sessionOrder.length} analysis session(s)
+**Overall Results:** Won: ${counts.won} · Lost: ${counts.lost} · Pending: ${counts.pending} · Skipped: ${counts.skipped}${winRate !== null ? ` · Win Rate: ${winRate}%` : ""}
 
 ---
 
-${signalBlocks}
+${sessionBlocks}
 
 ---
 
-Use the programmatic evaluation and price path data above as your source of truth. Narrate the review professionally. Be specific about prices and dates.`;
+Use the programmatic evaluations above as your source of truth. Structure the report by session. Open with the overall win rate and key stats, then review each session's signals, then close with analyst notes on overall performance and patterns.`;
 
   // Stream via OpenRouter
   const openrouter = new OpenAI({
