@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
+import { NextRequest, NextResponse, after } from "next/server";
+import OpenAI from "openai";
 import { getSupabaseAdminClient, getSupabaseServerClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -271,9 +271,8 @@ export async function POST(req: NextRequest) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
   }
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) {
-    return new Response(JSON.stringify({ error: "ANTHROPIC_API_KEY not set" }), { status: 500 });
+  if (!process.env.OPENROUTER_API_KEY) {
+    return new Response(JSON.stringify({ error: "OPENROUTER_API_KEY not set" }), { status: 500 });
   }
 
   const db = await getSupabaseAdminClient();
@@ -362,38 +361,56 @@ ${signalBlocks}
 
 Use the programmatic evaluation and price path data above as your source of truth. Narrate the review professionally. Be specific about prices and dates.`;
 
-  // Stream Claude response
-  const anthropic = new Anthropic({ apiKey, maxRetries: 3 });
+  // Stream via OpenRouter
+  const openrouter = new OpenAI({
+    baseURL: "https://openrouter.ai/api/v1",
+    apiKey: process.env.OPENROUTER_API_KEY,
+    defaultHeaders: {
+      "HTTP-Referer": process.env.NEXT_PUBLIC_SITE_URL ?? "https://eleusisfx.com",
+      "X-Title": "Eleusis FX Trade Review",
+    },
+  });
+
   const encoder = new TextEncoder();
   const chunks: string[] = [];
 
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        const msgStream = anthropic.messages.stream({
-          model: "claude-sonnet-4-6",
+        const completion = await openrouter.chat.completions.create({
+          model: "openai/gpt-oss-120b:free",
           max_tokens: 4096,
-          system: REVIEW_SYSTEM_PROMPT,
-          messages: [{ role: "user", content: userMessage }],
+          messages: [
+            { role: "system", content: REVIEW_SYSTEM_PROMPT },
+            { role: "user", content: userMessage },
+          ],
+          stream: true,
         });
 
-        for await (const event of msgStream) {
-          if (event.type === "content_block_delta" && event.delta.type === "text_delta") {
-            chunks.push(event.delta.text);
-            controller.enqueue(encoder.encode(event.delta.text));
+        for await (const chunk of completion) {
+          const text = chunk.choices[0]?.delta?.content ?? "";
+          if (text) {
+            chunks.push(text);
+            controller.enqueue(encoder.encode(text));
           }
         }
         controller.close();
 
-        // Save completed review to Supabase
+        // Save completed review after response is sent
         const content = chunks.join("");
-        await db.from("trade_reviews").insert({
-          content,
-          signals_reviewed: evals.length,
-          won:     counts.won,
-          lost:    counts.lost,
-          pending: counts.pending,
-          skipped: counts.skipped,
+        after(async () => {
+          try {
+            await db.from("trade_reviews").insert({
+              content,
+              signals_reviewed: evals.length,
+              won:     counts.won,
+              lost:    counts.lost,
+              pending: counts.pending,
+              skipped: counts.skipped,
+            });
+          } catch (err) {
+            console.error("[Trade Review] Failed to save to Supabase:", err);
+          }
         });
       } catch (err) {
         const msg = err instanceof Error ? err.message : "Review failed";
