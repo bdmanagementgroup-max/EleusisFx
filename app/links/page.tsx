@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Eleusis FX — Links",
-  description: "Eleusis FX — Prop Firm Specialists. Get funded with a $100K account.",
+  title: "Eleusis FX — Prop Firm Passing Service UK",
+  description: "UK's leading prop firm evaluation service — 87% pass rate, 700+ funded traders since 2019. We pass your FTMO challenge. Apply today.",
+  robots: { index: false },
 };
 
 export default function LinksPage() {

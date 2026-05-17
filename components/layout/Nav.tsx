@@ -7,6 +7,7 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 const DROPDOWN_ITEMS = [
   { href: "/articles", label: "Articles" },
   { href: "/compare", label: "Compare Firms" },
+  { href: "/reviews", label: "Reviews & Results" },
   { href: "/calendar", label: "Economic Calendar" },
   { divider: true },
   { href: "/resources/position-size-calculator", label: "Position Size Calculator" },

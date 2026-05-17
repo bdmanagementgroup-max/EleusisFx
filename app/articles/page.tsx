@@ -7,8 +7,12 @@ import ArticlesList from "@/components/articles/ArticlesList";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Articles — Eleusis FX",
-  description: "Trading insights, prop firm guides, and strategy breakdowns from the Eleusis FX team.",
+  title: "Prop Firm Guides & Trading Articles | Eleusis FX",
+  description: "FTMO challenge breakdowns, drawdown rules explained, passing service guides, and funded trader strategy — written by UK prop firm specialists with 700+ clients funded.",
+  openGraph: {
+    title: "Prop Firm Guides & Trading Articles | Eleusis FX",
+    description: "FTMO challenge breakdowns, drawdown rules, and funded trader strategy from UK prop specialists.",
+  },
 };
 
 const FALLBACK_ARTICLES = [

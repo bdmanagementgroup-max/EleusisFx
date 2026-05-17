@@ -4,8 +4,12 @@ import { getSupabaseAdminClient } from "@/lib/supabase/server";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Resources — Eleusis FX",
-  description: "Prop firm comparison guides, trading tools, calculators, and downloadable guides for funded traders.",
+  title: "Forex Trading Tools & Prop Firm Guides | Eleusis FX",
+  description: "Free trading calculators — position size, risk/reward, drawdown tracker — plus prop firm comparison guides and downloadable PDFs for FTMO and funded account traders.",
+  openGraph: {
+    title: "Forex Trading Tools & Prop Firm Guides | Eleusis FX",
+    description: "Free position size calculator, drawdown tracker, R:R calculator, and prop firm comparison guides.",
+  },
 };
 
 const FALLBACK_RESOURCES: Record<string, { title: string; description: string; href: string; download?: boolean }[]> = {

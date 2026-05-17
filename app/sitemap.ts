@@ -129,6 +129,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: 'https://eleusisfx.uk/reviews',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
       url: 'https://eleusisfx.uk/compare',
       lastModified: new Date(),
       changeFrequency: 'monthly',
