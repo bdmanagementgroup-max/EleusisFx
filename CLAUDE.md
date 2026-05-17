@@ -171,9 +171,13 @@ All three ticker components (`PublicMarketTicker`, `AdminMarketTicker`, `MarketT
 Fetches **Yahoo Finance** daily OHLCV (1 year, free, no API key) for all 12 forex pairs + 4 crypto, then calculates all indicators server-side:
 - **Forex symbols:** `EURUSD=X`, `GBPUSD=X`, `USDJPY=X`, `AUDUSD=X`, `GBPJPY=X`, `USDCAD=X`, `NZDUSD=X`, `EURGBP=X`, `USDCHF=X`, `EURJPY=X`, `CADJPY=X`, `AUDNZD=X`
 - **Crypto symbols:** `BTC-USD`, `ETH-USD`, `SOL-USD`, `XRP-USD`
-- **Indicators (inline JS, no library):** RSI(14) Wilder smoothing, EMA50, EMA200, MACD(12,26,9), ATR(14)
+- **Indicators (inline JS, no library):** RSI(14) Wilder smoothing, EMA50, EMA200, MACD(12,26,9), ATR(14), plus momentum direction data (RSI 5d delta, MACD histogram expansion/contraction, 5-day range position, candle body position)
 - **Endpoint:** `https://query1.finance.yahoo.com/v8/finance/chart/{symbol}?interval=1d&range=1y`
-- Crypto now gets full technical indicator analysis (was price-only before). Streams to Claude Opus via Anthropic SDK.
+- **Model:** OpenRouter `openai/gpt-oss-120b:free` (zero cost). Streams to Telegram + saves to `trading_signals` table.
+- **Signal methodology (updated 2026-05-17):** 3+ confluence requirement with 6 mandatory filters: momentum confirmation (no signals against declining RSI/contracting MACD), ATR-based stop sizing (min 1.5× ATR), correlation risk cap (max 2 same-direction USD positions), entry invalidation on momentum divergence, no extended-price entries, R:R floor (TP1 ≥ 2:1, TP2 ≥ 3:1)
+
+### Trade Review Agent (`/admin/tools/trade-review` + `.claude/agents/trade-reviewer.md`)
+Evaluates signal outcomes using Yahoo Finance 3-month OHLCV. Checks entry triggers, SL/TP hits day-by-day. Stores results in `trade_reviews` table, patches resolved outcomes back to `trading_signals`.
 
 ## Key Database Tables
 
