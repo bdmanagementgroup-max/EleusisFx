@@ -129,6 +129,30 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: 'https://eleusisfx.uk/articles/best-prop-firm-passing-service-uk-2026',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
+      url: 'https://eleusisfx.uk/articles/client-case-study-ftmo-100k-18-days',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: 'https://eleusisfx.uk/articles/client-case-study-the5ers-200k',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: 'https://eleusisfx.uk/articles/client-case-study-ftmo-first-attempt',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
       url: 'https://eleusisfx.uk/reviews',
       lastModified: new Date(),
       changeFrequency: 'monthly',

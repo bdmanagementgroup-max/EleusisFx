@@ -387,6 +387,108 @@ export default function ReviewsPage() {
         </div>
       </section>
 
+      {/* Case studies */}
+      <section
+        style={{
+          padding: "100px 56px",
+          background: "#020305",
+          borderBottom: "1px solid rgba(255,255,255,0.06)",
+        }}
+      >
+        <div style={{ maxWidth: 900, margin: "0 auto" }}>
+          <div
+            style={{
+              fontSize: 10,
+              letterSpacing: 4,
+              textTransform: "uppercase",
+              color: "#4f8ef7",
+              marginBottom: 20,
+              display: "flex",
+              alignItems: "center",
+              gap: 14,
+            }}
+          >
+            <span style={{ width: 24, height: 1, background: "#4f8ef7", display: "inline-block" }} />
+            Client Stories
+          </div>
+          <h2
+            style={{
+              fontFamily: "var(--font-syne), Syne, sans-serif",
+              fontWeight: 800,
+              fontSize: "clamp(24px, 4vw, 48px)",
+              letterSpacing: -1.5,
+              marginBottom: 48,
+              lineHeight: 1.1,
+            }}
+          >
+            Detailed Case Studies
+          </h2>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            {[
+              {
+                href: "/articles/client-case-study-ftmo-100k-18-days",
+                title: "FTMO $100,000 — Funded in 18 Days",
+                desc: "A UK trader who had failed Phase 2 twice independently. Both phases completed in 18 days total. Account now scaled to $200,000.",
+                tag: "FTMO · $100K",
+                time: "7 min read",
+              },
+              {
+                href: "/articles/client-case-study-the5ers-200k",
+                title: "The5ers $200,000 — Funded in 22 Days",
+                desc: "Two previous independent failures at the same firm. Strict position sizing and news avoidance strategy. Funded in 22 days from credential handover.",
+                tag: "The5ers · $200K",
+                time: "7 min read",
+              },
+              {
+                href: "/articles/client-case-study-ftmo-first-attempt",
+                title: "First-Time FTMO Applicant — 15 Days, Zero Prior Attempts",
+                desc: "A London-based professional who chose a passing service before attempting independently. Funded in 15 days. Three referrals sent since.",
+                tag: "FTMO · $100K",
+                time: "6 min read",
+              },
+            ].map(({ href, title, desc, tag, time }) => (
+              <Link
+                key={href}
+                href={href}
+                style={{
+                  display: "block",
+                  background: "#08090f",
+                  border: "1px solid rgba(255,255,255,0.06)",
+                  padding: "32px 36px",
+                  textDecoration: "none",
+                  transition: "border-color 0.2s",
+                }}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 24, flexWrap: "wrap" }}>
+                  <div style={{ flex: 1, minWidth: 200 }}>
+                    <div style={{ fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "#4f8ef7", marginBottom: 12 }}>
+                      {tag} · {time}
+                    </div>
+                    <div
+                      style={{
+                        fontFamily: "var(--font-syne), Syne, sans-serif",
+                        fontWeight: 700,
+                        fontSize: 17,
+                        color: "#e8eaf0",
+                        marginBottom: 10,
+                        letterSpacing: -0.3,
+                      }}
+                    >
+                      {title}
+                    </div>
+                    <div style={{ fontSize: 14, lineHeight: 1.7, color: "rgba(210,220,240,0.72)" }}>
+                      {desc}
+                    </div>
+                  </div>
+                  <div style={{ color: "#4f8ef7", fontSize: 20, flexShrink: 0, alignSelf: "center" }}>→</div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* FAQ */}
       <section
         style={{
