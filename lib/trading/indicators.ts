@@ -51,10 +51,51 @@ Only report a pair when 3+ INDEPENDENT signal categories align. Use the provided
 
 For each qualifying pair:
 - Entry: specific price or condition
-- Stop Loss: structural level, sized using ATR context (e.g. "1× ATR below swing low")
-- TP1: 1:2 R:R minimum, TP2: 1:3–4
+- Stop Loss: structural level, sized using ATR (minimum 1.5× ATR from entry)
+- TP1: minimum 2:1 R:R, TP2: minimum 3:1 R:R
 - R:R stated explicitly
 - Invalidation condition
+
+## MANDATORY FILTERS (override confluence — if ANY filter fails, do NOT signal)
+
+### 1. Momentum Confirmation Rule
+NEVER signal a LONG when:
+- RSI 5-day change is negative (RSI declining = fading bullish momentum)
+- MACD histogram is contracting (momentum weakening)
+- Last candle closed in the lower 30% of its range (sellers in control)
+
+NEVER signal a SHORT when:
+- RSI 5-day change is positive (RSI rising = fading bearish momentum)
+- MACD histogram is expanding (bullish momentum growing)
+- Last candle closed in the upper 30% of its range (buyers in control)
+
+If momentum conflicts with structure, SKIP the pair — state the specific conflict.
+
+### 2. ATR-Based Stop Sizing (Hard Rule)
+- Stop loss MUST be minimum 1.5× ATR(14) from entry price
+- If the structural level is tighter than 1.5× ATR, widen the stop OR skip the trade
+- State the ATR value and the multiple used: "ATR(14) = X. SL = 1.5× ATR = Y pips from entry."
+- This is non-negotiable. Tight stops = getting stopped by noise.
+
+### 3. Correlation Risk Cap
+- If all qualifying signals point in the SAME USD direction (all longs on EUR/GBP/AUD/XAU = all bearish USD), flag explicitly
+- Maximum 2 correlated positions per session
+- If 3+ same-direction signals qualify, rank by conviction and output only the top 2
+- State: "⚠️ Correlation warning: [N] signals are all [bearish/bullish] USD. Outputting top 2 only."
+
+### 4. Entry Invalidation on Momentum Divergence
+- For limit-order pullback entries: if price is approaching the entry zone with ACCELERATING counter-momentum (3+ consecutive closes moving against trade direction with expanding range), INVALIDATE
+- State: "Entry valid only on controlled pullback. Cancel limit if price falls through zone with momentum."
+
+### 5. No Extended-Price Entries
+- Do NOT signal a LONG when price is above 80% of its 5-day range (already extended upward)
+- Do NOT signal a SHORT when price is below 20% of its 5-day range (already extended downward)
+- Ideal entries are in the 30-70% zone of the 5-day range
+
+### 6. R:R Floor
+- TP1 must deliver minimum 2:1 R:R. If structural levels don't support this, the trade does not qualify.
+- TP2 must deliver minimum 3:1 R:R.
+- Prioritize TP1 hit rate. TP2 is aspirational — TP1 is the win condition.
 
 ## Output Format — EXACTLY this structure:
 
@@ -97,7 +138,9 @@ For each qualifying pair:
 ---
 
 #### PAIRS REVIEWED BUT NO SIGNAL
-[List pairs checked, one line each — include specific reason using the data, e.g. "AUDUSD: RSI 52 — no clear momentum bias, EMA50/200 converging"]
+[For each pair with no signal, state which MANDATORY FILTER blocked it. Be specific:]
+- "[PAIR]: [Filter name] — [specific data]. Example: GBPUSD: Momentum filter — RSI 5d Δ: -5.2 (declining), MACD hist contracting. Structure bullish but momentum says wait."
+- "[PAIR]: [Filter name] — [specific data]."
 
 ---
 ### INSTAGRAM CAPTIONS
@@ -121,9 +164,39 @@ For each qualifying pair:
 - Always reference actual indicator values when citing signals.
 - Derive DXY direction from the data — do not assume it.
 - The Instagram caption must stand alone without the full report.
-- Tone: direct, credible, experienced. Not hype. Not retail noise.`;
+- Tone: direct, credible, experienced. Not hype. Not retail noise.
+- MANDATORY FILTERS are non-negotiable. If a filter blocks a trade, it is blocked. Do not override.
+- Quality over quantity: 0 signals is better than 1 bad signal. 1 high-conviction signal is better than 3 mediocre ones.
+- State ATR value and SL multiple for every signal card.
+- If all signals are same-direction USD, cap at 2 and state correlation warning.`;
 
 // ─── Indicator engine ────────────────────────────────────────────────────────
+
+export function calcRSIArray(closes: number[], period = 14): number[] {
+  const out: number[] = new Array(closes.length).fill(NaN);
+  if (closes.length < period + 1) return out;
+  const changes = closes.slice(1).map((c, i) => c - closes[i]);
+  let ag = changes.slice(0, period).filter(c => c > 0).reduce((a, b) => a + b, 0) / period;
+  let al = changes.slice(0, period).filter(c => c < 0).reduce((a, b) => a + (-b), 0) / period;
+  out[period] = al === 0 ? 100 : 100 - 100 / (1 + ag / al);
+  for (let i = period; i < changes.length; i++) {
+    ag = (ag * (period - 1) + (changes[i] > 0 ? changes[i] : 0)) / period;
+    al = (al * (period - 1) + (changes[i] < 0 ? -changes[i] : 0)) / period;
+    out[i + 1] = al === 0 ? 100 : 100 - 100 / (1 + ag / al);
+  }
+  return out;
+}
+
+export function calcMACDArray(closes: number[]): { hist: number[] } | null {
+  const e12 = calcEMA(closes, 12);
+  const e26 = calcEMA(closes, 26);
+  const macdLine = closes.map((_, i) => (isNaN(e12[i]) || isNaN(e26[i]) ? NaN : e12[i] - e26[i]));
+  const valid = macdLine.filter(v => !isNaN(v));
+  if (valid.length < 9) return null;
+  const sig = calcEMA(valid, 9);
+  const hist = valid.map((m, i) => isNaN(sig[i]) ? NaN : m - sig[i]);
+  return { hist };
+}
 
 export function calcEMA(values: number[], period: number): number[] {
   const k = 2 / (period + 1);
@@ -226,11 +299,41 @@ export function buildLine(label: string, data: OHLCV): string {
   const vsE200 = !isNaN(e200l) ? (last > e200l ? "above" : "below") : "n/a";
   const macdBias = macdVal ? (macdVal.hist > 0 ? "bullish" : "bearish") : "n/a";
 
+  // Momentum direction indicators
+  const rsiArr = calcRSIArray(c);
+  const rsiNow = rsiArr[n - 1];
+  const rsi5ago = n >= 6 ? rsiArr[n - 6] : NaN;
+  const rsiDelta = (!isNaN(rsiNow) && !isNaN(rsi5ago)) ? rsiNow - rsi5ago : NaN;
+  const rsiDir = isNaN(rsiDelta) ? "n/a" : rsiDelta > 3 ? "rising" : rsiDelta < -3 ? "falling" : "flat";
+
+  const macdArr = calcMACDArray(c);
+  let histDir = "n/a";
+  if (macdArr && macdArr.hist.length >= 2) {
+    const hNow = macdArr.hist[macdArr.hist.length - 1];
+    const hPrev = macdArr.hist[macdArr.hist.length - 2];
+    if (!isNaN(hNow) && !isNaN(hPrev)) {
+      histDir = Math.abs(hNow) > Math.abs(hPrev) && Math.sign(hNow) === Math.sign(hPrev) ? "expanding" : "contracting";
+    }
+  }
+
+  // 5-day range position
+  const recent5H = Math.max(...h.slice(-5));
+  const recent5L = Math.min(...l.slice(-5));
+  const range5 = recent5H - recent5L;
+  const pricePos5d = range5 > 0 ? Math.round(((last - recent5L) / range5) * 100) : 50;
+
+  // Candle body position (last bar)
+  const lastHigh = h[n - 1]; const lastLow = l[n - 1];
+  const candleRange = lastHigh - lastLow;
+  const bodyPos = candleRange > 0 ? Math.round(((last - lastLow) / candleRange) * 100) : 50;
+  const bodyLabel = bodyPos >= 70 ? "bullish body (close in upper 30%)" : bodyPos <= 30 ? "bearish body (close in lower 30%)" : "neutral body";
+
   return [
     `${label}: ${last.toFixed(d)} (${chg}) | D-High: ${h[n-1].toFixed(d)} D-Low: ${l[n-1].toFixed(d)}`,
     `  RSI(14): ${isNaN(rsiVal) ? "n/a" : rsiVal.toFixed(1)} | ATR(14): ${isNaN(atrVal) ? "n/a" : atrVal.toFixed(d)}`,
     `  EMA50: ${isNaN(e50l) ? "n/a" : e50l.toFixed(d)} (price ${vsE50}) | EMA200: ${isNaN(e200l) ? "n/a" : e200l.toFixed(d)} (price ${vsE200})`,
     `  MACD: ${macdVal ? macdVal.macd.toFixed(d) : "n/a"} | Signal: ${macdVal ? macdVal.signal.toFixed(d) : "n/a"} | Hist: ${macdVal ? macdVal.hist.toFixed(d) : "n/a"} (${macdBias})`,
+    `  Momentum: RSI 5d Δ: ${isNaN(rsiDelta) ? "n/a" : (rsiDelta > 0 ? "+" : "") + rsiDelta.toFixed(1)} (${rsiDir}) | MACD hist ${histDir} | Price at ${pricePos5d}% of 5d range | Last candle: ${bodyLabel}`,
   ].join("\n");
 }
 
