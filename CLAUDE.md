@@ -65,7 +65,8 @@ Auth routing is handled by `proxy.ts` at the repo root (Next.js 16.2.4 renamed `
 | `/` | `Hero`, `Ticker`, `StatsRow`, `ProcessSteps`, `ProofSection`, `ProofFeed`, `PricingSection`, `LeadMagnet`, `FaqSection`, `ApplyForm` | Marketing homepage — pass rate shown as **87%** |
 | `/articles` | `app/articles/page.tsx` | Blog list — Supabase `articles`, fallback to 3 hardcoded |
 | `/articles/[slug]` | `app/articles/[slug]/page.tsx` | Article detail — DB first, hardcoded fallback if DB content < 500 chars. `force-dynamic` |
-| `/compare` | `app/compare/page.tsx` | Static prop firm comparison table |
+| `/compare` | `app/compare/page.tsx` | Static prop firm comparison table. Bottom CTA links to `/articles/best-prop-firm-passing-service-uk-2026` |
+| `/reviews` | `app/reviews/page.tsx` | Trust/reviews page — stats, funded results grid, case study links, FAQ. Targets "is eleusisfx legit" searches. Has AggregateRating + FAQ JSON-LD |
 | `/resources` | `app/resources/page.tsx` | Resource links — Supabase `resources`, fallback to hardcoded |
 | `/resources/position-size-calculator` | Interactive calculator | Lot size from balance, risk %, stop loss, pip value |
 | `/resources/risk-reward-calculator` | Interactive calculator | R:R ratio calculator |
