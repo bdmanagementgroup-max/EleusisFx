@@ -9,6 +9,7 @@ import {
   fetchMarketTA,
 } from "@/lib/trading/indicators";
 import { sendToTelegram } from "@/lib/telegram/sendToTelegram";
+import { sendToDiscord } from "@/lib/discord/sendToDiscord";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 120;
@@ -159,6 +160,13 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
             console.log("[Telegram] ✅ Posted successfully");
           } catch (err) {
             console.error("[Telegram] ❌ Failed to post report:", err);
+          }
+          try {
+            console.log("[Discord] Starting post to channel...");
+            await sendToDiscord(body_md);
+            console.log("[Discord] ✅ Posted successfully");
+          } catch (err) {
+            console.error("[Discord] ❌ Failed to post report:", err);
           }
           try {
             await supabase.from("signals").insert({
