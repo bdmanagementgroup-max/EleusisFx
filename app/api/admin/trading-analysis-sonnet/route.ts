@@ -108,15 +108,32 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        const completion = await openrouter.chat.completions.create({
-          model: "openai/gpt-oss-120b:free",
-          max_tokens: 4096,
-          messages: [
-            { role: "system", content: SYSTEM_PROMPT },
-            { role: "user", content: userMessage },
-          ],
-          stream: true,
-        });
+        const FREE_MODEL_CANDIDATES = [
+          "deepseek/deepseek-r1:free",
+          "meta-llama/llama-3.3-70b-instruct:free",
+          "openai/gpt-oss-120b:free",
+        ];
+
+        let completion: Awaited<ReturnType<typeof openrouter.chat.completions.create>> | undefined;
+        let lastErr: unknown;
+        for (const model of FREE_MODEL_CANDIDATES) {
+          try {
+            completion = await openrouter.chat.completions.create({
+              model,
+              max_tokens: 4096,
+              messages: [
+                { role: "system", content: SYSTEM_PROMPT },
+                { role: "user", content: userMessage },
+              ],
+              stream: true,
+            });
+            break;
+          } catch (err) {
+            lastErr = err;
+            console.warn(`[OpenRouter] ${model} failed, trying next free model`, err);
+          }
+        }
+        if (!completion) throw lastErr ?? new Error("All free models rate-limited");
 
         for await (const chunk of completion) {
           const text = chunk.choices[0]?.delta?.content ?? "";
