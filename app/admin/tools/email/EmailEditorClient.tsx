@@ -1907,11 +1907,13 @@ export default function EmailEditorClient({
   defaultTemplate,
   defaultTo,
   defaultName,
+  defaultHtml,
 }: {
   recipients: Recipient[];
   defaultTemplate?: string;
   defaultTo?: string;
   defaultName?: string;
+  defaultHtml?: string;
 }) {
   const editorRef = useRef<HTMLDivElement>(null);
 
@@ -1946,15 +1948,24 @@ export default function EmailEditorClient({
 
   // ── Pre-fill from URL params (e.g. opened from a client row) ──
   useEffect(() => {
-    if (!defaultTemplate) return;
-    const tpl = TEMPLATES.find((t) =>
-      t.label.toLowerCase().includes(defaultTemplate.toLowerCase())
-    );
-    if (!tpl) return;
-    const html = defaultName
-      ? tpl.html.replace(/\[First Name\]/g, defaultName)
-      : tpl.html;
-    setSubject(tpl.subject);
+    let subject = '';
+    let html = '';
+
+    if (defaultHtml) {
+      html = defaultHtml;
+      // If a template is also provided, we could use its subject
+      if (defaultTemplate) {
+        const tpl = TEMPLATES.find(t => t.label.toLowerCase().includes(defaultTemplate.toLowerCase()));
+        if (tpl) subject = tpl.subject;
+      }
+    } else if (defaultTemplate) {
+      const tpl = TEMPLATES.find(t => t.label.toLowerCase().includes(defaultTemplate.toLowerCase()));
+      if (!tpl) return;
+      html = defaultName ? tpl.html.replace(/\[First Name\]/g, defaultName) : tpl.html;
+      subject = tpl.subject;
+    }
+
+    setSubject(subject);
     setHtmlSource(html);
     setMode("html");
     setPreview(true);

@@ -12,10 +12,10 @@ export type Recipient = {
 export default async function EmailEditorPage({
   searchParams,
 }: {
-  searchParams: Promise<{ template?: string; to?: string; name?: string }>;
+  searchParams: Promise<{ template?: string; to?: string; name?: string; body?: string }>;
 }) {
   const supabase = await getSupabaseAdminClient();
-  const { template, to, name } = await searchParams;
+  const { template, to, name, body } = await searchParams;
 
   const [{ data: pastClients }, { data: { users } }] = await Promise.all([
     supabase
@@ -51,6 +51,6 @@ export default async function EmailEditorPage({
       defaultTemplate={template}
       defaultTo={to}
       defaultName={name}
-    />
+      defaultHtml={body}
   );
 }

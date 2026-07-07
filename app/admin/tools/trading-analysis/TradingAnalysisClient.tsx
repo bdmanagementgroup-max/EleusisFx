@@ -494,6 +494,20 @@ export default function TradingAnalysisClient() {
                 >
                   {saveError ? `✗ ${saveError}` : saved ? `✓ ${saved} signal${saved === 1 ? "" : "s"} saved` : saving ? "saving..." : "save signals"}
                 </button>
+                <button
+                  onClick={() => {
+                    const subject = encodeURIComponent(`Trade Analysis Report – ${session} – ${focus}`);
+                    const body = encodeURIComponent(output);
+                    window.location.href = `/admin/tools/email?subject=${subject}&body=${body}`;
+                  }}
+                  style={{
+                    fontFamily: "monospace", fontSize: 10,
+                    color: "rgba(210,220,240,0.3)", background: "none",
+                    border: "1px solid rgba(255,255,255,0.06)", padding: "3px 8px", cursor: "pointer",
+                  }}
+                >
+                  send to email
+                </button>
               </div>
             )}
           </div>
