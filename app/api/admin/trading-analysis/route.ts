@@ -109,7 +109,9 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
           "meta-llama/llama-3.3-70b-instruct:free",
         ];
 
-        let completion: Awaited<ReturnType<typeof openrouter.chat.completions.create>> | undefined;
+        type StreamChunk = { choices: Array<{ delta?: { content?: string | null } }> };
+
+        let completion: AsyncIterable<StreamChunk> | undefined;
         let lastErr: unknown;
         for (const model of FREE_MODEL_CANDIDATES) {
           try {
