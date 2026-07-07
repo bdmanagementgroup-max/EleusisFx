@@ -1661,6 +1661,195 @@ const TEMPLATES = [
           <p style="margin:0;font-size:13px;line-height:1.8;color:rgba(210,220,240,0.58);font-family:Arial,sans-serif;">Or simply reply to this email — we&apos;ll take it from there.</p>
         </td></tr>`),
   },
+  {
+    label: "Newsletter — The Funded Trader #6",
+    subject: "The framework 84% of our clients use to pass",
+    html: emailWrapper(`
+        <tr><td style="padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(210,220,240,0.3);font-family:Arial,sans-serif;">The Funded Trader &nbsp;&middot;&nbsp; Issue #6</p>
+        </td></tr>
+
+        <tr><td style="padding:40px 0 32px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <h1 style="margin:0 0 16px;font-size:32px;font-weight:800;letter-spacing:-1px;color:#e8eaf0;line-height:1.15;font-family:Arial,sans-serif;">The Framework Behind Every Pass</h1>
+          <p style="margin:0;font-size:15px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Not every trader we work with has the same edge. But every one who passes follows the same five-step process.</p>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td width="33%" style="padding:14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);text-align:center;">
+                <p style="margin:0;font-size:26px;font-weight:800;color:#4f8ef7;font-family:Arial,sans-serif;">84%</p>
+                <p style="margin:4px 0 0;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.5);font-family:Arial,sans-serif;">Pass rate</p>
+              </td>
+              <td width="33%" style="padding:14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-left:none;text-align:center;">
+                <p style="margin:0;font-size:26px;font-weight:800;color:#4f8ef7;font-family:Arial,sans-serif;">12</p>
+                <p style="margin:4px 0 0;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.5);font-family:Arial,sans-serif;">Avg. days to pass</p>
+              </td>
+              <td width="33%" style="padding:14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-left:none;text-align:center;">
+                <p style="margin:0;font-size:26px;font-weight:800;color:#4f8ef7;font-family:Arial,sans-serif;">700+</p>
+                <p style="margin:4px 0 0;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(210,220,240,0.5);font-family:Arial,sans-serif;">Clients served since 2019</p>
+              </td>
+            </tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">The Problem</p>
+          <p style="margin:0;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Most traders fail their challenge because they invent their process under pressure. They skip planning, overtrade, ignore risk limits, and panic when results slip. Without structure, emotion drives every decision.</p>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">The 5-Step Framework</p>
+          <h2 style="margin:0 0 20px;font-size:22px;font-weight:800;letter-spacing:-0.5px;color:#e8eaf0;font-family:Arial,sans-serif;">What Every Pass Has In Common</h2>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#4f8ef7;margin-right:10px;">01</span> <strong>Analyse</strong> — review your current approach for weak points</td></tr>
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#4f8ef7;margin-right:10px;">02</span> <strong>Simplify</strong> — remove low-conviction trades and excess rules</td></tr>
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#4f8ef7;margin-right:10px;">03</span> <strong>Plan</strong> — build a trade plan tied to your edge, not copy-paste rules</td></tr>
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#4f8ef7;margin-right:10px;">04</span> <strong>Execute</strong> — follow the plan, journal every decision</td></tr>
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#4f8ef7;margin-right:10px;">05</span> <strong>Adjust</strong> — weekly review and small refinements, not rebuilds</td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Why It Works</p>
+          <p style="margin:0;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">This isn&apos;t a secret system. It&apos;s the logical process every successful prop trader follows — we just make it explicit instead of implicit. Traders who pass aren&apos;t smarter. They&apos;re more organised. They have a plan, they stick to it, and they adjust based on results, not emotion.</p>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(255,255,255,0.06);border-top:2px solid #4f8ef7;">
+            <tr><td style="padding:28px;">
+              <p style="margin:0 0 8px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Ready to Apply the Framework?</p>
+              <p style="margin:0 0 20px;font-size:15px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">84% of our clients pass. Let us handle yours.</p>
+              <a href="https://eleusisfx.uk/#apply" style="display:inline-block;background:#e8eaf0;color:#020305;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:14px 26px;text-decoration:none;font-family:Arial,sans-serif;">Apply Now &rarr;</a>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;">
+          <p style="margin:0;font-size:13px;line-height:1.8;color:rgba(210,220,240,0.58);font-family:Arial,sans-serif;">Questions about the framework? Just reply to this email.</p>
+        </td></tr>`),
+  },
+  {
+    label: "Newsletter — The Funded Trader #7",
+    subject: "Why knowing the rules isn't enough",
+    html: emailWrapper(`
+        <tr><td style="padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(210,220,240,0.3);font-family:Arial,sans-serif;">The Funded Trader &nbsp;&middot;&nbsp; Issue #7</p>
+        </td></tr>
+
+        <tr><td style="padding:40px 0 32px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <h1 style="margin:0 0 16px;font-size:32px;font-weight:800;letter-spacing:-1px;color:#e8eaf0;line-height:1.15;font-family:Arial,sans-serif;">Why Knowing The Rules Isn&apos;t Enough</h1>
+          <p style="margin:0;font-size:15px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">You already know the rules. You can calculate risk. But do you know what happens in your brain when you&apos;re down 2% of your account?</p>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Traders study setups, study risk, study charts. Then they face a live account and freeze or panic. Knowledge doesn&apos;t equal execution. The psychology gap is what separates challenges passed from challenges repeated.</p>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">The 3 Core Barriers</p>
+          <h2 style="margin:0 0 20px;font-size:22px;font-weight:800;letter-spacing:-0.5px;color:#e8eaf0;font-family:Arial,sans-serif;">What&apos;s Actually Stopping You</h2>
+
+          <p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">1. Loss Aversion</p>
+          <p style="margin:0 0 18px;font-size:13px;line-height:1.7;color:rgba(210,220,240,0.75);font-family:Arial,sans-serif;">Your brain treats a $100 loss like a personal attack. Reframe losses as data points, not failures — a small stop is just the acceptable cost of trading.</p>
+
+          <p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">2. Recency Bias</p>
+          <p style="margin:0 0 18px;font-size:13px;line-height:1.7;color:rgba(210,220,240,0.75);font-family:Arial,sans-serif;">One bad trade convinces you to change everything. Weekly reviews beat daily emotional reactions — trust your process over one week&apos;s outcome.</p>
+
+          <p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">3. Overconfidence After Wins</p>
+          <p style="margin:0;font-size:13px;line-height:1.7;color:rgba(210,220,240,0.75);font-family:Arial,sans-serif;">Three good days convinces you to size up. Stick to your position sizing rules regardless of the streak — consistency beats opportunism.</p>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">Practical Tactics</p>
+          <h2 style="margin:0 0 20px;font-size:22px;font-weight:800;letter-spacing:-0.5px;color:#e8eaf0;font-family:Arial,sans-serif;">Do This Today</h2>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#4f8ef7;margin-right:10px;">01</span> <strong>Pre-trade checklist</strong> — why this trade, does it fit my rules, can I accept the stop? The pause kills impulsive decisions.</td></tr>
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);border-bottom:none;font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#4f8ef7;margin-right:10px;">02</span> <strong>Emotion-log journal</strong> — record your emotional state alongside the trade. Patterns show up fast once you track them.</td></tr>
+            <tr><td style="padding:10px 14px;background:#08090f;border:1px solid rgba(255,255,255,0.06);font-size:13px;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;"><span style="color:#4f8ef7;margin-right:10px;">03</span> <strong>Daily reset</strong> — one clean review, one decision: repeat tomorrow or change it. Prevents chasing losses and overconfidence streaks.</td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Why This Matters</p>
+          <p style="margin:0;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Psychology isn&apos;t separate from trading. It <em>is</em> trading. Every rule you create is an attempt to override your emotional brain. The traders who pass aren&apos;t the smartest — they&apos;re the most self-aware, with guardrails built against their own mistakes.</p>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(255,255,255,0.06);border-top:2px solid #4f8ef7;">
+            <tr><td style="padding:28px;">
+              <p style="margin:0 0 8px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Go Deeper</p>
+              <p style="margin:0 0 20px;font-size:15px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">Read the full breakdown of the psychology patterns that end evaluations.</p>
+              <a href="https://eleusisfx.uk/articles/prop-firm-evaluation-psychology-failures" style="display:inline-block;background:#e8eaf0;color:#020305;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:14px 26px;text-decoration:none;font-family:Arial,sans-serif;">Read The Article &rarr;</a>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;">
+          <p style="margin:0;font-size:13px;line-height:1.8;color:rgba(210,220,240,0.58);font-family:Arial,sans-serif;">Want to talk through your own psychology barriers? Just reply to this email.</p>
+        </td></tr>`),
+  },
+  {
+    label: "Newsletter — The Funded Trader #9",
+    subject: "Your position sizing formula (most traders get this wrong)",
+    html: emailWrapper(`
+        <tr><td style="padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(210,220,240,0.3);font-family:Arial,sans-serif;">The Funded Trader &nbsp;&middot;&nbsp; Issue #9</p>
+        </td></tr>
+
+        <tr><td style="padding:40px 0 32px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <h1 style="margin:0 0 16px;font-size:32px;font-weight:800;letter-spacing:-1px;color:#e8eaf0;line-height:1.15;font-family:Arial,sans-serif;">The Math That Separates Funded Traders</h1>
+          <p style="margin:0;font-size:15px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Risk management isn&apos;t about never losing. It&apos;s about knowing exactly how much you can lose and designing every trade around that number.</p>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Most traders know risk management exists. Few actually use it. They say "I&apos;ll risk 2%" then size positions like they&apos;re risking 5%. They have daily limits they don&apos;t track. This isn&apos;t recklessness — it&apos;s just not having a system.</p>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">The 3 Risk Rules</p>
+          <h2 style="margin:0 0 20px;font-size:22px;font-weight:800;letter-spacing:-0.5px;color:#e8eaf0;font-family:Arial,sans-serif;">Know Your Numbers Before You Trade</h2>
+
+          <p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">1. Account Risk Per Trade</p>
+          <p style="margin:0 0 18px;font-size:13px;line-height:1.7;color:rgba(210,220,240,0.75);font-family:Arial,sans-serif;">Account size &times; risk % = risk amount. A $25,000 account at 1% risk = $250 max loss per trade. Find your stop loss before you enter — your position size is determined by this number, not the other way round.</p>
+
+          <p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">2. Daily Loss Limit</p>
+          <p style="margin:0 0 18px;font-size:13px;line-height:1.7;color:rgba(210,220,240,0.75);font-family:Arial,sans-serif;">Account size &times; 2% = daily stop. On a $25,000 account that&apos;s $500. Hit it, and you stop trading for the day. Review tomorrow. This single rule saves accounts.</p>
+
+          <p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">3. Weekly Drawdown Check</p>
+          <p style="margin:0;font-size:13px;line-height:1.7;color:rgba(210,220,240,0.75);font-family:Arial,sans-serif;">Account size &times; 5% = weekly max. On $25,000 that&apos;s $1,250. Down that much midweek, you scale back — you don&apos;t revenge trade. You let emotion cool.</p>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 6px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#4f8ef7;font-weight:700;font-family:Arial,sans-serif;">Position Sizing, Worked</p>
+          <h2 style="margin:0 0 16px;font-size:22px;font-weight:800;letter-spacing:-0.5px;color:#e8eaf0;font-family:Arial,sans-serif;">Size Last, Not First</h2>
+          <p style="margin:0 0 16px;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Most traders size their position first. That&apos;s backwards. You size <em>last</em>, after you know your risk amount and your stop loss.</p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
+            <tr><td style="padding:14px 16px;background:#08090f;border:1px solid rgba(255,255,255,0.06);font-size:13px;line-height:1.9;color:rgba(210,220,240,0.88);font-family:'Courier New',monospace;">
+              Account: $25,000<br>
+              Risk per trade: 1% = $250<br>
+              Entry: EUR/USD at 1.0850<br>
+              Stop loss: 1.0800 (50 pips)<br>
+              Position size = $250 &divide; 50 pips = 5,000 units
+            </td></tr>
+          </table>
+          <p style="margin:0;font-size:14px;line-height:1.85;color:rgba(210,220,240,0.88);font-family:Arial,sans-serif;">Once you have these three rules working together, every trade costs a known maximum, a bad day is capped mechanically, and a bad week won&apos;t wipe you out. That&apos;s how funded traders think — they&apos;re not smarter, they just know the math.</p>
+        </td></tr>
+
+        <tr><td style="padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#08090f;border:1px solid rgba(255,255,255,0.06);border-top:2px solid #4f8ef7;">
+            <tr><td style="padding:28px;">
+              <p style="margin:0 0 8px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(210,220,240,0.4);font-family:Arial,sans-serif;">Ready to Trade With a System?</p>
+              <p style="margin:0 0 20px;font-size:15px;font-weight:700;color:#e8eaf0;font-family:Arial,sans-serif;">Start your evaluation with risk management built in from day one.</p>
+              <a href="https://eleusisfx.uk/#apply" style="display:inline-block;background:#e8eaf0;color:#020305;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:14px 26px;text-decoration:none;font-family:Arial,sans-serif;">Apply Now &rarr;</a>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:32px 0;">
+          <p style="margin:0;font-size:13px;line-height:1.8;color:rgba(210,220,240,0.58);font-family:Arial,sans-serif;">Questions on the math? Just reply to this email.</p>
+        </td></tr>`),
+  },
   // ─── Blank branded template ───────────────────────────────────────────────
   {
     label: "Blank — Direct Email",
