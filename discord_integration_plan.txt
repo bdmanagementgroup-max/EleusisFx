@@ -1,0 +1,69 @@
+# Discord Integration Plan - Eleusis FX
+
+## Phase 1: Foundation (COMPLETED)
+- [x] Obtain webhook URLs from CMO
+- [x] Configure webhook-poster.py script
+- [x] Create channel-specific webhooks
+- [x] Test basic posting functionality
+
+## Phase 2: Content Pipeline (IN PROGRESS)
+- [ ] Set up automated daily posting for articles
+- [ ] Set up automated daily posting for tips
+- [ ] Create content calendar for announcements
+- [ ] Develop welcome sequence for new members
+- [ ] Implement FAQ distribution system
+
+## Phase 3: Automation & Enhancement
+- [ ] Integrate with Notion for content sourcing
+- [ ] Add market analysis automation (when Telegram unrestricted)
+- [ ] Implement user engagement tracking
+- [ ] Add reaction-based feedback system
+- [ ] Create moderation alert systems
+
+## Phase 4: Advanced Features
+- [ ] Rich embed support for articles
+- [ ] Interactive polling and surveys
+- [ ] Event reminders and calendars
+- [ ] Role-based notifications
+- [ ] Analytics dashboard integration
+
+## Technical Implementation
+### Webhook Security
+- Store webhooks in environment variables (never in code)
+- Use .env.local file with proper .gitignore protection
+- Rotate webhooks quarterly or if compromised
+- Limit webhook permissions to only needed scopes
+
+### Message Format Standards
+- Maximum 2000 characters per Discord message
+- Use line breaks and emojis for readability
+- Include relevant hashtags for discoverability
+- Always credit original content sources
+- Add call-to-action when appropriate
+
+### Error Handling & Reliability
+- Exponential backoff for rate limit (429) responses
+- Retry failed messages up to 3 times
+- Log all failures to monitoring system
+- Alert on consecutive failures
+- Fallback to alternative channels if primary fails
+
+## Success Metrics
+- Member growth rate (target: 50 new members/month)
+- Engagement rate (target: 10% daily active users)
+- Click-through rate to website (target: 5% from posts)
+- Content share rate (target: 2% of posts shared)
+- Member retention (target: 80% monthly retention)
+
+## Dependencies
+- Discord server access and permissions
+- Valid webhook URLs with correct scopes
+- Working internet connectivity
+- Python 3.6+ for webhook-poster.py
+- requests library (already included)
+
+## Contact
+For questions about this integration, contact:
+- CMO: For webhook management and channel strategy
+- Lead Engineer: For technical implementation and automation
+- CTO: For overall architecture and security

@@ -1,0 +1,15 @@
+Discord Access Work Log
+====================
+Issue: ELE-175 - discord
+Description: i have given the discord webhook to cmo, get it and access discord server in order to start building anf refining process
+
+Actions Taken:
+1. Checked for Discord webhook information from CMO
+2. Created placeholder for Discord integration setup
+3. Documented need to access Discord server for process building/refinement
+4. Prepared to implement Discord notifications once webhook is obtained
+
+Next Steps:
+- Obtain Discord webhook from CMO
+- Access Discord server to understand current processes
+- Begin building/refining Discord notification processes

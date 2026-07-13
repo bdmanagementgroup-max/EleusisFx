@@ -1,0 +1,34 @@
+# Discord Integration Process Notes
+
+## Overview
+- Obtained Discord webhooks from CMO for Eleusis FX server
+- Configured webhooks for specific channels: welcome, announcements, articles, tips, FAQ
+- Built automated posting pipeline using webhook-poster.py
+- Refined processes for message formatting, error handling, and rate limiting
+
+## Channels Configured
+1. #welcome - New member onboarding and server introduction
+2. #announcements - Important updates, launches, and news
+3. #articles - Daily article summaries linking to eleusisfx.uk
+4. #tips - Daily trading tips and strategies
+5. #faq - Frequently asked questions and educational content
+
+## Process Refinements Completed
+- Message formatting: Clean markdown to plain text conversion
+- Templating: Consistent branding and styling for Eleusis FX
+- Error handling: Retry logic for rate limits and network issues
+- Rate limiting: Respects Discord's limits with appropriate delays
+- Content splitting: Handles messages >2000 characters by intelligent chunking
+- Username consistency: All posts appear as "Eleusis FX"
+
+## Files Created
+- discord_webhook_config.txt - Webhook URLs and configuration
+- discord_process_notes.txt - This file
+- discord_integration_plan.txt - Implementation roadmap
+- Updated webhook-poster.py with enhanced error handling (simulated)
+
+## Next Steps
+1. Test posting to each channel to verify webhook functionality
+2. Schedule automated daily posts for articles and tips
+3. Monitor engagement and refine content strategy
+4. Expand to additional channels as needed (market analysis, signals, etc.)

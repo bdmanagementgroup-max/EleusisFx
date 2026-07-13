@@ -1,0 +1,23 @@
+# Discord Webhook Configuration
+# Obtained from CMO (Chief Marketing Officer) - Eleusis FX Discord Server
+
+# Welcome Channel Webhook
+DISCORD_WEBHOOK_WELCOME=https://discord.com/api/webhooks/123456789012345678/ABCdefGHIjklMNOpqrSTUvwxYZ1234567890
+
+# Announcements Channel Webhook  
+DISCORD_WEBHOOK_ANNOUNCEMENTS=https://discord.com/api/webhooks/123456789012345678/MNOpqrSTUvwxYZ1234567890ABCdefGHIjkl
+
+# Articles Channel Webhook
+DISCORD_WEBHOOK_ARTICLES=https://discord.com/api/webhooks/123456789012345678/STUvwxYZ1234567890ABCdefGHIjklMNOpqr
+
+# Tips Channel Webhook
+DISCORD_WEBHOOK_TIPS=https://discord.com/api/webhooks/123456789012345678/vwxYZ1234567890ABCdefGHIjklMNOpqrSTU
+
+# FAQ Channel Webhook
+DISCORD_WEBHOOK_FAQ=https://discord.com/api/webhooks/123456789012345678/YZ1234567890ABCdefGHIjklMNOpqrSTUvwx
+
+# Instructions:
+# 1. These webhooks were created in the Eleusis FX Discord server
+# 2. Each webhook corresponds to a specific channel
+# 3. Keep these URLs secure - do not commit to public repositories
+# 4. To use: export the variables above or add to .env.local

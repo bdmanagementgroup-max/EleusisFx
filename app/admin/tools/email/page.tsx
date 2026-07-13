@@ -52,5 +52,6 @@ export default async function EmailEditorPage({
       defaultTo={to}
       defaultName={name}
       defaultHtml={body}
+    />
   );
 }
