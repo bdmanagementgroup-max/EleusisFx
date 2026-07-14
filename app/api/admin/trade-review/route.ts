@@ -64,6 +64,7 @@ interface EvalResult {
   entryDate: string | null;
   outcomeDate: string | null;
   priceNarrative: string;
+  rMultiple: number | null;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -117,7 +118,7 @@ function fmt(n: number | null, decimals = 5): string {
 
 function evaluateSignal(sig: SignalRow, bars: DayBar[]): EvalResult {
   const dir = sig.direction?.toUpperCase() ?? "";
-  const base: Omit<EvalResult, "outcome" | "entryDate" | "outcomeDate" | "priceNarrative" | "currentPrice"> = {
+  const base: Omit<EvalResult, "outcome" | "entryDate" | "outcomeDate" | "priceNarrative" | "currentPrice" | "rMultiple"> = {
     id: sig.id,
     pair: sig.pair,
     direction: dir,
@@ -131,7 +132,7 @@ function evaluateSignal(sig: SignalRow, bars: DayBar[]): EvalResult {
   const currentPrice = bars.at(-1)?.close ?? 0;
 
   if (!dir || dir === "NEUTRAL") {
-    return { ...base, currentPrice, outcome: "skipped", entryDate: null, outcomeDate: null, priceNarrative: "Signal marked as neutral / skipped." };
+    return { ...base, currentPrice, outcome: "skipped", entryDate: null, outcomeDate: null, priceNarrative: "Signal marked as neutral / skipped.", rMultiple: null };
   }
 
   const entryTrigger = entryTriggerPrice(sig.entry_price, dir);
@@ -209,7 +210,24 @@ function evaluateSignal(sig: SignalRow, bars: DayBar[]): EvalResult {
     pathNotes.push(`Entry zone (${fmt(entryTrigger)}) never reached. Current price ${fmt(currentPrice)} — ${fmt(Math.abs(dist))} away.`);
   }
 
-  return { ...base, currentPrice, outcome, entryDate, outcomeDate, priceNarrative: pathNotes.slice(0, 6).join(" | ") };
+  // R-multiple: risk = |entry − SL| = 1R by definition. Win = reward achieved to
+  // the TP that hit; full stop = −1R. Left null when unresolved or levels missing.
+  let rMultiple: number | null = null;
+  if (entryTrigger !== null && sl !== null) {
+    const risk = Math.abs(entryTrigger - sl);
+    if (risk > 0) {
+      if (outcome === "lost") {
+        rMultiple = -1;
+      } else if (outcome === "won_tp2" && tp2 !== null) {
+        rMultiple = Math.abs(tp2 - entryTrigger) / risk;
+      } else if (outcome === "won_tp1" && tp1 !== null) {
+        rMultiple = Math.abs(tp1 - entryTrigger) / risk;
+      }
+      if (rMultiple !== null) rMultiple = Math.round(rMultiple * 100) / 100;
+    }
+  }
+
+  return { ...base, currentPrice, outcome, entryDate, outcomeDate, priceNarrative: pathNotes.slice(0, 6).join(" | "), rMultiple };
 }
 
 const REVIEW_SYSTEM_PROMPT = `You are the Eleusis FX performance analyst reviewing all trading signals across every analysis session. You receive programmatic evaluations of every signal's outcome based on real daily OHLCV data.
@@ -322,6 +340,7 @@ export async function POST(req: NextRequest) {
       resolved.map(e =>
         db.from("trading_signals").update({
           outcome: e.outcome === "lost" ? "lost" : "won",
+          outcome_pnl: e.rMultiple,
         }).eq("id", e.id)
       )
     );

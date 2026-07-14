@@ -9,7 +9,7 @@ interface Signal {
   entry_price?: string; stop_loss?: string; tp1?: string; tp2?: string; risk_reward?: string;
   bias?: string; timeframe?: string; confluence?: string;
   setup_detail?: string; invalidation?: string; content?: string;
-  outcome?: string; outcome_pnl?: number | null;
+  outcome?: string; outcome_pnl?: number | null; card_url?: string | null;
 }
 
 interface SessionGroup {
@@ -37,6 +37,69 @@ function formatDate(iso: string) {
 
 function newsColour(n: string) {
   return n === "major" ? "#ef4444" : n === "light" ? "#f59e0b" : "#22c55e";
+}
+
+// ─── R-multiple helpers ─────────────────────────────────────────────────────
+
+function firstNum(s?: string | null): number | null {
+  if (!s) return null;
+  const m = s.replace(/,/g, "").match(/-?\d+\.?\d*/);
+  return m ? parseFloat(m[0]) : null;
+}
+
+// Default R for a manually-won trade: reward-to-TP1 over risk, from prices;
+// falls back to the stated R:R (e.g. "3:1" → 3), else 2.
+function defaultWonR(s: Signal): number {
+  const entry = firstNum(s.entry_price);
+  const sl = firstNum(s.stop_loss);
+  const tp1 = firstNum(s.tp1);
+  if (entry !== null && sl !== null && tp1 !== null) {
+    const risk = Math.abs(entry - sl);
+    if (risk > 0) return Math.round((Math.abs(tp1 - entry) / risk) * 100) / 100;
+  }
+  const rr = firstNum(s.risk_reward);
+  if (rr !== null && rr > 0) return rr;
+  return 2;
+}
+
+interface Agg {
+  decided: number; wins: number; losses: number; winRate: number | null;
+  rTrades: number; totalR: number; expectancy: number | null;
+  avgWinR: number | null; avgLossR: number | null; profitFactor: number | null;
+}
+
+function computeAgg(
+  signals: Signal[],
+  outcomes: Record<string, string>,
+  pnls: Record<string, number | null>,
+): Agg {
+  let wins = 0, losses = 0;
+  const rVals: number[] = [];
+  for (const s of signals) {
+    const o = outcomes[s.id] ?? "pending";
+    if (o === "won") wins++;
+    else if (o === "lost") losses++;
+    if ((o === "won" || o === "lost")) {
+      const r = pnls[s.id];
+      if (typeof r === "number") rVals.push(r);
+    }
+  }
+  const decided = wins + losses;
+  const winsR = rVals.filter(r => r > 0);
+  const lossesR = rVals.filter(r => r < 0);
+  const grossWin = winsR.reduce((a, b) => a + b, 0);
+  const grossLoss = Math.abs(lossesR.reduce((a, b) => a + b, 0));
+  const totalR = rVals.reduce((a, b) => a + b, 0);
+  return {
+    decided, wins, losses,
+    winRate: decided > 0 ? Math.round((wins / decided) * 100) : null,
+    rTrades: rVals.length,
+    totalR: Math.round(totalR * 100) / 100,
+    expectancy: rVals.length > 0 ? Math.round((totalR / rVals.length) * 100) / 100 : null,
+    avgWinR: winsR.length > 0 ? Math.round((grossWin / winsR.length) * 100) / 100 : null,
+    avgLossR: lossesR.length > 0 ? Math.round((grossLoss / lossesR.length) * 100) / 100 : null,
+    profitFactor: grossLoss > 0 ? Math.round((grossWin / grossLoss) * 100) / 100 : (grossWin > 0 ? null : null),
+  };
 }
 
 // ─── HTML export generator ────────────────────────────────────────────────────
@@ -218,7 +281,17 @@ export default function SnapshotsClient({ initial, dbError }: { initial: Signal[
   const [outcomes, setOutcomes] = useState<Record<string, string>>(
     Object.fromEntries(initial.map((s) => [s.id, s.outcome ?? "pending"]))
   );
+  const [pnls, setPnls] = useState<Record<string, number | null>>(
+    Object.fromEntries(initial.map((s) => [s.id, s.outcome_pnl ?? null]))
+  );
   const [savingOutcome, setSavingOutcome] = useState<string | null>(null);
+  const [cardUrls, setCardUrls] = useState<Record<string, string>>(
+    Object.fromEntries(initial.filter((s) => s.card_url).map((s) => [s.id, s.card_url as string]))
+  );
+  const [cardBusy, setCardBusy] = useState<string | null>(null);
+  const [cardError, setCardError] = useState<string | null>(null);
+
+  const agg = computeAgg(initial, outcomes, pnls);
 
   async function exportHtml(group: SessionGroup) {
     setExporting(group.session_id);
@@ -248,13 +321,51 @@ export default function SnapshotsClient({ initial, dbError }: { initial: Signal[
 
   async function saveOutcome(id: string, outcome: string) {
     setSavingOutcome(id);
+    // Seed a sensible default R when moving to a decided state; keep an
+    // already-logged R if one exists so re-selecting doesn't clobber it.
+    const sig = initial.find((s) => s.id === id);
+    let pnl: number | null = pnls[id] ?? null;
+    if (outcome === "lost") pnl = pnl ?? -1;
+    else if (outcome === "won") pnl = pnl ?? (sig ? defaultWonR(sig) : null);
+    else pnl = null; // pending / invalidated
     setOutcomes((prev) => ({ ...prev, [id]: outcome }));
+    setPnls((prev) => ({ ...prev, [id]: pnl }));
     await fetch("/api/admin/trading-signals-outcome", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, outcome }),
+      body: JSON.stringify({ id, outcome, outcome_pnl: pnl }),
     });
     setSavingOutcome(null);
+  }
+
+  async function savePnl(id: string, raw: string) {
+    const val = raw.trim() === "" ? null : parseFloat(raw);
+    const pnl = val !== null && !isNaN(val) ? Math.round(val * 100) / 100 : null;
+    setPnls((prev) => ({ ...prev, [id]: pnl }));
+    await fetch("/api/admin/trading-signals-outcome", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, outcome: outcomes[id] ?? "pending", outcome_pnl: pnl }),
+    });
+  }
+
+  async function generateCard(id: string) {
+    setCardBusy(id);
+    setCardError(null);
+    try {
+      const res = await fetch("/api/signal-card", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ signalId: id }),
+      });
+      const body = await res.json();
+      if (!res.ok) { setCardError(body.error ?? "card failed"); return; }
+      setCardUrls((prev) => ({ ...prev, [id]: body.url }));
+    } catch {
+      setCardError("card request failed");
+    } finally {
+      setCardBusy(null);
+    }
   }
 
   return (
@@ -263,9 +374,46 @@ export default function SnapshotsClient({ initial, dbError }: { initial: Signal[
       <h1 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 36, letterSpacing: -1.5, marginBottom: 8 }}>
         Analysis Snapshots
       </h1>
-      <p style={{ fontFamily: "monospace", fontSize: 12, color: "rgba(210,220,240,0.4)", marginBottom: 40 }}>
-        {groups.length} session{groups.length !== 1 ? "s" : ""} · {initial.length} signal{initial.length !== 1 ? "s" : ""} saved · export HTML to screenshot as posts
+      <p style={{ fontFamily: "monospace", fontSize: 12, color: "rgba(210,220,240,0.4)", marginBottom: 24 }}>
+        {groups.length} session{groups.length !== 1 ? "s" : ""} · {initial.length} signal{initial.length !== 1 ? "s" : ""} saved · generate IG cards per signal
       </p>
+
+      {/* Aggregate performance panel */}
+      {agg.decided > 0 && (
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 2, marginBottom: 40, background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", padding: 2 }}>
+          {(() => {
+            const tile = (label: string, value: string, colour: string, sub?: string) => (
+              <div style={{ flex: "1 1 140px", padding: "16px 18px", background: "rgba(255,255,255,0.015)" }}>
+                <div style={{ fontFamily: "monospace", fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.35)", marginBottom: 8 }}>{label}</div>
+                <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 26, letterSpacing: -1, color: colour }}>{value}</div>
+                {sub && <div style={{ fontFamily: "monospace", fontSize: 9, color: "rgba(210,220,240,0.3)", marginTop: 4 }}>{sub}</div>}
+              </div>
+            );
+            const wrColour = agg.winRate === null ? "rgba(210,220,240,0.5)" : agg.winRate >= 60 ? "#22c55e" : agg.winRate >= 40 ? "#f59e0b" : "#ef4444";
+            const expColour = agg.expectancy === null ? "rgba(210,220,240,0.5)" : agg.expectancy > 0 ? "#22c55e" : "#ef4444";
+            const pfColour = agg.profitFactor === null ? "rgba(210,220,240,0.5)" : agg.profitFactor >= 1 ? "#22c55e" : "#ef4444";
+            const totColour = agg.totalR > 0 ? "#22c55e" : agg.totalR < 0 ? "#ef4444" : "rgba(210,220,240,0.5)";
+            return (
+              <>
+                {tile("Win Rate", agg.winRate !== null ? `${agg.winRate}%` : "—", wrColour, `${agg.wins}W / ${agg.losses}L`)}
+                {tile("Expectancy", agg.expectancy !== null ? `${agg.expectancy > 0 ? "+" : ""}${agg.expectancy}R` : "—", expColour, "per trade")}
+                {tile("Profit Factor", agg.profitFactor !== null ? `${agg.profitFactor}` : "—", pfColour, "gross win / loss")}
+                {tile("Total R", `${agg.totalR > 0 ? "+" : ""}${agg.totalR}R`, totColour, `${agg.rTrades} logged`)}
+                {tile("Avg Win", agg.avgWinR !== null ? `+${agg.avgWinR}R` : "—", "#22c55e")}
+                {tile("Avg Loss", agg.avgLossR !== null ? `−${agg.avgLossR}R` : "—", "#ef4444")}
+              </>
+            );
+          })()}
+        </div>
+      )}
+      {agg.decided > 0 && agg.rTrades < agg.decided && (
+        <div style={{ fontFamily: "monospace", fontSize: 10, color: "rgba(210,220,240,0.3)", marginTop: -28, marginBottom: 32 }}>
+          {"// "}{agg.decided - agg.rTrades} decided trade{agg.decided - agg.rTrades !== 1 ? "s" : ""} missing an R value — run a trade review or set R manually to include in expectancy
+        </div>
+      )}
+      {cardError && (
+        <div style={{ fontFamily: "monospace", fontSize: 11, color: "#ef4444", marginBottom: 16 }}>card error: {cardError}</div>
+      )}
 
       {dbError && (
         <div style={{ fontFamily: "monospace", fontSize: 12, background: "rgba(239,68,68,0.05)", border: "1px solid rgba(239,68,68,0.25)", borderLeft: "2px solid #ef4444", padding: "10px 16px", marginBottom: 16, color: "#ef4444" }}>
@@ -379,6 +527,46 @@ export default function SnapshotsClient({ initial, dbError }: { initial: Signal[
                           <option value="lost" style={{ background: "#08090f" }}>Lost</option>
                           <option value="invalidated" style={{ background: "#08090f" }}>Invalidated</option>
                         </select>
+
+                        {(outcomes[s.id] === "won" || outcomes[s.id] === "lost") && (
+                          <input
+                            type="number"
+                            step="0.1"
+                            value={pnls[s.id] ?? ""}
+                            onChange={(e) => {
+                              const v = e.target.value;
+                              const n = v === "" ? null : parseFloat(v);
+                              setPnls((prev) => ({ ...prev, [s.id]: n !== null && isNaN(n) ? (prev[s.id] ?? null) : n }));
+                            }}
+                            onBlur={(e) => savePnl(s.id, e.target.value)}
+                            title="Result in R (risk multiples). Win = +R, full stop = −1."
+                            style={{
+                              width: 56, fontFamily: "monospace", fontSize: 10,
+                              background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)",
+                              color: (pnls[s.id] ?? 0) >= 0 ? "#22c55e" : "#ef4444",
+                              padding: "3px 6px", outline: "none",
+                            }}
+                            placeholder="R"
+                          />
+                        )}
+
+                        <button
+                          onClick={() => generateCard(s.id)}
+                          disabled={cardBusy === s.id}
+                          title="Generate 1080×1080 Instagram card"
+                          style={{ fontFamily: "monospace", fontSize: 10, cursor: cardBusy === s.id ? "wait" : "pointer", color: "#4f8ef7", background: "rgba(79,142,247,0.06)", border: "1px solid rgba(79,142,247,0.3)", padding: "3px 9px" }}
+                        >
+                          {cardBusy === s.id ? "rendering..." : "◨ card"}
+                        </button>
+                        {cardUrls[s.id] && (
+                          <a href={cardUrls[s.id]} target="_blank" rel="noopener noreferrer" title="Open full card">
+                            <img
+                              src={cardUrls[s.id]}
+                              alt={`${s.pair} card`}
+                              style={{ width: 30, height: 30, objectFit: "cover", border: "1px solid rgba(79,142,247,0.3)", display: "block" }}
+                            />
+                          </a>
+                        )}
                       </div>
                     </div>
                   ))}
