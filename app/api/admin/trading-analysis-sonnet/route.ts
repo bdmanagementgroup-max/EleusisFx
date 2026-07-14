@@ -108,10 +108,11 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
   const stream = new ReadableStream({
     async start(controller) {
       try {
+        // gpt-oss-120b / deepseek-r1 free tiers were retired by OpenRouter (404).
         const FREE_MODEL_CANDIDATES = [
-          "deepseek/deepseek-r1:free",
+          "openai/gpt-oss-20b:free",
+          "qwen/qwen3-next-80b-a3b-instruct:free",
           "meta-llama/llama-3.3-70b-instruct:free",
-          "openai/gpt-oss-120b:free",
         ];
 
         type StreamChunk = { choices: Array<{ delta?: { content?: string | null } }> };
@@ -156,7 +157,7 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
           cost: 0,
           status: "success",
           request_duration_ms: requestDuration,
-          metadata: { model: "openai/gpt-oss-120b:free", session, focus, newsLevel, macroMode: body.macroMode, testFlag: "hermes_test" },
+          metadata: { model: "openai/gpt-oss-20b:free", session, focus, newsLevel, macroMode: body.macroMode, testFlag: "hermes_test" },
         }).catch((err) => console.error("[Cost Tracking] Failed to log:", err));
 
         // Do NOT auto-post to Telegram from the test endpoint
@@ -201,7 +202,7 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
     headers: {
       "Content-Type": "text/plain; charset=utf-8",
       "Cache-Control": "no-cache",
-      "X-Model": "openai/gpt-oss-120b:free",
+      "X-Model": "openai/gpt-oss-20b:free",
     },
   });
 }

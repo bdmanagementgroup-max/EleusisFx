@@ -416,18 +416,39 @@ Use the programmatic evaluations above as your source of truth. Structure the re
   const encoder = new TextEncoder();
   const chunks: string[] = [];
 
+  // gpt-oss-120b:free / deepseek-r1:free were retired from OpenRouter's free
+  // tier (now 404). These are currently-free instruction models; the loop
+  // falls through on 404/429 so one busy model doesn't kill the review.
+  const REVIEW_MODEL_CANDIDATES = [
+    "openai/gpt-oss-20b:free",
+    "qwen/qwen3-next-80b-a3b-instruct:free",
+    "meta-llama/llama-3.3-70b-instruct:free",
+  ];
+
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        const completion = await openrouter.chat.completions.create({
-          model: "openai/gpt-oss-120b:free",
-          max_tokens: 4096,
-          messages: [
-            { role: "system", content: REVIEW_SYSTEM_PROMPT },
-            { role: "user", content: userMessage },
-          ],
-          stream: true,
-        });
+        type StreamChunk = { choices: Array<{ delta?: { content?: string | null } }> };
+        let completion: AsyncIterable<StreamChunk> | undefined;
+        let lastErr: unknown;
+        for (const model of REVIEW_MODEL_CANDIDATES) {
+          try {
+            completion = await openrouter.chat.completions.create({
+              model,
+              max_tokens: 4096,
+              messages: [
+                { role: "system", content: REVIEW_SYSTEM_PROMPT },
+                { role: "user", content: userMessage },
+              ],
+              stream: true,
+            });
+            break;
+          } catch (err) {
+            lastErr = err;
+            console.warn(`[Trade Review] ${model} failed, trying next free model`, err);
+          }
+        }
+        if (!completion) throw lastErr ?? new Error("All free models unavailable");
 
         for await (const chunk of completion) {
           const text = chunk.choices[0]?.delta?.content ?? "";

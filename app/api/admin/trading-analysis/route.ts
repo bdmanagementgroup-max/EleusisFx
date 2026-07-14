@@ -103,9 +103,15 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
   const stream = new ReadableStream({
     async start(controller) {
       try {
+        // NOTE: OpenRouter retired the free tier of gpt-oss-120b and deepseek-r1
+        // (they now 404 → "use the paid slug"). These are the currently-free,
+        // instruction-following models. gpt-oss-20b is first because it's the
+        // same family as the old default and best preserves the signal format
+        // that parseSignals() depends on. Free tier still 429s under load — the
+        // loop falls through, and a paid fallback can be appended if credited.
         const FREE_MODEL_CANDIDATES = [
-          "openai/gpt-oss-120b:free",
-          "deepseek/deepseek-r1:free",
+          "openai/gpt-oss-20b:free",
+          "qwen/qwen3-next-80b-a3b-instruct:free",
           "meta-llama/llama-3.3-70b-instruct:free",
         ];
 
@@ -151,7 +157,7 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
           cost: 0,
           status: "success",
           request_duration_ms: requestDuration,
-          metadata: { model: "openai/gpt-oss-120b:free", session, focus, newsLevel, macroMode: body.macroMode },
+          metadata: { model: "openai/gpt-oss-20b:free", session, focus, newsLevel, macroMode: body.macroMode },
         }).catch((err) => console.error("[Cost Tracking] Failed to log:", err));
 
         // after() keeps the Vercel function alive after the stream response is sent
