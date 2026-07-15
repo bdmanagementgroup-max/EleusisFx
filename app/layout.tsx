@@ -59,7 +59,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${syne.variable} ${epilogue.variable}`}>
+    <html lang="en" data-scroll-behavior="smooth" className={`${syne.variable} ${epilogue.variable}`}>
       <body>
         <CustomCursor />
         <RevealInit />
