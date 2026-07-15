@@ -90,6 +90,11 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
   const openrouter = new OpenAI({
     baseURL: "https://openrouter.ai/api/v1",
     apiKey: process.env.OPENROUTER_API_KEY,
+    // No SDK-level retries: a rate-limited free model returns 429 with a ~30s
+    // retry-after, and the SDK's default 2 retries turn that into a ~55s hang
+    // per model — two of those blow the 120s function budget before the paid
+    // fallback runs. Our model loop IS the retry mechanism, so fail fast.
+    maxRetries: 0,
     defaultHeaders: {
       "HTTP-Referer": process.env.NEXT_PUBLIC_SITE_URL ?? "https://eleusisfx.com",
       "X-Title": "Eleusis FX Trading Analysis",

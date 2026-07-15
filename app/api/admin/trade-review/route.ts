@@ -407,6 +407,9 @@ Use the programmatic evaluations above as your source of truth. Structure the re
   const openrouter = new OpenAI({
     baseURL: "https://openrouter.ai/api/v1",
     apiKey: process.env.OPENROUTER_API_KEY,
+    // Fail fast on 429s — the SDK's default retries add a ~55s hang per model
+    // (see trading-analysis route). The model loop handles failover.
+    maxRetries: 0,
     defaultHeaders: {
       "HTTP-Referer": process.env.NEXT_PUBLIC_SITE_URL ?? "https://eleusisfx.com",
       "X-Title": "Eleusis FX Trade Review",
