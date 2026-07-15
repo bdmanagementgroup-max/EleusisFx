@@ -416,24 +416,25 @@ Use the programmatic evaluations above as your source of truth. Structure the re
   const encoder = new TextEncoder();
   const chunks: string[] = [];
 
-  // gpt-oss-120b:free / deepseek-r1:free were retired from OpenRouter's free
-  // tier (now 404). These are currently-free instruction models; the loop
-  // falls through on 404/429 so one busy model doesn't kill the review.
+  // Free instruction models first (cost 0 when available), paid Claude Sonnet
+  // as guaranteed fallback. Reasoning-only free models (gpt-oss) return empty
+  // content on large prompts, so we read the stream inside the loop and treat
+  // zero content as a failure — falling through instead of returning nothing.
   const REVIEW_MODEL_CANDIDATES = [
-    "openai/gpt-oss-20b:free",
     "qwen/qwen3-next-80b-a3b-instruct:free",
     "meta-llama/llama-3.3-70b-instruct:free",
+    "anthropic/claude-sonnet-5", // paid fallback — funded OpenRouter account
   ];
 
   const stream = new ReadableStream({
     async start(controller) {
       try {
         type StreamChunk = { choices: Array<{ delta?: { content?: string | null } }> };
-        let completion: AsyncIterable<StreamChunk> | undefined;
+        let usedModel: string | null = null;
         let lastErr: unknown;
         for (const model of REVIEW_MODEL_CANDIDATES) {
           try {
-            completion = await openrouter.chat.completions.create({
+            const completion: AsyncIterable<StreamChunk> = await openrouter.chat.completions.create({
               model,
               max_tokens: 4096,
               messages: [
@@ -441,22 +442,28 @@ Use the programmatic evaluations above as your source of truth. Structure the re
                 { role: "user", content: userMessage },
               ],
               stream: true,
+              // Disable extended thinking so the token budget produces content,
+              // not reasoning (see trading-analysis route for the full rationale).
+              ...({ reasoning: { enabled: false } } as object),
             });
-            break;
+
+            let modelChars = 0;
+            for await (const chunk of completion) {
+              const text = chunk.choices[0]?.delta?.content ?? "";
+              if (text) {
+                chunks.push(text);
+                controller.enqueue(encoder.encode(text));
+                modelChars += text.length;
+              }
+            }
+            if (modelChars > 0) { usedModel = model; break; }
+            console.warn(`[Trade Review] ${model} returned 0 content chars, trying next model`);
           } catch (err) {
             lastErr = err;
-            console.warn(`[Trade Review] ${model} failed, trying next free model`, err);
+            console.warn(`[Trade Review] ${model} failed, trying next model`, err);
           }
         }
-        if (!completion) throw lastErr ?? new Error("All free models unavailable");
-
-        for await (const chunk of completion) {
-          const text = chunk.choices[0]?.delta?.content ?? "";
-          if (text) {
-            chunks.push(text);
-            controller.enqueue(encoder.encode(text));
-          }
-        }
+        if (!usedModel) throw lastErr ?? new Error("All models failed or returned empty content");
         controller.close();
 
         // Save completed review after response is sent

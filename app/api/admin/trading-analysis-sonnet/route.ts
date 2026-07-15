@@ -108,20 +108,23 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        // gpt-oss-120b / deepseek-r1 free tiers were retired by OpenRouter (404).
-        const FREE_MODEL_CANDIDATES = [
-          "openai/gpt-oss-20b:free",
+        // Free instruction models first (cost 0 when available), paid Claude
+        // Sonnet as guaranteed fallback. Reasoning-only free models return empty
+        // content on large prompts, so we read the stream inside the loop and
+        // treat zero content as a failure — falling through, not returning nothing.
+        const MODEL_CANDIDATES = [
           "qwen/qwen3-next-80b-a3b-instruct:free",
           "meta-llama/llama-3.3-70b-instruct:free",
+          "anthropic/claude-sonnet-5", // paid fallback — funded OpenRouter account
         ];
 
         type StreamChunk = { choices: Array<{ delta?: { content?: string | null } }> };
 
-        let completion: AsyncIterable<StreamChunk> | undefined;
+        let usedModel: string | null = null;
         let lastErr: unknown;
-        for (const model of FREE_MODEL_CANDIDATES) {
+        for (const model of MODEL_CANDIDATES) {
           try {
-            completion = await openrouter.chat.completions.create({
+            const completion: AsyncIterable<StreamChunk> = await openrouter.chat.completions.create({
               model,
               max_tokens: 4096,
               messages: [
@@ -129,22 +132,28 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
                 { role: "user", content: userMessage },
               ],
               stream: true,
+              // Disable extended thinking so the token budget produces content,
+              // not reasoning (see trading-analysis route for the full rationale).
+              ...({ reasoning: { enabled: false } } as object),
             });
-            break;
+
+            let modelChars = 0;
+            for await (const chunk of completion) {
+              const text = chunk.choices[0]?.delta?.content ?? "";
+              if (text) {
+                chunks.push(text);
+                controller.enqueue(encoder.encode(text));
+                modelChars += text.length;
+              }
+            }
+            if (modelChars > 0) { usedModel = model; break; }
+            console.warn(`[OpenRouter] ${model} returned 0 content chars, trying next model`);
           } catch (err) {
             lastErr = err;
-            console.warn(`[OpenRouter] ${model} failed, trying next free model`, err);
+            console.warn(`[OpenRouter] ${model} failed, trying next model`, err);
           }
         }
-        if (!completion) throw lastErr ?? new Error("All free models rate-limited");
-
-        for await (const chunk of completion) {
-          const text = chunk.choices[0]?.delta?.content ?? "";
-          if (text) {
-            chunks.push(text);
-            controller.enqueue(encoder.encode(text));
-          }
-        }
+        if (!usedModel) throw lastErr ?? new Error("All models failed or returned empty content");
         controller.close();
 
         const body_md = chunks.join("");
@@ -157,7 +166,7 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
           cost: 0,
           status: "success",
           request_duration_ms: requestDuration,
-          metadata: { model: "openai/gpt-oss-20b:free", session, focus, newsLevel, macroMode: body.macroMode, testFlag: "hermes_test" },
+          metadata: { model: usedModel, session, focus, newsLevel, macroMode: body.macroMode, testFlag: "hermes_test" },
         }).catch((err) => console.error("[Cost Tracking] Failed to log:", err));
 
         // Do NOT auto-post to Telegram from the test endpoint
@@ -202,7 +211,7 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
     headers: {
       "Content-Type": "text/plain; charset=utf-8",
       "Cache-Control": "no-cache",
-      "X-Model": "openai/gpt-oss-20b:free",
+      "X-Model": "openrouter-fallback-chain",
     },
   });
 }

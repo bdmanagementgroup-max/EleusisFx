@@ -103,25 +103,30 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        // NOTE: OpenRouter retired the free tier of gpt-oss-120b and deepseek-r1
-        // (they now 404 → "use the paid slug"). These are the currently-free,
-        // instruction-following models. gpt-oss-20b is first because it's the
-        // same family as the old default and best preserves the signal format
-        // that parseSignals() depends on. Free tier still 429s under load — the
-        // loop falls through, and a paid fallback can be appended if credited.
-        const FREE_MODEL_CANDIDATES = [
-          "openai/gpt-oss-20b:free",
+        // Model chain: free instruction models first (cost 0 when available),
+        // then a paid Claude Sonnet fallback that is always available and emits
+        // content directly.
+        //
+        // IMPORTANT: gpt-oss / deepseek-r1 free tiers were retired (404), and
+        // reasoning models like gpt-oss-20b spend their whole token budget on
+        // `reasoning` and return ZERO `content` on this prompt — which silently
+        // produced an empty report with no error. So we (a) use content-emitting
+        // instruct models only, and (b) read the stream INSIDE the loop and
+        // treat a zero-content response as a failure, falling through to the
+        // next model (ultimately the paid Sonnet, which always answers).
+        const MODEL_CANDIDATES = [
           "qwen/qwen3-next-80b-a3b-instruct:free",
           "meta-llama/llama-3.3-70b-instruct:free",
+          "anthropic/claude-sonnet-5", // paid fallback — funded OpenRouter account
         ];
 
         type StreamChunk = { choices: Array<{ delta?: { content?: string | null } }> };
 
-        let completion: AsyncIterable<StreamChunk> | undefined;
+        let usedModel: string | null = null;
         let lastErr: unknown;
-        for (const model of FREE_MODEL_CANDIDATES) {
+        for (const model of MODEL_CANDIDATES) {
           try {
-            completion = await openrouter.chat.completions.create({
+            const completion: AsyncIterable<StreamChunk> = await openrouter.chat.completions.create({
               model,
               max_tokens: 4096,
               messages: [
@@ -129,22 +134,30 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
                 { role: "user", content: userMessage },
               ],
               stream: true,
+              // OpenRouter extension — disable extended thinking. Reasoning models
+              // (gpt-oss, Claude via Bedrock) otherwise spend the whole token
+              // budget on `reasoning` and return zero `content`. Ignored by
+              // models without a reasoning mode.
+              ...({ reasoning: { enabled: false } } as object),
             });
-            break;
+
+            let modelChars = 0;
+            for await (const chunk of completion) {
+              const text = chunk.choices[0]?.delta?.content ?? "";
+              if (text) {
+                chunks.push(text);
+                controller.enqueue(encoder.encode(text));
+                modelChars += text.length;
+              }
+            }
+            if (modelChars > 0) { usedModel = model; break; }
+            console.warn(`[OpenRouter] ${model} returned 0 content chars (reasoning-only?), trying next model`);
           } catch (err) {
             lastErr = err;
-            console.warn(`[OpenRouter] ${model} failed, trying next free model`, err);
+            console.warn(`[OpenRouter] ${model} failed, trying next model`, err);
           }
         }
-        if (!completion) throw lastErr ?? new Error("All free models rate-limited");
-
-        for await (const chunk of completion) {
-          const text = chunk.choices[0]?.delta?.content ?? "";
-          if (text) {
-            chunks.push(text);
-            controller.enqueue(encoder.encode(text));
-          }
-        }
+        if (!usedModel) throw lastErr ?? new Error("All models failed or returned empty content");
         controller.close();
 
         const body_md = chunks.join("");
@@ -157,7 +170,7 @@ Use the indicator values above as your primary analysis foundation. Derive DXY b
           cost: 0,
           status: "success",
           request_duration_ms: requestDuration,
-          metadata: { model: "openai/gpt-oss-20b:free", session, focus, newsLevel, macroMode: body.macroMode },
+          metadata: { model: usedModel, session, focus, newsLevel, macroMode: body.macroMode },
         }).catch((err) => console.error("[Cost Tracking] Failed to log:", err));
 
         // after() keeps the Vercel function alive after the stream response is sent
