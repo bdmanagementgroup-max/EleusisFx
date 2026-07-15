@@ -42,7 +42,7 @@ export default function AdminLeadsClient({ leads: initial }: { leads: Lead[] }) 
     <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" } as React.CSSProperties}>
       <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", overflow: "hidden", minWidth: 400 }}>
         {leads.map(({ id, email, source, created_at }) => (
-          <div key={id} style={{ display: "grid", gridTemplateColumns: "1fr auto auto auto", padding: "14px 24px", borderBottom: "1px solid rgba(255,255,255,0.04)", alignItems: "center", gap: 20 }}>
+          <div key={id} className="lead-row" style={{ display: "grid", gridTemplateColumns: "1fr auto auto auto", padding: "14px 24px", borderBottom: "1px solid rgba(255,255,255,0.04)", alignItems: "center", gap: 20, transition: "background 0.2s" }}>
             <span style={{ fontSize: 13, color: "#e8eaf0" }}>{email}</span>
             <span style={{ fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", color: "rgba(210,220,240,0.88)" }}>{source ?? "free_guide"}</span>
             <span style={{ fontSize: 11, color: "rgba(210,220,240,0.58)", whiteSpace: "nowrap" }}>{formatDate(created_at)}</span>
@@ -63,6 +63,7 @@ export default function AdminLeadsClient({ leads: initial }: { leads: Lead[] }) 
           </div>
         ))}
       </div>
+      <style>{`.lead-row:hover { background: rgba(79,142,247,0.03); }`}</style>
     </div>
   );
 }

@@ -223,6 +223,13 @@ Evaluates signal outcomes using Yahoo Finance 3-month OHLCV. Checks entry trigge
 - **Grid background** on `body` via `background-image` (not `::after` pseudo-element — that caused GPU repaint on scroll)
 - **Scroll animation** — `@keyframes scroll` in `globals.css`, used by Ticker and ProofFeedTicker (PublicMarketTicker now uses TradingView widget, no scroll animation)
 - **Admin UI** — dark `#08090f` panels, `#4f8ef7` blue accent, `#22c55e` green, `#ef4444` red
+- **Global a11y baseline** (in `globals.css`, applies everywhere): accent `:focus-visible` outline, `::selection` tint, `html { scroll-behavior: smooth; scroll-padding-top: 96px }`, and a `prefers-reduced-motion` block that disables animations + forces `.reveal` visible. Don't remove focus rings or re-add unguarded animations.
+- **Icons are inline SVG, never glyphs** — use stroked SVG (`M20 6 9 17l-5-5` check, `m9 6 6 6-6 6` chevron, `M18 6 6 18…` close) at `strokeWidth` 2.5–3, not `✓ ● ▶ ▲ ✕`. Text arrows `←/→` are the one accepted exception.
+- **Active nav highlighting** — `DashboardShell`/`AdminShell` mark the current route via `usePathname()` with accent left-border + `rgba(79,142,247,0.08)` bg + `aria-current="page"`; hover rules use `:not(.is-active)` so hover never dulls the active item. Admin uses prefix matching (deep routes highlight their parent); dashboard uses exact match.
+
+## Shared Components
+
+- **`components/dashboard/EquityChart.tsx`** — the single equity-curve chart (client component). Used by both `/dashboard` and `/admin/metrics/[userId]`. Custom SVG (not Recharts): recessive gridlines + `$` Y-axis labels, thinned X labels (~6 max), current-value/delta header, last-point emphasis, and a pointer-driven crosshair + tooltip. Takes `data: { day, equity }[]`. Do not re-inline a per-page copy — extend this one.
 
 ## Public PDFs (in `public/`)
 

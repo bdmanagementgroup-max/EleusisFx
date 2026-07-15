@@ -57,14 +57,29 @@ export default function FaqSection() {
           <div
             key={i}
             className="faq-item"
-            onClick={() => setOpen(open === i ? null : i)}
-            style={{
-              borderBottom: "1px solid rgba(255,255,255,0.06)",
-              padding: "32px 0",
-              cursor: "pointer",
-            }}
+            style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 24 }}>
+            <button
+              type="button"
+              className="faq-trigger"
+              onClick={() => setOpen(open === i ? null : i)}
+              aria-expanded={open === i}
+              aria-controls={`faq-answer-${i}`}
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                gap: 24,
+                padding: "32px 0",
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                textAlign: "left",
+                color: "inherit",
+                fontFamily: "inherit",
+              }}
+            >
               <span
                 style={{
                   fontFamily: "var(--font-syne), Syne, sans-serif",
@@ -77,7 +92,8 @@ export default function FaqSection() {
               >
                 {q}
               </span>
-              <div
+              <span
+                aria-hidden="true"
                 style={{
                   width: 28,
                   height: 28,
@@ -95,17 +111,19 @@ export default function FaqSection() {
                 }}
               >
                 +
-              </div>
-            </div>
+              </span>
+            </button>
             <div
+              id={`faq-answer-${i}`}
+              role="region"
               style={{
                 fontSize: 14,
                 lineHeight: 1.85,
                 color: "rgba(210,220,240,0.88)",
-                maxHeight: open === i ? 200 : 0,
+                maxHeight: open === i ? 240 : 0,
                 overflow: "hidden",
                 transition: "max-height 0.4s ease, padding 0.3s",
-                paddingTop: open === i ? 20 : 0,
+                paddingBottom: open === i ? 32 : 0,
               }}
             >
               {a}
@@ -115,6 +133,8 @@ export default function FaqSection() {
       </div>
 
       <style>{`
+        .faq-trigger:hover { box-shadow: none !important; }
+        .faq-trigger:hover span:first-child { color: #7eb3ff; }
         @media (max-width: 1024px) {
           section#faq { padding: 80px 20px !important; }
         }

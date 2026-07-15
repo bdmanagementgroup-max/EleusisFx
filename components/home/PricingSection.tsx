@@ -84,7 +84,8 @@ export default function PricingSection() {
         <div style={{ position: "absolute", bottom: -100, right: -100, width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle, rgba(79,142,247,0.06) 0%, transparent 70%)", pointerEvents: "none" }} />
 
         <div style={{ fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: "#4f8ef7", marginBottom: 32, display: "flex", alignItems: "center", gap: 10 }}>
-          <span>●</span> Complete Challenge Package
+          <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#4f8ef7", display: "inline-block", flexShrink: 0 }} />
+          Complete Challenge Package
         </div>
 
         <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: "clamp(36px, 6vw, 60px)", letterSpacing: -2, lineHeight: 1.1, marginBottom: 6, color: "#e8eaf0" }}>
@@ -97,7 +98,11 @@ export default function PricingSection() {
         <ul style={{ listStyle: "none", marginBottom: 44 }}>
           {FEATURES.map((f) => (
             <li key={f} style={{ display: "flex", alignItems: "flex-start", gap: 14, fontSize: 14, color: "rgba(210,220,240,0.88)", padding: "14px 0", borderBottom: "1px solid rgba(255,255,255,0.06)", lineHeight: 1.5 }}>
-              <span style={{ width: 18, height: 18, border: "1px solid rgba(79,142,247,0.4)", borderRadius: 2, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1, fontSize: 10, color: "#4f8ef7" }}>✓</span>
+              <span style={{ width: 18, height: 18, border: "1px solid rgba(79,142,247,0.4)", borderRadius: 2, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1 }}>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#4f8ef7" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
+              </span>
               {f}
             </li>
           ))}

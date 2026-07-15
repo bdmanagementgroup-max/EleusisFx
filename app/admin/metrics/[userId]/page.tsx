@@ -2,47 +2,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSupabaseAdminClient } from "@/lib/supabase/server";
 import ClientDetailClient from "./ClientDetailClient";
+import EquityChart from "@/components/dashboard/EquityChart";
 
 export const dynamic = "force-dynamic";
-
-function EquityChart({ data }: { data: { day: string; equity: number }[] }) {
-  const min = Math.min(...data.map((d) => d.equity)) - 500;
-  const max = Math.max(...data.map((d) => d.equity)) + 500;
-  const range = max - min;
-  const w = 800, h = 200;
-  const pts = data.map((d, i) => {
-    const x = (i / (data.length - 1)) * w;
-    const y = h - ((d.equity - min) / range) * h;
-    return `${x},${y}`;
-  });
-  const pathD = `M ${pts.join(" L ")}`;
-  const areaD = `M 0,${h} L ${pts.join(" L ")} L ${w},${h} Z`;
-
-  return (
-    <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", padding: "32px 28px" }}>
-      <div style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.4)", marginBottom: 24 }}>Equity Curve</div>
-      <svg viewBox={`0 0 ${w} ${h}`} style={{ width: "100%", height: "auto" }}>
-        <defs>
-          <linearGradient id="eq-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#4f8ef7" stopOpacity="0.3" />
-            <stop offset="100%" stopColor="#4f8ef7" stopOpacity="0.02" />
-          </linearGradient>
-        </defs>
-        <path d={areaD} fill="url(#eq-grad)" />
-        <path d={pathD} fill="none" stroke="#4f8ef7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        {data.map((d, i) => {
-          const [x, y] = pts[i].split(",").map(Number);
-          return <circle key={i} cx={x} cy={y} r="4" fill="#4f8ef7" />;
-        })}
-      </svg>
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 12 }}>
-        {data.map((d) => (
-          <span key={d.day} style={{ fontSize: 9, letterSpacing: 1, textTransform: "uppercase", color: "rgba(210,220,240,0.3)" }}>{d.day}</span>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 export default async function ClientDetailPage({ params }: { params: Promise<{ userId: string }> }) {
   const { userId } = await params;
@@ -96,12 +58,13 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ u
           { label: "Daily Drawdown",  value: `${Number(m.daily_drawdown).toFixed(2)}%`, color: Number(m.daily_drawdown) > 4 ? "#ef4444" : undefined },
           { label: "Max Drawdown",    value: `${Number(m.max_drawdown).toFixed(2)}%`,  color: Number(m.max_drawdown) > 8 ? "#ef4444" : undefined },
         ].map(({ label, value, color }) => (
-          <div key={label} style={{ background: "#08090f", padding: "28px 24px" }}>
+          <div key={label} className="adm-stat" style={{ background: "#08090f", padding: "28px 24px", transition: "background 0.2s" }}>
             <div style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.4)", marginBottom: 10 }}>{label}</div>
             <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 26, letterSpacing: -1, color: color ?? "#e8eaf0" }}>{value}</div>
           </div>
         ))}
       </div>
+      <style>{`.adm-stat:hover { background: #0b0d16 !important; }`}</style>
 
       {/* Progress bars */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 24 }}>

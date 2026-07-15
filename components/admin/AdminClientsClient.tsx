@@ -260,7 +260,7 @@ export default function AdminClientsClient({ applications: initial }: { applicat
             return (
               <div key={id} style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
                 {/* Main row */}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr auto auto auto auto", padding: "16px 24px", alignItems: "center", gap: 16 }}>
+                <div className="ac-row" style={{ display: "grid", gridTemplateColumns: "1fr 1fr auto auto auto auto", padding: "16px 24px", alignItems: "center", gap: 16, transition: "background 0.2s" }}>
                   <div>
                     <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 600, fontSize: 14, color: "#e8eaf0" }}>
                       {first_name} {last_name}
@@ -293,7 +293,12 @@ export default function AdminClientsClient({ applications: initial }: { applicat
                   </select>
 
                   <ActionBtn onClick={() => toggleExpand(id)}>
-                    {isExpanded ? "▲ Close" : "▼ Details"}
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                      <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ transform: isExpanded ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>
+                        <path d="m6 9 6 6 6-6" />
+                      </svg>
+                      {isExpanded ? "Close" : "Details"}
+                    </span>
                   </ActionBtn>
 
                   <ActionBtn onClick={() => deleteApp(id)} disabled={deleting === id} color="rgba(239,68,68,0.5)">
@@ -371,7 +376,10 @@ export default function AdminClientsClient({ applications: initial }: { applicat
                           Send welcome email + free guide to {email}. Creates a dashboard account if none exists.
                         </p>
                         {welcomeSent.has(id) ? (
-                          <div style={{ fontSize: 11, color: "#22c55e", letterSpacing: 1 }}>✓ Sent</div>
+                          <div style={{ fontSize: 11, color: "#22c55e", letterSpacing: 1, display: "inline-flex", alignItems: "center", gap: 6 }}>
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>
+                            Sent
+                          </div>
                         ) : (
                           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                             <ActionBtn onClick={() => sendWelcome(id, email, first_name)} disabled={welcomeSending === id} color="#22c55e">
@@ -418,7 +426,10 @@ export default function AdminClientsClient({ applications: initial }: { applicat
                           ))}
                         </select>
                         {pdfSent[id] ? (
-                          <div style={{ fontSize: 11, color: "#22c55e", letterSpacing: 1 }}>✓ Sent: {pdfSent[id]}</div>
+                          <div style={{ fontSize: 11, color: "#22c55e", letterSpacing: 1, display: "inline-flex", alignItems: "center", gap: 6 }}>
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>
+                            Sent: {pdfSent[id]}
+                          </div>
                         ) : (
                           <ActionBtn onClick={() => sendPdf(id, email, first_name)} disabled={pdfSending === id} color="#4f8ef7">
                             {pdfSending === id ? "Sending…" : "Send PDF"}
@@ -543,6 +554,7 @@ export default function AdminClientsClient({ applications: initial }: { applicat
       </div>
 
       <style>{`
+        .ac-row:hover { background: rgba(79,142,247,0.03); }
         .ac-detail-grid {
           display: grid;
           grid-template-columns: 1fr 1fr 1fr 1fr;

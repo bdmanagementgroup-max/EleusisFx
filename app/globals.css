@@ -29,6 +29,22 @@
 html {
   background: #020305;
   color-scheme: dark;
+  scroll-behavior: smooth;
+  /* clear the fixed nav + 46px market ticker when jumping to #anchors */
+  scroll-padding-top: 96px;
+}
+
+/* TEXT SELECTION — accent tint */
+::selection {
+  background: rgba(79, 142, 247, 0.28);
+  color: #ffffff;
+}
+
+/* KEYBOARD FOCUS — visible accent ring (never removed) */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 1px;
 }
 
 body {
@@ -132,10 +148,26 @@ textarea:-webkit-autofill {
 
 /* BUTTON GLOW — subtle only, applied on hover not always */
 button:not([disabled]) {
-  transition: opacity 0.2s, background 0.15s;
+  transition: opacity 0.2s, background 0.15s, box-shadow 0.2s;
 }
 button:not([disabled]):hover {
   box-shadow: 0 0 16px -4px currentColor;
+}
+
+/* REDUCED MOTION — respect user preference (a11y) */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
 /* RESPONSIVE */

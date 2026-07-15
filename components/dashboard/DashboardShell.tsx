@@ -1,7 +1,14 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import LogoutButton from "@/components/dashboard/LogoutButton";
+
+const RESOURCE_HREFS = [
+  "/resources/position-size-calculator",
+  "/resources/risk-reward-calculator",
+  "/resources/drawdown-tracker",
+];
 
 type NavItem =
   | { href: string; label: string }
@@ -11,8 +18,9 @@ type NavItem =
 
 
 export default function DashboardShell({ children, coachEnabled = false }: { children: React.ReactNode; coachEnabled?: boolean }) {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [resourcesOpen, setResourcesOpen] = useState(false);
+  const [resourcesOpen, setResourcesOpen] = useState(() => RESOURCE_HREFS.includes(pathname ?? ""));
 
   const NAV: NavItem[] = [
     { href: "/dashboard",          label: "Overview" },
@@ -65,7 +73,9 @@ export default function DashboardShell({ children, coachEnabled = false }: { chi
             className="dashboard-sidebar-close"
             aria-label="Close menu"
           >
-            ✕
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" aria-hidden="true">
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
           </button>
         </div>
 
@@ -90,31 +100,39 @@ export default function DashboardShell({ children, coachEnabled = false }: { chi
                     }}
                   >
                     <span>{item.label}</span>
-                    <span style={{
-                      fontSize: 9,
-                      display: "inline-block",
-                      transition: "transform 0.2s",
-                      transform: resourcesOpen ? "rotate(90deg)" : "rotate(0deg)",
-                      color: "rgba(210,220,240,0.5)",
-                    }}>▶</span>
+                    <svg
+                      width="10" height="10" viewBox="0 0 24 24" fill="none"
+                      stroke="rgba(210,220,240,0.5)" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"
+                      aria-hidden="true"
+                      style={{ transition: "transform 0.2s", transform: resourcesOpen ? "rotate(90deg)" : "rotate(0deg)" }}
+                    >
+                      <path d="m9 6 6 6-6 6" />
+                    </svg>
                   </button>
                   {resourcesOpen && (
                     <div>
-                      {item.items.map(({ href, label }) => (
-                        <Link
-                          key={href}
-                          href={href}
-                          onClick={() => setOpen(false)}
-                          style={{
-                            display: "block", padding: "10px 28px 10px 40px",
-                            fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase",
-                            color: "rgba(210,220,240,0.58)", textDecoration: "none",
-                            transition: "all 0.2s",
-                          }}
-                        >
-                          {label}
-                        </Link>
-                      ))}
+                      {item.items.map(({ href, label }) => {
+                        const active = pathname === href;
+                        return (
+                          <Link
+                            key={href}
+                            href={href}
+                            onClick={() => setOpen(false)}
+                            aria-current={active ? "page" : undefined}
+                            className={active ? "is-active" : undefined}
+                            style={{
+                              display: "block", padding: "10px 28px 10px 38px",
+                              fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase",
+                              color: active ? "#e8eaf0" : "rgba(210,220,240,0.58)", textDecoration: "none",
+                              borderLeft: active ? "2px solid #4f8ef7" : "2px solid transparent",
+                              background: active ? "rgba(79,142,247,0.08)" : "transparent",
+                              transition: "all 0.2s",
+                            }}
+                          >
+                            {label}
+                          </Link>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
@@ -122,15 +140,20 @@ export default function DashboardShell({ children, coachEnabled = false }: { chi
             }
 
             const { href, label } = item as { href: string; label: string };
+            const active = pathname === href;
             return (
               <Link
                 key={href}
                 href={href}
                 onClick={() => setOpen(false)}
+                aria-current={active ? "page" : undefined}
+                className={active ? "is-active" : undefined}
                 style={{
-                  display: "block", padding: "12px 28px",
+                  display: "block", padding: "12px 28px 12px 26px",
                   fontSize: 11, letterSpacing: 2, textTransform: "uppercase",
-                  color: "rgba(210,220,240,0.88)", textDecoration: "none",
+                  color: active ? "#e8eaf0" : "rgba(210,220,240,0.88)", textDecoration: "none",
+                  borderLeft: active ? "2px solid #4f8ef7" : "2px solid transparent",
+                  background: active ? "rgba(79,142,247,0.08)" : "transparent",
                   transition: "all 0.2s",
                 }}
               >
@@ -240,10 +263,13 @@ export default function DashboardShell({ children, coachEnabled = false }: { chi
           }
           .dashboard-sidebar-close:hover { color: #e8eaf0; }
         }
-        .dashboard-sidebar nav a:hover,
+        .dashboard-sidebar nav a:not(.is-active):hover,
         .dashboard-sidebar nav button:hover {
           color: #e8eaf0 !important;
           background: rgba(79,142,247,0.05);
+        }
+        .dashboard-sidebar nav a.is-active:hover {
+          background: rgba(79,142,247,0.12);
         }
       `}</style>
     </div>

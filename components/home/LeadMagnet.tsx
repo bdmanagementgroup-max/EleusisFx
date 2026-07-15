@@ -92,7 +92,11 @@ export default function LeadMagnet() {
         <div style={{ display: "flex", justifyContent: "center", gap: 32, marginBottom: 48, flexWrap: "wrap" }}>
           {["The 3-Trade Rule", "The Drawdown Buffer System", "The Recovery Protocol"].map((b) => (
             <div key={b} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, letterSpacing: "0.5px", color: "rgba(210,220,240,0.88)" }}>
-              <span style={{ width: 18, height: 18, border: "1px solid rgba(79,142,247,0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: "#4f8ef7", flexShrink: 0 }}>✓</span>
+              <span style={{ width: 18, height: 18, border: "1px solid rgba(79,142,247,0.3)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#4f8ef7" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
+              </span>
               {b}
             </div>
           ))}
@@ -152,8 +156,11 @@ export default function LeadMagnet() {
               margin: "0 auto",
             }}
           >
-            <p style={{ fontSize: 14, color: "#7eb3ff", letterSpacing: "0.5px", margin: 0 }}>
-              ✓ &nbsp;Check your inbox — your free guide is on its way.
+            <p style={{ fontSize: 14, color: "#7eb3ff", letterSpacing: "0.5px", margin: 0, display: "inline-flex", alignItems: "center", gap: 10 }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7eb3ff" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+              Check your inbox — your free guide is on its way.
             </p>
           </div>
         )}

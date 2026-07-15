@@ -1,5 +1,6 @@
 import MarketTickerStrip from "@/components/dashboard/MarketTickerStrip";
 import PerformanceInsights from "@/components/dashboard/PerformanceInsights";
+import EquityChart from "@/components/dashboard/EquityChart";
 import { getSupabaseAdminClient, getSupabaseServerClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -79,7 +80,7 @@ export default async function DashboardPage() {
           { label: "Daily Drawdown",  value: m.daily_drawdown != null ? `${Number(m.daily_drawdown).toFixed(2)}%` : "—", warn: Number(m.daily_drawdown) > 4 },
           { label: "Max Drawdown",    value: m.max_drawdown != null ? `${Number(m.max_drawdown).toFixed(2)}%` : "—",  warn: Number(m.max_drawdown) > 8 },
         ].map(({ label, value, green, warn }) => (
-          <div key={label} style={{ background: "#08090f", padding: "32px 28px" }}>
+          <div key={label} className="dash-stat" style={{ background: "#08090f", padding: "32px 28px", transition: "background 0.2s" }}>
             <div style={{ fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 12 }}>{label}</div>
             <div style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 28, letterSpacing: -1, color: warn ? "#ef4444" : green ? "#22c55e" : "#e8eaf0" }}>
               {value}
@@ -114,9 +115,12 @@ export default async function DashboardPage() {
 
       {equityData.length > 1 && <EquityChart data={equityData} />}
       <PerformanceInsights />
+
+      <style>{`.dash-stat:hover { background: #0b0d16 !important; }`}</style>
     </div>
   );
 }
+
 
 function EmptyState() {
   return (
@@ -137,41 +141,3 @@ function EmptyState() {
   );
 }
 
-function EquityChart({ data }: { data: { day: string; equity: number }[] }) {
-  const min = Math.min(...data.map((d) => d.equity)) - 500;
-  const max = Math.max(...data.map((d) => d.equity)) + 500;
-  const range = max - min;
-  const w = 800, h = 200;
-  const pts = data.map((d, i) => {
-    const x = (i / (data.length - 1)) * w;
-    const y = h - ((d.equity - min) / range) * h;
-    return `${x},${y}`;
-  });
-  const pathD = `M ${pts.join(" L ")}`;
-  const areaD = `M 0,${h} L ${pts.join(" L ")} L ${w},${h} Z`;
-
-  return (
-    <div style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", padding: "32px 28px" }}>
-      <div style={{ fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(210,220,240,0.88)", marginBottom: 24 }}>Equity Curve</div>
-      <svg viewBox={`0 0 ${w} ${h}`} style={{ width: "100%", height: "auto" }}>
-        <defs>
-          <linearGradient id="eq-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#4f8ef7" stopOpacity="0.3" />
-            <stop offset="100%" stopColor="#4f8ef7" stopOpacity="0.02" />
-          </linearGradient>
-        </defs>
-        <path d={areaD} fill="url(#eq-grad)" />
-        <path d={pathD} fill="none" stroke="#4f8ef7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        {data.map((d, i) => {
-          const [x, y] = pts[i].split(",").map(Number);
-          return <circle key={i} cx={x} cy={y} r="4" fill="#4f8ef7" />;
-        })}
-      </svg>
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 12 }}>
-        {data.map((d) => (
-          <span key={d.day} style={{ fontSize: 9, letterSpacing: 1, textTransform: "uppercase", color: "rgba(210,220,240,0.58)" }}>{d.day}</span>
-        ))}
-      </div>
-    </div>
-  );
-}

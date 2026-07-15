@@ -132,6 +132,33 @@ export default function Hero() {
             </svg>
           </a>
         </div>
+
+        {/* Mobile-only trust strip — the specialist card is hidden below 1024px */}
+        <div className="hero-mobile-stats">
+          {[
+            { num: "87%", label: "Pass Rate", green: true },
+            { num: "700+", label: "Funded Traders" },
+            { num: "<30", label: "Days to Funded" },
+          ].map(({ num, label, green }) => (
+            <div key={label} className="hero-mobile-stat">
+              <div
+                style={{
+                  fontFamily: "var(--font-syne), Syne, sans-serif",
+                  fontWeight: 800,
+                  fontSize: 28,
+                  letterSpacing: -1,
+                  lineHeight: 1,
+                  color: green ? "#22c55e" : "#e8eaf0",
+                }}
+              >
+                {num}
+              </div>
+              <div style={{ fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: "rgba(210,220,240,0.58)", marginTop: 8 }}>
+                {label}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Right — Specialist Card */}
@@ -237,6 +264,9 @@ export default function Hero() {
         .btn-ghost-hero svg { transition: transform 0.2s; }
         .btn-ghost-hero:hover svg { transform: translateX(4px); }
 
+        /* Mobile trust strip — hidden on desktop (specialist card shows instead) */
+        .hero-mobile-stats { display: none; }
+
         @media (max-width: 1024px) {
           .hero-section {
             grid-template-columns: 1fr !important;
@@ -245,6 +275,24 @@ export default function Hero() {
             gap: 48px !important;
           }
           .hero-right { display: none; }
+          .hero-mobile-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+            margin-top: 48px;
+            border: 1px solid rgba(255,255,255,0.08);
+            opacity: 0;
+            animation: fadeIn 0.8s 1s forwards;
+          }
+          .hero-mobile-stat {
+            padding: 24px 16px;
+            text-align: center;
+            border-right: 1px solid rgba(255,255,255,0.06);
+          }
+          .hero-mobile-stat:last-child { border-right: none; }
+        }
+        @media (max-width: 380px) {
+          .hero-mobile-stat { padding: 20px 8px; }
         }
       `}</style>
     </section>

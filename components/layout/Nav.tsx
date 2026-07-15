@@ -77,9 +77,17 @@ export default function Nav() {
             style={{ position: "relative" }}
             onMouseEnter={() => setDropOpen(true)}
             onMouseLeave={() => setDropOpen(false)}
+            onBlur={(e) => {
+              if (!e.currentTarget.contains(e.relatedTarget as Node)) setDropOpen(false);
+            }}
           >
             <button
               className="nav-link-item"
+              aria-haspopup="menu"
+              aria-expanded={dropOpen}
+              onClick={() => setDropOpen((v) => !v)}
+              onFocus={() => setDropOpen(true)}
+              onKeyDown={(e) => { if (e.key === "Escape") setDropOpen(false); }}
               style={{
                 background: "none",
                 border: "none",
@@ -181,6 +189,8 @@ export default function Nav() {
           className="nav-hamburger"
           onClick={() => setOpen(!open)}
           aria-label="Toggle menu"
+          aria-expanded={open}
+          aria-controls="mobile-nav-drawer"
           style={{ background: "none", border: "none", cursor: "pointer", padding: 8, display: "none" }}
         >
           <div style={{ width: 22, height: 1.5, background: "#e8eaf0", marginBottom: 5, transition: "all 0.2s", transform: open ? "rotate(45deg) translate(4px, 4px)" : "none" }} />
@@ -192,6 +202,7 @@ export default function Nav() {
       {/* Mobile drawer */}
       {open && (
         <div
+          id="mobile-nav-drawer"
           style={{
             position: "fixed",
             top: 72,

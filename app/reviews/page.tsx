@@ -240,6 +240,7 @@ export default function ReviewsPage() {
             ].map(({ icon, title, body }) => (
               <div
                 key={title}
+                className="rev-card"
                 style={{
                   background: "#08090f",
                   border: "1px solid rgba(255,255,255,0.06)",
@@ -318,6 +319,7 @@ export default function ReviewsPage() {
             {RESULTS.map(({ name, firm, size, time, phase }) => (
               <div
                 key={name}
+                className="rev-card"
                 style={{
                   background: "#020305",
                   border: "1px solid rgba(255,255,255,0.06)",
@@ -458,13 +460,14 @@ export default function ReviewsPage() {
               <Link
                 key={href}
                 href={href}
+                className="rev-case-link"
                 style={{
                   display: "block",
                   background: "#08090f",
                   border: "1px solid rgba(255,255,255,0.06)",
                   padding: "32px 36px",
                   textDecoration: "none",
-                  transition: "border-color 0.2s",
+                  transition: "border-color 0.2s, background 0.2s",
                 }}
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 24, flexWrap: "wrap" }}>
@@ -473,6 +476,7 @@ export default function ReviewsPage() {
                       {tag}{time ? ` · ${time}` : ""}
                     </div>
                     <div
+                      className="rev-case-title"
                       style={{
                         fontFamily: "var(--font-syne), Syne, sans-serif",
                         fontWeight: 700,
@@ -480,6 +484,7 @@ export default function ReviewsPage() {
                         color: "#e8eaf0",
                         marginBottom: 10,
                         letterSpacing: -0.3,
+                        transition: "color 0.2s",
                       }}
                     >
                       {title}
@@ -488,7 +493,7 @@ export default function ReviewsPage() {
                       {desc}
                     </div>
                   </div>
-                  <div style={{ color: "#4f8ef7", fontSize: 20, flexShrink: 0, alignSelf: "center" }}>→</div>
+                  <div className="rev-case-arrow" style={{ color: "#4f8ef7", fontSize: 20, flexShrink: 0, alignSelf: "center" }}>→</div>
                 </div>
               </Link>
             ))}
@@ -604,6 +609,7 @@ export default function ReviewsPage() {
           <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
             <Link
               href="/#apply"
+              className="rev-cta-primary"
               style={{
                 display: "inline-block",
                 background: "#4f8ef7",
@@ -621,6 +627,7 @@ export default function ReviewsPage() {
             </Link>
             <Link
               href="/compare"
+              className="rev-cta-ghost"
               style={{
                 display: "inline-block",
                 border: "1px solid rgba(255,255,255,0.12)",
@@ -643,6 +650,27 @@ export default function ReviewsPage() {
       <Footer />
 
       <style>{`
+        .rev-card {
+          transition: border-color 0.3s, transform 0.3s, background 0.3s;
+        }
+        .rev-card:hover {
+          border-color: rgba(79,142,247,0.3) !important;
+          transform: translateY(-4px);
+        }
+        .rev-case-link {
+          position: relative;
+        }
+        .rev-case-link:hover {
+          border-color: rgba(79,142,247,0.3) !important;
+          background: #0b0d16 !important;
+        }
+        .rev-case-link .rev-case-arrow { transition: transform 0.2s; }
+        .rev-case-link:hover .rev-case-arrow { transform: translateX(5px); }
+        .rev-case-link:hover .rev-case-title { color: #7eb3ff !important; }
+        .rev-cta-primary { transition: opacity 0.2s, box-shadow 0.2s; }
+        .rev-cta-primary:hover { box-shadow: 0 0 24px -6px #4f8ef7; }
+        .rev-cta-ghost { transition: border-color 0.2s, color 0.2s; }
+        .rev-cta-ghost:hover { border-color: rgba(79,142,247,0.4) !important; color: #7eb3ff !important; }
         @media (max-width: 768px) {
           section { padding-left: 20px !important; padding-right: 20px !important; }
         }
