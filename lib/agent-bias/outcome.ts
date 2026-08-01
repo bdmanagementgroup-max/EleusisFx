@@ -43,11 +43,16 @@ export async function resolvePendingOutcomes(): Promise<{ resolved: number }> {
   cutoff.setDate(cutoff.getDate() - HOLD_TRADING_DAYS - 2); // small buffer for weekends
   const cutoffStr = cutoff.toISOString().slice(0, 10);
 
-  const { data: pending } = await supabase
+  const { data: pending, error: selectError } = await supabase
     .from("agent_bias")
     .select("id, instrument, rating, run_date")
     .eq("outcome", "pending")
     .lte("run_date", cutoffStr);
+
+  if (selectError) {
+    console.error("[AgentBias] outcome query failed", selectError);
+    return { resolved: 0 };
+  }
 
   if (!pending || pending.length === 0) return { resolved: 0 };
 
@@ -65,10 +70,15 @@ export async function resolvePendingOutcomes(): Promise<{ resolved: number }> {
     const pctMove = ((endClose - startClose) / startClose) * 100;
     const outcome = directionMatchesRating(row.rating, pctMove) ? "correct" : "incorrect";
 
-    await supabase
+    const { error: updateError } = await supabase
       .from("agent_bias")
       .update({ outcome, outcome_checked_at: new Date().toISOString() })
       .eq("id", row.id);
+
+    if (updateError) {
+      console.error("[AgentBias] outcome update failed for", row.instrument, updateError);
+      continue;
+    }
     resolved++;
   }
 
