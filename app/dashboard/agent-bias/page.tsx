@@ -10,12 +10,16 @@ export const metadata = {
 export default async function AgentBiasPage() {
   const supabase = await getSupabaseServerClient();
 
-  const { data: rows } = await supabase
+  const { data: rows, error } = await supabase
     .from("agent_bias")
     .select("id, run_date, display_pair, rating, executive_summary, bull_case, bear_case")
     .eq("status", "published")
     .order("run_date", { ascending: false })
     .limit(50);
+
+  if (error) {
+    console.error("agent_bias fetch failed:", error);
+  }
 
   const list = (rows ?? []) as PublishedBiasRow[];
   const latestDate = list[0]?.run_date;
