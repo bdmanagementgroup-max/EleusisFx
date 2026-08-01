@@ -27,6 +27,7 @@ export default function DashboardShell({ children, coachEnabled = false }: { chi
     { href: "/dashboard/markets",  label: "Live Markets" },
     ...(coachEnabled ? [{ href: "/dashboard/coach",    label: "AI Coach" }] : []),
     { href: "/dashboard/calendar", label: "Economic Calendar" },
+    { href: "/dashboard/agent-bias", label: "Agent Bias" },
     { divider: true },
     {
       accordion: true,
