@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { AGENT_BIAS_INSTRUMENTS } from "@/lib/agent-bias/instruments";
-import { resolvePendingOutcomes } from "@/lib/agent-bias/outcome";
+import { getSupabaseAdminClient } from "@/lib/supabase/server";
+import { runAgentBiasDispatch } from "@/lib/agent-bias/dispatch";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
@@ -10,10 +10,16 @@ function isAuthorizedCron(req: NextRequest): boolean {
   return req.headers.get("authorization") === `Bearer ${process.env.CRON_SECRET}`;
 }
 
-function chunk<T>(items: T[], size: number): T[][] {
-  const out: T[][] = [];
-  for (let i = 0; i < items.length; i += size) out.push(items.slice(i, i + size));
-  return out;
+async function isCronEnabled(): Promise<boolean> {
+  const supabase = await getSupabaseAdminClient();
+  const { data } = await supabase
+    .from("app_settings")
+    .select("setting_value")
+    .eq("setting_key", "agent_bias_cron_enabled")
+    .maybeSingle();
+  // Default to enabled if the flag is missing, so an unseeded row never
+  // silently disables the feature.
+  return data?.setting_value !== false;
 }
 
 export async function GET(req: NextRequest) {
@@ -21,44 +27,10 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const outcomeResult = await resolvePendingOutcomes();
-
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://eleusisfx.uk";
-  const workerUrl = `${siteUrl}/api/cron/agent-bias/run`;
-  const batches = chunk(AGENT_BIAS_INSTRUMENTS, 16);
-
-  let succeeded = 0;
-  let failed = 0;
-
-  for (const batch of batches) {
-    const results = await Promise.allSettled(
-      batch.map((instrument) =>
-        fetch(workerUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `Bearer ${process.env.CRON_SECRET}`,
-          },
-          body: JSON.stringify({ instrument: instrument.yahoo }),
-        }).then((res) => {
-          if (!res.ok) throw new Error(`Worker returned ${res.status} for ${instrument.yahoo}`);
-          return res.json();
-        })
-      )
-    );
-    for (const r of results) {
-      if (r.status === "fulfilled") succeeded++;
-      else {
-        failed++;
-        console.error("[AgentBias] worker failed:", r.reason);
-      }
-    }
+  if (!(await isCronEnabled())) {
+    return NextResponse.json({ skipped: true, reason: "disabled via admin toggle" });
   }
 
-  return NextResponse.json({
-    resolvedOutcomes: outcomeResult.resolved,
-    dispatched: AGENT_BIAS_INSTRUMENTS.length,
-    succeeded,
-    failed,
-  });
+  const result = await runAgentBiasDispatch();
+  return NextResponse.json(result);
 }

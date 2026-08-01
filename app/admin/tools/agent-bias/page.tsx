@@ -1,5 +1,6 @@
 import { getSupabaseAdminClient } from "@/lib/supabase/server";
 import AgentBiasReviewClient, { type AgentBiasRow } from "./AgentBiasReviewClient";
+import AgentBiasControls from "./AgentBiasControls";
 
 export const dynamic = "force-dynamic";
 
@@ -8,9 +9,9 @@ export default async function AgentBiasReviewPage() {
   const { data: rows, error } = await supabase
     .from("agent_bias")
     .select("id, run_date, instrument, display_pair, rating, executive_summary, bull_case, bear_case, trader_action, entry_price, stop_loss, position_sizing, full_debate, status")
-    .eq("status", "pending_review")
     .order("run_date", { ascending: false })
-    .order("display_pair", { ascending: true });
+    .order("display_pair", { ascending: true })
+    .limit(300);
 
   const headerSection = (
     <div style={{ marginBottom: 40 }}>
@@ -31,6 +32,7 @@ export default async function AgentBiasReviewPage() {
     return (
       <div style={{ padding: "40px 40px 80px" }}>
         {headerSection}
+        <AgentBiasControls />
         <div style={{
           backgroundColor: "#08090f",
           border: "1px solid rgba(255,255,255,0.06)",
@@ -55,6 +57,7 @@ export default async function AgentBiasReviewPage() {
   return (
     <div style={{ padding: "40px 40px 80px" }}>
       {headerSection}
+      <AgentBiasControls />
       <AgentBiasReviewClient initialRows={(rows ?? []) as AgentBiasRow[]} />
     </div>
   );

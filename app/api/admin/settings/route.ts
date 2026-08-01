@@ -1,15 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabaseAdminClient } from "@/lib/supabase/server";
+import { getSupabaseAdminClient, getSupabaseServerClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
+async function requireAdmin() {
+  const auth = await getSupabaseServerClient();
+  const { data: { user } } = await auth.auth.getUser();
+  if (!user || user.app_metadata?.role !== "admin") return null;
+  return user;
+}
+
 export async function GET() {
+  if (!await requireAdmin()) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   try {
     const supabase = await getSupabaseAdminClient();
     const { data, error } = await supabase
       .from("app_settings")
       .select("setting_key, setting_value")
-      .in("setting_key", ["ai_coach_enabled"]);
+      .in("setting_key", ["ai_coach_enabled", "agent_bias_cron_enabled"]);
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
@@ -27,6 +35,7 @@ export async function GET() {
 }
 
 export async function PATCH(req: NextRequest) {
+  if (!await requireAdmin()) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   try {
     const body = await req.json();
     const supabase = await getSupabaseAdminClient();
