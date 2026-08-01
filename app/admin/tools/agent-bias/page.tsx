@@ -11,6 +11,9 @@ export default async function AgentBiasReviewPage() {
     .select("id, run_date, instrument, display_pair, rating, executive_summary, bull_case, bear_case, trader_action, entry_price, stop_loss, position_sizing, full_debate, status")
     .order("run_date", { ascending: false })
     .order("display_pair", { ascending: true })
+    // Covers all three tabs (Pending/Approved/Rejected) at ~16 rows/night —
+    // roughly the most recent 18 days of history; older rows drop out of
+    // every tab, not just one.
     .limit(300);
 
   const headerSection = (

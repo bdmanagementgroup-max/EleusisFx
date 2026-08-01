@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdminClient } from "@/lib/supabase/server";
-import { runAgentBiasDispatch } from "@/lib/agent-bias/dispatch";
+import { runAgentBiasDispatch, DispatchAlreadyRunningError } from "@/lib/agent-bias/dispatch";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
@@ -18,8 +18,10 @@ async function isCronEnabled(): Promise<boolean> {
     .eq("setting_key", "agent_bias_cron_enabled")
     .maybeSingle();
   // Default to enabled if the flag is missing, so an unseeded row never
-  // silently disables the feature.
-  return data?.setting_value !== false;
+  // silently disables the feature. Matches the dual true/"true" check used
+  // by isAiCoachEnabled() for the same jsonb column, in the opposite
+  // (unsafe) direction: a hand-edited string "false" must still disable.
+  return data?.setting_value !== false && data?.setting_value !== "false";
 }
 
 export async function GET(req: NextRequest) {
@@ -31,6 +33,13 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ skipped: true, reason: "disabled via admin toggle" });
   }
 
-  const result = await runAgentBiasDispatch();
-  return NextResponse.json(result);
+  try {
+    const result = await runAgentBiasDispatch();
+    return NextResponse.json(result);
+  } catch (err) {
+    if (err instanceof DispatchAlreadyRunningError) {
+      return NextResponse.json({ error: err.message }, { status: 409 });
+    }
+    throw err;
+  }
 }

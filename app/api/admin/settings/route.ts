@@ -45,11 +45,12 @@ export async function PATCH(req: NextRequest) {
       setting_value: value,
     }));
 
-    for (const update of updates) {
-      await supabase
-        .from("app_settings")
-        .update({ setting_value: update.setting_value })
-        .eq("setting_key", update.setting_key);
+    const { error } = await supabase
+      .from("app_settings")
+      .upsert(updates, { onConflict: "setting_key" });
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
     return NextResponse.json({ success: true });

@@ -25,7 +25,7 @@ export default function AgentBiasControls() {
     fetch("/api/admin/settings")
       .then((res) => res.json())
       .then((data) => {
-        setEnabled(data.agent_bias_cron_enabled !== false);
+        setEnabled(data.agent_bias_cron_enabled !== false && data.agent_bias_cron_enabled !== "false");
       })
       .catch(() => {})
       .finally(() => setLoadingToggle(false));
@@ -77,7 +77,7 @@ export default function AgentBiasControls() {
               width: 52,
               height: 28,
               borderRadius: 14,
-              background: enabled ? "#22c55e" : "rgba(255,255,255,0.1)",
+              background: loadingToggle ? "rgba(255,255,255,0.06)" : enabled ? "#22c55e" : "rgba(255,255,255,0.1)",
               border: "none",
               cursor: loadingToggle || savingToggle ? "not-allowed" : "pointer",
               position: "relative",
@@ -86,18 +86,20 @@ export default function AgentBiasControls() {
               flexShrink: 0,
             }}
           >
-            <div
-              style={{
-                width: 24,
-                height: 24,
-                borderRadius: "50%",
-                background: "#fff",
-                position: "absolute",
-                top: 2,
-                left: enabled ? 26 : 2,
-                transition: "left 0.2s",
-              }}
-            />
+            {!loadingToggle && (
+              <div
+                style={{
+                  width: 24,
+                  height: 24,
+                  borderRadius: "50%",
+                  background: "#fff",
+                  position: "absolute",
+                  top: 2,
+                  left: enabled ? 26 : 2,
+                  transition: "left 0.2s",
+                }}
+              />
+            )}
           </button>
           <div>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#e8eaf0" }}>

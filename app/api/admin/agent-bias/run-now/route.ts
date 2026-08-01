@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
-import { runAgentBiasDispatch } from "@/lib/agent-bias/dispatch";
+import { runAgentBiasDispatch, DispatchAlreadyRunningError } from "@/lib/agent-bias/dispatch";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
@@ -19,6 +19,13 @@ export async function POST() {
     return NextResponse.json({ error: "CRON_SECRET is not configured" }, { status: 500 });
   }
 
-  const result = await runAgentBiasDispatch();
-  return NextResponse.json(result);
+  try {
+    const result = await runAgentBiasDispatch();
+    return NextResponse.json(result);
+  } catch (err) {
+    if (err instanceof DispatchAlreadyRunningError) {
+      return NextResponse.json({ error: err.message }, { status: 409 });
+    }
+    throw err;
+  }
 }

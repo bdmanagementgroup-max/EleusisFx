@@ -28,11 +28,26 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: `Unknown instrument: ${yahooSymbol}` }, { status: 400 });
   }
 
+  const runDate = new Date().toISOString().slice(0, 10);
+  const supabase = await getSupabaseAdminClient();
+
+  // A manual "fire now" re-run must never clobber a row an admin has
+  // already approved or rejected today — only regenerate rows still
+  // pending review (or not generated yet).
+  const { data: existing } = await supabase
+    .from("agent_bias")
+    .select("status")
+    .eq("run_date", runDate)
+    .eq("instrument", instrument.yahoo)
+    .maybeSingle();
+
+  if (existing && existing.status !== "pending_review") {
+    return NextResponse.json({ instrument: instrument.yahoo, skipped: true, reason: `already ${existing.status}` });
+  }
+
   try {
     const result = await runAgentBiasPipeline(instrument);
-    const runDate = new Date().toISOString().slice(0, 10);
 
-    const supabase = await getSupabaseAdminClient();
     const { error } = await supabase.from("agent_bias").upsert(
       {
         run_date: runDate,

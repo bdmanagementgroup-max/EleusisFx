@@ -109,7 +109,7 @@ export default function AgentBiasReviewClient({ initialRows }: { initialRows: Ag
         {visibleRows.map((row) => {
           const expanded = expandedId === row.id;
           const color = RATING_COLOR[row.rating] ?? "rgba(210,220,240,0.58)";
-          const badge = STATUS_BADGE[row.status as Tab] ?? STATUS_BADGE.pending_review;
+          const badge = STATUS_BADGE[tab];
           return (
             <div key={row.id} style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 4, padding: "24px 28px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
