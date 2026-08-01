@@ -47,7 +47,8 @@ export async function resolvePendingOutcomes(): Promise<{ resolved: number }> {
     .from("agent_bias")
     .select("id, instrument, rating, run_date")
     .eq("outcome", "pending")
-    .lte("run_date", cutoffStr);
+    .lte("run_date", cutoffStr)
+    .limit(200);
 
   if (selectError) {
     console.error("[AgentBias] outcome query failed", selectError);
@@ -56,9 +57,17 @@ export async function resolvePendingOutcomes(): Promise<{ resolved: number }> {
 
   if (!pending || pending.length === 0) return { resolved: 0 };
 
+  const closesByInstrument = new Map<string, DailyClose[] | null>();
+
   let resolved = 0;
   for (const row of pending) {
-    const closes = await fetchYahooDailyCloses(row.instrument);
+    let closes: DailyClose[] | null;
+    if (closesByInstrument.has(row.instrument)) {
+      closes = closesByInstrument.get(row.instrument)!;
+    } else {
+      closes = await fetchYahooDailyCloses(row.instrument);
+      closesByInstrument.set(row.instrument, closes);
+    }
     if (!closes) continue;
 
     const runDateMs = new Date(row.run_date).getTime() / 1000;

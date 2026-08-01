@@ -31,6 +31,6 @@ ALTER TABLE agent_bias ENABLE ROW LEVEL SECURITY;
 -- entirely — see every existing admin route in this repo — so no admin
 -- policy is needed here.
 CREATE POLICY "Clients read published agent_bias" ON agent_bias
-  FOR SELECT USING (status = 'published');
+  FOR SELECT TO authenticated USING (status = 'published');
 
 NOTIFY pgrst, 'reload schema';

@@ -23,9 +23,9 @@ export async function GET(req: NextRequest) {
 
   const outcomeResult = await resolvePendingOutcomes();
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://eleusisfx.com";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://eleusisfx.uk";
   const workerUrl = `${siteUrl}/api/cron/agent-bias/run`;
-  const batches = chunk(AGENT_BIAS_INSTRUMENTS, 4);
+  const batches = chunk(AGENT_BIAS_INSTRUMENTS, 16);
 
   let succeeded = 0;
   let failed = 0;
