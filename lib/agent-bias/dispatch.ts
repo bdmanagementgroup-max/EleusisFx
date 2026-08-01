@@ -35,21 +35,34 @@ async function acquireDispatchLock(supabase: Awaited<ReturnType<typeof getSupaba
     .eq("setting_key", LOCK_KEY)
     .maybeSingle();
 
+  // Unlocked state is represented as a non-string jsonb value (`false`, or
+  // legacy seeded `null`) — setting_value is `not null`, so PostgREST can't
+  // actually persist a JS `null` through a plain upsert (it gets read as SQL
+  // NULL and rejected by the column constraint), hence `false` below.
   const lockedAt = typeof data?.setting_value === "string" ? Date.parse(data.setting_value) : NaN;
   if (!Number.isNaN(lockedAt) && Date.now() - lockedAt < LOCK_TIMEOUT_MS) {
     return false;
   }
 
-  await supabase
+  const { error } = await supabase
     .from("app_settings")
     .upsert({ setting_key: LOCK_KEY, setting_value: new Date().toISOString() }, { onConflict: "setting_key" });
+  if (error) {
+    // Fail closed: if we can't persist the lock, don't claim it — a false
+    // "already running" is safer than letting a second dispatch through.
+    console.error("[AgentBias] failed to acquire dispatch lock:", error);
+    return false;
+  }
   return true;
 }
 
 async function releaseDispatchLock(supabase: Awaited<ReturnType<typeof getSupabaseAdminClient>>): Promise<void> {
-  await supabase
+  const { error } = await supabase
     .from("app_settings")
-    .upsert({ setting_key: LOCK_KEY, setting_value: null }, { onConflict: "setting_key" });
+    .upsert({ setting_key: LOCK_KEY, setting_value: false }, { onConflict: "setting_key" });
+  if (error) {
+    console.error("[AgentBias] failed to release dispatch lock:", error);
+  }
 }
 
 // Shared by the nightly cron route and the admin "fire now" route — both
