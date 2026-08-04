@@ -290,6 +290,7 @@ export default function SnapshotsClient({ initial, dbError }: { initial: Signal[
   );
   const [cardBusy, setCardBusy] = useState<string | null>(null);
   const [cardError, setCardError] = useState<string | null>(null);
+  const [cardDownloading, setCardDownloading] = useState<string | null>(null);
 
   const agg = computeAgg(initial, outcomes, pnls);
 
@@ -365,6 +366,40 @@ export default function SnapshotsClient({ initial, dbError }: { initial: Signal[
       setCardError("card request failed");
     } finally {
       setCardBusy(null);
+    }
+  }
+
+  async function downloadCard(id: string) {
+    const url = cardUrls[id];
+    if (!url) return;
+    setCardDownloading(id);
+    try {
+      // Try server-side save first (works in local dev)
+      const res = await fetch("/api/signal-card/download", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ signalId: id, url }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.saved) return;
+      }
+      // Fallback: browser download (works everywhere including Vercel)
+      const imgRes = await fetch(url);
+      const blob = await imgRes.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const sig = initial.find((s) => s.id === id);
+      const pair = sig?.pair?.replace("/", "") ?? id.slice(0, 8);
+      a.href = blobUrl;
+      a.download = `eleusis-card-${pair}.png`;
+      a.click();
+      URL.revokeObjectURL(blobUrl);
+    } catch {
+      // Final fallback: just open in new tab
+      window.open(url, "_blank", "noopener,noreferrer");
+    } finally {
+      setCardDownloading(null);
     }
   }
 
@@ -488,7 +523,7 @@ export default function SnapshotsClient({ initial, dbError }: { initial: Signal[
               {expanded === group.session_id && (
                 <div style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
                   {group.signals.map((s, i) => (
-                    <div key={s.id} style={{ padding: "10px 36px", display: "flex", alignItems: "center", gap: 20, borderBottom: i < group.signals.length - 1 ? "1px solid rgba(255,255,255,0.03)" : "none" }}>
+                    <div key={s.id} style={{ padding: "10px 36px", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "12px 20px", borderBottom: i < group.signals.length - 1 ? "1px solid rgba(255,255,255,0.03)" : "none" }}>
                       <span style={{ fontFamily: "monospace", fontSize: 12, fontWeight: 700, color: s.direction === "BUY" ? "#22c55e" : "#ef4444", width: 36 }}>{s.direction}</span>
                       <span style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 700, fontSize: 14, color: "#e8eaf0", width: 72 }}>{s.pair}</span>
                       <span style={{ fontFamily: "monospace", fontSize: 11, color: "#4f8ef7" }}>Entry: {s.entry_price ?? "—"}</span>
@@ -559,13 +594,23 @@ export default function SnapshotsClient({ initial, dbError }: { initial: Signal[
                           {cardBusy === s.id ? "rendering..." : "◨ card"}
                         </button>
                         {cardUrls[s.id] && (
-                          <a href={cardUrls[s.id]} target="_blank" rel="noopener noreferrer" title="Open full card">
-                            <img
-                              src={cardUrls[s.id]}
-                              alt={`${s.pair} card`}
-                              style={{ width: 30, height: 30, objectFit: "cover", border: "1px solid rgba(79,142,247,0.3)", display: "block" }}
-                            />
-                          </a>
+                          <>
+                            <button
+                              onClick={() => downloadCard(s.id)}
+                              disabled={cardDownloading === s.id}
+                              title="Download 1080×1080 card to IGSocialExports"
+                              style={{ fontFamily: "monospace", fontSize: 10, cursor: cardDownloading === s.id ? "wait" : "pointer", color: "#22c55e", background: "rgba(34,197,94,0.06)", border: "1px solid rgba(34,197,94,0.3)", padding: "3px 9px", marginLeft: 6 }}
+                            >
+                              {cardDownloading === s.id ? "saving..." : "↓ save"}
+                            </button>
+                            <a href={cardUrls[s.id]} target="_blank" rel="noopener noreferrer" title="Open full card">
+                              <img
+                                src={cardUrls[s.id]}
+                                alt={`${s.pair} card`}
+                                style={{ width: 30, height: 30, objectFit: "cover", border: "1px solid rgba(79,142,247,0.3)", display: "block", marginLeft: 6 }}
+                              />
+                            </a>
+                          </>
                         )}
                       </div>
                     </div>
