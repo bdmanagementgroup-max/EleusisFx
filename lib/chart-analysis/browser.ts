@@ -1,8 +1,17 @@
 /**
  * Chart Analysis Browser Automation
- * Uses puppeteer-core + @sparticuz/chromium (Vercel-compatible headless Chrome —
- * same pattern as /api/admin/chart-screenshot) to navigate TradingView,
- * apply indicators/drawings, and capture screenshots.
+ * Renders TradingView's Advanced Chart embed widget (no login required) on an
+ * internal preview page — /app/chart-preview — with indicators pre-loaded via
+ * the widget's `studies` config, then captures a screenshot with puppeteer-core
+ * + @sparticuz/chromium (Vercel-compatible headless Chrome, same pattern as
+ * /api/admin/chart-screenshot).
+ *
+ * Earlier versions of this file drove TradingView's public, interactive
+ * /chart/ app directly and tried to click through the Indicators dialog.
+ * That approach cannot work: TradingView requires a logged-in account to add
+ * ANY indicator (even a built-in EMA) via that UI — anonymous sessions hit a
+ * "Join for free" paywall modal on the very first click, confirmed via a
+ * live headless run. The embed widget has no such restriction.
  */
 
 import type { Browser, Page } from 'puppeteer-core';
@@ -17,34 +26,51 @@ export interface BrowserConfig {
 
 const DEFAULT_CONFIG: Required<BrowserConfig> = {
   headless: true,
-  viewport: { width: 1920, height: 1080 },
+  // Extra height so the price pane + RSI + MACD sub-panes all fit in one shot
+  viewport: { width: 1920, height: 1600 },
   deviceScaleFactor: 2,
   timeout: 90000,
 };
 
+interface StudyConfig {
+  id: string;
+  inputs?: Record<string, number | string>;
+}
+
 /**
- * Convert Yahoo symbol to TradingView symbol format
+ * Convert Yahoo symbol to TradingView symbol format for the embed widget.
+ * FX: works for forex without login; BINANCE: for crypto.
  */
-export function getTradingViewUrl(symbol: string, timeframe: TimeframeValue = '1D'): string {
-  // TradingView public chart URL format
-  // For forex: TVC:EURUSD, for crypto: BINANCE:BTCUSDT
-  const tvSymbol = symbol
-    .replace('=X', '')
-    .replace('-USD', 'USDT');
-
-  let prefix = 'TVC:';
-  if (['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'XRPUSDT'].includes(tvSymbol)) {
-    prefix = 'BINANCE:';
+export function getTradingViewSymbol(symbol: string): string {
+  if (symbol.endsWith('=X')) {
+    return `FX:${symbol.replace('=X', '')}`;
   }
+  if (symbol.endsWith('-USD')) {
+    return `BINANCE:${symbol.replace('-USD', 'USDT')}`;
+  }
+  return symbol;
+}
 
-  // Timeframe mapping for TradingView
-  const tfMap: Record<TimeframeValue, string> = {
-    '4H': '240',
-    '1D': 'D',
-    '1W': 'W',
-  };
+const TIMEFRAME_TO_INTERVAL: Record<TimeframeValue, string> = {
+  '4H': '240',
+  '1D': 'D',
+  '1W': 'W',
+};
 
-  return `https://www.tradingview.com/chart/?symbol=${prefix}${tvSymbol}&interval=${tfMap[timeframe]}`;
+const DEFAULT_STUDIES: StudyConfig[] = [
+  { id: 'MAExp@tv-basicstudies', inputs: { length: 20 } },
+  { id: 'MAExp@tv-basicstudies', inputs: { length: 50 } },
+  { id: 'MAExp@tv-basicstudies', inputs: { length: 200 } },
+  { id: 'RSI@tv-basicstudies', inputs: { length: 14 } },
+  { id: 'MACD@tv-basicstudies' },
+  // Volume is rendered by default on the embed widget's main pane
+];
+
+function buildPreviewUrl(symbol: string, timeframe: TimeframeValue, siteUrl: string): string {
+  const tvSymbol = getTradingViewSymbol(symbol);
+  const interval = TIMEFRAME_TO_INTERVAL[timeframe];
+  const studiesParam = encodeURIComponent(JSON.stringify(DEFAULT_STUDIES));
+  return `${siteUrl}/chart-preview?symbol=${encodeURIComponent(tvSymbol)}&interval=${interval}&studies=${studiesParam}`;
 }
 
 async function launchBrowser(cfg: Required<BrowserConfig>): Promise<Browser> {
@@ -83,143 +109,46 @@ async function launchBrowser(cfg: Required<BrowserConfig>): Promise<Browser> {
 }
 
 /**
- * Wait for TradingView chart to fully load
- */
-async function waitForChartLoad(page: Page): Promise<void> {
-  await page.waitForSelector('[data-name="chart-widget"]', { timeout: 60000 });
-  await page.waitForNetworkIdle({ idleTime: 1000, timeout: 60000 }).catch(() => {});
-  await new Promise((r) => setTimeout(r, 3000));
-}
-
-/**
- * Apply indicators via TradingView UI
- */
-async function applyIndicators(page: Page): Promise<void> {
-  try {
-    const indicatorsButton = page.locator(
-      '[data-name="indicator-button"], [title*="Indicator" i], button ::-p-text(Indicators)'
-    );
-    await indicatorsButton.setTimeout(10000).click();
-
-    await page.waitForSelector('[data-name="indicators-dialog"], [role="dialog"]', { timeout: 10000 });
-
-    await addIndicator(page, 'Moving Average Exponential', '20');
-    await addIndicator(page, 'Moving Average Exponential', '50');
-    await addIndicator(page, 'Moving Average Exponential', '200');
-    await addIndicator(page, 'Relative Strength Index', '14');
-    await addIndicator(page, 'MACD', '12,26,9');
-    // Volume is usually shown by default
-
-    await page.keyboard.press('Escape');
-    await new Promise((r) => setTimeout(r, 1000));
-  } catch (err) {
-    console.warn('Failed to apply some indicators:', err);
-    await page.keyboard.press('Escape').catch(() => {});
-  }
-}
-
-async function addIndicator(page: Page, name: string, params: string): Promise<void> {
-  try {
-    const searchInput = page.locator('[data-name="indicator-search-input"], input[placeholder*="Search" i]');
-    await searchInput.setTimeout(5000).fill(name);
-    await new Promise((r) => setTimeout(r, 500));
-
-    const indicatorItem = page.locator(`[data-name="indicator-item"] ::-p-text(${name})`);
-    await indicatorItem.setTimeout(5000).click();
-    await new Promise((r) => setTimeout(r, 500));
-
-    if (params && name.includes('Moving Average')) {
-      const lengthInput = page.locator('input[data-name="input-length"], input[placeholder*="Length" i]');
-      await lengthInput.setTimeout(2000).fill(params).catch(() => {});
-      await page.keyboard.press('Enter').catch(() => {});
-    }
-  } catch (err) {
-    console.warn(`Failed to add indicator ${name}:`, err);
-  }
-}
-
-/**
- * Support/resistance levels are computed for reference only — automated
- * drawing via TradingView's toolbar isn't reliable enough to script, so the
- * LLM vision pass identifies levels visually from the rendered chart instead.
- */
-function calculateKeyLevels(ohlcv: { high: number[]; low: number[]; close: number[] }): void {
-  const highs = ohlcv.high;
-  const lows = ohlcv.low;
-  const n = ohlcv.close.length;
-
-  const swingHighs: number[] = [];
-  const swingLows: number[] = [];
-
-  for (let i = 2; i < n - 2; i++) {
-    if (highs[i] > highs[i - 1] && highs[i] > highs[i - 2] && highs[i] > highs[i + 1] && highs[i] > highs[i + 2]) {
-      swingHighs.push(highs[i]);
-    }
-    if (lows[i] < lows[i - 1] && lows[i] < lows[i - 2] && lows[i] < lows[i + 1] && lows[i] < lows[i + 2]) {
-      swingLows.push(lows[i]);
-    }
-  }
-
-  const recentResistance = swingHighs.slice(-3).reverse();
-  const recentSupport = swingLows.slice(-3).reverse();
-
-  console.log('Calculated S/R levels (for reference):', { recentResistance, recentSupport });
-}
-
-/**
- * Capture high-resolution screenshot of the chart area
- */
-async function captureChartScreenshot(page: Page): Promise<Uint8Array> {
-  const chartContainer = await page.$('[data-name="chart-widget"], .chart-container, .chart-widget');
-
-  if (chartContainer) {
-    return new Uint8Array(await chartContainer.screenshot({ type: 'png' }));
-  }
-
-  return new Uint8Array(
-    await page.screenshot({
-      type: 'png',
-      clip: { x: 0, y: 0, width: 1920, height: 1080 },
-    })
-  );
-}
-
-/**
- * Main function to generate chart screenshot from TradingView
+ * Main function to generate chart screenshot from the TradingView embed widget
  */
 export async function generateChartScreenshot(
   symbol: string,
   timeframes: TimeframeValue[],
-  ohlcvData: { high: number[]; low: number[]; close: number[] },
   config: BrowserConfig = {}
 ): Promise<Uint8Array> {
   const cfg = { ...DEFAULT_CONFIG, ...config };
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
   let browser: Browser | null = null;
 
   try {
     browser = await launchBrowser(cfg);
-    const page = await browser.newPage();
+    const page: Page = await browser.newPage();
     page.setDefaultTimeout(cfg.timeout);
-    await page.setUserAgent(
-      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-    );
 
     const primaryTf = timeframes[0] || '1D';
-    const url = getTradingViewUrl(symbol, primaryTf);
+    const url = buildPreviewUrl(symbol, primaryTf, siteUrl);
 
     console.log(`[ChartAnalysis] Navigating to ${url}`);
-    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
 
-    await waitForChartLoad(page);
-
-    console.log('[ChartAnalysis] Applying indicators...');
-    await applyIndicators(page);
-    await new Promise((r) => setTimeout(r, 3000));
-
-    calculateKeyLevels(ohlcvData);
+    // Wait for the widget's iframe to mount, then give it time to fetch data
+    // and render candles/indicators. The chart itself lives in a cross-origin
+    // iframe (tradingview-widget.com) so we can't query into it directly —
+    // a fixed settle time is the same approach chart-screenshot/route.ts uses.
+    await page
+      .waitForSelector('.tradingview-widget-container__widget iframe', { timeout: 25000 })
+      .catch(() => {
+        // Proceed even if the selector isn't found — the fixed wait below covers it
+      });
+    await new Promise((r) => setTimeout(r, 8000));
 
     console.log('[ChartAnalysis] Capturing screenshot...');
-    const screenshot = await captureChartScreenshot(page);
+    const screenshot = new Uint8Array(
+      await page.screenshot({
+        type: 'png',
+        clip: { x: 0, y: 0, width: cfg.viewport.width, height: cfg.viewport.height },
+      })
+    );
 
     console.log(`[ChartAnalysis] Screenshot captured: ${screenshot.length} bytes`);
     return screenshot;
@@ -229,33 +158,4 @@ export async function generateChartScreenshot(
       await browser.close();
     }
   }
-}
-
-/**
- * Generate screenshots for multiple timeframes
- */
-export async function generateMultiTimeframeScreenshots(
-  symbol: string,
-  timeframes: TimeframeValue[],
-  ohlcvByTimeframe: Record<TimeframeValue, { high: number[]; low: number[]; close: number[] }>,
-  config: BrowserConfig = {}
-): Promise<Map<TimeframeValue, Uint8Array>> {
-  const results = new Map<TimeframeValue, Uint8Array>();
-
-  for (const tf of timeframes) {
-    try {
-      const ohlcv = ohlcvByTimeframe[tf];
-      if (!ohlcv) {
-        console.warn(`[ChartAnalysis] No OHLCV data for ${tf}, skipping`);
-        continue;
-      }
-
-      const screenshot = await generateChartScreenshot(symbol, [tf], ohlcv, config);
-      results.set(tf, screenshot);
-    } catch (err) {
-      console.error(`[ChartAnalysis] Failed to generate ${tf} screenshot:`, err);
-    }
-  }
-
-  return results;
 }

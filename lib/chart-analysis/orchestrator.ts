@@ -40,13 +40,9 @@ async function runChartAnalysisPipeline(jobId: string, input: ChartAnalysisJobIn
     console.log(`[ChartAnalysis] Fetching market data for ${timeframes.join(', ')}...`);
     const marketData = await fetchMarketDataForTimeframes(instrument, timeframes);
 
-    // Prepare OHLCV data for browser automation (use primary timeframe for drawing)
-    const primaryData = marketData[0];
-    const ohlcvForDrawing = primaryData.ohlcv;
-
-    // Step 3: Generate chart screenshot via TradingView automation
+    // Step 3: Generate chart screenshot via TradingView embed widget
     console.log(`[ChartAnalysis] Generating TradingView chart screenshot...`);
-    const chartImage = await generateChartScreenshot(instrument, timeframes, ohlcvForDrawing);
+    const chartImage = await generateChartScreenshot(instrument, timeframes);
 
     // Step 4: Analyze with LLM vision
     console.log(`[ChartAnalysis] Analyzing chart with LLM vision...`);

@@ -15,7 +15,7 @@ export async function POST(req: Request) {
   const { symbol = "FX:EURUSD", interval = "D" } = await req.json();
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-  const previewUrl = `${siteUrl}/admin/tools/chart/preview?symbol=${encodeURIComponent(symbol)}&interval=${encodeURIComponent(interval)}`;
+  const previewUrl = `${siteUrl}/chart-preview?symbol=${encodeURIComponent(symbol)}&interval=${encodeURIComponent(interval)}`;
 
   let browser: import("puppeteer-core").Browser | null = null;
 

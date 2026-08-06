@@ -2,12 +2,19 @@
 
 import { useEffect, useRef } from "react";
 
+export interface StudyConfig {
+  id: string;
+  inputs?: Record<string, number | string>;
+}
+
 export default function ChartPreviewWidget({
   symbol,
   interval,
+  studies,
 }: {
   symbol: string;
   interval: string;
+  studies?: StudyConfig[];
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -32,9 +39,15 @@ export default function ChartPreviewWidget({
       allow_symbol_change: false,
       calendar: false,
       support_host: "https://www.tradingview.com",
+      // Must be a uniform array of {id, inputs} objects — mixing in bare ID
+      // strings for studies without inputs breaks TradingView's widget parser
+      // (it throws "e.indexOf is not a function" and silently drops the study).
+      ...(studies && studies.length > 0
+        ? { studies: studies.map((s) => ({ id: s.id, inputs: s.inputs ?? {} })) }
+        : {}),
     });
     containerRef.current.appendChild(script);
-  }, [symbol, interval]);
+  }, [symbol, interval, studies]);
 
   return (
     <div
