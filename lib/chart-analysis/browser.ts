@@ -1,9 +1,11 @@
 /**
  * Chart Analysis Browser Automation
- * Uses Playwright to navigate TradingView, apply indicators/drawings, and capture screenshots
+ * Uses puppeteer-core + @sparticuz/chromium (Vercel-compatible headless Chrome —
+ * same pattern as /api/admin/chart-screenshot) to navigate TradingView,
+ * apply indicators/drawings, and capture screenshots.
  */
 
-import { chromium, type Browser, type Page, type BrowserContext } from 'playwright';
+import type { Browser, Page } from 'puppeteer-core';
 import type { TimeframeValue } from './types';
 
 export interface BrowserConfig {
@@ -17,7 +19,7 @@ const DEFAULT_CONFIG: Required<BrowserConfig> = {
   headless: true,
   viewport: { width: 1920, height: 1080 },
   deviceScaleFactor: 2,
-  timeout: 300000, // 5 minutes
+  timeout: 90000,
 };
 
 /**
@@ -45,18 +47,48 @@ export function getTradingViewUrl(symbol: string, timeframe: TimeframeValue = '1
   return `https://www.tradingview.com/chart/?symbol=${prefix}${tvSymbol}&interval=${tfMap[timeframe]}`;
 }
 
+async function launchBrowser(cfg: Required<BrowserConfig>): Promise<Browser> {
+  const puppeteer = (await import('puppeteer-core')).default;
+  const isProduction = process.env.NODE_ENV === 'production';
+
+  let executablePath: string;
+  let launchArgs: string[];
+
+  if (isProduction) {
+    const chromium = (await import('@sparticuz/chromium')).default;
+    executablePath = await chromium.executablePath();
+    launchArgs = [...chromium.args, '--disable-blink-features=AutomationControlled'];
+  } else {
+    executablePath =
+      process.env.CHROME_PATH ??
+      '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+    launchArgs = [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      '--disable-blink-features=AutomationControlled',
+    ];
+  }
+
+  return puppeteer.launch({
+    args: launchArgs,
+    executablePath,
+    headless: cfg.headless,
+    defaultViewport: {
+      width: cfg.viewport.width,
+      height: cfg.viewport.height,
+      deviceScaleFactor: cfg.deviceScaleFactor,
+    },
+  });
+}
+
 /**
  * Wait for TradingView chart to fully load
  */
 async function waitForChartLoad(page: Page): Promise<void> {
-  // Wait for the chart widget to be present
   await page.waitForSelector('[data-name="chart-widget"]', { timeout: 60000 });
-
-  // Wait for network to be idle (chart data loaded)
-  await page.waitForLoadState('networkidle', { timeout: 60000 });
-
-  // Additional wait for chart rendering
-  await page.waitForTimeout(3000);
+  await page.waitForNetworkIdle({ idleTime: 1000, timeout: 60000 }).catch(() => {});
+  await new Promise((r) => setTimeout(r, 3000));
 }
 
 /**
@@ -64,61 +96,42 @@ async function waitForChartLoad(page: Page): Promise<void> {
  */
 async function applyIndicators(page: Page): Promise<void> {
   try {
-    // Click the "Indicators" button (fx icon in toolbar)
-    const indicatorsButton = page.locator('[data-name="indicator-button"], [title*="Indicator" i], button:has-text("Indicators")').first();
-    await indicatorsButton.waitFor({ state: 'visible', timeout: 10000 });
-    await indicatorsButton.click();
+    const indicatorsButton = page.locator(
+      '[data-name="indicator-button"], [title*="Indicator" i], button ::-p-text(Indicators)'
+    );
+    await indicatorsButton.setTimeout(10000).click();
 
-    // Wait for indicators dialog
-    await page.waitForSelector('[data-name="indicators-dialog"], [role="dialog"]:has-text("Indicators")', { timeout: 10000 });
+    await page.waitForSelector('[data-name="indicators-dialog"], [role="dialog"]', { timeout: 10000 });
 
-    // Add EMA 20
     await addIndicator(page, 'Moving Average Exponential', '20');
-    // Add EMA 50
     await addIndicator(page, 'Moving Average Exponential', '50');
-    // Add EMA 200
     await addIndicator(page, 'Moving Average Exponential', '200');
-    // Add RSI
     await addIndicator(page, 'Relative Strength Index', '14');
-    // Add MACD
     await addIndicator(page, 'MACD', '12,26,9');
-    // Add Volume (usually built-in)
+    // Volume is usually shown by default
 
-    // Close dialog - press Escape
     await page.keyboard.press('Escape');
-    await page.waitForTimeout(1000);
+    await new Promise((r) => setTimeout(r, 1000));
   } catch (err) {
     console.warn('Failed to apply some indicators:', err);
-    // Try to close any open dialog
     await page.keyboard.press('Escape').catch(() => {});
   }
 }
 
 async function addIndicator(page: Page, name: string, params: string): Promise<void> {
   try {
-    // Search for indicator
-    const searchInput = page.locator('[data-name="indicator-search-input"], input[placeholder*="Search" i]').first();
-    await searchInput.fill(name);
-    await page.waitForTimeout(500);
+    const searchInput = page.locator('[data-name="indicator-search-input"], input[placeholder*="Search" i]');
+    await searchInput.setTimeout(5000).fill(name);
+    await new Promise((r) => setTimeout(r, 500));
 
-    // Click the indicator result
-    const indicatorItem = page.locator(`[data-name="indicator-item"]:has-text("${name}"), [role="option"]:has-text("${name}")`).first();
-    await indicatorItem.waitFor({ state: 'visible', timeout: 5000 });
-    await indicatorItem.click();
-    await page.waitForTimeout(500);
+    const indicatorItem = page.locator(`[data-name="indicator-item"] ::-p-text(${name})`);
+    await indicatorItem.setTimeout(5000).click();
+    await new Promise((r) => setTimeout(r, 500));
 
-    // If parameters needed, set them (for EMA length)
     if (params && name.includes('Moving Average')) {
-      const lengthInput = page.locator('input[data-name="input-length"], input[placeholder*="Length" i]').first();
-      if (await lengthInput.isVisible({ timeout: 2000 }).catch(() => false)) {
-        await lengthInput.fill(params);
-        await page.keyboard.press('Enter');
-      }
-    }
-
-    // For MACD, set fast/slow/signal
-    if (name === 'MACD') {
-      await page.waitForTimeout(300);
+      const lengthInput = page.locator('input[data-name="input-length"], input[placeholder*="Length" i]');
+      await lengthInput.setTimeout(2000).fill(params).catch(() => {});
+      await page.keyboard.press('Enter').catch(() => {});
     }
   } catch (err) {
     console.warn(`Failed to add indicator ${name}:`, err);
@@ -126,62 +139,49 @@ async function addIndicator(page: Page, name: string, params: string): Promise<v
 }
 
 /**
- * Draw support/resistance lines and trend lines
- * This is complex with TradingView's drawing toolbar - we'll use keyboard shortcuts
+ * Support/resistance levels are computed for reference only — automated
+ * drawing via TradingView's toolbar isn't reliable enough to script, so the
+ * LLM vision pass identifies levels visually from the rendered chart instead.
  */
-async function drawKeyLevels(page: Page, ohlcv: { high: number[]; low: number[]; close: number[] }): Promise<void> {
-  try {
-    // Calculate recent swing highs/lows for S/R levels
-    const highs = ohlcv.high;
-    const lows = ohlcv.low;
-    const closes = ohlcv.close;
-    const n = closes.length;
+function calculateKeyLevels(ohlcv: { high: number[]; low: number[]; close: number[] }): void {
+  const highs = ohlcv.high;
+  const lows = ohlcv.low;
+  const n = ohlcv.close.length;
 
-    // Find recent swing highs (peak higher than neighbors)
-    const swingHighs: number[] = [];
-    const swingLows: number[] = [];
+  const swingHighs: number[] = [];
+  const swingLows: number[] = [];
 
-    for (let i = 2; i < n - 2; i++) {
-      if (highs[i] > highs[i-1] && highs[i] > highs[i-2] && highs[i] > highs[i+1] && highs[i] > highs[i+2]) {
-        swingHighs.push(highs[i]);
-      }
-      if (lows[i] < lows[i-1] && lows[i] < lows[i-2] && lows[i] < lows[i+1] && lows[i] < lows[i+2]) {
-        swingLows.push(lows[i]);
-      }
+  for (let i = 2; i < n - 2; i++) {
+    if (highs[i] > highs[i - 1] && highs[i] > highs[i - 2] && highs[i] > highs[i + 1] && highs[i] > highs[i + 2]) {
+      swingHighs.push(highs[i]);
     }
-
-    // Get most recent 3-4 levels
-    const recentResistance = swingHighs.slice(-3).reverse();
-    const recentSupport = swingLows.slice(-3).reverse();
-
-    // Use drawing tools - horizontal line tool (shortcut: H)
-    // This is very brittle - TradingView's drawing API isn't exposed
-    // We'll skip automated drawing and rely on LLM vision to identify levels
-
-    console.log('Calculated S/R levels (for reference):', { recentResistance, recentSupport });
-  } catch (err) {
-    console.warn('Failed to calculate/draw key levels:', err);
+    if (lows[i] < lows[i - 1] && lows[i] < lows[i - 2] && lows[i] < lows[i + 1] && lows[i] < lows[i + 2]) {
+      swingLows.push(lows[i]);
+    }
   }
+
+  const recentResistance = swingHighs.slice(-3).reverse();
+  const recentSupport = swingLows.slice(-3).reverse();
+
+  console.log('Calculated S/R levels (for reference):', { recentResistance, recentSupport });
 }
 
 /**
  * Capture high-resolution screenshot of the chart area
  */
 async function captureChartScreenshot(page: Page): Promise<Uint8Array> {
-  // Try to find the chart container
-  const chartContainer = page.locator('[data-name="chart-widget"], .chart-container, .chart-widget').first();
+  const chartContainer = await page.$('[data-name="chart-widget"], .chart-container, .chart-widget');
 
-  if (await chartContainer.isVisible({ timeout: 5000 }).catch(() => false)) {
-    return await chartContainer.screenshot({ type: 'png', animations: 'disabled' });
+  if (chartContainer) {
+    return new Uint8Array(await chartContainer.screenshot({ type: 'png' }));
   }
 
-  // Fallback: full page screenshot
-  return await page.screenshot({
-    type: 'png',
-    fullPage: false,
-    animations: 'disabled',
-    clip: { x: 0, y: 0, width: 1920, height: 1080 },
-  });
+  return new Uint8Array(
+    await page.screenshot({
+      type: 'png',
+      clip: { x: 0, y: 0, width: 1920, height: 1080 },
+    })
+  );
 }
 
 /**
@@ -197,49 +197,27 @@ export async function generateChartScreenshot(
   let browser: Browser | null = null;
 
   try {
-    browser = await chromium.launch({
-      headless: cfg.headless,
-      args: [
-        '--disable-blink-features=AutomationControlled',
-        '--disable-dev-shm-usage',
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-      ],
-    });
-
-    const context: BrowserContext = await browser.newContext({
-      viewport: cfg.viewport,
-      deviceScaleFactor: cfg.deviceScaleFactor,
-      userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-    });
-
-    const page: Page = await context.newPage();
+    browser = await launchBrowser(cfg);
+    const page = await browser.newPage();
     page.setDefaultTimeout(cfg.timeout);
+    await page.setUserAgent(
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    );
 
-    // Navigate to primary timeframe (usually daily)
     const primaryTf = timeframes[0] || '1D';
     const url = getTradingViewUrl(symbol, primaryTf);
 
     console.log(`[ChartAnalysis] Navigating to ${url}`);
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
 
-    // Wait for chart to load
     await waitForChartLoad(page);
 
-    // Apply indicators
     console.log('[ChartAnalysis] Applying indicators...');
     await applyIndicators(page);
+    await new Promise((r) => setTimeout(r, 3000));
 
-    // Wait for indicators to render
-    await page.waitForTimeout(3000);
+    calculateKeyLevels(ohlcvData);
 
-    // Draw key levels (best effort)
-    await drawKeyLevels(page, ohlcvData);
-
-    // Wait for drawings to render
-    await page.waitForTimeout(2000);
-
-    // Capture screenshot
     console.log('[ChartAnalysis] Capturing screenshot...');
     const screenshot = await captureChartScreenshot(page);
 

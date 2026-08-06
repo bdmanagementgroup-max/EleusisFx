@@ -1,8 +1,12 @@
+import { after } from 'next/server';
 import { getSupabaseServerClient } from '@/lib/supabase/server';
-import { createChartAnalysis, listChartAnalyses, type ChartAnalysisJobInput } from '@/lib/chart-analysis';
+import { createChartAnalysis, listChartAnalyses } from '@/lib/chart-analysis/storage';
 import { AGENT_BIAS_INSTRUMENTS } from '@/lib/agent-bias/instruments';
-import { runChartAnalysisJobWithId } from '@/lib/chart-analysis/orchestrator';
-import type { TimeframeValue } from '@/lib/chart-analysis/types';
+import type { ChartAnalysisJobInput, TimeframeValue } from '@/lib/chart-analysis/types';
+
+// Chart generation (headless browser automation + LLM vision) runs well past
+// the default 10s/60s limits — this matches /api/admin/chart-screenshot's pattern.
+export const maxDuration = 300;
 
 export async function POST(request: Request) {
   try {
@@ -47,11 +51,17 @@ export async function POST(request: Request) {
     // The job runs asynchronously - we return the job ID immediately
     const record = await createChartAnalysis(jobInput);
 
-    // Trigger background processing
-    // In production, you'd use a queue (Vercel Queues) or run with extended timeout
-    // For now, run inline but respond immediately with job ID
-    runChartAnalysisJobWithId(record.id, jobInput).catch(err => {
-      console.error('[ChartAnalysis] Background job failed:', err);
+    // after() keeps the Vercel function alive after the response is sent, so the
+    // background job actually finishes instead of being frozen mid-run. Dynamically
+    // imported so the browser-automation module graph is only loaded on this actual
+    // generation path, not on every GET/list request to this route.
+    after(async () => {
+      try {
+        const { runChartAnalysisJobWithId } = await import('@/lib/chart-analysis/orchestrator');
+        await runChartAnalysisJobWithId(record.id, jobInput);
+      } catch (err) {
+        console.error('[ChartAnalysis] Background job failed:', err);
+      }
     });
 
     return Response.json({
