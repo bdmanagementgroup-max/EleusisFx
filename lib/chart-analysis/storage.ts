@@ -55,12 +55,17 @@ export async function completeChartAnalysis(
 ): Promise<void> {
   const supabase = await getSupabaseAdminClient();
 
+  // PostgREST expects bytea columns as a \x-prefixed hex literal string —
+  // passing the raw Uint8Array gets JSON.stringify'd into {"0":137,"1":80,...}
+  // instead of being encoded as binary, corrupting the stored image.
+  const chartImageHex = `\\x${Buffer.from(chartImage).toString('hex')}`;
+
   const { error } = await supabase
     .from('chart_analyses')
     .update({
       status: 'completed',
       completed_at: new Date().toISOString(),
-      chart_image: chartImage,
+      chart_image: chartImageHex,
       caption_json: caption,
       metadata: metadata,
     })
@@ -167,7 +172,7 @@ function mapRecord(row: {
   display_pair: string;
   timeframes: string[];
   status: string;
-  chart_image: Uint8Array | null;
+  chart_image: string | null;
   caption_json: ChartCaption;
   metadata: ChartAnalysisMetadata;
   created_by: string | null;
@@ -180,9 +185,16 @@ function mapRecord(row: {
     display_pair: row.display_pair,
     timeframes: row.timeframes,
     status: row.status as ChartAnalysisRecord['status'],
-    chart_image: row.chart_image,
+    chart_image: decodeBytea(row.chart_image),
     caption_json: row.caption_json,
     metadata: row.metadata,
     created_by: row.created_by,
   };
+}
+
+// PostgREST returns bytea columns as a \x-prefixed hex string over JSON, not raw bytes
+function decodeBytea(value: string | null): Uint8Array | null {
+  if (!value) return null;
+  const hex = value.startsWith('\\x') ? value.slice(2) : value;
+  return new Uint8Array(Buffer.from(hex, 'hex'));
 }
