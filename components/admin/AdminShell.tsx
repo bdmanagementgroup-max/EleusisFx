@@ -24,6 +24,7 @@ const NAV = [
   { href: "/admin/tools/trading-analysis", label: "Trading Analysis" },
   { href: "/admin/tools/snapshots", label: "Analysis Snapshots" },
   { href: "/admin/tools/agent-bias", label: "Agent Bias" },
+  { href: "/admin/tools/chart-analysis", label: "Chart Analysis" },
 ];
 
 export default function AdminShell({ children }: { children: React.ReactNode }) {
