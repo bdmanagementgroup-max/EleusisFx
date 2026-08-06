@@ -109,6 +109,48 @@ async function launchBrowser(cfg: Required<BrowserConfig>): Promise<Browser> {
 }
 
 /**
+ * Poll the (cross-origin) chart iframe's rendered text until the MACD
+ * legend — the last of DEFAULT_STUDIES to compute — shows real numeric
+ * values rather than just its label. Falls back to a fixed settle time if
+ * the values never appear (e.g. TradingView UI changes the legend format),
+ * so a screenshot still gets taken rather than the job failing outright.
+ */
+async function waitForChartData(page: Page, timeout: number): Promise<void> {
+  const start = Date.now();
+  const pollInterval = 300;
+
+  while (Date.now() - start < Math.min(timeout, 30000)) {
+    const chartFrame = page.frames().find((f) => f.url().includes('advanced-chart'));
+    if (chartFrame) {
+      try {
+        const text: string = await chartFrame.evaluate(() => document.body?.innerText ?? '');
+        if (isChartDataLoaded(text)) {
+          return;
+        }
+      } catch {
+        // Frame may be mid-navigation between polls — retry
+      }
+    }
+    await new Promise((r) => setTimeout(r, pollInterval));
+  }
+
+  console.warn('[ChartAnalysis] Chart data did not confirm loaded within timeout; capturing anyway');
+  await new Promise((r) => setTimeout(r, 3000));
+}
+
+function isChartDataLoaded(text: string): boolean {
+  const macdIdx = text.indexOf('MACD');
+  if (macdIdx === -1) return false;
+  const closeIdx = text.indexOf('close', macdIdx);
+  if (closeIdx === -1) return false;
+  const afterClose = text.slice(closeIdx + 'close'.length);
+  // Legend renders as "MACD 12 26 close 9" immediately; the 3 computed
+  // values (macd/signal/hist) — using TradingView's unicode minus (−) for
+  // negatives — only appear once the study has actually calculated.
+  return /^\n\d+\n[-−]?\d/.test(afterClose);
+}
+
+/**
  * Main function to generate chart screenshot from the TradingView embed widget
  */
 export async function generateChartScreenshot(
@@ -131,16 +173,18 @@ export async function generateChartScreenshot(
     console.log(`[ChartAnalysis] Navigating to ${url}`);
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
 
-    // Wait for the widget's iframe to mount, then give it time to fetch data
-    // and render candles/indicators. The chart itself lives in a cross-origin
-    // iframe (tradingview-widget.com) so we can't query into it directly —
-    // a fixed settle time is the same approach chart-screenshot/route.ts uses.
-    await page
-      .waitForSelector('.tradingview-widget-container__widget iframe', { timeout: 25000 })
-      .catch(() => {
-        // Proceed even if the selector isn't found — the fixed wait below covers it
-      });
-    await new Promise((r) => setTimeout(r, 8000));
+    // The widget script empties the container and inserts the iframe as a
+    // direct child (not nested under .tradingview-widget-container__widget —
+    // that placeholder div gets wiped out first). Wait for the iframe itself.
+    await page.waitForSelector('.tradingview-widget-container iframe', { timeout: 25000 });
+
+    // The chart lives in a cross-origin iframe (tradingview-widget.com), so
+    // we can read its rendered text via Puppeteer's frame API even though we
+    // can't touch its DOM directly. Poll until the LAST study to render
+    // (MACD, in DEFAULT_STUDIES order) has real numeric values next to its
+    // legend — its label text appears well before the computed values do,
+    // so checking for the label alone produces a chart with blank indicators.
+    await waitForChartData(page, cfg.timeout);
 
     console.log('[ChartAnalysis] Capturing screenshot...');
     const screenshot = new Uint8Array(
