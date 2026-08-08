@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { createChart, type IChartApi, type UTCTimestamp } from "lightweight-charts";
+import {
+  createChart,
+  type AutoscaleInfo,
+  type IChartApi,
+  type UTCTimestamp,
+} from "lightweight-charts";
 
 export interface OhlcvPayload {
   open: number[];
@@ -154,6 +159,31 @@ export default function ChartPreviewWidgetPA({
         lineStyle: 2,
         axisLabelVisible: true,
         title: "target",
+      });
+    }
+
+    const overlayPrices = [
+      ...setup.keyLevels.support,
+      ...setup.keyLevels.resistance,
+      ...(setup.fibRetracement?.map((f) => f.price) ?? []),
+      ...(setup.longShortBox
+        ? [setup.longShortBox.entry, setup.longShortBox.stopLoss, setup.longShortBox.takeProfit]
+        : []),
+    ];
+
+    if (overlayPrices.length > 0) {
+      candleSeries.applyOptions({
+        autoscaleInfoProvider: (original: () => AutoscaleInfo | null) => {
+          const res = original();
+          if (!res?.priceRange) return res;
+          return {
+            ...res,
+            priceRange: {
+              minValue: Math.min(res.priceRange.minValue, ...overlayPrices),
+              maxValue: Math.max(res.priceRange.maxValue, ...overlayPrices),
+            },
+          };
+        },
       });
     }
 
