@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { AGENT_BIAS_INSTRUMENTS } from "@/lib/agent-bias/instruments";
-import { TIMEFRAME_OPTIONS, type TimeframeValue, type ChartAnalysisRecord, type ChartCaption } from "@/lib/chart-analysis/types";
+import { TIMEFRAME_OPTIONS, CHART_ANALYSIS_CONFIGS, type TimeframeValue, type ChartAnalysisConfig, type ChartAnalysisRecord, type ChartCaption } from "@/lib/chart-analysis/types";
 
 type ListRecord = Omit<ChartAnalysisRecord, "chart_image"> & { chart_image: null };
 type DetailRecord = ChartAnalysisRecord & { chart_image_base64: string | null };
@@ -52,7 +52,12 @@ function base64ToUint8Array(base64: string): Uint8Array {
   return bytes;
 }
 
-function CaptionPanel({ caption }: { caption: ChartCaption }) {
+function CaptionPanel({ caption, config }: { caption: ChartCaption; config: ChartAnalysisConfig }) {
+  const signalLabels =
+    config === "price_action"
+      ? { ema: "Trend", rsi: "Levels", macd: "Fib", volume: "Vol" }
+      : { ema: "EMA", rsi: "RSI", macd: "MACD", volume: "Vol" };
+
   return (
     <div style={{ fontFamily: "monospace", fontSize: 12.5, lineHeight: 1.8, color: "rgba(210,220,240,0.88)" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
@@ -80,7 +85,7 @@ function CaptionPanel({ caption }: { caption: ChartCaption }) {
             {a.keyObservations?.map((o, i) => <li key={i} style={{ color: "rgba(210,220,240,0.7)" }}>{o}</li>)}
           </ul>
           <div style={{ color: "rgba(210,220,240,0.4)", fontSize: 11 }}>
-            EMA: {a.indicatorSignals?.ema} · RSI: {a.indicatorSignals?.rsi} · MACD: {a.indicatorSignals?.macd} · Vol: {a.indicatorSignals?.volume}
+            {signalLabels.ema}: {a.indicatorSignals?.ema} · {signalLabels.rsi}: {a.indicatorSignals?.rsi} · {signalLabels.macd}: {a.indicatorSignals?.macd} · {signalLabels.volume}: {a.indicatorSignals?.volume}
           </div>
         </div>
       ))}
@@ -206,7 +211,7 @@ function DetailModal({ id, onClose, onDeleted }: { id: string; onClose: () => vo
               </div>
 
               {record.caption_json?.overallBias ? (
-                <CaptionPanel caption={record.caption_json} />
+                <CaptionPanel caption={record.caption_json} config={record.config} />
               ) : (
                 <div style={{ fontFamily: "monospace", fontSize: 12, color: "rgba(210,220,240,0.3)" }}>no caption available</div>
               )}
@@ -229,6 +234,7 @@ function btnStyle(color: string): React.CSSProperties {
 export default function ChartAnalysisClient() {
   const [instrument, setInstrument] = useState(FOREX[0]?.yahoo ?? "");
   const [timeframes, setTimeframes] = useState<TimeframeValue[]>(["1D"]);
+  const [config, setConfig] = useState<ChartAnalysisConfig>("indicators");
   const [submitting, setSubmitting] = useState(false);
   const [activeJobId, setActiveJobId] = useState<string | null>(null);
   const [activeJob, setActiveJob] = useState<ListRecord | DetailRecord | null>(null);
@@ -302,7 +308,7 @@ export default function ChartAnalysisClient() {
       const res = await fetch("/api/admin/chart-analysis", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ instrument, timeframes }),
+        body: JSON.stringify({ instrument, timeframes, config }),
       });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
@@ -317,10 +323,10 @@ export default function ChartAnalysisClient() {
       setError(e instanceof Error ? e.message : "Unknown error");
       setSubmitting(false);
     }
-  }, [instrument, timeframes, pollJob]);
+  }, [instrument, timeframes, config, pollJob]);
 
   const selectedInstrument = AGENT_BIAS_INSTRUMENTS.find((i) => i.yahoo === instrument);
-  const commandPreview = `chart-analysis --instrument "${selectedInstrument?.display ?? instrument}" --timeframes ${timeframes.join(",")}`;
+  const commandPreview = `chart-analysis --instrument "${selectedInstrument?.display ?? instrument}" --timeframes ${timeframes.join(",")} --config ${config}`;
 
   return (
     <div style={{ padding: "40px 48px 80px", maxWidth: 1200 }}>
@@ -353,7 +359,9 @@ export default function ChartAnalysisClient() {
       <div style={{ fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: "#4f8ef7", marginBottom: 8 }}>Admin / Tools</div>
       <h1 style={{ fontFamily: "var(--font-syne), Syne, sans-serif", fontWeight: 800, fontSize: 36, letterSpacing: -1.5, marginBottom: 8 }}>Chart Analysis</h1>
       <p style={{ fontFamily: "monospace", fontSize: 12, color: "rgba(210,220,240,0.4)", marginBottom: 40 }}>
-        TradingView automation · EMA 20/50/200 · RSI · MACD · Volume — LLM vision analysis via OpenRouter, one instrument at a time
+        {config === "price_action"
+          ? "Self-hosted renderer · Trendline · Fib Retracement · Key Levels · Long/Short · Volume"
+          : "TradingView automation · EMA 20/50/200 · RSI · MACD · Volume"} — LLM vision analysis via OpenRouter, one instrument at a time
       </p>
 
       {/* Config panel */}
@@ -369,6 +377,23 @@ export default function ChartAnalysisClient() {
         </div>
 
         <div style={{ padding: "20px 20px 24px", display: "flex", flexDirection: "column", gap: 16 }}>
+          {/* Analysis config */}
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <span style={{ fontFamily: "monospace", fontSize: 10, letterSpacing: 1.5, color: "rgba(210,220,240,0.28)", width: 90, textTransform: "uppercase" }}>{"// config"}</span>
+            <div style={{ display: "flex", gap: 1 }}>
+              {CHART_ANALYSIS_CONFIGS.map((c) => (
+                <button
+                  key={c.value}
+                  className={`param-btn${config === c.value ? " active-blue" : ""}`}
+                  onClick={() => setConfig(c.value)}
+                  disabled={submitting}
+                >
+                  {c.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Instrument */}
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <span style={{ fontFamily: "monospace", fontSize: 10, letterSpacing: 1.5, color: "rgba(210,220,240,0.28)", width: 90, textTransform: "uppercase" }}>{"// instrument"}</span>
@@ -462,7 +487,7 @@ export default function ChartAnalysisClient() {
               </div>
             )}
             {activeJob.status === "completed" && "caption_json" in activeJob && activeJob.caption_json?.overallBias && (
-              <CaptionPanel caption={activeJob.caption_json} />
+              <CaptionPanel caption={activeJob.caption_json} config={activeJob.config} />
             )}
           </div>
         </div>
@@ -492,6 +517,9 @@ export default function ChartAnalysisClient() {
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
                 <span style={{ width: 6, height: 6, borderRadius: "50%", background: STATUS_COLOR[rec.status], display: "inline-block" }} />
                 <span style={{ fontFamily: "monospace", fontSize: 13, color: "rgba(210,220,240,0.9)" }}>{rec.display_pair}</span>
+                <span style={{ marginLeft: "auto", fontFamily: "monospace", fontSize: 9, padding: "1px 6px", border: "1px solid rgba(210,220,240,0.15)", color: "rgba(210,220,240,0.4)" }}>
+                  {rec.config === "price_action" ? "PA" : "IND"}
+                </span>
               </div>
               <div style={{ fontFamily: "monospace", fontSize: 10, color: "rgba(210,220,240,0.35)", marginBottom: 4 }}>
                 {rec.timeframes.join(" · ")}
