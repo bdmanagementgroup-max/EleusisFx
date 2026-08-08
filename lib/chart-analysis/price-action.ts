@@ -32,6 +32,25 @@ const TREND_SLOPE_THRESHOLD = 0.0005; // normalized slope per bar (fraction of p
 const MIN_RR_RATIO = 2;
 const STOP_ATR_BUFFER = 0.25;
 const RELATIVE_VOLUME_WINDOW = 20;
+const MAX_RISK_ATR_MULTIPLE = 2; // caps how far the invalidation stop (and thus the 3x fallback target) can sit from entry, keeping the box chart-legible
+
+// Collapses runs of consecutive swings that share the same price (a flat
+// top/bottom plateau) into a single swing at the last index of the run —
+// otherwise every bar along a plateau is reported as its own swing point.
+function dedupePlateaus(
+  swings: { index: number; price: number }[]
+): { index: number; price: number }[] {
+  const result: { index: number; price: number }[] = [];
+  for (const s of swings) {
+    const last = result[result.length - 1];
+    if (last && last.price === s.price) {
+      result[result.length - 1] = s;
+    } else {
+      result.push(s);
+    }
+  }
+  return result;
+}
 
 function findSwingHighs(high: number[]): { index: number; price: number }[] {
   const swings: { index: number; price: number }[] = [];
@@ -41,7 +60,7 @@ function findSwingHighs(high: number[]): { index: number; price: number }[] {
       swings.push({ index: i, price: high[i] });
     }
   }
-  return swings;
+  return dedupePlateaus(swings);
 }
 
 function findSwingLows(low: number[]): { index: number; price: number }[] {
@@ -52,7 +71,7 @@ function findSwingLows(low: number[]): { index: number; price: number }[] {
       swings.push({ index: i, price: low[i] });
     }
   }
-  return swings;
+  return dedupePlateaus(swings);
 }
 
 function linearRegressionSlope(values: number[]): number {
@@ -87,8 +106,8 @@ function clusterLevels(
 
   for (const s of sorted) {
     const last = clusters[clusters.length - 1];
-    const lastPrice = last?.prices[last.prices.length - 1];
-    if (last && lastPrice !== undefined && Math.abs(s.price - lastPrice) / s.price <= tolerance) {
+    const originPrice = last?.prices[0];
+    if (last && originPrice !== undefined && Math.abs(s.price - originPrice) / s.price <= tolerance) {
       last.prices.push(s.price);
       last.indices.push(s.index);
     } else {
@@ -136,6 +155,8 @@ function computeTrendline(
   const sorted = [...points].sort((a, b) => a.index - b.index);
   const [p1, p2] = sorted.slice(-2);
   if (p1.index === p2.index) return null;
+  if (trend === 'up' && p2.price <= p1.price) return null;
+  if (trend === 'down' && p2.price >= p1.price) return null;
   return { x1: p1.index, y1: p1.price, x2: p2.index, y2: p2.price };
 }
 
@@ -160,8 +181,8 @@ function computeFibRetracement(
   return levels.map((level) => ({
     level,
     price: best!.highFirst
-      ? best!.high - (best!.range * level) / 100
-      : best!.low + (best!.range * level) / 100,
+      ? best!.low + (best!.range * level) / 100
+      : best!.high - (best!.range * level) / 100,
   }));
 }
 
@@ -188,7 +209,9 @@ function computeLongShortBox(
 
   const entry = close[close.length - 1];
   const atr = calcATR(high, low, close, 14);
+  if (!Number.isFinite(atr) || atr <= 0) return null;
   const buffer = atr * STOP_ATR_BUFFER;
+  const maxRisk = atr * MAX_RISK_ATR_MULTIPLE;
 
   if (trend === 'up') {
     const invalidation = [...swingLows]
@@ -196,9 +219,10 @@ function computeLongShortBox(
       .sort((a, b) => b.index - a.index)[0];
     if (!invalidation) return null;
 
-    const stopLoss = invalidation.price - buffer;
-    const risk = entry - stopLoss;
-    if (risk <= 0) return null;
+    const naturalRisk = entry - (invalidation.price - buffer);
+    if (naturalRisk <= 0) return null;
+    const risk = Math.min(naturalRisk, maxRisk);
+    const stopLoss = entry - risk;
 
     const targetLevel = keyLevels.resistance.find((r) => (r - entry) / risk >= MIN_RR_RATIO);
     const takeProfit = targetLevel ?? entry + risk * 3;
@@ -212,9 +236,10 @@ function computeLongShortBox(
     .sort((a, b) => b.index - a.index)[0];
   if (!invalidation) return null;
 
-  const stopLoss = invalidation.price + buffer;
-  const risk = stopLoss - entry;
-  if (risk <= 0) return null;
+  const naturalRisk = invalidation.price + buffer - entry;
+  if (naturalRisk <= 0) return null;
+  const risk = Math.min(naturalRisk, maxRisk);
+  const stopLoss = entry + risk;
 
   const targetLevel = keyLevels.support.find((s) => (entry - s) / risk >= MIN_RR_RATIO);
   const takeProfit = targetLevel ?? entry - risk * 3;
