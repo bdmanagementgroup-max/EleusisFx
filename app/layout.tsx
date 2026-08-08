@@ -3,6 +3,7 @@ import { Syne, Epilogue } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/layout/CustomCursor";
 import RevealInit from "@/components/layout/RevealInit";
+import { Analytics } from '@vercel/analytics/next';
 
 const syne = Syne({
   subsets: ["latin"],
@@ -63,6 +64,7 @@ export default function RootLayout({
         <CustomCursor />
         <RevealInit />
         {children}
+        <Analytics />
       </body>
     </html>
   );
