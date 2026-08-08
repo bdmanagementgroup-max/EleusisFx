@@ -2,7 +2,8 @@ import { after } from 'next/server';
 import { getSupabaseServerClient } from '@/lib/supabase/server';
 import { createChartAnalysis, listChartAnalyses } from '@/lib/chart-analysis/storage';
 import { AGENT_BIAS_INSTRUMENTS } from '@/lib/agent-bias/instruments';
-import type { ChartAnalysisJobInput, TimeframeValue } from '@/lib/chart-analysis/types';
+import type { ChartAnalysisJobInput, TimeframeValue, ChartAnalysisConfig } from '@/lib/chart-analysis/types';
+import { CHART_ANALYSIS_CONFIGS } from '@/lib/chart-analysis/types';
 
 // Chart generation (headless browser automation + LLM vision) runs well past
 // the default 10s/60s limits — this matches /api/admin/chart-screenshot's pattern.
@@ -20,11 +21,14 @@ export async function POST(request: Request) {
 
     // Parse request body
     const body = await request.json();
-    const { instrument, timeframes } = body;
+    const { instrument, timeframes, config } = body;
 
     if (!instrument || !timeframes || !Array.isArray(timeframes)) {
       return Response.json({ error: 'Missing required fields: instrument, timeframes' }, { status: 400 });
     }
+
+    const validConfigs = CHART_ANALYSIS_CONFIGS.map((c) => c.value);
+    const resolvedConfig: ChartAnalysisConfig = validConfigs.includes(config) ? config : 'indicators';
 
     // Validate instrument
     const instrumentData = AGENT_BIAS_INSTRUMENTS.find(i => i.yahoo === instrument);
@@ -44,6 +48,7 @@ export async function POST(request: Request) {
       instrument,
       displayPair: instrumentData.display,
       timeframes: timeframes as TimeframeValue[],
+      config: resolvedConfig,
       createdBy: user.id,
     };
 

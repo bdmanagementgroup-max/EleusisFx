@@ -15,6 +15,7 @@ export async function createChartAnalysis(input: ChartAnalysisJobInput): Promise
       instrument: input.instrument,
       display_pair: input.displayPair,
       timeframes: input.timeframes,
+      config: input.config,
       status: 'pending',
       caption_json: {},
       metadata: {
@@ -171,6 +172,7 @@ function mapRecord(row: {
   instrument: string;
   display_pair: string;
   timeframes: string[];
+  config: string;
   status: string;
   chart_image: string | null;
   caption_json: ChartCaption;
@@ -184,6 +186,7 @@ function mapRecord(row: {
     instrument: row.instrument,
     display_pair: row.display_pair,
     timeframes: row.timeframes,
+    config: row.config as ChartAnalysisRecord['config'],
     status: row.status as ChartAnalysisRecord['status'],
     chart_image: decodeBytea(row.chart_image),
     caption_json: row.caption_json,
