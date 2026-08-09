@@ -46,6 +46,7 @@ export interface ChartAnalysisRecord {
   instrument: string;            // Yahoo symbol (e.g., EURUSD=X)
   display_pair: string;          // Display pair (e.g., EUR/USD)
   timeframes: string[];
+  config: ChartAnalysisConfig;
   status: 'pending' | 'processing' | 'completed' | 'failed';
   chart_image: Uint8Array | null;  // PNG bytes
   caption_json: ChartCaption;
@@ -65,6 +66,7 @@ export interface ChartAnalysisJobInput {
   instrument: string;            // Yahoo symbol
   displayPair: string;           // Display pair
   timeframes: TimeframeValue[];  // e.g., ['4H', '1D', '1W']
+  config: ChartAnalysisConfig;
   createdBy: string;             // User ID
 }
 
@@ -89,6 +91,13 @@ export const TIMEFRAME_OPTIONS = [
 ] as const;
 
 export type TimeframeValue = (typeof TIMEFRAME_OPTIONS)[number]['value'];
+
+export const CHART_ANALYSIS_CONFIGS = [
+  { value: 'indicators', label: 'Indicators' },
+  { value: 'price_action', label: 'Price Action' },
+] as const;
+
+export type ChartAnalysisConfig = (typeof CHART_ANALYSIS_CONFIGS)[number]['value'];
 
 // Map Yahoo symbols to TradingView symbols
 export function yahooToTradingView(yahoo: string): string {

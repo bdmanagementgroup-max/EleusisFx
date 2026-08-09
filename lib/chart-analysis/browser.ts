@@ -15,22 +15,10 @@
  */
 
 import type { Browser, Page } from 'puppeteer-core';
+import { launchBrowser, DEFAULT_BROWSER_CONFIG, type BrowserConfig } from './browser-common';
 import type { TimeframeValue } from './types';
 
-export interface BrowserConfig {
-  headless?: boolean;
-  viewport?: { width: number; height: number };
-  deviceScaleFactor?: number;
-  timeout?: number;
-}
-
-const DEFAULT_CONFIG: Required<BrowserConfig> = {
-  headless: true,
-  // Extra height so the price pane + RSI + MACD sub-panes all fit in one shot
-  viewport: { width: 1920, height: 1600 },
-  deviceScaleFactor: 2,
-  timeout: 90000,
-};
+export type { BrowserConfig } from './browser-common';
 
 interface StudyConfig {
   id: string;
@@ -71,41 +59,6 @@ function buildPreviewUrl(symbol: string, timeframe: TimeframeValue, siteUrl: str
   const interval = TIMEFRAME_TO_INTERVAL[timeframe];
   const studiesParam = encodeURIComponent(JSON.stringify(DEFAULT_STUDIES));
   return `${siteUrl}/chart-preview?symbol=${encodeURIComponent(tvSymbol)}&interval=${interval}&studies=${studiesParam}`;
-}
-
-async function launchBrowser(cfg: Required<BrowserConfig>): Promise<Browser> {
-  const puppeteer = (await import('puppeteer-core')).default;
-  const isProduction = process.env.NODE_ENV === 'production';
-
-  let executablePath: string;
-  let launchArgs: string[];
-
-  if (isProduction) {
-    const chromium = (await import('@sparticuz/chromium')).default;
-    executablePath = await chromium.executablePath();
-    launchArgs = [...chromium.args, '--disable-blink-features=AutomationControlled'];
-  } else {
-    executablePath =
-      process.env.CHROME_PATH ??
-      '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
-    launchArgs = [
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-      '--disable-dev-shm-usage',
-      '--disable-blink-features=AutomationControlled',
-    ];
-  }
-
-  return puppeteer.launch({
-    args: launchArgs,
-    executablePath,
-    headless: cfg.headless,
-    defaultViewport: {
-      width: cfg.viewport.width,
-      height: cfg.viewport.height,
-      deviceScaleFactor: cfg.deviceScaleFactor,
-    },
-  });
 }
 
 /**
@@ -158,7 +111,7 @@ export async function generateChartScreenshot(
   timeframes: TimeframeValue[],
   config: BrowserConfig = {}
 ): Promise<Uint8Array> {
-  const cfg = { ...DEFAULT_CONFIG, ...config };
+  const cfg = { ...DEFAULT_BROWSER_CONFIG, ...config };
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
   let browser: Browser | null = null;
 

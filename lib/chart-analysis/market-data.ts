@@ -28,6 +28,82 @@ const TIMEFRAME_CONFIG: Record<TimeframeValue, { interval: string; range: string
   '1W': { interval: '1wk', range: '2y' },
 };
 
+export interface PriceActionOHLCV {
+  open: number[];
+  high: number[];
+  low: number[];
+  close: number[];
+  volume: number[];
+}
+
+// Caps the render/analysis window: keeps the chart legible, keeps the
+// screenshot's query-string payload (Task 9) comfortably under Node's
+// request-line size limit, and keeps computePriceActionSetup's indices
+// consistent with what's actually rendered (no separate trim-after-compute
+// step that would desync indices).
+const PRICE_ACTION_MAX_BARS = 120;
+
+export async function fetchOHLCVWithVolume(
+  symbol: string,
+  timeframe: TimeframeValue
+): Promise<PriceActionOHLCV> {
+  const config = TIMEFRAME_CONFIG[timeframe];
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=${config.interval}&range=${config.range}`;
+
+  const res = await fetch(url, {
+    cache: 'no-store',
+    headers: { 'User-Agent': 'Mozilla/5.0' },
+  });
+
+  if (!res.ok) {
+    throw new Error(`Yahoo Finance ${timeframe} fetch failed: ${res.status}`);
+  }
+
+  const json = await res.json();
+  const q = json?.chart?.result?.[0]?.indicators?.quote?.[0];
+
+  if (!q) {
+    throw new Error(`No quote data for ${timeframe}`);
+  }
+
+  const open: number[] = [];
+  const high: number[] = [];
+  const low: number[] = [];
+  const close: number[] = [];
+  const volume: number[] = [];
+
+  for (let i = 0; i < (q.close ?? []).length; i++) {
+    if (
+      q.close[i] != null &&
+      q.open[i] != null &&
+      q.high[i] != null &&
+      q.low[i] != null
+    ) {
+      open.push(q.open[i]);
+      high.push(q.high[i]);
+      low.push(q.low[i]);
+      close.push(q.close[i]);
+      // A missing volume field shouldn't cost us an otherwise-valid bar of
+      // price data — Yahoo omits volume entirely for some forex bars.
+      volume.push(q.volume[i] ?? 0);
+    }
+  }
+
+  if (close.length < 50) {
+    throw new Error(`Insufficient data for ${timeframe}: ${close.length} candles`);
+  }
+
+  const trimStart = Math.max(0, close.length - PRICE_ACTION_MAX_BARS);
+
+  return {
+    open: open.slice(trimStart),
+    high: high.slice(trimStart),
+    low: low.slice(trimStart),
+    close: close.slice(trimStart),
+    volume: volume.slice(trimStart),
+  };
+}
+
 export async function fetchMarketDataForTimeframes(
   symbol: string,
   timeframes: TimeframeValue[]
