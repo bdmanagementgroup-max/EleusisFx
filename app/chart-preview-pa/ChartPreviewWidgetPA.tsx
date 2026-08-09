@@ -7,6 +7,7 @@ import {
   type IChartApi,
   type UTCTimestamp,
 } from "lightweight-charts";
+import { derivePricePrecision } from "@/lib/chart-analysis/price-action";
 
 export interface OhlcvPayload {
   open: number[];
@@ -70,6 +71,10 @@ export default function ChartPreviewWidgetPA({
     });
     chartRef.current = chart;
 
+    // Without an explicit precision, lightweight-charts labels every price
+    // line at 2dp — collapsing distinct forex levels (entry 1.13163, stop
+    // 1.12551) into an identical "1.13" and contradicting the caption text.
+    const precision = derivePricePrecision(ohlcv.close[ohlcv.close.length - 1] ?? 1);
     const candleSeries = chart.addCandlestickSeries({
       upColor: BULLISH,
       downColor: BEARISH,
@@ -77,6 +82,7 @@ export default function ChartPreviewWidgetPA({
       borderDownColor: BEARISH,
       wickUpColor: BULLISH,
       wickDownColor: BEARISH,
+      priceFormat: { type: "price", precision, minMove: 1 / 10 ** precision },
     });
     candleSeries.setData(
       ohlcv.close.map((c, i) => ({
@@ -88,18 +94,30 @@ export default function ChartPreviewWidgetPA({
       }))
     );
 
-    const volumeSeries = chart.addHistogramSeries({
-      priceFormat: { type: "volume" },
-      priceScaleId: "",
-    });
-    volumeSeries.priceScale().applyOptions({ scaleMargins: { top: 0.82, bottom: 0 } });
-    volumeSeries.setData(
-      ohlcv.volume.map((v, i) => ({
-        time: indexToTime(i),
-        value: v,
-        color: ohlcv.close[i] >= ohlcv.open[i] ? `${BULLISH}88` : `${BEARISH}88`,
-      }))
-    );
+    // Yahoo returns all-zero volume for forex pairs; an all-flat histogram
+    // is noise, so skip the series entirely and let the candles reclaim the
+    // space instead of leaving a reserved-but-empty strip.
+    const hasVolume = ohlcv.volume.some((v) => v !== 0);
+    candleSeries
+      .priceScale()
+      .applyOptions({ scaleMargins: { top: 0.1, bottom: hasVolume ? 0.2 : 0.1 } });
+
+    if (hasVolume) {
+      const volumeSeries = chart.addHistogramSeries({
+        priceFormat: { type: "volume" },
+        priceScaleId: "",
+        lastValueVisible: false,
+        priceLineVisible: false,
+      });
+      volumeSeries.priceScale().applyOptions({ scaleMargins: { top: 0.82, bottom: 0 } });
+      volumeSeries.setData(
+        ohlcv.volume.map((v, i) => ({
+          time: indexToTime(i),
+          value: v,
+          color: ohlcv.close[i] >= ohlcv.open[i] ? `${BULLISH}88` : `${BEARISH}88`,
+        }))
+      );
+    }
 
     if (setup.trendline) {
       const trendColor = setup.trend === "up" ? BULLISH : BEARISH;

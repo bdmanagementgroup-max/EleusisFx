@@ -91,9 +91,16 @@ function CaptionPanel({ caption, config }: { caption: ChartCaption; config: Char
       ))}
 
       <div style={{ color: "#f59e0b", marginBottom: 4 }}>Trade Levels</div>
-      <div style={{ marginBottom: 12, color: "rgba(210,220,240,0.75)" }}>
-        Entry: {caption.riskReward?.entry} · SL: <span style={{ color: "#ef4444" }}>{caption.riskReward?.stopLoss}</span> · TP: <span style={{ color: "#22c55e" }}>{caption.riskReward?.takeProfit?.join(", ")}</span> · R:R {caption.riskReward?.ratio}
-      </div>
+      {/* A zeroed risk/reward block means no qualifying setup was found (sideways
+          market) — rendering "Entry: 0 · SL: 0 · TP: · R:R 0" on a copy-to-social
+          surface reads as a broken result rather than a deliberate no-trade call. */}
+      {caption.riskReward?.ratio === 0 && (!caption.riskReward?.takeProfit || caption.riskReward.takeProfit.length === 0) ? (
+        <div style={{ marginBottom: 12, color: "rgba(210,220,240,0.5)" }}>No qualifying long/short setup — market is sideways/choppy.</div>
+      ) : (
+        <div style={{ marginBottom: 12, color: "rgba(210,220,240,0.75)" }}>
+          Entry: {caption.riskReward?.entry} · SL: <span style={{ color: "#ef4444" }}>{caption.riskReward?.stopLoss}</span> · TP: <span style={{ color: "#22c55e" }}>{caption.riskReward?.takeProfit?.join(", ")}</span> · R:R {caption.riskReward?.ratio}
+        </div>
+      )}
 
       <div style={{ color: "#4f8ef7", marginBottom: 4 }}>Reasoning</div>
       <div style={{ marginBottom: 12, color: "rgba(210,220,240,0.75)", whiteSpace: "pre-wrap" }}>{caption.reasoning}</div>
@@ -308,7 +315,10 @@ export default function ChartAnalysisClient() {
       const res = await fetch("/api/admin/chart-analysis", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ instrument, timeframes, config }),
+        // The price_action pipeline only ever analyses timeframes[0] — sending
+        // the full multi-select would misreport a single-timeframe analysis as
+        // multi-timeframe in the caption, the DB, and the gallery card.
+        body: JSON.stringify({ instrument, timeframes: config === "price_action" ? [timeframes[0]] : timeframes, config }),
       });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
@@ -415,7 +425,7 @@ export default function ChartAnalysisClient() {
                 <button
                   key={tf.value}
                   className={`param-btn${timeframes.includes(tf.value) ? " active-blue" : ""}`}
-                  onClick={() => toggleTimeframe(tf.value)}
+                  onClick={() => (config === "price_action" ? setTimeframes([tf.value]) : toggleTimeframe(tf.value))}
                   disabled={submitting}
                 >
                   {tf.label}

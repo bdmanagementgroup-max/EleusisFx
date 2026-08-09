@@ -213,6 +213,14 @@ function buildPriceActionUserPrompt(
     ? `${setup.longShortBox.direction.toUpperCase()} — Entry ${setup.longShortBox.entry.toFixed(5)}, Stop ${setup.longShortBox.stopLoss.toFixed(5)}, Target ${setup.longShortBox.takeProfit.toFixed(5)}, R:R ${setup.longShortBox.ratio}:1`
     : 'no qualifying setup — market is sideways/choppy';
   const latestVolume = setup.relativeVolume[setup.relativeVolume.length - 1];
+  // An empty relativeVolume means the data source reported no volume at all
+  // (Yahoo does this for forex) — say so rather than implying a reading.
+  const relativeVolumeLine =
+    setup.relativeVolume.length === 0
+      ? 'n/a - no volume data available for this instrument'
+      : latestVolume
+        ? `${latestVolume.ratio.toFixed(2)}x`
+        : 'n/a';
 
   return `Analyze this price-action chart for ${displayPair} (${instrument}), ${timeframe} timeframe.
 
@@ -220,7 +228,7 @@ Trend: ${setup.trend}
 Key Levels: ${levels}
 Fibonacci Retracement: ${fib}
 Long/Short Setup: ${box}
-Relative Volume (latest bar vs 20-bar avg): ${latestVolume ? `${latestVolume.ratio.toFixed(2)}x` : 'n/a'}
+Relative Volume (latest bar vs 20-bar avg): ${relativeVolumeLine}
 
 Return the JSON only.`;
 }

@@ -77,14 +77,15 @@ export async function fetchOHLCVWithVolume(
       q.close[i] != null &&
       q.open[i] != null &&
       q.high[i] != null &&
-      q.low[i] != null &&
-      q.volume[i] != null
+      q.low[i] != null
     ) {
       open.push(q.open[i]);
       high.push(q.high[i]);
       low.push(q.low[i]);
       close.push(q.close[i]);
-      volume.push(q.volume[i]);
+      // A missing volume field shouldn't cost us an otherwise-valid bar of
+      // price data — Yahoo omits volume entirely for some forex bars.
+      volume.push(q.volume[i] ?? 0);
     }
   }
 

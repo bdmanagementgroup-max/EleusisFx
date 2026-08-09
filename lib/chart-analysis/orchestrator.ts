@@ -53,7 +53,9 @@ async function runChartAnalysisPipeline(jobId: string, input: ChartAnalysisJobIn
       console.log(`[ChartAnalysis] Analyzing price-action chart with LLM vision...`);
       ({ caption, model } = await analyzeChartWithPriceAction(instrument, displayPair, timeframes, setup, chartImage));
 
-      indicatorsUsed = ['Trendline', 'FibRetracement', 'KeyLevels', 'LongShortBox', 'Volume'];
+      indicatorsUsed = ['Trendline', 'FibRetracement', 'KeyLevels', 'LongShortBox'];
+      // Forex feeds report all-zero volume — don't claim we used it.
+      if (ohlcv.volume.some((v) => v !== 0)) indicatorsUsed.push('Volume');
     } else {
       console.log(`[ChartAnalysis] Fetching market data for ${timeframes.join(', ')}...`);
       const marketData = await fetchMarketDataForTimeframes(instrument, timeframes);

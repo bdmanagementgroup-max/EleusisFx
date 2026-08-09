@@ -122,24 +122,43 @@ function clusterLevels(
   }));
 }
 
+// Picks a sensible decimal precision from price magnitude — 5dp for
+// sub-$10 instruments (forex majors), down to 2dp for large-magnitude
+// ones (BTC, JPY crosses) — so labels/rounding stay consistent with how
+// each instrument class is normally quoted, without hardcoding per-symbol
+// rules.
+export function derivePricePrecision(price: number): number {
+  if (!Number.isFinite(price) || price <= 0) return 5;
+  const magnitude = Math.floor(Math.log10(price));
+  return Math.max(2, Math.min(5, 5 - magnitude));
+}
+
 function computeKeyLevels(
   swingHighs: { index: number; price: number }[],
   swingLows: { index: number; price: number }[],
   currentPrice: number
 ): { support: number[]; resistance: number[] } {
+  // Cluster averaging produces raw floats (e.g. 1.3325071930885315) that
+  // would otherwise leak straight into the stored caption JSON and any
+  // social post copied from it.
+  const precision = derivePricePrecision(currentPrice);
+  const round = (price: number) => Number(price.toFixed(precision));
+
   const resistance = clusterLevels(swingHighs, SWING_CLUSTER_TOLERANCE)
     .filter((c) => c.price > currentPrice)
     .sort((a, b) => b.count - a.count || b.lastIndex - a.lastIndex)
     .slice(0, 3)
     .map((c) => c.price)
-    .sort((a, b) => a - b);
+    .sort((a, b) => a - b)
+    .map(round);
 
   const support = clusterLevels(swingLows, SWING_CLUSTER_TOLERANCE)
     .filter((c) => c.price < currentPrice)
     .sort((a, b) => b.count - a.count || b.lastIndex - a.lastIndex)
     .slice(0, 3)
     .map((c) => c.price)
-    .sort((a, b) => b - a);
+    .sort((a, b) => b - a)
+    .map(round);
 
   return { support, resistance };
 }
@@ -187,6 +206,11 @@ function computeFibRetracement(
 }
 
 function computeRelativeVolume(volume: number[]): { index: number; ratio: number }[] {
+  // Some sources (Yahoo, for forex) report zero volume on every bar. Reporting
+  // a 1.00x "normal" reading for that is a fabricated statistic — return
+  // nothing so callers can say "no volume data" instead.
+  if (volume.every((v) => v === 0)) return [];
+
   const result: { index: number; ratio: number }[] = [];
   for (let i = RELATIVE_VOLUME_WINDOW; i < volume.length; i++) {
     const avg =
