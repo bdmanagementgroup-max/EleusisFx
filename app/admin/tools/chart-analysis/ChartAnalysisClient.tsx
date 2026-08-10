@@ -271,6 +271,19 @@ export default function ChartAnalysisClient() {
     loadGallery();
   }, [loadGallery]);
 
+  const handleDeleteCard = useCallback(async (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    if (!confirm("Delete this chart analysis? This cannot be undone.")) return;
+    try {
+      const res = await fetch(`/api/admin/chart-analysis/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        setGallery((prev) => prev.filter((r) => r.id !== id));
+      }
+    } catch {
+      // silent — same best-effort pattern as gallery load
+    }
+  }, []);
+
   useEffect(() => {
     return () => {
       if (pollRef.current) clearInterval(pollRef.current);
@@ -364,6 +377,9 @@ export default function ChartAnalysisClient() {
         }
         .gallery-card { transition: border-color 0.15s, transform 0.15s; cursor: pointer; }
         .gallery-card:hover { border-color: rgba(79,142,247,0.4) !important; transform: translateY(-2px); }
+        .gallery-card-delete { opacity: 0; transition: opacity 0.15s, background 0.15s; }
+        .gallery-card:hover .gallery-card-delete { opacity: 1; }
+        .gallery-card-delete:hover { background: rgba(239,68,68,0.2) !important; }
       `}</style>
 
       <div style={{ fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: "#4f8ef7", marginBottom: 8 }}>Admin / Tools</div>
@@ -522,8 +538,28 @@ export default function ChartAnalysisClient() {
               key={rec.id}
               className="gallery-card"
               onClick={() => setSelectedId(rec.id)}
-              style={{ background: "#08090f", border: "1px solid rgba(255,255,255,0.07)", padding: "14px 16px" }}
+              style={{ position: "relative", background: "#08090f", border: "1px solid rgba(255,255,255,0.07)", padding: "14px 16px" }}
             >
+              <button
+                onClick={(e) => handleDeleteCard(e, rec.id)}
+                className="gallery-card-delete"
+                aria-label={`Delete ${rec.display_pair} analysis`}
+                title="Delete"
+                style={{
+                  position: "absolute", top: 8, right: 8, width: 22, height: 22,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.3)",
+                  color: "#ef4444", cursor: "pointer", padding: 0,
+                }}
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 6h18" />
+                  <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                  <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                  <path d="M10 11v6" />
+                  <path d="M14 11v6" />
+                </svg>
+              </button>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
                 <span style={{ width: 6, height: 6, borderRadius: "50%", background: STATUS_COLOR[rec.status], display: "inline-block" }} />
                 <span style={{ fontFamily: "monospace", fontSize: 13, color: "rgba(210,220,240,0.9)" }}>{rec.display_pair}</span>
